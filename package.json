@@ -2,7 +2,6 @@
   "name": "@clevercanary/data-explorer",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +14,8 @@
   "bugs": {
     "url": "https://github.com/clevercanary/data-explorer/issues"
   },
-  "homepage": "https://github.com/clevercanary/data-explorer#readme"
+  "homepage": "https://github.com/clevercanary/data-explorer#readme",
+  "devDependencies": {
+    "typescript": "^4.9.4"
+  }
 }
