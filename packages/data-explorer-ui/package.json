@@ -1,5 +1,5 @@
 {
-  "name": "@clevercanary/data-explorer",
+  "name": "@clevercanary/data-explorer-ui",
   "version": "0.0.1",
   "description": "",
   "scripts": {
@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/clevercanary/data-explorer/issues"
   },
-  "homepage": "https://github.com/clevercanary/data-explorer#readme",
+  "homepage": "https://github.com/clevercanary/data-explorer/tree/main/data-explorer-ui#readme",
   "devDependencies": {
     "typescript": "^4.9.4"
   }
