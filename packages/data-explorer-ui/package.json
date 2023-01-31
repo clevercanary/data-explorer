@@ -14,7 +14,7 @@
   "bugs": {
     "url": "https://github.com/clevercanary/data-explorer/issues"
   },
-  "homepage": "https://github.com/clevercanary/data-explorer/tree/main/data-explorer-ui#readme",
+  "homepage": "https://github.com/clevercanary/data-explorer/tree/main/packages/data-explorer-ui#readme",
   "devDependencies": {
     "@types/jest": "^29.4.0",
     "jest": "^29.4.1",
