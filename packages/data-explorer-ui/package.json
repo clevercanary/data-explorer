@@ -3,7 +3,10 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint .",
+    "check-format": "prettier --check .",
+    "test-compile": "tsc --noEmit"
   },
   "repository": {
     "type": "git",
