@@ -1,19 +1,18 @@
 import { createTheme, Theme, ThemeOptions } from "@mui/material";
 import { Shadows } from "@mui/material/styles/shadows";
+import "../common/types/theme";
 import * as B from "./common/breakpoints";
 import * as C from "./common/components";
 import * as P from "./common/palette";
 import { shadows } from "./common/shadows";
 import { fontFamily, typography } from "./common/typography";
 
-export type CCTheme = Theme;
-
 /**
  * Returns a generated theme with customization.
  * @param customOptions - Custom theme option overrides.
  * @returns theme with custom theme overrides.
  */
-export function createAppTheme(customOptions?: ThemeOptions): CCTheme {
+export function createAppTheme(customOptions?: ThemeOptions): Theme {
   // Generate default theme with custom overrides.
   const theme = createTheme(
     {
@@ -88,4 +87,4 @@ export function createAppTheme(customOptions?: ThemeOptions): CCTheme {
 /**
  * Default theme without customization.
  */
-export const defaultTheme: CCTheme = createAppTheme();
+export const defaultTheme: Theme = createAppTheme();

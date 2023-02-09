@@ -125,6 +125,9 @@ export const MuiBreadcrumbs: Components["MuiBreadcrumbs"] = {
   },
 };
 
+/**
+ * MuiButton Component
+ */
 export const MuiButton: Components["MuiButton"] = {
   defaultProps: {
     disableRipple: true,
