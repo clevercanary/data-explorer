@@ -4,7 +4,7 @@ import { TypeBackground, TypeText } from "@mui/material/styles/createPalette";
 /**
  * Palette "Alert"
  */
-export enum ALERT {
+enum ALERT {
   LIGHT = "#FED3D1",
   LIGHTEST = "#FFF4F4",
   MAIN = "#B42318",
@@ -13,14 +13,14 @@ export enum ALERT {
 /**
  * Palette "Background"
  */
-export enum BACKGROUND {
+enum BACKGROUND {
   DEFAULT = "#F6F6F7",
 }
 
 /**
  * Palette "Info"
  */
-export enum INFO {
+enum INFO {
   CONTRAST_TEXT = "#00729C",
   LIGHT = "#97D6EA",
   LIGHTEST = "#F2FAFC",
@@ -30,7 +30,7 @@ export enum INFO {
 /**
  * Palette "Ink"
  */
-export enum INK {
+enum INK {
   LIGHT = "#637381",
   MAIN = "#212B36",
 }
@@ -38,14 +38,14 @@ export enum INK {
 /**
  * Palette "Primary"
  */
-export enum PRIMARY {
+enum PRIMARY {
   MAIN = "#2278c3",
 }
 
 /**
  * Palette "Smoke"
  */
-export enum SMOKE {
+enum SMOKE {
   DARK = "#C4CDD5",
   LIGHT = "#F6F6F7",
   LIGHTEST = "#FAFBFB",
@@ -55,7 +55,7 @@ export enum SMOKE {
 /**
  * Palette "Success"
  */
-export enum SUCCESS {
+enum SUCCESS {
   LIGHT = "#AEE9D1",
   LIGHTEST = "#F1F8F5",
   MAIN = "#287555",
@@ -64,14 +64,14 @@ export enum SUCCESS {
 /**
  * Palette "Text"
  */
-export enum TEXT {
+enum TEXT {
   PRIMARY = "#212B36",
 }
 
 /**
  * Palette "Warning"
  */
-export enum WARNING {
+enum WARNING {
   CONTRAST_TEXT = "#B54708",
   LIGHT = "#FFD79D",
   LIGHTEST = "#FFFAEB",
@@ -81,21 +81,21 @@ export enum WARNING {
 /**
  * Default "Black"
  */
-export enum BLACK {
+enum BLACK {
   DEFAULT = "#000000",
 }
 
 /**
  * Default "White"
  */
-export enum WHITE {
+enum WHITE {
   DEFAULT = "#ffffff",
 }
 
 /**
  * Color alpha
  */
-export enum ALPHA {
+enum ALPHA {
   A04 = "0a",
   A32 = "52",
   A80 = "cc",
@@ -141,7 +141,6 @@ export const alpha80 = ALPHA.A80;
  * Shades
  */
 export const black04 = `${black}${alpha04}`;
-export const info32 = `${infoMain}${alpha32}`;
 
 /**
  * Palette Option "Alert"

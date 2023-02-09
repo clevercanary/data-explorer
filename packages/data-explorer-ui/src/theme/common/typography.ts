@@ -1,33 +1,26 @@
-import {
-  CSSProperties,
-  TypographyOptions,
-} from "@mui/material/styles/createTypography";
+import { CSSProperties } from "@mui/material/styles/createTypography";
 import { tabletUp } from "./breakpoints";
-
-/**
- * Typography
- */
-export enum TYPOGRAPHY {
-  TEXT_BODY_400 = "text-body-400",
-  TEXT_BODY_400_2_LINES = "text-body-400-2lines",
-  TEXT_BODY_500 = "text-body-500",
-  TEXT_BODY_500_2_LINES = "text-body-500-2lines",
-  TEXT_BODY_LARGE_400 = "text-body-large-400",
-  TEXT_BODY_LARGE_400_2_LINES = "text-body-large-400-2lines",
-  TEXT_BODY_LARGE_500 = "text-body-large-500",
-  TEXT_BODY_SMALL_400 = "text-body-small-400",
-  TEXT_BODY_SMALL_500 = "text-body-small-500",
-  TEXT_HEADING = "text-heading",
-  TEXT_HEADING_LARGE = "text-heading-large",
-  TEXT_HEADING_SMALL = "text-heading-small",
-  TEXT_HEADING_XLARGE = "text-heading-xlarge",
-  TEXT_UPPERCASE_500 = "text-uppercase-500",
-}
 
 /**
  * Typography constants.
  */
 export const fontFamily = "Inter";
+const TYPOGRAPHY = {
+  TEXT_BODY_400: "text-body-400",
+  TEXT_BODY_400_2_LINES: "text-body-400-2lines",
+  TEXT_BODY_500: "text-body-500",
+  TEXT_BODY_500_2_LINES: "text-body-500-2lines",
+  TEXT_BODY_LARGE_400: "text-body-large-400",
+  TEXT_BODY_LARGE_400_2_LINES: "text-body-large-400-2lines",
+  TEXT_BODY_LARGE_500: "text-body-large-500",
+  TEXT_BODY_SMALL_400: "text-body-small-400",
+  TEXT_BODY_SMALL_500: "text-body-small-500",
+  TEXT_HEADING: "text-heading",
+  TEXT_HEADING_LARGE: "text-heading-large",
+  TEXT_HEADING_SMALL: "text-heading-small",
+  TEXT_HEADING_XLARGE: "text-heading-xlarge",
+  TEXT_UPPERCASE_500: "text-uppercase-500",
+} as const;
 export const {
   TEXT_BODY_400,
   TEXT_BODY_400_2_LINES,
@@ -193,24 +186,4 @@ export const textUppercase500: CSSProperties = {
   fontWeight: 500,
   lineHeight: "16px",
   textTransform: "uppercase",
-};
-
-/**
- * Typography Options
- */
-export const typography: TypographyOptions = {
-  [TEXT_BODY_400]: textBody400,
-  [TEXT_BODY_400_2_LINES]: textBody4002Lines,
-  [TEXT_BODY_500]: textBody500,
-  [TEXT_BODY_500_2_LINES]: textBody5002Lines,
-  [TEXT_BODY_LARGE_400]: textBodyLarge400,
-  [TEXT_BODY_LARGE_400_2_LINES]: textBodyLarge4002Lines,
-  [TEXT_BODY_LARGE_500]: textBodyLarge500,
-  [TEXT_BODY_SMALL_400]: textBodySmall400,
-  [TEXT_BODY_SMALL_500]: textBodySmall500,
-  [TEXT_HEADING]: textHeading,
-  [TEXT_HEADING_LARGE]: textHeadingLarge,
-  [TEXT_HEADING_SMALL]: textHeadingSmall,
-  [TEXT_HEADING_XLARGE]: textHeadingXLarge,
-  [TEXT_UPPERCASE_500]: textUppercase500,
 };

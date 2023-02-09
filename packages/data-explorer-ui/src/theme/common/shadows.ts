@@ -3,7 +3,7 @@ import { smokeMain } from "./palette";
 /*
  * Elevation
  */
-export enum ELEVATION {
+enum ELEVATION {
   E00 = "none",
   E01 = "0 1px 4px 0 #00000012",
   E02 = "0 8px 8px -4px #10182808, 0 20px 24px -4px #10182814",
@@ -12,7 +12,7 @@ export enum ELEVATION {
 /**
  * Stroke
  */
-export enum STROKE {
+enum STROKE {
   BOTTOM = "inset 0 -1px 0 0",
   TOP = "inset 0 1px 0 0",
 }

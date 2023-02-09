@@ -1,12 +1,28 @@
+import { Breakpoint } from "@mui/material";
+
 /**
  * Breakpoints
  */
-export enum BREAKPOINTS {
+enum BREAKPOINTS {
   DESKTOP = 1440,
   DESKTOP_SM = 1280,
   MOBILE = 0,
   TABLET = 768,
 }
+
+/**
+ * Breakpoint key constants
+ */
+const BREAKPOINT_KEY: Record<keyof typeof BREAKPOINTS, Breakpoint> = {
+  DESKTOP: "desktop",
+  DESKTOP_SM: "desktopSm",
+  MOBILE: "mobile",
+  TABLET: "tablet",
+};
+export const DESKTOP = BREAKPOINT_KEY.DESKTOP;
+export const DESKTOP_SM = BREAKPOINT_KEY.DESKTOP_SM;
+export const MOBILE = BREAKPOINT_KEY.MOBILE;
+export const TABLET = BREAKPOINT_KEY.TABLET;
 
 /**
  * Breakpoints constants
