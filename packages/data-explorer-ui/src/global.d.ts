@@ -9,22 +9,6 @@ import "@mui/material/styles/createPalette";
 import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
 import "@mui/material/SvgIcon";
 import "@mui/material/Typography";
-import {
-  TEXT_BODY_400,
-  TEXT_BODY_400_2_LINES,
-  TEXT_BODY_500,
-  TEXT_BODY_500_2_LINES,
-  TEXT_BODY_LARGE_400,
-  TEXT_BODY_LARGE_400_2_LINES,
-  TEXT_BODY_LARGE_500,
-  TEXT_BODY_SMALL_400,
-  TEXT_BODY_SMALL_500,
-  TEXT_HEADING,
-  TEXT_HEADING_LARGE,
-  TEXT_HEADING_SMALL,
-  TEXT_HEADING_XLARGE,
-  TEXT_UPPERCASE_500,
-} from "../../theme/common/typography";
 
 /**
  * Breakpoint definitions.
@@ -146,42 +130,44 @@ declare module "@mui/material/SvgIcon" {
   }
 }
 
+/* eslint-disable sonarjs/no-duplicate-string  -- ignoring duplicate strings here */
+
 /**
  * Typography definitions.
  */
 declare module "@mui/material/styles" {
   interface TypographyVariants {
-    [TEXT_BODY_400]: TypographyStyleOptions;
-    [TEXT_BODY_400_2_LINES]: TypographyStyleOptions;
-    [TEXT_BODY_500]: TypographyStyleOptions;
-    [TEXT_BODY_500_2_LINES]: TypographyStyleOptions;
-    [TEXT_BODY_LARGE_400]: TypographyStyleOptions;
-    [TEXT_BODY_LARGE_400_2_LINES]: TypographyStyleOptions;
-    [TEXT_BODY_LARGE_500]: TypographyStyleOptions;
-    [TEXT_BODY_SMALL_400]: TypographyStyleOptions;
-    [TEXT_BODY_SMALL_500]: TypographyStyleOptions;
-    [TEXT_HEADING]: TypographyStyleOptions;
-    [TEXT_HEADING_LARGE]: TypographyStyleOptions;
-    [TEXT_HEADING_SMALL]: TypographyStyleOptions;
-    [TEXT_HEADING_XLARGE]: TypographyStyleOptions;
-    [TEXT_UPPERCASE_500]: TypographyStyleOptions;
+    "text-body-400": TypographyStyleOptions;
+    "text-body-400-2lines": TypographyStyleOptions;
+    "text-body-500": TypographyStyleOptions;
+    "text-body-500-2lines": TypographyStyleOptions;
+    "text-body-large-400": TypographyStyleOptions;
+    "text-body-large-400-2lines": TypographyStyleOptions;
+    "text-body-large-500": TypographyStyleOptions;
+    "text-body-small-400": TypographyStyleOptions;
+    "text-body-small-500": TypographyStyleOptions;
+    "text-heading": TypographyStyleOptions;
+    "text-heading-large": TypographyStyleOptions;
+    "text-heading-small": TypographyStyleOptions;
+    "text-heading-xlarge": TypographyStyleOptions;
+    "text-uppercase-500": TypographyStyleOptions;
   }
 
   interface TypographyVariantsOptions {
-    [TEXT_BODY_400]?: TypographyStyleOptions;
-    [TEXT_BODY_400_2_LINES]?: TypographyStyleOptions;
-    [TEXT_BODY_500]?: TypographyStyleOptions;
-    [TEXT_BODY_500_2_LINES]?: TypographyStyleOptions;
-    [TEXT_BODY_LARGE_400]?: TypographyStyleOptions;
-    [TEXT_BODY_LARGE_400_2_LINES]?: TypographyStyleOptions;
-    [TEXT_BODY_LARGE_500]?: TypographyStyleOptions;
-    [TEXT_BODY_SMALL_400]?: TypographyStyleOptions;
-    [TEXT_BODY_SMALL_500]?: TypographyStyleOptions;
-    [TEXT_HEADING]?: TypographyStyleOptions;
-    [TEXT_HEADING_LARGE]?: TypographyStyleOptions;
-    [TEXT_HEADING_SMALL]?: TypographyStyleOptions;
-    [TEXT_HEADING_XLARGE]?: TypographyStyleOptions;
-    [TEXT_UPPERCASE_500]?: TypographyStyleOptions;
+    "text-body-400"?: TypographyStyleOptions;
+    "text-body-400-2lines"?: TypographyStyleOptions;
+    "text-body-500"?: TypographyStyleOptions;
+    "text-body-500-2lines"?: TypographyStyleOptions;
+    "text-body-large-400"?: TypographyStyleOptions;
+    "text-body-large-400-2lines"?: TypographyStyleOptions;
+    "text-body-large-500"?: TypographyStyleOptions;
+    "text-body-small-400"?: TypographyStyleOptions;
+    "text-body-small-500"?: TypographyStyleOptions;
+    "text-heading"?: TypographyStyleOptions;
+    "text-heading-large"?: TypographyStyleOptions;
+    "text-heading-small"?: TypographyStyleOptions;
+    "text-heading-xlarge"?: TypographyStyleOptions;
+    "text-uppercase-500"?: TypographyStyleOptions;
   }
 }
 
@@ -190,22 +176,24 @@ declare module "@mui/material/styles" {
  */
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
-    [TEXT_BODY_400]: true;
-    [TEXT_BODY_400_2_LINES]: true;
-    [TEXT_BODY_500]: true;
-    [TEXT_BODY_500_2_LINES]: true;
-    [TEXT_BODY_LARGE_400]: true;
-    [TEXT_BODY_LARGE_400_2_LINES]: true;
-    [TEXT_BODY_LARGE_500]: true;
-    [TEXT_BODY_SMALL_400]: true;
-    [TEXT_BODY_SMALL_500]: true;
-    [TEXT_HEADING]: true;
-    [TEXT_HEADING_LARGE]: true;
-    [TEXT_HEADING_SMALL]: true;
-    [TEXT_HEADING_XLARGE]: true;
-    [TEXT_UPPERCASE_500]: true;
+    "text-body-400": true;
+    "text-body-400-2lines": true;
+    "text-body-500": true;
+    "text-body-500-2lines": true;
+    "text-body-large-400": true;
+    "text-body-large-400-2lines": true;
+    "text-body-large-500": true;
+    "text-body-small-400": true;
+    "text-body-small-500": true;
+    "text-heading": true;
+    "text-heading-large": true;
+    "text-heading-small": true;
+    "text-heading-xlarge": true;
+    "text-uppercase-500": true;
   }
 }
+
+/* eslint-enable sonarjs/no-duplicate-string  -- watching duplicate strings here */
 
 declare module "@emotion/react" {
   export interface Theme extends MTheme {
