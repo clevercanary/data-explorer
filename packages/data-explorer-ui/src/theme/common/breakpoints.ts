@@ -14,10 +14,10 @@ enum BREAKPOINTS {
  * Breakpoint key constants
  */
 const BREAKPOINT_KEY: Record<keyof typeof BREAKPOINTS, Breakpoint> = {
-  DESKTOP: "desktop",
-  DESKTOP_SM: "desktopSm",
-  MOBILE: "mobile",
-  TABLET: "tablet",
+  DESKTOP: "lg",
+  DESKTOP_SM: "md",
+  MOBILE: "xs",
+  TABLET: "sm",
 };
 export const DESKTOP = BREAKPOINT_KEY.DESKTOP;
 export const DESKTOP_SM = BREAKPOINT_KEY.DESKTOP_SM;

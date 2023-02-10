@@ -15,15 +15,11 @@ import "@mui/material/Typography";
  */
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
-    desktop: true;
-    desktopSm: true;
-    lg: false;
-    md: false;
-    mobile: true;
-    sm: false;
-    tablet: true;
+    lg: true;
+    md: true;
+    sm: true;
     xl: false;
-    xs: false;
+    xs: true;
   }
 }
 

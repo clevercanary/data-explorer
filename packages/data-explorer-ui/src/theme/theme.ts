@@ -18,10 +18,10 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
     {
       breakpoints: {
         values: {
-          desktop: B.desktop,
-          desktopSm: B.desktopSm,
-          mobile: B.mobile,
-          tablet: B.tablet,
+          lg: B.desktop,
+          md: B.desktopSm,
+          sm: B.tablet,
+          xs: B.mobile,
         },
       },
       components: {
