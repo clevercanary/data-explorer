@@ -1,4 +1,4 @@
-import { PaletteColorOptions, Theme as MTheme } from "@mui/material";
+import { Theme as MTheme } from "@mui/material";
 import "@mui/material/Button";
 import "@mui/material/Checkbox";
 import "@mui/material/Chip";
@@ -6,6 +6,7 @@ import "@mui/material/IconButton";
 import "@mui/material/Paper";
 import "@mui/material/styles";
 import "@mui/material/styles/createPalette";
+import { PaletteColorOptions } from "@mui/material/styles/createPalette";
 import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
 import "@mui/material/SvgIcon";
 import "@mui/material/Typography";

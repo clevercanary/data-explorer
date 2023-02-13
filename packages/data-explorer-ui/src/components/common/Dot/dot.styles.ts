@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
 
-export const Dot = styled("span")`
+export const DotSeparator = styled("span")`
   align-self: center;
   background-color: ${({ theme }) => theme.palette.ink.light};
   border-radius: 50%;
