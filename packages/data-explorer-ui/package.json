@@ -21,6 +21,12 @@
   "main": "lib/index.js",
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.1.6",
+    "@storybook/addon-actions": "^6.4.22",
+    "@storybook/addon-essentials": "^6.4.22",
+    "@storybook/addon-interactions": "^6.4.22",
+    "@storybook/addon-links": "^6.4.22",
+    "@storybook/react": "^6.4.22",
+    "@storybook/testing-library": "^0.0.11",
     "@types/jest": "^29.4.0",
     "@types/react": "^18.0.15",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
@@ -47,6 +53,7 @@
     "@emotion/styled": "11.10.4",
     "@mui/icons-material": "5.8.0",
     "@mui/material": "5.8.1",
+    "copy-to-clipboard": "3.3.1",
     "next": "12.3.1",
     "react": "17.0.2",
     "react-dom": "17.0.2"

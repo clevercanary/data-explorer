@@ -1,15 +1,15 @@
 import { Theme as MTheme } from "@mui/material";
-import "@mui/material/Button";
-import "@mui/material/Checkbox";
-import "@mui/material/Chip";
-import "@mui/material/IconButton";
-import "@mui/material/Paper";
-import "@mui/material/styles";
-import "@mui/material/styles/createPalette";
+import type {} from "@mui/material/Button";
+import type {} from "@mui/material/Checkbox";
+import type {} from "@mui/material/Chip";
+import type {} from "@mui/material/IconButton";
+import type {} from "@mui/material/Paper";
+import type {} from "@mui/material/styles";
+import type {} from "@mui/material/styles/createPalette";
 import { PaletteColorOptions } from "@mui/material/styles/createPalette";
 import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
-import "@mui/material/SvgIcon";
-import "@mui/material/Typography";
+import type {} from "@mui/material/SvgIcon";
+import type {} from "@mui/material/Typography";
 
 /**
  * Breakpoint definitions.
