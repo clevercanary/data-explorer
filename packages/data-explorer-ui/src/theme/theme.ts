@@ -1,6 +1,5 @@
 import { createTheme, Theme, ThemeOptions } from "@mui/material";
 import { Shadows } from "@mui/material/styles/shadows";
-import "../global";
 import * as B from "./common/breakpoints";
 import * as C from "./common/components";
 import * as P from "./common/palette";

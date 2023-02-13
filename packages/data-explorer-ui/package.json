@@ -18,8 +18,7 @@
     "url": "https://github.com/clevercanary/data-explorer/issues"
   },
   "homepage": "https://github.com/clevercanary/data-explorer/tree/main/packages/data-explorer-ui#readme",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "main": "lib/index.js",
   "devDependencies": {
     "@next/eslint-plugin-next": "^13.1.6",
     "@types/jest": "^29.4.0",

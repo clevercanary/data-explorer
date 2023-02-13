@@ -19,12 +19,12 @@
     "baseUrl": "./src",
     "rootDir": "./src",
     "outDir": "lib",
-    "declaration": true
+    "declaration": true,
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "data-explorer-ui.d.ts"
+    "types/*.d.ts"
   ],
   "exclude": [
     "node_modules"
