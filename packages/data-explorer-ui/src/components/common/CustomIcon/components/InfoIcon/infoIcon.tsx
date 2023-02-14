@@ -9,7 +9,7 @@ import { CustomSVGIconProps } from "../../common/entities";
 export const InfoIcon = ({
   fontSize = "xsmall",
   viewBox = "0 0 18 18",
-  ...props /* Spread props to allow for svg icon specific props SvgIconProps e.g. "htmlColor". */
+  ...props /* Spread props to allow for Mui SvgIconProps specific prop overrides e.g. "htmlColor". */
 }: CustomSVGIconProps): JSX.Element => {
   return (
     <SvgIcon fontSize={fontSize} viewBox={viewBox} {...props}>

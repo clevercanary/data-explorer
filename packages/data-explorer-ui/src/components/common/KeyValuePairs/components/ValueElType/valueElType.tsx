@@ -11,7 +11,7 @@ export interface ValueElTypeProps {
 
 export const ValueElType = ({
   children,
-  ...props /* Spread props to allow for Typography specific prop overrides e.g. "variant". */
+  ...props /* Spread props to allow for Mui TypographyProps specific prop overrides e.g. "variant". */
 }: ValueElTypeProps): JSX.Element => {
   return (
     <Typography variant="text-body-400-2lines" {...props}>

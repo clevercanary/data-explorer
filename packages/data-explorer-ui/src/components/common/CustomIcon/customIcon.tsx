@@ -8,7 +8,7 @@ export interface CustomIconProps extends SvgIconProps {
 
 export const CustomIcon = ({
   iconName,
-  ...props /* Spread props to allow for svg icon specific props SvgIconProps e.g. "fontSize", or "htmlColor". */
+  ...props /* Spread props to allow for Mui SvgIconProps specific prop overrides e.g. "htmlColor". */
 }: CustomIconProps): JSX.Element => {
   const pathShapes = IconSvgPathShapes[iconName];
   return (
