@@ -1,25 +1,30 @@
-import { Tab as MTab, TabProps, Tabs as MTabs, TabsProps } from "@mui/material";
+import {
+  Tab as MTab,
+  TabProps as MTabProps,
+  Tabs as MTabs,
+  TabsProps as MTabsProps,
+} from "@mui/material";
 import React from "react";
 import { TabScrollFuzz } from "./tabs.styles";
 
-export type TabsValue = TabsProps["value"]; // any
-export type TabValue = TabProps["value"]; // any
+export type TabsValue = MTabsProps["value"]; // any
+export type TabValue = MTabProps["value"]; // any
 export type OnTabChangeFn = (tabValue: TabValue) => void; // Function invoked when selected tab value changes.
 
 export interface Tab {
-  icon?: TabProps["icon"]; // element or string
-  iconPosition?: TabProps["iconPosition"]; // "bottom" or "end" or "start" or "top
+  icon?: MTabProps["icon"]; // element or string
+  iconPosition?: MTabProps["iconPosition"]; // "bottom" or "end" or "start" or "top
   label: string;
   value: TabValue;
 }
 
-interface Props {
+export interface TabsProps {
   onTabChange: OnTabChangeFn;
   tabs: Tab[];
   value: TabsValue;
 }
 
-export const Tabs = ({ onTabChange, tabs, value }: Props): JSX.Element => {
+export const Tabs = ({ onTabChange, tabs, value }: TabsProps): JSX.Element => {
   return (
     <MTabs
       onChange={(_, tabValue): void => onTabChange(tabValue)}

@@ -1,20 +1,20 @@
+import { Stack as MStack, StackProps as MStackProps } from "@mui/material";
+import React, { ReactNode } from "react";
+
 /**
  * An extension of the basic Mui Stack component with available Stack props.
  * Stack gutters may also be achieved between rows/columns by using the gap css property.
  * See https://developer.mozilla.org/en-US/docs/Web/CSS/gap.
  */
 
-import { Stack as Stacker, StackProps } from "@mui/material";
-import React, { ReactNode } from "react";
-
-interface Props {
-  alignItems?: StackProps["alignItems"];
+export interface StackProps {
+  alignItems?: MStackProps["alignItems"];
   children: ReactNode | ReactNode[];
   className?: string;
-  direction?: StackProps["direction"];
-  divider?: StackProps["divider"];
+  direction?: MStackProps["direction"];
+  divider?: MStackProps["divider"];
   gap?: number;
-  justifyContent?: StackProps["justifyContent"];
+  justifyContent?: MStackProps["justifyContent"];
   spacing?: number;
 }
 
@@ -27,9 +27,9 @@ export const Stack = ({
   alignItems,
   gap = 0,
   spacing = 0,
-}: Props): JSX.Element => {
+}: StackProps): JSX.Element => {
   return (
-    <Stacker
+    <MStack
       className={className}
       direction={direction}
       divider={divider}
@@ -39,6 +39,6 @@ export const Stack = ({
       spacing={spacing}
     >
       {children}
-    </Stacker>
+    </MStack>
   );
 };

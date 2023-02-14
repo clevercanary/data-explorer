@@ -12,7 +12,7 @@ export interface Breadcrumb {
   text: string;
 }
 
-interface Props {
+export interface BreadcrumbsProps {
   breadcrumbs: Breadcrumb[];
   Separator?: ReactNode;
 }
@@ -20,7 +20,7 @@ interface Props {
 export const Breadcrumbs = ({
   breadcrumbs,
   Separator = <ChevronRightRoundedIcon fontSize="xxsmall" />,
-}: Props): JSX.Element => {
+}: BreadcrumbsProps): JSX.Element => {
   return (
     <>
       {breadcrumbs.length > 0 ? (

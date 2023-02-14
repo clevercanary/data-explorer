@@ -1,20 +1,16 @@
+import { SvgIcon } from "@mui/material";
+import React from "react";
+import { CustomSVGIconProps } from "../../common/entities";
+
 /**
  * Custom loading icon.
  */
-
-import { SvgIcon, SvgIconProps } from "@mui/material";
-import React from "react";
-
-interface Props extends SvgIconProps {
-  fontSize?: SvgIconProps["fontSize"];
-  viewBox?: string;
-}
 
 export const LoadingIcon = ({
   fontSize = "xsmall",
   viewBox = "0 0 105 105",
   ...props /* Spread props to allow for svg icon specific props SvgIconProps e.g. "htmlColor". */
-}: Props): JSX.Element => {
+}: CustomSVGIconProps): JSX.Element => {
   return (
     <SvgIcon fontSize={fontSize} viewBox={viewBox} {...props}>
       <circle cx="12.5" cy="12.5" r="12.5">

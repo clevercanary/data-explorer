@@ -1,20 +1,16 @@
+import { SvgIcon } from "@mui/material";
+import React from "react";
+import { CustomSVGIconProps } from "../../common/entities";
+
 /**
  * Custom checked icon.
  */
-
-import { SvgIcon, SvgIconProps } from "@mui/material";
-import React from "react";
-
-interface Props {
-  fontSize?: SvgIconProps["fontSize"];
-  viewBox?: string;
-}
 
 export const CheckedIcon = ({
   fontSize = "xsmall",
   viewBox = "0 0 18 18",
   ...props /* Spread props to allow for svg icon specific props SvgIconProps e.g. "htmlColor". */
-}: Props): JSX.Element => {
+}: CustomSVGIconProps): JSX.Element => {
   return (
     <SvgIcon fontSize={fontSize} viewBox={viewBox} {...props}>
       <path

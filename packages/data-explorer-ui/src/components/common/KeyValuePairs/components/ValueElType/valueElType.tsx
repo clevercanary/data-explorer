@@ -1,17 +1,18 @@
-/**
- * Basic KeyValuePairs "value" wrapper component.
- */
 import { Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 
-interface Props {
+/**
+ * Basic KeyValuePairs "value" wrapper component.
+ */
+
+export interface ValueElTypeProps {
   children: ReactNode;
 }
 
 export const ValueElType = ({
   children,
   ...props /* Spread props to allow for Typography specific prop overrides e.g. "variant". */
-}: Props): JSX.Element => {
+}: ValueElTypeProps): JSX.Element => {
   return (
     <Typography variant="text-body-400-2lines" {...props}>
       {children}

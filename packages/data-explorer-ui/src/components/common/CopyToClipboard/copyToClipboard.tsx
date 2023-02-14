@@ -3,11 +3,13 @@ import { IconButton, Tooltip } from "@mui/material";
 import copy from "copy-to-clipboard";
 import React, { useEffect } from "react";
 
-interface Props {
+export interface CopyToClipboardProps {
   copyStr: string;
 }
 
-export const CopyToClipboard = ({ copyStr }: Props): JSX.Element => {
+export const CopyToClipboard = ({
+  copyStr,
+}: CopyToClipboardProps): JSX.Element => {
   const [showTooltip, setShowTooltip] = React.useState(false);
 
   /**
