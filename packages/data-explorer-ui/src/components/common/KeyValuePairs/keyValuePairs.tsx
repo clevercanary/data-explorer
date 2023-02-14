@@ -1,5 +1,5 @@
 import React, { ElementType, ReactNode } from "react";
-import { Stack } from "../Stack/Stack";
+import { Stack } from "../Stack/stack";
 
 /**
  * Basic key value pairs component.
