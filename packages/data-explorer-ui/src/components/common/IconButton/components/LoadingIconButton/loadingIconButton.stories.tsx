@@ -7,9 +7,9 @@ export default {
   title: "Components/Common/IconButton/Download",
 } as ComponentMeta<typeof LoadingIconButton>;
 
-const Template: ComponentStory<typeof LoadingIconButton> = () => (
-  <LoadingIconButton />
-);
+const LoadingIconButtonTemplate: ComponentStory<
+  typeof LoadingIconButton
+> = () => <LoadingIconButton />;
 
-export const Loading = Template.bind({});
-Loading.args = {};
+export const LoadingIconButtonStory = LoadingIconButtonTemplate.bind({});
+LoadingIconButtonStory.args = {};
