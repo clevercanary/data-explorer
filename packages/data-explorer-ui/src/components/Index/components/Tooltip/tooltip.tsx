@@ -6,7 +6,7 @@ import React from "react";
 
 export const Tooltip = ({ children, ...props }: MTooltipProps): JSX.Element => {
   return (
-    <MTooltip {...props}>
+    <MTooltip arrow placement="top" {...props}>
       <div>{children}</div>
     </MTooltip>
   );
