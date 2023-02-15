@@ -1,13 +1,4 @@
 /**
- * Element alignment.
- */
-export enum ELEMENT_ALIGNMENT {
-  CENTER = "CENTER",
-  LEFT = "LEFT",
-  RIGHT = "RIGHT",
-}
-
-/**
  * Filterable metadata keys.
  */
 export type CategoryKey = string;
@@ -25,6 +16,32 @@ export interface CategoryTag {
  * Category values to be used as keys. For example, "Homo sapiens" or "10X 3' v2 sequencing".
  */
 export type CategoryValueKey = string;
+
+/**
+ * Element alignment.
+ */
+export enum ELEMENT_ALIGNMENT {
+  CENTER = "CENTER",
+  LEFT = "LEFT",
+  RIGHT = "RIGHT",
+}
+
+/**
+ * Generic pagination model used by both static and dynamic lists.
+ */
+export interface Pagination {
+  canNextPage: boolean;
+  canPreviousPage: boolean;
+  currentPage: number;
+  nextPage: () => void;
+  previousPage: () => void;
+  resetPage: () => void;
+}
+
+/**
+ * Possible pagination direction values.
+ */
+export type PaginationDirectionType = "next" | "prev";
 
 /**
  * Internal filter model of a multiselect category (e.g. library construction approach).
@@ -66,18 +83,14 @@ export interface SelectCategoryView {
 }
 
 /**
- * Generic pagination model used by both static and dynamic lists.
+ * Model of selected category values in a category.
  */
-export interface Pagination {
-  canNextPage: boolean;
-  canPreviousPage: boolean;
-  currentPage: number;
-  nextPage: () => void;
-  previousPage: () => void;
-  resetPage: () => void;
+export interface SelectedFilter {
+  categoryKey: CategoryKey;
+  value: SelectedFilterValue;
 }
 
 /**
- * Possible pagination direction values.
+ * Possible types of selected category values.
  */
-export type PaginationDirectionType = "next" | "prev";
+export type SelectedFilterValue = CategoryValueKey[];
