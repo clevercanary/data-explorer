@@ -73,7 +73,7 @@ export type ExploreState = {
 /**
  * Model of explore state context.
  */
-interface ExploreStateContextProps {
+export interface ExploreStateContextProps {
   exploreDispatch: Dispatch<ExploreAction>;
   exploreState: ExploreState;
 }

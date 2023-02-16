@@ -47,7 +47,7 @@ export interface UserProfile {
 /**
  * Model of authentication context.
  */
-interface IAuthContext {
+export interface AuthContextProps {
   authorizeUser: AuthorizeUserFn;
   hasTerraAccount: boolean;
   isAuthorized: boolean;
@@ -59,7 +59,7 @@ interface IAuthContext {
 /**
  * Auth context for storing and using auth-related state.
  */
-export const AuthContext = createContext<IAuthContext>({
+export const AuthContext = createContext<AuthContextProps>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   authorizeUser: () => {},
   hasTerraAccount: false,

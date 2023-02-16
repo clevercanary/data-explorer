@@ -20,14 +20,11 @@ import {
   Updater,
   useReactTable,
 } from "@tanstack/react-table";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { Pagination } from "../../common/entities";
+import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
-import {
-  EntityView,
-  ExploreActionKind,
-  ExploreStateContext,
-} from "../../providers/exploreState";
+import { EntityView, ExploreActionKind } from "../../providers/exploreState";
 import { InfoIcon } from "../common/CustomIcon/components/InfoIcon/infoIcon";
 import { GridPaper, RoundedPaper } from "../common/Paper/paper.styles";
 import { NoResults } from "../NoResults/noResults";
@@ -78,7 +75,7 @@ export const TableComponent = <T extends object>({
   total,
 }: // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO fix component length / complexity
 TableProps<T>): JSX.Element => {
-  const { exploreDispatch, exploreState } = useContext(ExploreStateContext);
+  const { exploreDispatch, exploreState } = useExploreState();
   const {
     filterState,
     isRelatedView,

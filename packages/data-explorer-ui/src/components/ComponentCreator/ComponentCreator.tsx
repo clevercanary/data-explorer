@@ -1,8 +1,8 @@
-import React, { useContext } from "react";
+import React from "react";
 import { v4 as uuid4 } from "uuid";
 import { ComponentsConfig } from "../../config/entities";
 import { useConfig } from "../../hooks/useConfig";
-import { ExploreStateContext } from "../../providers/exploreState";
+import { useExploreState } from "../../hooks/useExploreState";
 
 export interface ComponentCreatorProps<T> {
   components: ComponentsConfig;
@@ -23,7 +23,7 @@ export const ComponentCreator = <T,>({
   response,
 }: ComponentCreatorProps<T>): JSX.Element => {
   const { config, entityConfig } = useConfig();
-  const { exploreState } = useContext(ExploreStateContext);
+  const { exploreState } = useExploreState();
   const componentsValue =
     typeof components === "function" ? components(config) : components;
 

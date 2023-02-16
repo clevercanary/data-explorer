@@ -1,13 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
+import { useExploreState } from "../../../../hooks/useExploreState";
 import {
   EntityView,
   ExploreActionKind,
-  ExploreStateContext,
 } from "../../../../providers/exploreState";
 import { ToggleButtonGroup } from "../../../common/ToggleButtonGroup/toggleButtonGroup";
 
 export const EntityViewToggle = (): JSX.Element => {
-  const { exploreDispatch } = useContext(ExploreStateContext);
+  const { exploreDispatch } = useExploreState();
   const toggleButtons = [
     {
       label: "Exact Match",
