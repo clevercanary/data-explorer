@@ -30,6 +30,7 @@
     "@types/jest": "^29.4.0",
     "@types/react": "^18.0.15",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
+    "@types/uuid": "8.3.4",
     "eslint": "^8.33.0",
     "eslint-config-next": "^13.1.6",
     "eslint-config-prettier": "^8.6.0",
@@ -53,12 +54,13 @@
     "@emotion/styled": "11.10.4",
     "@mui/icons-material": "5.8.0",
     "@mui/material": "5.8.1",
+    "@tanstack/react-table": "8.5.11",
     "copy-to-clipboard": "3.3.1",
     "isomorphic-dompurify": "0.24.0",
     "match-sorter": "6.3.1",
     "next": "12.3.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "@tanstack/react-table": "8.5.11"
+    "uuid": "8.3.2"
   }
 }
