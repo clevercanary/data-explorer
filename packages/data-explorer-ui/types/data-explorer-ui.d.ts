@@ -10,6 +10,8 @@ import { PaletteColorOptions } from "@mui/material/styles/createPalette";
 import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
 import type {} from "@mui/material/SvgIcon";
 import type {} from "@mui/material/Typography";
+import { RowData } from "@tanstack/react-table";
+import { GridTrackSize } from "../src/config/entities";
 
 /**
  * Breakpoint definitions.
@@ -195,5 +197,11 @@ declare module "@mui/material/Typography" {
 declare module "@emotion/react" {
   export interface Theme extends MTheme {
     name: "EmotionTheme";
+  }
+}
+
+declare module "@tanstack/table-core" {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    width: GridTrackSize;
   }
 }
