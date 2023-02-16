@@ -27,6 +27,11 @@ export enum ELEMENT_ALIGNMENT {
 }
 
 /**
+ * Set of selected category values.
+ */
+export type Filters = SelectedFilter[];
+
+/**
  * Generic pagination model used by both static and dynamic lists.
  */
 export interface Pagination {
