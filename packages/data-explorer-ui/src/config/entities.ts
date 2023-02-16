@@ -77,7 +77,7 @@ export interface ComponentConfig<
   props?: React.ComponentProps<T>;
   viewBuilder?: (
     model: D,
-    exploreState?: ExploreState
+    viewContext?: ViewContext
   ) => React.ComponentProps<T>;
 }
 
@@ -245,7 +245,7 @@ export interface SiteConfig {
     footer: FooterProps;
     header: HeaderProps;
   };
-  redirectRootToPath?: string;
+  redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   themeOptions?: ThemeOptions;
 }
@@ -272,4 +272,12 @@ export interface SummaryConfig {
 interface TabConfig {
   label: string;
   route: string;
+}
+
+/**
+ * View context.
+ */
+export interface ViewContext {
+  entityConfig: EntityConfig;
+  exploreState: ExploreState;
 }
