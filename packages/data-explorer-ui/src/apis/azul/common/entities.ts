@@ -17,3 +17,12 @@ export type AzulSearchIndex = keyof Pick<
   AzulListParams,
   "search_before" | "search_after"
 >;
+
+/**
+ * Model of the response to get a download link, using a get-retry approach
+ */
+export interface FileLocationResponse {
+  Location: string;
+  "Retry-After"?: number;
+  Status: number;
+}

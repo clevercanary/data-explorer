@@ -1,0 +1,2 @@
+export const FILE_LOCATION_SUCCESSFULLY = 302;
+export const FILE_LOCATION_PENDING = 301;
