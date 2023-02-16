@@ -8,6 +8,7 @@ import {
 
 export type ConfigContextProps = {
   config: SiteConfig;
+  defaultEntityListType: string;
   entityConfig: EntityConfig;
   entityListType: string;
 };
@@ -20,6 +21,7 @@ export interface ConfigProps {
 
 export const ConfigContext = createContext<ConfigContextProps>({
   config: getDefaultConfig(),
+  defaultEntityListType: "",
   entityConfig: getDefaultEntityConfig(),
   entityListType: "",
 });
@@ -29,11 +31,18 @@ export function ConfigProvider({
   config,
   entityListType,
 }: ConfigProps): JSX.Element {
-  const redirect = config.redirectRootToPath.slice(1);
-  const entityName = entityListType || redirect;
+  const defaultEntityListType = config.redirectRootToPath.slice(1);
+  const entityName = entityListType || defaultEntityListType;
   const entityConfig = getEntityConfig(config, entityName);
   return (
-    <ConfigContext.Provider value={{ config, entityConfig, entityListType }}>
+    <ConfigContext.Provider
+      value={{
+        config,
+        defaultEntityListType,
+        entityConfig,
+        entityListType,
+      }}
+    >
       {children}
     </ConfigContext.Provider>
   );
