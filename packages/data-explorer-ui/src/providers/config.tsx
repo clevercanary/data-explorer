@@ -31,9 +31,10 @@ export function ConfigProvider({
   config,
   entityListType,
 }: ConfigProps): JSX.Element {
+  const { entities } = config;
   const defaultEntityListType = config.redirectRootToPath.slice(1);
   const entityName = entityListType || defaultEntityListType;
-  const entityConfig = getEntityConfig(config, entityName);
+  const entityConfig = getEntityConfig(entities, entityName);
   return (
     <ConfigContext.Provider
       value={{
