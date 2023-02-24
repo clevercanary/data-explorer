@@ -7,7 +7,7 @@ import {
 import React, { MouseEvent, useState } from "react";
 
 /**
- * An extension of the basic Mui ButtonGroup component with available ButtonGroup props.
+ * An extension of the basic Mui ToggleButtonGroup component with available ToggleButtonGroup props.
  */
 
 export type OnToggleButtonFn = () => void; // Function invoked when selected toggle button value changes.

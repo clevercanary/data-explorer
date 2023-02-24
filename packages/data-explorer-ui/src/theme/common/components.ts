@@ -9,6 +9,7 @@ import {
   infoMain,
   inkLight,
   inkMain,
+  primaryDark,
   primaryMain,
   smokeDark,
   smokeLight,
@@ -184,6 +185,34 @@ export const MuiButtonBase: Components["MuiButtonBase"] = {
     root: {
       flex: "none",
       fontFamily: fontFamily,
+    },
+  },
+};
+
+/**
+ * MuiButtonGroup Component
+ */
+export const MuiButtonGroup: Components["MuiButtonGroup"] = {
+  defaultProps: {
+    disableElevation: true,
+    disableRipple: true,
+  },
+  styleOverrides: {
+    grouped: {
+      minWidth: 0,
+      padding: "6px 8px",
+    },
+    groupedContainedPrimary: {
+      borderColor: primaryDark,
+      boxShadow: `0 1px 0 0 ${primaryDark}`,
+      // eslint-disable-next-line sort-keys -- disabling key order for readability
+      "&:hover": {
+        boxShadow: `0 1px 0 0 ${primaryDark}`,
+      },
+      // eslint-disable-next-line sort-keys -- disabling key order for readability
+      "&:active": {
+        boxShadow: "none",
+      },
     },
   },
 };

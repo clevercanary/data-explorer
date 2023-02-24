@@ -39,7 +39,8 @@ enum INK {
  * Palette "Primary"
  */
 enum PRIMARY {
-  MAIN = "#2278c3",
+  DARK = "#005EA9",
+  MAIN = "#1C7CC7",
 }
 
 /**
@@ -114,6 +115,7 @@ export const infoLightest = INFO.LIGHTEST;
 export const infoMain = INFO.MAIN;
 export const inkLight = INK.LIGHT;
 export const inkMain = INK.MAIN;
+export const primaryDark = PRIMARY.DARK;
 export const primaryMain = PRIMARY.MAIN;
 export const smokeDark = SMOKE.DARK;
 export const smokeLight = SMOKE.LIGHT;
@@ -180,6 +182,7 @@ export const ink: PaletteColorOptions = {
  * Palette Option "Primary"
  */
 export const primary: PaletteColorOptions = {
+  dark: primaryDark,
   main: primaryMain,
 };
 
