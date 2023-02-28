@@ -67,9 +67,10 @@ export interface ColumnConfig<
  * This will be used by @see ComponentCreator to create a React component with the given props and
  * making any necessary transformations.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- This config model is part of a generic array
 export interface ComponentConfig<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This config model is part of a generic array
   T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any> = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This config model is part of a generic array
   D = any
 > {
   children?: ComponentConfig[];
