@@ -1,4 +1,5 @@
 import { Theme as MTheme } from "@mui/material";
+import type {} from "@mui/material/Alert";
 import type {} from "@mui/material/Button";
 import type {} from "@mui/material/Checkbox";
 import type {} from "@mui/material/Chip";
@@ -12,6 +13,15 @@ import type {} from "@mui/material/SvgIcon";
 import type {} from "@mui/material/Typography";
 import { RowData } from "@tanstack/react-table";
 import { GridTrackSize } from "../src/config/entities";
+
+/**
+ * Alert prop options.
+ */
+declare module "@mui/material/Alert" {
+  interface AlertPropsVariantOverrides {
+    neutral: true;
+  }
+}
 
 /**
  * Breakpoint definitions.

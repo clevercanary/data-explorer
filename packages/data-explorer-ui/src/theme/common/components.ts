@@ -44,6 +44,9 @@ export const MuiAlert: Components["MuiAlert"] = {
     message: {
       padding: 0,
     },
+    root: {
+      ...textBody400,
+    },
     standard: {
       alignItems: "center",
       boxShadow: elevation01,
@@ -59,6 +62,15 @@ export const MuiAlert: Components["MuiAlert"] = {
       },
     },
   },
+  variants: [
+    {
+      props: { color: "info", variant: "neutral" },
+      style: {
+        backgroundColor: smokeLight,
+        padding: 16,
+      },
+    },
+  ],
 };
 
 /**
@@ -704,6 +716,7 @@ export const MuiTableCell: Components["MuiTableCell"] = {
     },
     head: {
       ...textBodySmall500,
+      padding: "20px",
     },
     root: {
       padding: "18px 20px",

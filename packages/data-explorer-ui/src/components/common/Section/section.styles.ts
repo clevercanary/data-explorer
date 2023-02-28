@@ -1,6 +1,15 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
 import { TABLET } from "../../../theme/common/breakpoints";
+
+export const sectionMargin = css`
+  margin: 20px 16px;
+`;
+
+export const sectionMarginSm = css`
+  margin: 20px;
+`;
 
 export const Section = styled.div`
   display: flex;
