@@ -25,7 +25,6 @@ import { Pagination } from "../../common/entities";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
 import { EntityView, ExploreActionKind } from "../../providers/exploreState";
-import { InfoIcon } from "../common/CustomIcon/components/InfoIcon/infoIcon";
 import { GridPaper, RoundedPaper } from "../common/Paper/paper.styles";
 import { NoResults } from "../NoResults/noResults";
 import {
@@ -268,7 +267,7 @@ TableProps<T>): JSX.Element => {
           </TableToolbar>
         )}
         {isRelatedView && (
-          <Alert icon={<InfoIcon fontSize="small" />} severity="info">
+          <Alert severity="info" variant="banner">
             <AlertTitle>
               Dug has identified the following studies as mentioning the
               selected focus/disease or related term in the study description.

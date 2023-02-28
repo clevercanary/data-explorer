@@ -1,12 +1,19 @@
 import { Components } from "@mui/material";
+import { ErrorIcon } from "../../components/common/CustomIcon/components/ErrorIcon/errorIcon";
+import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon/infoIcon";
+import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
+import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
 import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
 import {
-  alpha32,
+  alertLightest,
+  alertMain,
+  alertMain32,
   alpha80,
   black04,
   infoLight,
   infoLightest,
   infoMain,
+  infoMain32,
   inkLight,
   inkMain,
   primaryDark,
@@ -15,7 +22,13 @@ import {
   smokeLight,
   smokeLightest,
   smokeMain,
+  successLightest,
+  successMain,
+  successMain32,
   warningLight,
+  warningLightest,
+  warningMain,
+  warningMain32,
   white,
 } from "./palette";
 import {
@@ -27,7 +40,9 @@ import {
 import {
   fontFamily,
   textBody400,
+  textBody4002Lines,
   textBody500,
+  textBodyLarge500,
   textBodySmall400,
   textBodySmall500,
 } from "./typography";
@@ -36,38 +51,128 @@ import {
  * MuiAlert Component
  */
 export const MuiAlert: Components["MuiAlert"] = {
+  defaultProps: {
+    iconMapping: {
+      error: ErrorIcon({ fontSize: "small" }),
+      info: InfoIcon({ fontSize: "small" }),
+      success: SuccessIcon({ fontSize: "small" }),
+      warning: WarningIcon({ fontSize: "small" }),
+    },
+  },
   styleOverrides: {
     icon: {
       opacity: 1,
-      padding: 0,
+      padding: "2px 0",
     },
     message: {
       padding: 0,
     },
     root: {
-      ...textBody400,
-    },
-    standard: {
-      alignItems: "center",
+      ...textBody4002Lines,
+      borderRadius: 8,
       boxShadow: elevation01,
       color: inkMain,
-      padding: 16,
+    },
+    standard: {
+      alignItems: "flex-start",
+      padding: 20,
+    },
+    standardError: {
+      backgroundColor: alertLightest,
+      border: `1px solid ${alertMain32}`,
+      // eslint-disable-next-line sort-keys -- disabling key order for readability
+      "& .MuiAlert-icon": {
+        color: alertMain,
+      },
     },
     standardInfo: {
       backgroundColor: infoLightest,
-      border: `1px solid ${infoMain}${alpha32}`, // TODO combine alpha
+      border: `1px solid ${infoMain32}`,
       // eslint-disable-next-line sort-keys -- disabling key order for readability
       "& .MuiAlert-icon": {
         color: infoMain,
       },
     },
+    standardSuccess: {
+      backgroundColor: successLightest,
+      border: `1px solid ${successMain32}`,
+      // eslint-disable-next-line sort-keys -- disabling key order for readability
+      "& .MuiAlert-icon": {
+        color: successMain,
+      },
+    },
+    standardWarning: {
+      backgroundColor: warningLightest,
+      border: `1px solid ${warningMain32}`,
+      // eslint-disable-next-line sort-keys -- disabling key order for readability
+      "& .MuiAlert-icon": {
+        color: warningMain,
+      },
+    },
   },
   variants: [
     {
-      props: { color: "info", variant: "neutral" },
+      props: { severity: "info", variant: "neutral" },
       style: {
         backgroundColor: smokeLight,
         padding: 16,
+      },
+    },
+    {
+      props: { variant: "banner" },
+      style: {
+        padding: 16,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiAlert-icon": {
+          padding: 0,
+        },
+        "& .MuiAlertTitle-root": {
+          ...textBody500,
+        },
+      },
+    },
+    {
+      props: { severity: "error", variant: "banner" },
+      style: {
+        backgroundColor: alertLightest,
+        border: `1px solid ${alertMain32}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiAlert-icon": {
+          color: alertMain,
+        },
+      },
+    },
+    {
+      props: { severity: "info", variant: "banner" },
+      style: {
+        backgroundColor: infoLightest,
+        border: `1px solid ${infoMain32}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiAlert-icon": {
+          color: infoMain,
+        },
+      },
+    },
+    {
+      props: { severity: "success", variant: "banner" },
+      style: {
+        backgroundColor: successLightest,
+        border: `1px solid ${successMain32}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiAlert-icon": {
+          color: successMain,
+        },
+      },
+    },
+    {
+      props: { severity: "warning", variant: "banner" },
+      style: {
+        backgroundColor: warningLightest,
+        border: `1px solid ${warningMain32}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiAlert-icon": {
+          color: warningMain,
+        },
       },
     },
   ],
@@ -79,7 +184,7 @@ export const MuiAlert: Components["MuiAlert"] = {
 export const MuiAlertTitle: Components["MuiAlertTitle"] = {
   styleOverrides: {
     root: {
-      ...textBody500,
+      ...textBodyLarge500,
       margin: 0,
     },
   },
@@ -349,6 +454,13 @@ export const MuiCssBaseline: Components["MuiCssBaseline"] = {
     },
     img: {
       display: "block",
+    },
+    p: {
+      margin: "0 0 8px",
+      // eslint-disable-next-line sort-keys -- disabling key order for readability
+      "&:last-child": {
+        margin: 0,
+      },
     },
     strong: {
       fontWeight: 500,

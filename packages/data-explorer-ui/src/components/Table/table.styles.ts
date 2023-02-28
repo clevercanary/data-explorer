@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
-import { Alert as MAlert, Table as MTable } from "@mui/material";
+import { Table as MTable } from "@mui/material";
+import { FlatAlert } from "../common/Alert/alert.styles";
 
 interface Props {
   gridTemplateColumns: string;
@@ -45,8 +46,7 @@ export const TableToolbar = styled.div`
   padding: 20px;
 `;
 
-export const Alert = styled(MAlert)`
+export const Alert = styled(FlatAlert)`
   border: none;
-  border-radius: 0;
   box-shadow: 0 -1px 0 0 #00729c52, 0 1px 0 0 #00729c52;
 `;
