@@ -12,7 +12,7 @@ export interface FileLocation {
   status: number;
 }
 
-interface UseRequestFileLocationResult {
+export interface UseRequestFileLocationResult {
   data: FileLocation | undefined;
   isIdle: boolean;
   isLoading: boolean;
