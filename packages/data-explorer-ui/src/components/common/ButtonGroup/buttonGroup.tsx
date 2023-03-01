@@ -3,7 +3,8 @@ import {
   ButtonGroup as MButtonGroup,
   ButtonGroupProps as MButtonGroupProps,
 } from "@mui/material";
-import React, { ElementType, ReactNode } from "react";
+import React, { ReactNode } from "react";
+import { LoadingIcon } from "../CustomIcon/components/LoadingIcon/loadingIcon";
 
 /**
  * An extension of the basic Mui ButtonGroup component with available ButtonGroup props.
@@ -13,7 +14,8 @@ export type OnButtonGroupButtonFn = () => void; // Function invoked with button 
 
 export interface ButtonGroup {
   action: string; // Short description to describe button action.
-  label: ElementType | string; // Button label may be an element i.e. icon.
+  label: ReactNode; // Button label may be a string or an element e.g. icon.
+  loading?: boolean;
   onClick: OnButtonGroupButtonFn;
 }
 
@@ -45,26 +47,13 @@ export const ButtonGroup = ({
       size={size}
       variant={variant}
     >
-      {buttons.map(({ action, label, onClick }) => {
+      {buttons.map(({ action, label, loading, onClick }) => {
         return (
-          <MButton key={action} onClick={onClick}>
-            {renderButtonLabel(label)}
+          <MButton key={action} onClick={loading ? undefined : onClick}>
+            {loading ? <LoadingIcon fontSize="small" /> : label}
           </MButton>
         );
       })}
     </MButtonGroup>
   );
 };
-
-/**
- * Renders button label.
- * @param label - Label is a string or element type.
- * @returns react node for the displaying of button label.
- */
-function renderButtonLabel(label: ElementType | string): ReactNode {
-  if (typeof label === "string") {
-    return label;
-  }
-  const Label = label;
-  return <Label />;
-}
