@@ -4,6 +4,7 @@ import { LoadingIcon } from "../../../CustomIcon/components/LoadingIcon/loadingI
 
 export interface ButtonGroupButtonProps {
   action: string; // Short description to describe button action.
+  disabled?: boolean;
   label: ReactNode; // Button label may be a string or an element e.g. icon.
   loading?: boolean;
   loadingIcon?: ReactNode;
@@ -11,13 +12,14 @@ export interface ButtonGroupButtonProps {
 }
 
 export const ButtonGroupButton = ({
+  disabled = false,
   label,
   loading,
   loadingIcon = <LoadingIcon fontSize="small" />,
   onClick,
 }: ButtonGroupButtonProps): JSX.Element => {
   return (
-    <MButton onClick={loading ? undefined : onClick}>
+    <MButton disabled={disabled} onClick={loading ? undefined : onClick}>
       {loading ? loadingIcon : label}
     </MButton>
   );
