@@ -1,26 +1,16 @@
 import {
-  Button as MButton,
   ButtonGroup as MButtonGroup,
   ButtonGroupProps as MButtonGroupProps,
 } from "@mui/material";
-import React, { ReactNode } from "react";
-import { LoadingIcon } from "../CustomIcon/components/LoadingIcon/loadingIcon";
+import React, { Fragment, ReactElement } from "react";
+import { ButtonGroupButton } from "./components/ButtonGroupButton/buttonGroupButton";
 
 /**
  * An extension of the basic Mui ButtonGroup component with available ButtonGroup props.
  */
 
-export type OnButtonGroupButtonFn = () => void; // Function invoked with button onClick handler.
-
-export interface ButtonGroup {
-  action: string; // Short description to describe button action.
-  label: ReactNode; // Button label may be a string or an element e.g. icon.
-  loading?: boolean;
-  onClick: OnButtonGroupButtonFn;
-}
-
 export interface ButtonGroupProps {
-  buttons: ButtonGroup[];
+  Buttons: ReactElement<typeof ButtonGroupButton>[];
   color?: MButtonGroupProps["color"];
   disabled?: boolean;
   fullWidth?: boolean;
@@ -30,7 +20,7 @@ export interface ButtonGroupProps {
 }
 
 export const ButtonGroup = ({
-  buttons,
+  Buttons,
   color = "primary",
   disabled = false,
   fullWidth = false,
@@ -47,13 +37,9 @@ export const ButtonGroup = ({
       size={size}
       variant={variant}
     >
-      {buttons.map(({ action, label, loading, onClick }) => {
-        return (
-          <MButton key={action} onClick={loading ? undefined : onClick}>
-            {loading ? <LoadingIcon fontSize="small" /> : label}
-          </MButton>
-        );
-      })}
+      {Buttons.map((Button, i) => (
+        <Fragment key={`button-${i}`}>{Button}</Fragment>
+      ))}
     </MButtonGroup>
   );
 };
