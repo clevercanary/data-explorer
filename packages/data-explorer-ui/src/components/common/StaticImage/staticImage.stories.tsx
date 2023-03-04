@@ -1,5 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
+import logo from "../../../images/logo.svg";
 import { StaticImage } from "./staticImage";
 
 export default {
@@ -19,7 +20,7 @@ const StaticImageTemplate: ComponentStory<typeof StaticImage> = (args) => (
 
 export const StaticImageStory = StaticImageTemplate.bind({});
 StaticImageStory.args = {
-  alt: "NHGRI Analysis Visualization and Informatics Lab-space",
+  alt: "Data Explorer",
   height: 40,
-  src: undefined,
+  src: logo,
 };
