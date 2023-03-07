@@ -10,7 +10,7 @@ import { ButtonGroupButton } from "./components/ButtonGroupButton/buttonGroupBut
  */
 
 export interface ButtonGroupProps {
-  Buttons: ReactElement<typeof ButtonGroupButton>[];
+  Buttons: (ReactElement<typeof ButtonGroupButton> | null)[];
   color?: MButtonGroupProps["color"];
   disabled?: boolean;
   fullWidth?: boolean;
