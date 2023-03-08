@@ -30,6 +30,7 @@ import {
   textBody500,
   textBodySmall400,
   textBodySmall500,
+  TEXT_BODY_400,
   TEXT_BODY_400_2_LINES,
   TEXT_BODY_500,
   TEXT_BODY_LARGE_500,
@@ -684,18 +685,22 @@ export const MuiIconButton = (theme: Theme): Components["MuiIconButton"] => {
 
 /**
  * MuiInputBase Component
+ * @param theme - Theme.
+ * @returns MuiInputBase component theme styles.
  */
-export const MuiInputBase: Components["MuiInputBase"] = {
-  styleOverrides: {
-    adornedStart: {
-      gap: 8,
+export const MuiInputBase = (theme: Theme): Components["MuiInputBase"] => {
+  return {
+    styleOverrides: {
+      adornedStart: {
+        gap: 8,
+      },
+      root: {
+        ...theme.typography[TEXT_BODY_400],
+        height: 40,
+        letterSpacing: "normal",
+      },
     },
-    root: {
-      ...textBody400,
-      height: 40,
-      letterSpacing: "normal",
-    },
-  },
+  };
 };
 
 /**
