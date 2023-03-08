@@ -18,9 +18,9 @@ import React from "react";
 import { Table as GridTable } from "../../../Table/table.styles";
 
 export interface TableView {
-  table?: MTableProps;
-  tableCell?: MTableCellProps;
-  tableContainer?: MTableContainerProps;
+  table?: Partial<MTableProps>;
+  tableCell?: Partial<MTableCellProps>;
+  tableContainer?: Partial<MTableContainerProps>;
 }
 
 export interface TableProps<T extends object> {
