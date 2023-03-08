@@ -7,11 +7,11 @@ import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
 import {
   alpha32,
   alpha60,
+  alpha80,
   black04,
   infoLight,
   inkLight,
   inkMain,
-  inkMain80,
   primaryDark,
   primaryMain,
   smokeDark,
@@ -211,16 +211,20 @@ export const MuiAppBar: Components["MuiAppBar"] = {
 
 /**
  * MuiBackdrop Component
+ * @param theme - Theme.
+ * @returns MuiBackdrop component theme styles.
  */
-export const MuiBackdrop: Components["MuiBackdrop"] = {
-  styleOverrides: {
-    invisible: {
-      backgroundColor: "transparent",
+export const MuiBackdrop = (theme: Theme): Components["MuiBackdrop"] => {
+  return {
+    styleOverrides: {
+      invisible: {
+        backgroundColor: "transparent",
+      },
+      root: {
+        backgroundColor: `${theme.palette.ink.main}${alpha80}`,
+      },
     },
-    root: {
-      backgroundColor: inkMain80,
-    },
-  },
+  };
 };
 
 /**
