@@ -308,18 +308,22 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
 
 /**
  * MuiButtonBase Component
+ * @param theme - Theme.
+ * @returns MuiButtonBase component theme styles.
  */
-export const MuiButtonBase: Components["MuiButtonBase"] = {
-  defaultProps: {
-    disableRipple: true,
-    disableTouchRipple: true,
-  },
-  styleOverrides: {
-    root: {
-      flex: "none",
-      fontFamily: fontFamily,
+export const MuiButtonBase = (theme: Theme): Components["MuiButtonBase"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
+      disableTouchRipple: true,
     },
-  },
+    styleOverrides: {
+      root: {
+        flex: "none",
+        fontFamily: theme.typography.fontFamily,
+      },
+    },
+  };
 };
 
 /**
