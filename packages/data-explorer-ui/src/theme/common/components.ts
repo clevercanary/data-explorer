@@ -5,15 +5,10 @@ import { SuccessIcon } from "../../components/common/CustomIcon/components/Succe
 import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
 import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
 import {
-  alertLightest,
-  alertMain,
-  alertMain32,
+  alpha32,
   alpha60,
   black04,
   infoLight,
-  infoLightest,
-  infoMain,
-  infoMain32,
   inkLight,
   inkMain,
   inkMain80,
@@ -23,13 +18,7 @@ import {
   smokeLight,
   smokeLightest,
   smokeMain,
-  successLightest,
-  successMain,
-  successMain32,
   warningLight,
-  warningLightest,
-  warningMain,
-  warningMain32,
   white,
 } from "./palette";
 import {
@@ -41,11 +30,12 @@ import {
 import {
   fontFamily,
   textBody400,
-  textBody4002Lines,
   textBody500,
   textBodyLarge500,
   textBodySmall400,
   textBodySmall500,
+  TEXT_BODY_400_2_LINES,
+  TEXT_BODY_500,
   TEXT_HEADING,
 } from "./typography";
 
@@ -54,133 +44,137 @@ const FLEX_START = "flex-start";
 
 /**
  * MuiAlert Component
+ * @param theme - Theme.
+ * @returns MuiAlert component theme styles.
  */
-export const MuiAlert: Components["MuiAlert"] = {
-  defaultProps: {
-    iconMapping: {
-      error: ErrorIcon({ fontSize: "small" }),
-      info: InfoIcon({ fontSize: "small" }),
-      success: SuccessIcon({ fontSize: "small" }),
-      warning: WarningIcon({ fontSize: "small" }),
-    },
-  },
-  styleOverrides: {
-    icon: {
-      opacity: 1,
-      padding: "2px 0",
-    },
-    message: {
-      padding: 0,
-    },
-    root: {
-      ...textBody4002Lines,
-      borderRadius: 8,
-      boxShadow: elevation01,
-      color: inkMain,
-    },
-    standard: {
-      alignItems: FLEX_START,
-      padding: 20,
-    },
-    standardError: {
-      backgroundColor: alertLightest,
-      border: `1px solid ${alertMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: alertMain,
+export const MuiAlert = (theme: Theme): Components["MuiAlert"] => {
+  return {
+    defaultProps: {
+      iconMapping: {
+        error: ErrorIcon({ fontSize: "small" }),
+        info: InfoIcon({ fontSize: "small" }),
+        success: SuccessIcon({ fontSize: "small" }),
+        warning: WarningIcon({ fontSize: "small" }),
       },
     },
-    standardInfo: {
-      backgroundColor: infoLightest,
-      border: `1px solid ${infoMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: infoMain,
+    styleOverrides: {
+      icon: {
+        opacity: 1,
+        padding: "2px 0",
       },
-    },
-    standardSuccess: {
-      backgroundColor: successLightest,
-      border: `1px solid ${successMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: successMain,
+      message: {
+        padding: 0,
       },
-    },
-    standardWarning: {
-      backgroundColor: warningLightest,
-      border: `1px solid ${warningMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: warningMain,
+      root: {
+        ...theme.typography[TEXT_BODY_400_2_LINES],
+        borderRadius: 8,
+        boxShadow: theme.shadows[1], // elevation01
+        color: theme.palette.ink.main,
       },
-    },
-  },
-  variants: [
-    {
-      props: { severity: "info", variant: "neutral" },
-      style: {
-        backgroundColor: smokeLight,
-        padding: 16,
+      standard: {
+        alignItems: FLEX_START,
+        padding: 20,
       },
-    },
-    {
-      props: { variant: "banner" },
-      style: {
-        padding: 16,
+      standardError: {
+        backgroundColor: theme.palette.alert.lightest,
+        border: `1px solid ${theme.palette.alert.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          padding: 0,
-        },
-        "& .MuiAlertTitle-root": {
-          ...textBody500,
+          color: theme.palette.alert.main,
         },
       },
-    },
-    {
-      props: { severity: "error", variant: "banner" },
-      style: {
-        backgroundColor: alertLightest,
-        border: `1px solid ${alertMain32}`,
+      standardInfo: {
+        backgroundColor: theme.palette.info.lightest,
+        border: `1px solid ${theme.palette.info.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          color: alertMain,
+          color: theme.palette.info.main,
         },
       },
-    },
-    {
-      props: { severity: "info", variant: "banner" },
-      style: {
-        backgroundColor: infoLightest,
-        border: `1px solid ${infoMain32}`,
+      standardSuccess: {
+        backgroundColor: theme.palette.success.lightest,
+        border: `1px solid ${theme.palette.success.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          color: infoMain,
+          color: theme.palette.success.main,
         },
       },
-    },
-    {
-      props: { severity: "success", variant: "banner" },
-      style: {
-        backgroundColor: successLightest,
-        border: `1px solid ${successMain32}`,
+      standardWarning: {
+        backgroundColor: theme.palette.warning.lightest,
+        border: `1px solid ${theme.palette.warning.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          color: successMain,
+          color: theme.palette.warning.main,
         },
       },
     },
-    {
-      props: { severity: "warning", variant: "banner" },
-      style: {
-        backgroundColor: warningLightest,
-        border: `1px solid ${warningMain32}`,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "& .MuiAlert-icon": {
-          color: warningMain,
+    variants: [
+      {
+        props: { severity: "info", variant: "neutral" },
+        style: {
+          backgroundColor: theme.palette.smoke.light,
+          padding: 16,
         },
       },
-    },
-  ],
+      {
+        props: { variant: "banner" },
+        style: {
+          padding: 16,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            padding: 0,
+          },
+          "& .MuiAlertTitle-root": {
+            ...theme.typography[TEXT_BODY_500],
+          },
+        },
+      },
+      {
+        props: { severity: "error", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.alert.lightest,
+          border: `1px solid ${theme.palette.alert.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.alert.main,
+          },
+        },
+      },
+      {
+        props: { severity: "info", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.info.lightest,
+          border: `1px solid ${theme.palette.info.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.info.main,
+          },
+        },
+      },
+      {
+        props: { severity: "success", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.success.lightest,
+          border: `1px solid ${theme.palette.success.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.success.main,
+          },
+        },
+      },
+      {
+        props: { severity: "warning", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.warning.lightest,
+          border: `1px solid ${theme.palette.warning.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.warning.main,
+          },
+        },
+      },
+    ],
+  };
 };
 
 /**

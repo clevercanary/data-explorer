@@ -63,7 +63,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
 
   // Theme components.
   theme.components = {
-    MuiAlert: C.MuiAlert,
+    MuiAlert: C.MuiAlert(theme),
     MuiAlertTitle: C.MuiAlertTitle,
     MuiAppBar: C.MuiAppBar,
     MuiBackdrop: C.MuiBackdrop,
