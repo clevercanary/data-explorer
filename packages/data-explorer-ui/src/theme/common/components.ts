@@ -15,12 +15,7 @@ import {
   smokeMain,
   white,
 } from "./palette";
-import {
-  elevation02,
-  strokeBottom,
-  strokeBottomSmoke,
-  strokeTop,
-} from "./shadows";
+import { elevation02, strokeBottom, strokeTop } from "./shadows";
 import {
   fontFamily,
   textBody500,
@@ -1017,34 +1012,38 @@ export const MuiTableSortLabel: Components["MuiTableSortLabel"] = {
 
 /**
  * MuiTabs Component
+ * @param theme - Theme.
+ * @returns MuiTabs component theme styles.
  */
-export const MuiTabs: Components["MuiTabs"] = {
-  defaultProps: {
-    textColor: "inherit",
-    variant: "scrollable",
-  },
-  styleOverrides: {
-    flexContainer: {
-      gap: 8,
+export const MuiTabs = (theme: Theme): Components["MuiTabs"] => {
+  return {
+    defaultProps: {
+      textColor: "inherit",
+      variant: "scrollable",
     },
-    indicator: {
-      borderTopLeftRadius: 12,
-      borderTopRightRadius: 12,
-      height: 3,
-    },
-    root: {
-      boxShadow: strokeBottomSmoke,
-      minHeight: "unset",
-      position: "relative", // Positions scroll fuzz.
-    },
-    scroller: {
-      margin: "0 16px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      [tabletUp]: {
-        margin: 0,
+    styleOverrides: {
+      flexContainer: {
+        gap: 8,
+      },
+      indicator: {
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        height: 3,
+      },
+      root: {
+        boxShadow: `${strokeBottom} ${theme.palette.smoke.main}`,
+        minHeight: "unset",
+        position: "relative", // Positions scroll fuzz.
+      },
+      scroller: {
+        margin: "0 16px",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        [tabletUp]: {
+          margin: 0,
+        },
       },
     },
-  },
+  };
 };
 
 /**

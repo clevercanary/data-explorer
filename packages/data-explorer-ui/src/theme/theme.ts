@@ -92,7 +92,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
     MuiTab: C.MuiTab(theme),
     MuiTableCell: C.MuiTableCell(theme),
     MuiTableSortLabel: C.MuiTableSortLabel,
-    MuiTabs: C.MuiTabs,
+    MuiTabs: C.MuiTabs(theme),
     MuiToggleButton: C.MuiToggleButton,
     MuiToggleButtonGroup: C.MuiToggleButtonGroup,
     MuiToolbar: C.MuiToolbar,

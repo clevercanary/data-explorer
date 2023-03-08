@@ -144,13 +144,7 @@ export const alpha80 = ALPHA.A80;
 /**
  * Shades
  */
-export const alertMain32 = `${alertMain}${alpha32}`;
 export const black04 = `${black}${alpha04}`;
-export const infoMain32 = `${infoMain}${alpha32}`;
-export const inkMain60 = `${inkMain}${alpha60}`;
-export const inkMain80 = `${inkMain}${alpha80}`;
-export const successMain32 = `${successMain}${alpha32}`;
-export const warningMain32 = `${warningMain}${alpha32}`;
 
 /**
  * Palette Option "Alert"
