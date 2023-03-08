@@ -68,7 +68,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
     MuiAppBar: C.MuiAppBar,
     MuiBackdrop: C.MuiBackdrop(theme),
     MuiBreadcrumbs: C.MuiBreadcrumbs(theme),
-    MuiButton: C.MuiButton,
+    MuiButton: C.MuiButton(theme),
     MuiButtonBase: C.MuiButtonBase,
     MuiButtonGroup: C.MuiButtonGroup,
     MuiCheckbox: C.MuiCheckbox,

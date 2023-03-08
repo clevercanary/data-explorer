@@ -257,49 +257,53 @@ export const MuiBreadcrumbs = (theme: Theme): Components["MuiBreadcrumbs"] => {
 
 /**
  * MuiButton Component
+ * @param theme - Theme.
+ * @returns MuiButton component theme styles.
  */
-export const MuiButton: Components["MuiButton"] = {
-  defaultProps: {
-    disableRipple: true,
-    disableTouchRipple: true,
-  },
-  styleOverrides: {
-    endIcon: {
-      margin: 0,
+export const MuiButton = (theme: Theme): Components["MuiButton"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
+      disableTouchRipple: true,
     },
-    root: {
-      ...textBody500,
-      gap: 4,
-      letterSpacing: "normal",
-      padding: "10px 16px",
-      textTransform: "capitalize",
-    },
-    startIcon: {
-      marginRight: 0,
-    },
-  },
-  variants: [
-    {
-      props: {
-        variant: "nav",
+    styleOverrides: {
+      endIcon: {
+        margin: 0,
       },
-      style: {
-        ...textBody500,
-        color: inkMain,
-        minWidth: 0,
-        padding: "12px 24px",
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        gap: 4,
+        letterSpacing: "normal",
+        padding: "10px 16px",
         textTransform: "capitalize",
-        whiteSpace: "nowrap",
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: smokeLight,
-        },
-        [desktopSmUp]: {
-          padding: "6px 12px",
-        },
+      },
+      startIcon: {
+        marginRight: 0,
       },
     },
-  ],
+    variants: [
+      {
+        props: {
+          variant: "nav",
+        },
+        style: {
+          ...theme.typography[TEXT_BODY_500],
+          color: theme.palette.ink.main,
+          minWidth: 0,
+          padding: "12px 24px",
+          textTransform: "capitalize",
+          whiteSpace: "nowrap",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
+          [desktopSmUp]: {
+            padding: "6px 12px",
+          },
+        },
+      },
+    ],
+  };
 };
 
 /**
