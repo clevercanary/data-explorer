@@ -9,7 +9,6 @@ import {
   alpha60,
   alpha80,
   black04,
-  infoLight,
   inkLight,
   inkMain,
   primaryMain,
@@ -17,7 +16,6 @@ import {
   smokeLight,
   smokeLightest,
   smokeMain,
-  warningLight,
   white,
 } from "./palette";
 import {
@@ -36,6 +34,7 @@ import {
   TEXT_BODY_500,
   TEXT_BODY_LARGE_500,
   TEXT_BODY_SMALL_400,
+  TEXT_BODY_SMALL_500,
   TEXT_HEADING,
 } from "./typography";
 
@@ -392,75 +391,79 @@ export const MuiCheckbox = (theme: Theme): Components["MuiCheckbox"] => {
 
 /**
  * MuiChip Component
+ * @param theme - Theme.
+ * @returns MuiChip component theme styles.
  */
-export const MuiChip: Components["MuiChip"] = {
-  defaultProps: {
-    size: "small",
-  },
-  styleOverrides: {
-    deleteIcon: {
-      color: "inherit",
-      margin: "0 -2px 0 0",
+export const MuiChip = (theme: Theme): Components["MuiChip"] => {
+  return {
+    defaultProps: {
+      size: "small",
     },
-  },
-  variants: [
-    {
-      props: { color: "default" },
-      style: {
-        backgroundColor: smokeMain,
-        color: inkMain,
+    styleOverrides: {
+      deleteIcon: {
+        color: "inherit",
+        margin: "0 -2px 0 0",
       },
     },
-    {
-      props: { color: "info" },
-      style: {
-        backgroundColor: infoLight,
-      },
-    },
-    {
-      props: { color: "warning" },
-      style: {
-        backgroundColor: warningLight,
-      },
-    },
-    {
-      props: { variant: "filterTag" },
-      style: {
-        ...textBodySmall500,
-        cursor: "pointer", // "pointer" cursor required to restore "clickable" ui
-        gap: 2,
-        height: 24,
-        justifySelf: FLEX_START,
-        padding: "0 8px",
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "& .MuiChip-label": {
-          padding: 0,
+    variants: [
+      {
+        props: { color: "default" },
+        style: {
+          backgroundColor: theme.palette.smoke.main,
+          color: theme.palette.ink.main,
         },
       },
-    },
-    {
-      props: { variant: "ntag" },
-      style: {
-        ...textBodySmall400,
-        backgroundColor: smokeMain,
-        borderColor: white,
-        borderStyle: "solid",
-        borderWidth: 2,
-        boxSizing: "content-box",
-        height: 24,
+      {
+        props: { color: "info" },
+        style: {
+          backgroundColor: theme.palette.info.light,
+        },
       },
-    },
-    {
-      props: { variant: "status" },
-      style: {
-        ...textBodySmall500,
-        borderColor: white,
-        borderStyle: "solid",
-        borderWidth: 2,
-        height: 24,
+      {
+        props: { color: "warning" },
+        style: {
+          backgroundColor: theme.palette.warning.light,
+        },
       },
-    },
-  ],
+      {
+        props: { variant: "filterTag" },
+        style: {
+          ...theme.typography[TEXT_BODY_SMALL_500],
+          cursor: "pointer", // "pointer" cursor required to restore "clickable" ui
+          gap: 2,
+          height: 24,
+          justifySelf: FLEX_START,
+          padding: "0 8px",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiChip-label": {
+            padding: 0,
+          },
+        },
+      },
+      {
+        props: { variant: "ntag" },
+        style: {
+          ...theme.typography[TEXT_BODY_SMALL_400],
+          backgroundColor: theme.palette.smoke.main,
+          borderColor: white,
+          borderStyle: "solid",
+          borderWidth: 2,
+          boxSizing: "content-box",
+          height: 24,
+        },
+      },
+      {
+        props: { variant: "status" },
+        style: {
+          ...theme.typography[TEXT_BODY_SMALL_500],
+          borderColor: white,
+          borderStyle: "solid",
+          borderWidth: 2,
+          height: 24,
+        },
+      },
+    ],
+  };
 };
 
 /**
