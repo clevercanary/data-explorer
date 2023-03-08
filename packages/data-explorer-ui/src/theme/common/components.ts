@@ -9,7 +9,6 @@ import {
   alpha60,
   alpha80,
   black04,
-  inkLight,
   inkMain,
   primaryMain,
   smokeLightest,
@@ -928,34 +927,38 @@ export const MuiSvgIcon = (theme: Theme): Components["MuiSvgIcon"] => {
 
 /**
  * MuiTab Component
+ * @param theme - Theme.
+ * @returns MuiTab component theme styles.
  */
-export const MuiTab: Components["MuiTab"] = {
-  styleOverrides: {
-    labelIcon: {
-      gap: 8,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& > img": {
-        maxHeight: 20, // Tab image max height.
+export const MuiTab = (theme: Theme): Components["MuiTab"] => {
+  return {
+    styleOverrides: {
+      labelIcon: {
+        gap: 8,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& > img": {
+          maxHeight: 20, // Tab image max height.
+        },
+      },
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        color: theme.palette.ink.light,
+        marginBottom: 3,
+        minHeight: "unset",
+        minWidth: "unset",
+        opacity: 1,
+        padding: 12,
+        textTransform: "capitalize",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& > .MuiTab-iconWrapper": {
+          marginRight: 0,
+        },
+        "&.Mui-selected": {
+          color: theme.palette.ink.main,
+        },
       },
     },
-    root: {
-      ...textBody500,
-      color: inkLight,
-      marginBottom: 3,
-      minHeight: "unset",
-      minWidth: "unset",
-      opacity: 1,
-      padding: 12,
-      textTransform: "capitalize",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& > .MuiTab-iconWrapper": {
-        marginRight: 0,
-      },
-      "&.Mui-selected": {
-        color: inkMain,
-      },
-    },
-  },
+  };
 };
 
 /**
