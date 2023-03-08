@@ -11,7 +11,6 @@ import {
   black04,
   inkMain,
   primaryMain,
-  smokeMain,
   white,
 } from "./palette";
 import { elevation02, strokeBottom, strokeTop } from "./shadows";
@@ -1081,24 +1080,30 @@ export const MuiToggleButton = (
 
 /**
  * MuiToggleButtonGroup Component
+ * @param theme - Theme.
+ * @returns MuiToggleButtonGroup component theme styles.
  */
-export const MuiToggleButtonGroup: Components["MuiToggleButtonGroup"] = {
-  styleOverrides: {
-    grouped: {
-      border: "none !important", // Overrides "grouped" css selector specificity.
-      borderRadius: "4px !important", // Overrides "grouped" css selector specificity.
-      margin: "0 !important", // Overrides "grouped" css selector specificity.
+export const MuiToggleButtonGroup = (
+  theme: Theme
+): Components["MuiToggleButtonGroup"] => {
+  return {
+    styleOverrides: {
+      grouped: {
+        border: "none !important", // Overrides "grouped" css selector specificity.
+        borderRadius: "4px !important", // Overrides "grouped" css selector specificity.
+        margin: "0 !important", // Overrides "grouped" css selector specificity.
+      },
+      root: {
+        backgroundColor: theme.palette.smoke.main,
+        borderRadius: 6,
+        color: theme.palette.ink.main,
+        display: "grid",
+        gridAutoColumns: "1fr",
+        gridAutoFlow: "column",
+        padding: 2,
+      },
     },
-    root: {
-      backgroundColor: smokeMain,
-      borderRadius: 6,
-      color: inkMain,
-      display: "grid",
-      gridAutoColumns: "1fr",
-      gridAutoFlow: "column",
-      padding: 2,
-    },
-  },
+  };
 };
 
 /**

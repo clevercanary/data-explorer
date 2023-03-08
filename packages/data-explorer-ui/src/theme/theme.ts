@@ -94,7 +94,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
     MuiTableSortLabel: C.MuiTableSortLabel,
     MuiTabs: C.MuiTabs(theme),
     MuiToggleButton: C.MuiToggleButton(theme),
-    MuiToggleButtonGroup: C.MuiToggleButtonGroup,
+    MuiToggleButtonGroup: C.MuiToggleButtonGroup(theme),
     MuiToolbar: C.MuiToolbar,
     MuiTooltip: C.MuiTooltip,
     MuiTypography: C.MuiTypography,
