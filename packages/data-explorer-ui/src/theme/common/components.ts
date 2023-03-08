@@ -4,17 +4,9 @@ import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon
 import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
 import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
 import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
-import {
-  alpha32,
-  alpha60,
-  alpha80,
-  black04,
-  primaryMain,
-  white,
-} from "./palette";
+import { alpha32, alpha60, alpha80, black04, white } from "./palette";
 import { strokeBottom, strokeTop } from "./shadows";
 import {
-  fontFamily,
   TEXT_BODY_400,
   TEXT_BODY_400_2_LINES,
   TEXT_BODY_500,
@@ -454,34 +446,38 @@ export const MuiChip = (theme: Theme): Components["MuiChip"] => {
 
 /**
  * MuiCssBaseline Component
+ * @param theme - Theme.
+ * @returns MuiCssBaseline component theme styles.
  */
-export const MuiCssBaseline: Components["MuiCssBaseline"] = {
-  styleOverrides: {
-    a: {
-      color: primaryMain,
-      textDecoration: "none",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        textDecoration: "underline",
+export const MuiCssBaseline = (theme: Theme): Components["MuiCssBaseline"] => {
+  return {
+    styleOverrides: {
+      a: {
+        color: theme.palette.primary.main,
+        textDecoration: "none",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          textDecoration: "underline",
+        },
+      },
+      body: {
+        fontFamily: theme.typography.fontFamily,
+      },
+      img: {
+        display: "block",
+      },
+      p: {
+        margin: "0 0 8px",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:last-child": {
+          margin: 0,
+        },
+      },
+      strong: {
+        fontWeight: 500,
       },
     },
-    body: {
-      fontFamily: fontFamily,
-    },
-    img: {
-      display: "block",
-    },
-    p: {
-      margin: "0 0 8px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:last-child": {
-        margin: 0,
-      },
-    },
-    strong: {
-      fontWeight: 500,
-    },
-  },
+  };
 };
 
 /**
