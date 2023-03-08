@@ -99,6 +99,7 @@ enum WHITE {
 enum ALPHA {
   A04 = "0a",
   A32 = "52",
+  A60 = "99",
   A80 = "cc",
 }
 
@@ -137,6 +138,7 @@ export const white = WHITE.DEFAULT;
  */
 export const alpha04 = ALPHA.A04;
 export const alpha32 = ALPHA.A32;
+export const alpha60 = ALPHA.A60;
 export const alpha80 = ALPHA.A80;
 
 /**
@@ -145,6 +147,8 @@ export const alpha80 = ALPHA.A80;
 export const alertMain32 = `${alertMain}${alpha32}`;
 export const black04 = `${black}${alpha04}`;
 export const infoMain32 = `${infoMain}${alpha32}`;
+export const inkMain60 = `${inkMain}${alpha60}`;
+export const inkMain80 = `${inkMain}${alpha80}`;
 export const successMain32 = `${successMain}${alpha32}`;
 export const warningMain32 = `${warningMain}${alpha32}`;
 

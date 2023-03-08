@@ -1,4 +1,4 @@
-import { Components } from "@mui/material";
+import { Components, Theme } from "@mui/material";
 import { ErrorIcon } from "../../components/common/CustomIcon/components/ErrorIcon/errorIcon";
 import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon/infoIcon";
 import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
@@ -8,7 +8,7 @@ import {
   alertLightest,
   alertMain,
   alertMain32,
-  alpha80,
+  alpha60,
   black04,
   infoLight,
   infoLightest,
@@ -16,6 +16,7 @@ import {
   infoMain32,
   inkLight,
   inkMain,
+  inkMain80,
   primaryDark,
   primaryMain,
   smokeDark,
@@ -45,7 +46,11 @@ import {
   textBodyLarge500,
   textBodySmall400,
   textBodySmall500,
+  TEXT_HEADING,
 } from "./typography";
+
+// Constants
+const FLEX_START = "flex-start";
 
 /**
  * MuiAlert Component
@@ -74,7 +79,7 @@ export const MuiAlert: Components["MuiAlert"] = {
       color: inkMain,
     },
     standard: {
-      alignItems: "flex-start",
+      alignItems: FLEX_START,
       padding: 20,
     },
     standardError: {
@@ -215,7 +220,7 @@ export const MuiBackdrop: Components["MuiBackdrop"] = {
       backgroundColor: "transparent",
     },
     root: {
-      backgroundColor: `${inkMain}${alpha80}`, // TODO alpha
+      backgroundColor: inkMain80,
     },
   },
 };
@@ -403,7 +408,7 @@ export const MuiChip: Components["MuiChip"] = {
         cursor: "pointer", // "pointer" cursor required to restore "clickable" ui
         gap: 2,
         height: 24,
-        justifySelf: "flex-start",
+        justifySelf: FLEX_START,
         padding: "0 8px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiChip-label": {
@@ -466,6 +471,81 @@ export const MuiCssBaseline: Components["MuiCssBaseline"] = {
       fontWeight: 500,
     },
   },
+};
+
+/**
+ * MuiDialog Component
+ * @param theme - Theme.
+ * @returns MuiDialog component theme styles.
+ */
+export const MuiDialog = (theme: Theme): Components["MuiDialog"] => {
+  return {
+    styleOverrides: {
+      paper: {
+        boxShadow: theme.shadows[2], // elevation02
+      },
+      root: {
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiBackdrop-root": {
+          backgroundColor: `${theme.palette.ink.main}${alpha60}`,
+        },
+      },
+    },
+  };
+};
+
+/**
+ * MuiDialogActions Component
+ */
+export const MuiDialogActions: Components["MuiDialogActions"] = {
+  styleOverrides: {
+    root: {
+      padding: 20,
+    },
+  },
+};
+
+/**
+ * MuiDialogContent Component
+ * @param theme - Theme.
+ * @returns MuiDialogContent component theme styles.
+ */
+export const MuiDialogContent = (
+  theme: Theme
+): Components["MuiDialogContent"] => {
+  return {
+    styleOverrides: {
+      root: {
+        borderColor: theme.palette.smoke.main,
+        padding: 20,
+      },
+    },
+  };
+};
+
+/**
+ * MuiDialogTitle Component
+ * @param theme - Theme.
+ * @returns MuiDialogTitle component theme styles.
+ */
+export const MuiDialogTitle = (theme: Theme): Components["MuiDialogTitle"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_HEADING],
+        alignItems: "center",
+        display: "grid",
+        gridAutoFlow: "column",
+        padding: 20,
+        [tabletUp]: {},
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiIconButton-edgeEnd": {
+          alignSelf: FLEX_START,
+          justifySelf: "flex-end",
+        },
+      },
+    },
+  };
 };
 
 /**
@@ -546,7 +626,7 @@ export const MuiIconButton: Components["MuiIconButton"] = {
         size: "xsmall",
       },
       style: {
-        padding: 2,
+        padding: 4,
       },
     },
     {
@@ -555,7 +635,7 @@ export const MuiIconButton: Components["MuiIconButton"] = {
         size: "xsmall",
       },
       style: {
-        marginRight: -2,
+        marginRight: -4,
       },
     },
     {
@@ -832,6 +912,12 @@ export const MuiTableCell: Components["MuiTableCell"] = {
     },
     root: {
       padding: "18px 20px",
+    },
+    sizeSmall: {
+      padding: "14px 20px",
+    },
+    stickyHeader: {
+      boxShadow: `0 1px 0 ${smokeMain}`,
     },
   },
 };

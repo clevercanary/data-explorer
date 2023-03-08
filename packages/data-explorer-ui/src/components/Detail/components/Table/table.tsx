@@ -1,8 +1,11 @@
 import {
   TableBody,
   TableCell,
+  TableCellProps as MTableCellProps,
   TableContainer,
+  TableContainerProps as MTableContainerProps,
   TableHead,
+  TableProps as MTableProps,
   TableRow,
 } from "@mui/material";
 import {
@@ -14,17 +17,29 @@ import {
 import React from "react";
 import { Table as GridTable } from "../../../Table/table.styles";
 
-interface TableProps<T extends object> {
+export interface TableView {
+  table?: Partial<MTableProps>;
+  tableCell?: Partial<MTableCellProps>;
+  tableContainer?: Partial<MTableContainerProps>;
+}
+
+export interface TableProps<T extends object> {
   columns: ColumnDef<T>[];
   gridTemplateColumns: string;
   items: T[];
+  tableView?: TableView;
 }
 
 export const Table = <T extends object>({
   columns,
   gridTemplateColumns,
   items,
+  tableView,
 }: TableProps<T>): JSX.Element => {
+  const { table, tableCell, tableContainer } = tableView || {};
+  const { stickyHeader = false } = table || {};
+  const { size: tableCellSize = "medium" } = tableCell || {};
+  const { sx: tableContainerSx } = tableContainer || {};
   const tableInstance = useReactTable({
     columns,
     data: items,
@@ -32,8 +47,11 @@ export const Table = <T extends object>({
   });
   const { getHeaderGroups, getRowModel } = tableInstance;
   return (
-    <TableContainer>
-      <GridTable gridTemplateColumns={gridTemplateColumns}>
+    <TableContainer sx={tableContainerSx}>
+      <GridTable
+        gridTemplateColumns={gridTemplateColumns}
+        stickyHeader={stickyHeader}
+      >
         {getHeaderGroups().map((headerGroup) => (
           <TableHead key={headerGroup.id}>
             <TableRow>
@@ -53,7 +71,7 @@ export const Table = <T extends object>({
             <TableRow key={row.id}>
               {row.getVisibleCells().map((cell) => {
                 return (
-                  <TableCell key={cell.id}>
+                  <TableCell key={cell.id} size={tableCellSize}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 );
