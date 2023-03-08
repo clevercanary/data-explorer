@@ -756,16 +756,20 @@ export const MuiListItemText: Components["MuiListItemText"] = {
 
 /**
  * MuiMenuItem Component
+ * @param theme - Theme.
+ * @returns MuiMenuItem component theme styles.
  */
-export const MuiMenuItem: Components["MuiMenuItem"] = {
-  defaultProps: { disableRipple: true },
-  styleOverrides: {
-    root: {
-      ...textBody400,
-      minHeight: "unset",
-      padding: "10px 16px",
+export const MuiMenuItem = (theme: Theme): Components["MuiMenuItem"] => {
+  return {
+    defaultProps: { disableRipple: true },
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_400],
+        minHeight: "unset",
+        padding: "10px 16px",
+      },
     },
-  },
+  };
 };
 
 /**
