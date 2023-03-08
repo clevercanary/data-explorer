@@ -868,58 +868,62 @@ export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
 
 /**
  * MuiSvgIcon Component
+ * @param theme - Theme.
+ * @returns MuiSvgIcon component theme styles.
  */
-export const MuiSvgIcon: Components["MuiSvgIcon"] = {
-  styleOverrides: {
-    fontSizeLarge: {
-      fontSize: "32px",
-    },
-    fontSizeSmall: {
-      fontSize: "20px",
-    },
-  },
-  variants: [
-    {
-      props: {
-        color: "inkLight",
+export const MuiSvgIcon = (theme: Theme): Components["MuiSvgIcon"] => {
+  return {
+    styleOverrides: {
+      fontSizeLarge: {
+        fontSize: "32px",
       },
-      style: {
-        color: inkLight,
+      fontSizeSmall: {
+        fontSize: "20px",
       },
     },
-    {
-      props: {
-        fontSize: "medium",
+    variants: [
+      {
+        props: {
+          color: "inkLight",
+        },
+        style: {
+          color: theme.palette.ink.light,
+        },
       },
-      style: {
-        fontSize: "24px",
+      {
+        props: {
+          fontSize: "medium",
+        },
+        style: {
+          fontSize: "24px",
+        },
       },
-    },
-    {
-      props: {
-        fontSize: "xsmall",
+      {
+        props: {
+          fontSize: "xsmall",
+        },
+        style: {
+          fontSize: "18px",
+        },
       },
-      style: {
-        fontSize: "18px",
+      {
+        props: {
+          fontSize: "xxlarge",
+        },
+        style: {
+          fontSize: "40px",
+        },
       },
-    },
-    {
-      props: {
-        fontSize: "xxlarge",
+      {
+        props: {
+          fontSize: "xxsmall",
+        },
+        style: {
+          fontSize: "16px",
+        },
       },
-      style: {
-        fontSize: "40px",
-      },
-    },
-    {
-      props: {
-        fontSize: "xxsmall",
-      },
-      style: {
-        fontSize: "16px",
-      },
-    },
-  ],
+    ],
+  };
 };
 
 /**
