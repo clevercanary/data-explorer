@@ -32,5 +32,6 @@ export const shadows = [elevation00, elevation01, elevation02];
 /**
  * Stroke constants
  */
+export const strokeBottom = STROKE.BOTTOM;
 export const strokeBottomSmoke = `${STROKE.BOTTOM} ${smokeMain}`;
-export const strokeTopSmoke = `${STROKE.TOP} ${smokeMain}`;
+export const strokeTop = STROKE.TOP;

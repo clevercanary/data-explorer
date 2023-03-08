@@ -12,17 +12,15 @@ import {
   inkLight,
   inkMain,
   primaryMain,
-  smokeDark,
-  smokeLight,
   smokeLightest,
   smokeMain,
   white,
 } from "./palette";
 import {
-  elevation01,
   elevation02,
+  strokeBottom,
   strokeBottomSmoke,
-  strokeTopSmoke,
+  strokeTop,
 } from "./shadows";
 import {
   fontFamily,
@@ -824,44 +822,48 @@ export const MuiOutlinedInput = (
 
 /**
  * MuiPaper Component
+ * @param theme - Theme.
+ * @returns MuiPaper component theme styles.
  */
-export const MuiPaper: Components["MuiPaper"] = {
-  variants: [
-    {
-      props: { variant: "footer" },
-      style: {
-        backgroundColor: smokeLight,
-        boxShadow: `${strokeTopSmoke}, ${strokeBottomSmoke}`,
+export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
+  return {
+    variants: [
+      {
+        props: { variant: "footer" },
+        style: {
+          backgroundColor: theme.palette.smoke.light,
+          boxShadow: `${strokeTop} ${theme.palette.smoke.main}, ${strokeBottom} ${theme.palette.smoke.main}`,
+        },
       },
-    },
-    {
-      props: { variant: "menu" },
-      style: {
-        borderColor: smokeDark,
-        borderRadius: 8,
-        borderStyle: "solid",
-        borderWidth: 1,
-        boxShadow: elevation02,
+      {
+        props: { variant: "menu" },
+        style: {
+          borderColor: theme.palette.smoke.dark,
+          borderRadius: 8,
+          borderStyle: "solid",
+          borderWidth: 1,
+          boxShadow: theme.shadows[2], // elevation02
+        },
       },
-    },
-    {
-      props: { variant: "panel" },
-      style: {
-        borderColor: smokeMain,
-        borderStyle: "solid",
-        borderWidth: 1,
-        boxShadow: elevation01,
+      {
+        props: { variant: "panel" },
+        style: {
+          borderColor: theme.palette.smoke.main,
+          borderStyle: "solid",
+          borderWidth: 1,
+          boxShadow: theme.shadows[1], // elevation01
+        },
       },
-    },
-    {
-      props: { variant: "sidebar" },
-      style: {
-        backgroundColor: smokeLight,
-        padding: "24px 0",
-        width: 312,
+      {
+        props: { variant: "sidebar" },
+        style: {
+          backgroundColor: theme.palette.smoke.light,
+          padding: "24px 0",
+          width: 312,
+        },
       },
-    },
-  ],
+    ],
+  };
 };
 
 /**
