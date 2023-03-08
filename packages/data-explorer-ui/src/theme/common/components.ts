@@ -11,14 +11,12 @@ import {
   black04,
   inkMain,
   primaryMain,
-  smokeLightest,
   smokeMain,
   white,
 } from "./palette";
 import { elevation02, strokeBottom, strokeTop } from "./shadows";
 import {
   fontFamily,
-  textBody500,
   textBodySmall400,
   TEXT_BODY_400,
   TEXT_BODY_400_2_LINES,
@@ -1048,31 +1046,37 @@ export const MuiTabs = (theme: Theme): Components["MuiTabs"] => {
 
 /**
  * MuiToggleButton Component
+ * @param theme - Theme.
+ * @returns MuiToggleButton component theme styles.
  */
-export const MuiToggleButton: Components["MuiToggleButton"] = {
-  styleOverrides: {
-    root: {
-      ...textBody500,
-      backgroundColor: smokeMain,
-      border: "none",
-      borderRadius: 4,
-      color: inkMain,
-      flex: 1,
-      padding: "8px 12px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        backgroundColor: smokeLightest,
-      },
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&.Mui-selected": {
-        backgroundColor: white,
+export const MuiToggleButton = (
+  theme: Theme
+): Components["MuiToggleButton"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        backgroundColor: theme.palette.smoke.main,
+        border: "none",
+        borderRadius: 4,
+        color: theme.palette.ink.main,
+        flex: 1,
+        padding: "8px 12px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "&:hover": {
+          backgroundColor: theme.palette.smoke.lightest,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-selected": {
           backgroundColor: white,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: white,
+          },
         },
       },
     },
-  },
+  };
 };
 
 /**
