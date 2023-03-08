@@ -8,6 +8,7 @@ import {
   alertLightest,
   alertMain,
   alertMain32,
+  alpha60,
   black04,
   infoLight,
   infoLightest,
@@ -15,7 +16,6 @@ import {
   infoMain32,
   inkLight,
   inkMain,
-  inkMain60,
   inkMain80,
   primaryDark,
   primaryMain,
@@ -475,19 +475,23 @@ export const MuiCssBaseline: Components["MuiCssBaseline"] = {
 
 /**
  * MuiDialog Component
+ * @param theme - Theme.
+ * @returns MuiDialog component theme styles.
  */
-export const MuiDialog: Components["MuiDialog"] = {
-  styleOverrides: {
-    paper: {
-      boxShadow: elevation02,
-    },
-    root: {
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiBackdrop-root": {
-        backgroundColor: inkMain60,
+export const MuiDialog = (theme: Theme): Components["MuiDialog"] => {
+  return {
+    styleOverrides: {
+      paper: {
+        boxShadow: theme.shadows[2], // elevation02
+      },
+      root: {
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& .MuiBackdrop-root": {
+          backgroundColor: `${theme.palette.ink.main}${alpha60}`,
+        },
       },
     },
-  },
+  };
 };
 
 /**
@@ -503,14 +507,20 @@ export const MuiDialogActions: Components["MuiDialogActions"] = {
 
 /**
  * MuiDialogContent Component
+ * @param theme - Theme.
+ * @returns MuiDialogContent component theme styles.
  */
-export const MuiDialogContent: Components["MuiDialogContent"] = {
-  styleOverrides: {
-    root: {
-      borderColor: smokeMain,
-      padding: 20,
+export const MuiDialogContent = (
+  theme: Theme
+): Components["MuiDialogContent"] => {
+  return {
+    styleOverrides: {
+      root: {
+        borderColor: theme.palette.smoke.main,
+        padding: 20,
+      },
     },
-  },
+  };
 };
 
 /**
