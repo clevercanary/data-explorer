@@ -714,27 +714,33 @@ export const MuiLink: Components["MuiLink"] = {
 
 /**
  * MuiListItemButton Component
+ * @param theme - Theme.
+ * @returns MuiListItemButton component theme styles.
  */
-export const MuiListItemButton: Components["MuiListItemButton"] = {
-  styleOverrides: {
-    root: {
-      ...textBody400,
-      minHeight: "unset",
-      padding: "10px 16px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        backgroundColor: smokeLight,
-      },
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&.Mui-selected": {
-        backgroundColor: "unset",
+export const MuiListItemButton = (
+  theme: Theme
+): Components["MuiListItemButton"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_400],
+        minHeight: "unset",
+        padding: "10px 16px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "&:hover": {
-          backgroundColor: smokeLight,
+          backgroundColor: theme.palette.smoke.light,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-selected": {
+          backgroundColor: "unset",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
         },
       },
     },
-  },
+  };
 };
 
 /**
