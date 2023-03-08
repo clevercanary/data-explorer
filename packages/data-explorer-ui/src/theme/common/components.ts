@@ -601,81 +601,85 @@ export const MuiDrawer: Components["MuiDrawer"] = {
 
 /**
  * MuiIconButton Component
+ * @param theme - Theme.
+ * @returns MuiIconButton component theme styles.
  */
-export const MuiIconButton: Components["MuiIconButton"] = {
-  defaultProps: {
-    disableRipple: true,
-  },
-  styleOverrides: {
-    root: {
-      borderRadius: 4,
+export const MuiIconButton = (theme: Theme): Components["MuiIconButton"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
     },
-    sizeLarge: {
-      padding: 10,
-    },
-    sizeSmall: {
-      padding: 6,
-    },
-  },
-  variants: [
-    {
-      props: {
-        color: "ink",
+    styleOverrides: {
+      root: {
+        borderRadius: 4,
       },
-      style: {
-        color: inkMain,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: smokeLight,
+      sizeLarge: {
+        padding: 10,
+      },
+      sizeSmall: {
+        padding: 6,
+      },
+    },
+    variants: [
+      {
+        props: {
+          color: "ink",
+        },
+        style: {
+          color: theme.palette.ink.main,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
         },
       },
-    },
-    {
-      props: {
-        color: "inkLight",
-      },
-      style: {
-        color: inkLight,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: smokeLight,
+      {
+        props: {
+          color: "inkLight",
+        },
+        style: {
+          color: theme.palette.ink.light,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
         },
       },
-    },
-    {
-      props: {
-        size: "xlarge",
+      {
+        props: {
+          size: "xlarge",
+        },
+        style: {
+          padding: 14,
+        },
       },
-      style: {
-        padding: 14,
+      {
+        props: {
+          size: "xsmall",
+        },
+        style: {
+          padding: 4,
+        },
       },
-    },
-    {
-      props: {
-        size: "xsmall",
+      {
+        props: {
+          edge: "end",
+          size: "xsmall",
+        },
+        style: {
+          marginRight: -4,
+        },
       },
-      style: {
-        padding: 4,
+      {
+        props: {
+          size: "xxsmall",
+        },
+        style: {
+          padding: 0,
+        },
       },
-    },
-    {
-      props: {
-        edge: "end",
-        size: "xsmall",
-      },
-      style: {
-        marginRight: -4,
-      },
-    },
-    {
-      props: {
-        size: "xxsmall",
-      },
-      style: {
-        padding: 0,
-      },
-    },
-  ],
+    ],
+  };
 };
 
 /**
