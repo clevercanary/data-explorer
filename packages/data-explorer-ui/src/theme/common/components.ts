@@ -575,13 +575,17 @@ export const MuiDialogTitle = (theme: Theme): Components["MuiDialogTitle"] => {
 
 /**
  * MuiDivider Component
+ * @param theme - Theme.
+ * @returns MuiDivider component theme styles.
  */
-export const MuiDivider: Components["MuiDivider"] = {
-  styleOverrides: {
-    root: {
-      borderColor: smokeMain,
+export const MuiDivider = (theme: Theme): Components["MuiDivider"] => {
+  return {
+    styleOverrides: {
+      root: {
+        borderColor: theme.palette.smoke.main,
+      },
     },
-  },
+  };
 };
 
 /**
