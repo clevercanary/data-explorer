@@ -359,31 +359,35 @@ export const MuiButtonGroup = (theme: Theme): Components["MuiButtonGroup"] => {
 
 /**
  * MuiCheckbox Component
+ * @param theme - Theme.
+ * @returns MuiCheckbox component theme styles.
  */
-export const MuiCheckbox: Components["MuiCheckbox"] = {
-  defaultProps: {
-    size: "xsmall",
-  },
-  styleOverrides: {
-    root: {
-      color: smokeDark,
-      padding: 0,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&.Mui-disabled": {
-        color: smokeDark,
+export const MuiCheckbox = (theme: Theme): Components["MuiCheckbox"] => {
+  return {
+    defaultProps: {
+      size: "xsmall",
+    },
+    styleOverrides: {
+      root: {
+        color: theme.palette.smoke.dark,
+        padding: 0,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-disabled": {
+          color: theme.palette.smoke.dark,
+        },
       },
     },
-  },
-  variants: [
-    {
-      props: {
-        size: "xsmall",
+    variants: [
+      {
+        props: {
+          size: "xsmall",
+        },
+        style: {
+          fontSize: "18px",
+        },
       },
-      style: {
-        fontSize: "18px",
-      },
-    },
-  ],
+    ],
+  };
 };
 
 /**
