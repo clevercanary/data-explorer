@@ -9,14 +9,12 @@ import {
   alpha60,
   alpha80,
   black04,
-  inkMain,
   primaryMain,
   white,
 } from "./palette";
-import { elevation02, strokeBottom, strokeTop } from "./shadows";
+import { strokeBottom, strokeTop } from "./shadows";
 import {
   fontFamily,
-  textBodySmall400,
   TEXT_BODY_400,
   TEXT_BODY_400_2_LINES,
   TEXT_BODY_500,
@@ -1127,23 +1125,27 @@ export const MuiToolbar: Components["MuiToolbar"] = {
 
 /**
  * MuiTooltip Component
+ * @param theme - Theme.
+ * @returns MuiTooltip component theme styles.
  */
-export const MuiTooltip: Components["MuiTooltip"] = {
-  styleOverrides: {
-    arrow: {
-      color: inkMain,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:before": {
-        borderRadius: 1,
+export const MuiTooltip = (theme: Theme): Components["MuiTooltip"] => {
+  return {
+    styleOverrides: {
+      arrow: {
+        color: theme.palette.ink.main,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:before": {
+          borderRadius: 1,
+        },
+      },
+      tooltip: {
+        ...theme.typography[TEXT_BODY_SMALL_400],
+        backgroundColor: theme.palette.ink.main,
+        boxShadow: theme.shadows[2], // elevation02
+        padding: "8px 12px",
       },
     },
-    tooltip: {
-      ...textBodySmall400,
-      backgroundColor: inkMain,
-      boxShadow: elevation02,
-      padding: "8px 12px",
-    },
-  },
+  };
 };
 
 /**

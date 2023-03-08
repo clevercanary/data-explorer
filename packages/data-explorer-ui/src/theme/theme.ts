@@ -96,7 +96,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
     MuiToggleButton: C.MuiToggleButton(theme),
     MuiToggleButtonGroup: C.MuiToggleButtonGroup(theme),
     MuiToolbar: C.MuiToolbar,
-    MuiTooltip: C.MuiTooltip,
+    MuiTooltip: C.MuiTooltip(theme),
     MuiTypography: C.MuiTypography,
   };
 
