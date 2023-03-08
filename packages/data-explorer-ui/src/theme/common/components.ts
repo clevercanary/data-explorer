@@ -12,7 +12,6 @@ import {
   infoLight,
   inkLight,
   inkMain,
-  primaryDark,
   primaryMain,
   smokeDark,
   smokeLight,
@@ -328,30 +327,34 @@ export const MuiButtonBase = (theme: Theme): Components["MuiButtonBase"] => {
 
 /**
  * MuiButtonGroup Component
+ * @param theme - Theme.
+ * @returns MuiButtonGroup component theme styles.
  */
-export const MuiButtonGroup: Components["MuiButtonGroup"] = {
-  defaultProps: {
-    disableElevation: true,
-    disableRipple: true,
-  },
-  styleOverrides: {
-    grouped: {
-      minWidth: 0,
-      padding: "6px 8px",
+export const MuiButtonGroup = (theme: Theme): Components["MuiButtonGroup"] => {
+  return {
+    defaultProps: {
+      disableElevation: true,
+      disableRipple: true,
     },
-    groupedContainedPrimary: {
-      borderColor: primaryDark,
-      boxShadow: `0 1px 0 0 ${primaryDark}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        boxShadow: `0 1px 0 0 ${primaryDark}`,
+    styleOverrides: {
+      grouped: {
+        minWidth: 0,
+        padding: "6px 8px",
       },
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:active": {
-        boxShadow: "none",
+      groupedContainedPrimary: {
+        borderColor: theme.palette.primary.dark,
+        boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:active": {
+          boxShadow: "none",
+        },
       },
     },
-  },
+  };
 };
 
 /**
