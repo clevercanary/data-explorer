@@ -86,7 +86,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
     MuiListItemButton: C.MuiListItemButton(theme),
     MuiListItemText: C.MuiListItemText,
     MuiMenuItem: C.MuiMenuItem(theme),
-    MuiOutlinedInput: C.MuiOutlinedInput,
+    MuiOutlinedInput: C.MuiOutlinedInput(theme),
     MuiPaper: C.MuiPaper,
     MuiSvgIcon: C.MuiSvgIcon,
     MuiTab: C.MuiTab,

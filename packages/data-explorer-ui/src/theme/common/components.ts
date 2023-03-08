@@ -774,46 +774,52 @@ export const MuiMenuItem = (theme: Theme): Components["MuiMenuItem"] => {
 
 /**
  * MuiOutlinedInput Component
+ * @param theme - Theme.
+ * @returns MuiOutlinedInput component theme styles.
  */
-export const MuiOutlinedInput: Components["MuiOutlinedInput"] = {
-  styleOverrides: {
-    input: {
-      color: inkLight,
-      height: 20,
-      padding: "10px 14px 10px 0",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:focus": {
-        color: inkMain,
-      },
-    },
-    notchedOutline: {
-      borderColor: smokeDark,
-    },
-    root: {
-      backgroundColor: white,
-      boxShadow: `inset 0 2px 0 0 ${black04}`,
-      paddingLeft: 12,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiSvgIcon-root": {
-        color: inkLight, // Adornment e.g. "SearchIcon".
-      },
-      "&:hover": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: smokeDark,
+export const MuiOutlinedInput = (
+  theme: Theme
+): Components["MuiOutlinedInput"] => {
+  return {
+    styleOverrides: {
+      input: {
+        color: theme.palette.ink.light,
+        height: 20,
+        padding: "10px 14px 10px 0",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:focus": {
+          color: theme.palette.ink.main,
         },
       },
-      // eslint-disable-next-line sort-keys -- disabling key order for specificity
-      "&.Mui-focused": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: inkMain,
-          borderWidth: 1,
-        },
+      notchedOutline: {
+        borderColor: theme.palette.smoke.dark,
+      },
+      root: {
+        backgroundColor: white,
+        boxShadow: `inset 0 2px 0 0 ${black04}`,
+        paddingLeft: 12,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiSvgIcon-root": {
-          color: inkMain, // Adornment e.g. "SearchIcon".
+          color: theme.palette.ink.light, // Adornment e.g. "SearchIcon".
+        },
+        "&:hover": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.smoke.dark,
+          },
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for specificity
+        "&.Mui-focused": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.ink.main,
+            borderWidth: 1,
+          },
+          "& .MuiSvgIcon-root": {
+            color: theme.palette.ink.main, // Adornment e.g. "SearchIcon".
+          },
         },
       },
     },
-  },
+  };
 };
 
 /**
