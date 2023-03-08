@@ -1,5 +1,3 @@
-import { smokeMain } from "./palette";
-
 /*
  * Elevation
  */
@@ -32,5 +30,5 @@ export const shadows = [elevation00, elevation01, elevation02];
 /**
  * Stroke constants
  */
-export const strokeBottomSmoke = `${STROKE.BOTTOM} ${smokeMain}`;
-export const strokeTopSmoke = `${STROKE.TOP} ${smokeMain}`;
+export const strokeBottom = STROKE.BOTTOM;
+export const strokeTop = STROKE.TOP;

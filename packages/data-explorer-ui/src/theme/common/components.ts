@@ -4,48 +4,15 @@ import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon
 import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
 import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
 import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
+import { alpha32, alpha60, alpha80, black04, white } from "./palette";
+import { strokeBottom, strokeTop } from "./shadows";
 import {
-  alertLightest,
-  alertMain,
-  alertMain32,
-  alpha60,
-  black04,
-  infoLight,
-  infoLightest,
-  infoMain,
-  infoMain32,
-  inkLight,
-  inkMain,
-  inkMain80,
-  primaryDark,
-  primaryMain,
-  smokeDark,
-  smokeLight,
-  smokeLightest,
-  smokeMain,
-  successLightest,
-  successMain,
-  successMain32,
-  warningLight,
-  warningLightest,
-  warningMain,
-  warningMain32,
-  white,
-} from "./palette";
-import {
-  elevation01,
-  elevation02,
-  strokeBottomSmoke,
-  strokeTopSmoke,
-} from "./shadows";
-import {
-  fontFamily,
-  textBody400,
-  textBody4002Lines,
-  textBody500,
-  textBodyLarge500,
-  textBodySmall400,
-  textBodySmall500,
+  TEXT_BODY_400,
+  TEXT_BODY_400_2_LINES,
+  TEXT_BODY_500,
+  TEXT_BODY_LARGE_500,
+  TEXT_BODY_SMALL_400,
+  TEXT_BODY_SMALL_500,
   TEXT_HEADING,
 } from "./typography";
 
@@ -54,145 +21,153 @@ const FLEX_START = "flex-start";
 
 /**
  * MuiAlert Component
+ * @param theme - Theme.
+ * @returns MuiAlert component theme styles.
  */
-export const MuiAlert: Components["MuiAlert"] = {
-  defaultProps: {
-    iconMapping: {
-      error: ErrorIcon({ fontSize: "small" }),
-      info: InfoIcon({ fontSize: "small" }),
-      success: SuccessIcon({ fontSize: "small" }),
-      warning: WarningIcon({ fontSize: "small" }),
-    },
-  },
-  styleOverrides: {
-    icon: {
-      opacity: 1,
-      padding: "2px 0",
-    },
-    message: {
-      padding: 0,
-    },
-    root: {
-      ...textBody4002Lines,
-      borderRadius: 8,
-      boxShadow: elevation01,
-      color: inkMain,
-    },
-    standard: {
-      alignItems: FLEX_START,
-      padding: 20,
-    },
-    standardError: {
-      backgroundColor: alertLightest,
-      border: `1px solid ${alertMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: alertMain,
+export const MuiAlert = (theme: Theme): Components["MuiAlert"] => {
+  return {
+    defaultProps: {
+      iconMapping: {
+        error: ErrorIcon({ fontSize: "small" }),
+        info: InfoIcon({ fontSize: "small" }),
+        success: SuccessIcon({ fontSize: "small" }),
+        warning: WarningIcon({ fontSize: "small" }),
       },
     },
-    standardInfo: {
-      backgroundColor: infoLightest,
-      border: `1px solid ${infoMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: infoMain,
+    styleOverrides: {
+      icon: {
+        opacity: 1,
+        padding: "2px 0",
       },
-    },
-    standardSuccess: {
-      backgroundColor: successLightest,
-      border: `1px solid ${successMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: successMain,
+      message: {
+        padding: 0,
       },
-    },
-    standardWarning: {
-      backgroundColor: warningLightest,
-      border: `1px solid ${warningMain32}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiAlert-icon": {
-        color: warningMain,
+      root: {
+        ...theme.typography[TEXT_BODY_400_2_LINES],
+        borderRadius: 8,
+        boxShadow: theme.shadows[1], // elevation01
+        color: theme.palette.ink.main,
       },
-    },
-  },
-  variants: [
-    {
-      props: { severity: "info", variant: "neutral" },
-      style: {
-        backgroundColor: smokeLight,
-        padding: 16,
+      standard: {
+        alignItems: FLEX_START,
+        padding: 20,
       },
-    },
-    {
-      props: { variant: "banner" },
-      style: {
-        padding: 16,
+      standardError: {
+        backgroundColor: theme.palette.alert.lightest,
+        border: `1px solid ${theme.palette.alert.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          padding: 0,
-        },
-        "& .MuiAlertTitle-root": {
-          ...textBody500,
+          color: theme.palette.alert.main,
         },
       },
-    },
-    {
-      props: { severity: "error", variant: "banner" },
-      style: {
-        backgroundColor: alertLightest,
-        border: `1px solid ${alertMain32}`,
+      standardInfo: {
+        backgroundColor: theme.palette.info.lightest,
+        border: `1px solid ${theme.palette.info.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          color: alertMain,
+          color: theme.palette.info.main,
         },
       },
-    },
-    {
-      props: { severity: "info", variant: "banner" },
-      style: {
-        backgroundColor: infoLightest,
-        border: `1px solid ${infoMain32}`,
+      standardSuccess: {
+        backgroundColor: theme.palette.success.lightest,
+        border: `1px solid ${theme.palette.success.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          color: infoMain,
+          color: theme.palette.success.main,
         },
       },
-    },
-    {
-      props: { severity: "success", variant: "banner" },
-      style: {
-        backgroundColor: successLightest,
-        border: `1px solid ${successMain32}`,
+      standardWarning: {
+        backgroundColor: theme.palette.warning.lightest,
+        border: `1px solid ${theme.palette.warning.main}${alpha32}`,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiAlert-icon": {
-          color: successMain,
+          color: theme.palette.warning.main,
         },
       },
     },
-    {
-      props: { severity: "warning", variant: "banner" },
-      style: {
-        backgroundColor: warningLightest,
-        border: `1px solid ${warningMain32}`,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "& .MuiAlert-icon": {
-          color: warningMain,
+    variants: [
+      {
+        props: { severity: "info", variant: "neutral" },
+        style: {
+          backgroundColor: theme.palette.smoke.light,
+          padding: 16,
         },
       },
-    },
-  ],
+      {
+        props: { variant: "banner" },
+        style: {
+          padding: 16,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            padding: 0,
+          },
+          "& .MuiAlertTitle-root": {
+            ...theme.typography[TEXT_BODY_500],
+          },
+        },
+      },
+      {
+        props: { severity: "error", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.alert.lightest,
+          border: `1px solid ${theme.palette.alert.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.alert.main,
+          },
+        },
+      },
+      {
+        props: { severity: "info", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.info.lightest,
+          border: `1px solid ${theme.palette.info.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.info.main,
+          },
+        },
+      },
+      {
+        props: { severity: "success", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.success.lightest,
+          border: `1px solid ${theme.palette.success.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.success.main,
+          },
+        },
+      },
+      {
+        props: { severity: "warning", variant: "banner" },
+        style: {
+          backgroundColor: theme.palette.warning.lightest,
+          border: `1px solid ${theme.palette.warning.main}${alpha32}`,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiAlert-icon": {
+            color: theme.palette.warning.main,
+          },
+        },
+      },
+    ],
+  };
 };
 
 /**
  * MuiAlertTitle Component
+ * @param theme - Theme.
+ * @returns MuiAlertTitle component theme styles.
  */
-export const MuiAlertTitle: Components["MuiAlertTitle"] = {
-  styleOverrides: {
-    root: {
-      ...textBodyLarge500,
-      margin: 0,
+export const MuiAlertTitle = (theme: Theme): Components["MuiAlertTitle"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_LARGE_500],
+        margin: 0,
+      },
     },
-  },
+  };
 };
 
 /**
@@ -213,264 +188,296 @@ export const MuiAppBar: Components["MuiAppBar"] = {
 
 /**
  * MuiBackdrop Component
+ * @param theme - Theme.
+ * @returns MuiBackdrop component theme styles.
  */
-export const MuiBackdrop: Components["MuiBackdrop"] = {
-  styleOverrides: {
-    invisible: {
-      backgroundColor: "transparent",
+export const MuiBackdrop = (theme: Theme): Components["MuiBackdrop"] => {
+  return {
+    styleOverrides: {
+      invisible: {
+        backgroundColor: "transparent",
+      },
+      root: {
+        backgroundColor: `${theme.palette.ink.main}${alpha80}`,
+      },
     },
-    root: {
-      backgroundColor: inkMain80,
-    },
-  },
+  };
 };
 
 /**
  * MuiBreadcrumbs Component
+ * @param theme - Theme.
+ * @returns MuiBreadcrumbs component theme styles.
  */
-export const MuiBreadcrumbs: Components["MuiBreadcrumbs"] = {
-  styleOverrides: {
-    li: {
-      ...textBodySmall400,
-      "& .MuiLink-root": {
-        color: "inherit",
+export const MuiBreadcrumbs = (theme: Theme): Components["MuiBreadcrumbs"] => {
+  return {
+    styleOverrides: {
+      li: {
+        ...theme.typography[TEXT_BODY_SMALL_400],
+        "& .MuiLink-root": {
+          color: "inherit",
+        },
+      },
+      ol: {
+        gap: 2,
+      },
+      root: {
+        color: theme.palette.ink.light,
+      },
+      separator: {
+        margin: 0,
       },
     },
-    ol: {
-      gap: 2,
-    },
-    root: {
-      color: inkLight,
-    },
-    separator: {
-      margin: 0,
-    },
-  },
+  };
 };
 
 /**
  * MuiButton Component
+ * @param theme - Theme.
+ * @returns MuiButton component theme styles.
  */
-export const MuiButton: Components["MuiButton"] = {
-  defaultProps: {
-    disableRipple: true,
-    disableTouchRipple: true,
-  },
-  styleOverrides: {
-    endIcon: {
-      margin: 0,
+export const MuiButton = (theme: Theme): Components["MuiButton"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
+      disableTouchRipple: true,
     },
-    root: {
-      ...textBody500,
-      gap: 4,
-      letterSpacing: "normal",
-      padding: "10px 16px",
-      textTransform: "capitalize",
-    },
-    startIcon: {
-      marginRight: 0,
-    },
-  },
-  variants: [
-    {
-      props: {
-        variant: "nav",
+    styleOverrides: {
+      endIcon: {
+        margin: 0,
       },
-      style: {
-        ...textBody500,
-        color: inkMain,
-        minWidth: 0,
-        padding: "12px 24px",
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        gap: 4,
+        letterSpacing: "normal",
+        padding: "10px 16px",
         textTransform: "capitalize",
-        whiteSpace: "nowrap",
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: smokeLight,
-        },
-        [desktopSmUp]: {
-          padding: "6px 12px",
-        },
+      },
+      startIcon: {
+        marginRight: 0,
       },
     },
-  ],
+    variants: [
+      {
+        props: {
+          variant: "nav",
+        },
+        style: {
+          ...theme.typography[TEXT_BODY_500],
+          color: theme.palette.ink.main,
+          minWidth: 0,
+          padding: "12px 24px",
+          textTransform: "capitalize",
+          whiteSpace: "nowrap",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
+          [desktopSmUp]: {
+            padding: "6px 12px",
+          },
+        },
+      },
+    ],
+  };
 };
 
 /**
  * MuiButtonBase Component
+ * @param theme - Theme.
+ * @returns MuiButtonBase component theme styles.
  */
-export const MuiButtonBase: Components["MuiButtonBase"] = {
-  defaultProps: {
-    disableRipple: true,
-    disableTouchRipple: true,
-  },
-  styleOverrides: {
-    root: {
-      flex: "none",
-      fontFamily: fontFamily,
+export const MuiButtonBase = (theme: Theme): Components["MuiButtonBase"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
+      disableTouchRipple: true,
     },
-  },
+    styleOverrides: {
+      root: {
+        flex: "none",
+        fontFamily: theme.typography.fontFamily,
+      },
+    },
+  };
 };
 
 /**
  * MuiButtonGroup Component
+ * @param theme - Theme.
+ * @returns MuiButtonGroup component theme styles.
  */
-export const MuiButtonGroup: Components["MuiButtonGroup"] = {
-  defaultProps: {
-    disableElevation: true,
-    disableRipple: true,
-  },
-  styleOverrides: {
-    grouped: {
-      minWidth: 0,
-      padding: "6px 8px",
+export const MuiButtonGroup = (theme: Theme): Components["MuiButtonGroup"] => {
+  return {
+    defaultProps: {
+      disableElevation: true,
+      disableRipple: true,
     },
-    groupedContainedPrimary: {
-      borderColor: primaryDark,
-      boxShadow: `0 1px 0 0 ${primaryDark}`,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        boxShadow: `0 1px 0 0 ${primaryDark}`,
+    styleOverrides: {
+      grouped: {
+        minWidth: 0,
+        padding: "6px 8px",
       },
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:active": {
-        boxShadow: "none",
+      groupedContainedPrimary: {
+        borderColor: theme.palette.primary.dark,
+        boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:active": {
+          boxShadow: "none",
+        },
       },
     },
-  },
+  };
 };
 
 /**
  * MuiCheckbox Component
+ * @param theme - Theme.
+ * @returns MuiCheckbox component theme styles.
  */
-export const MuiCheckbox: Components["MuiCheckbox"] = {
-  defaultProps: {
-    size: "xsmall",
-  },
-  styleOverrides: {
-    root: {
-      color: smokeDark,
-      padding: 0,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&.Mui-disabled": {
-        color: smokeDark,
+export const MuiCheckbox = (theme: Theme): Components["MuiCheckbox"] => {
+  return {
+    defaultProps: {
+      size: "xsmall",
+    },
+    styleOverrides: {
+      root: {
+        color: theme.palette.smoke.dark,
+        padding: 0,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-disabled": {
+          color: theme.palette.smoke.dark,
+        },
       },
     },
-  },
-  variants: [
-    {
-      props: {
-        size: "xsmall",
+    variants: [
+      {
+        props: {
+          size: "xsmall",
+        },
+        style: {
+          fontSize: "18px",
+        },
       },
-      style: {
-        fontSize: "18px",
-      },
-    },
-  ],
+    ],
+  };
 };
 
 /**
  * MuiChip Component
+ * @param theme - Theme.
+ * @returns MuiChip component theme styles.
  */
-export const MuiChip: Components["MuiChip"] = {
-  defaultProps: {
-    size: "small",
-  },
-  styleOverrides: {
-    deleteIcon: {
-      color: "inherit",
-      margin: "0 -2px 0 0",
+export const MuiChip = (theme: Theme): Components["MuiChip"] => {
+  return {
+    defaultProps: {
+      size: "small",
     },
-  },
-  variants: [
-    {
-      props: { color: "default" },
-      style: {
-        backgroundColor: smokeMain,
-        color: inkMain,
+    styleOverrides: {
+      deleteIcon: {
+        color: "inherit",
+        margin: "0 -2px 0 0",
       },
     },
-    {
-      props: { color: "info" },
-      style: {
-        backgroundColor: infoLight,
-      },
-    },
-    {
-      props: { color: "warning" },
-      style: {
-        backgroundColor: warningLight,
-      },
-    },
-    {
-      props: { variant: "filterTag" },
-      style: {
-        ...textBodySmall500,
-        cursor: "pointer", // "pointer" cursor required to restore "clickable" ui
-        gap: 2,
-        height: 24,
-        justifySelf: FLEX_START,
-        padding: "0 8px",
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "& .MuiChip-label": {
-          padding: 0,
+    variants: [
+      {
+        props: { color: "default" },
+        style: {
+          backgroundColor: theme.palette.smoke.main,
+          color: theme.palette.ink.main,
         },
       },
-    },
-    {
-      props: { variant: "ntag" },
-      style: {
-        ...textBodySmall400,
-        backgroundColor: smokeMain,
-        borderColor: white,
-        borderStyle: "solid",
-        borderWidth: 2,
-        boxSizing: "content-box",
-        height: 24,
+      {
+        props: { color: "info" },
+        style: {
+          backgroundColor: theme.palette.info.light,
+        },
       },
-    },
-    {
-      props: { variant: "status" },
-      style: {
-        ...textBodySmall500,
-        borderColor: white,
-        borderStyle: "solid",
-        borderWidth: 2,
-        height: 24,
+      {
+        props: { color: "warning" },
+        style: {
+          backgroundColor: theme.palette.warning.light,
+        },
       },
-    },
-  ],
+      {
+        props: { variant: "filterTag" },
+        style: {
+          ...theme.typography[TEXT_BODY_SMALL_500],
+          cursor: "pointer", // "pointer" cursor required to restore "clickable" ui
+          gap: 2,
+          height: 24,
+          justifySelf: FLEX_START,
+          padding: "0 8px",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "& .MuiChip-label": {
+            padding: 0,
+          },
+        },
+      },
+      {
+        props: { variant: "ntag" },
+        style: {
+          ...theme.typography[TEXT_BODY_SMALL_400],
+          backgroundColor: theme.palette.smoke.main,
+          borderColor: white,
+          borderStyle: "solid",
+          borderWidth: 2,
+          boxSizing: "content-box",
+          height: 24,
+        },
+      },
+      {
+        props: { variant: "status" },
+        style: {
+          ...theme.typography[TEXT_BODY_SMALL_500],
+          borderColor: white,
+          borderStyle: "solid",
+          borderWidth: 2,
+          height: 24,
+        },
+      },
+    ],
+  };
 };
 
 /**
  * MuiCssBaseline Component
+ * @param theme - Theme.
+ * @returns MuiCssBaseline component theme styles.
  */
-export const MuiCssBaseline: Components["MuiCssBaseline"] = {
-  styleOverrides: {
-    a: {
-      color: primaryMain,
-      textDecoration: "none",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        textDecoration: "underline",
+export const MuiCssBaseline = (theme: Theme): Components["MuiCssBaseline"] => {
+  return {
+    styleOverrides: {
+      a: {
+        color: theme.palette.primary.main,
+        textDecoration: "none",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          textDecoration: "underline",
+        },
+      },
+      body: {
+        fontFamily: theme.typography.fontFamily,
+      },
+      img: {
+        display: "block",
+      },
+      p: {
+        margin: "0 0 8px",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:last-child": {
+          margin: 0,
+        },
+      },
+      strong: {
+        fontWeight: 500,
       },
     },
-    body: {
-      fontFamily: fontFamily,
-    },
-    img: {
-      display: "block",
-    },
-    p: {
-      margin: "0 0 8px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:last-child": {
-        margin: 0,
-      },
-    },
-    strong: {
-      fontWeight: 500,
-    },
-  },
+  };
 };
 
 /**
@@ -550,13 +557,17 @@ export const MuiDialogTitle = (theme: Theme): Components["MuiDialogTitle"] => {
 
 /**
  * MuiDivider Component
+ * @param theme - Theme.
+ * @returns MuiDivider component theme styles.
  */
-export const MuiDivider: Components["MuiDivider"] = {
-  styleOverrides: {
-    root: {
-      borderColor: smokeMain,
+export const MuiDivider = (theme: Theme): Components["MuiDivider"] => {
+  return {
+    styleOverrides: {
+      root: {
+        borderColor: theme.palette.smoke.main,
+      },
     },
-  },
+  };
 };
 
 /**
@@ -572,97 +583,105 @@ export const MuiDrawer: Components["MuiDrawer"] = {
 
 /**
  * MuiIconButton Component
+ * @param theme - Theme.
+ * @returns MuiIconButton component theme styles.
  */
-export const MuiIconButton: Components["MuiIconButton"] = {
-  defaultProps: {
-    disableRipple: true,
-  },
-  styleOverrides: {
-    root: {
-      borderRadius: 4,
+export const MuiIconButton = (theme: Theme): Components["MuiIconButton"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
     },
-    sizeLarge: {
-      padding: 10,
-    },
-    sizeSmall: {
-      padding: 6,
-    },
-  },
-  variants: [
-    {
-      props: {
-        color: "ink",
+    styleOverrides: {
+      root: {
+        borderRadius: 4,
       },
-      style: {
-        color: inkMain,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: smokeLight,
+      sizeLarge: {
+        padding: 10,
+      },
+      sizeSmall: {
+        padding: 6,
+      },
+    },
+    variants: [
+      {
+        props: {
+          color: "ink",
+        },
+        style: {
+          color: theme.palette.ink.main,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
         },
       },
-    },
-    {
-      props: {
-        color: "inkLight",
-      },
-      style: {
-        color: inkLight,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: smokeLight,
+      {
+        props: {
+          color: "inkLight",
+        },
+        style: {
+          color: theme.palette.ink.light,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
         },
       },
-    },
-    {
-      props: {
-        size: "xlarge",
+      {
+        props: {
+          size: "xlarge",
+        },
+        style: {
+          padding: 14,
+        },
       },
-      style: {
-        padding: 14,
+      {
+        props: {
+          size: "xsmall",
+        },
+        style: {
+          padding: 4,
+        },
       },
-    },
-    {
-      props: {
-        size: "xsmall",
+      {
+        props: {
+          edge: "end",
+          size: "xsmall",
+        },
+        style: {
+          marginRight: -4,
+        },
       },
-      style: {
-        padding: 4,
+      {
+        props: {
+          size: "xxsmall",
+        },
+        style: {
+          padding: 0,
+        },
       },
-    },
-    {
-      props: {
-        edge: "end",
-        size: "xsmall",
-      },
-      style: {
-        marginRight: -4,
-      },
-    },
-    {
-      props: {
-        size: "xxsmall",
-      },
-      style: {
-        padding: 0,
-      },
-    },
-  ],
+    ],
+  };
 };
 
 /**
  * MuiInputBase Component
+ * @param theme - Theme.
+ * @returns MuiInputBase component theme styles.
  */
-export const MuiInputBase: Components["MuiInputBase"] = {
-  styleOverrides: {
-    adornedStart: {
-      gap: 8,
+export const MuiInputBase = (theme: Theme): Components["MuiInputBase"] => {
+  return {
+    styleOverrides: {
+      adornedStart: {
+        gap: 8,
+      },
+      root: {
+        ...theme.typography[TEXT_BODY_400],
+        height: 40,
+        letterSpacing: "normal",
+      },
     },
-    root: {
-      ...textBody400,
-      height: 40,
-      letterSpacing: "normal",
-    },
-  },
+  };
 };
 
 /**
@@ -676,27 +695,33 @@ export const MuiLink: Components["MuiLink"] = {
 
 /**
  * MuiListItemButton Component
+ * @param theme - Theme.
+ * @returns MuiListItemButton component theme styles.
  */
-export const MuiListItemButton: Components["MuiListItemButton"] = {
-  styleOverrides: {
-    root: {
-      ...textBody400,
-      minHeight: "unset",
-      padding: "10px 16px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        backgroundColor: smokeLight,
-      },
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&.Mui-selected": {
-        backgroundColor: "unset",
+export const MuiListItemButton = (
+  theme: Theme
+): Components["MuiListItemButton"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_400],
+        minHeight: "unset",
+        padding: "10px 16px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "&:hover": {
-          backgroundColor: smokeLight,
+          backgroundColor: theme.palette.smoke.light,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-selected": {
+          backgroundColor: "unset",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: theme.palette.smoke.light,
+          },
         },
       },
     },
-  },
+  };
 };
 
 /**
@@ -712,214 +737,240 @@ export const MuiListItemText: Components["MuiListItemText"] = {
 
 /**
  * MuiMenuItem Component
+ * @param theme - Theme.
+ * @returns MuiMenuItem component theme styles.
  */
-export const MuiMenuItem: Components["MuiMenuItem"] = {
-  defaultProps: { disableRipple: true },
-  styleOverrides: {
-    root: {
-      ...textBody400,
-      minHeight: "unset",
-      padding: "10px 16px",
+export const MuiMenuItem = (theme: Theme): Components["MuiMenuItem"] => {
+  return {
+    defaultProps: { disableRipple: true },
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_400],
+        minHeight: "unset",
+        padding: "10px 16px",
+      },
     },
-  },
+  };
 };
 
 /**
  * MuiOutlinedInput Component
+ * @param theme - Theme.
+ * @returns MuiOutlinedInput component theme styles.
  */
-export const MuiOutlinedInput: Components["MuiOutlinedInput"] = {
-  styleOverrides: {
-    input: {
-      color: inkLight,
-      height: 20,
-      padding: "10px 14px 10px 0",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:focus": {
-        color: inkMain,
-      },
-    },
-    notchedOutline: {
-      borderColor: smokeDark,
-    },
-    root: {
-      backgroundColor: white,
-      boxShadow: `inset 0 2px 0 0 ${black04}`,
-      paddingLeft: 12,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& .MuiSvgIcon-root": {
-        color: inkLight, // Adornment e.g. "SearchIcon".
-      },
-      "&:hover": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: smokeDark,
+export const MuiOutlinedInput = (
+  theme: Theme
+): Components["MuiOutlinedInput"] => {
+  return {
+    styleOverrides: {
+      input: {
+        color: theme.palette.ink.light,
+        height: 20,
+        padding: "10px 14px 10px 0",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:focus": {
+          color: theme.palette.ink.main,
         },
       },
-      // eslint-disable-next-line sort-keys -- disabling key order for specificity
-      "&.Mui-focused": {
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: inkMain,
-          borderWidth: 1,
-        },
+      notchedOutline: {
+        borderColor: theme.palette.smoke.dark,
+      },
+      root: {
+        backgroundColor: white,
+        boxShadow: `inset 0 2px 0 0 ${black04}`,
+        paddingLeft: 12,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiSvgIcon-root": {
-          color: inkMain, // Adornment e.g. "SearchIcon".
+          color: theme.palette.ink.light, // Adornment e.g. "SearchIcon".
+        },
+        "&:hover": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.smoke.dark,
+          },
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for specificity
+        "&.Mui-focused": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.ink.main,
+            borderWidth: 1,
+          },
+          "& .MuiSvgIcon-root": {
+            color: theme.palette.ink.main, // Adornment e.g. "SearchIcon".
+          },
         },
       },
     },
-  },
+  };
 };
 
 /**
  * MuiPaper Component
+ * @param theme - Theme.
+ * @returns MuiPaper component theme styles.
  */
-export const MuiPaper: Components["MuiPaper"] = {
-  variants: [
-    {
-      props: { variant: "footer" },
-      style: {
-        backgroundColor: smokeLight,
-        boxShadow: `${strokeTopSmoke}, ${strokeBottomSmoke}`,
+export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
+  return {
+    variants: [
+      {
+        props: { variant: "footer" },
+        style: {
+          backgroundColor: theme.palette.smoke.light,
+          boxShadow: `${strokeTop} ${theme.palette.smoke.main}, ${strokeBottom} ${theme.palette.smoke.main}`,
+        },
       },
-    },
-    {
-      props: { variant: "menu" },
-      style: {
-        borderColor: smokeDark,
-        borderRadius: 8,
-        borderStyle: "solid",
-        borderWidth: 1,
-        boxShadow: elevation02,
+      {
+        props: { variant: "menu" },
+        style: {
+          borderColor: theme.palette.smoke.dark,
+          borderRadius: 8,
+          borderStyle: "solid",
+          borderWidth: 1,
+          boxShadow: theme.shadows[2], // elevation02
+        },
       },
-    },
-    {
-      props: { variant: "panel" },
-      style: {
-        borderColor: smokeMain,
-        borderStyle: "solid",
-        borderWidth: 1,
-        boxShadow: elevation01,
+      {
+        props: { variant: "panel" },
+        style: {
+          borderColor: theme.palette.smoke.main,
+          borderStyle: "solid",
+          borderWidth: 1,
+          boxShadow: theme.shadows[1], // elevation01
+        },
       },
-    },
-    {
-      props: { variant: "sidebar" },
-      style: {
-        backgroundColor: smokeLight,
-        padding: "24px 0",
-        width: 312,
+      {
+        props: { variant: "sidebar" },
+        style: {
+          backgroundColor: theme.palette.smoke.light,
+          padding: "24px 0",
+          width: 312,
+        },
       },
-    },
-  ],
+    ],
+  };
 };
 
 /**
  * MuiSvgIcon Component
+ * @param theme - Theme.
+ * @returns MuiSvgIcon component theme styles.
  */
-export const MuiSvgIcon: Components["MuiSvgIcon"] = {
-  styleOverrides: {
-    fontSizeLarge: {
-      fontSize: "32px",
-    },
-    fontSizeSmall: {
-      fontSize: "20px",
-    },
-  },
-  variants: [
-    {
-      props: {
-        color: "inkLight",
+export const MuiSvgIcon = (theme: Theme): Components["MuiSvgIcon"] => {
+  return {
+    styleOverrides: {
+      fontSizeLarge: {
+        fontSize: "32px",
       },
-      style: {
-        color: inkLight,
+      fontSizeSmall: {
+        fontSize: "20px",
       },
     },
-    {
-      props: {
-        fontSize: "medium",
+    variants: [
+      {
+        props: {
+          color: "inkLight",
+        },
+        style: {
+          color: theme.palette.ink.light,
+        },
       },
-      style: {
-        fontSize: "24px",
+      {
+        props: {
+          fontSize: "medium",
+        },
+        style: {
+          fontSize: "24px",
+        },
       },
-    },
-    {
-      props: {
-        fontSize: "xsmall",
+      {
+        props: {
+          fontSize: "xsmall",
+        },
+        style: {
+          fontSize: "18px",
+        },
       },
-      style: {
-        fontSize: "18px",
+      {
+        props: {
+          fontSize: "xxlarge",
+        },
+        style: {
+          fontSize: "40px",
+        },
       },
-    },
-    {
-      props: {
-        fontSize: "xxlarge",
+      {
+        props: {
+          fontSize: "xxsmall",
+        },
+        style: {
+          fontSize: "16px",
+        },
       },
-      style: {
-        fontSize: "40px",
-      },
-    },
-    {
-      props: {
-        fontSize: "xxsmall",
-      },
-      style: {
-        fontSize: "16px",
-      },
-    },
-  ],
+    ],
+  };
 };
 
 /**
  * MuiTab Component
+ * @param theme - Theme.
+ * @returns MuiTab component theme styles.
  */
-export const MuiTab: Components["MuiTab"] = {
-  styleOverrides: {
-    labelIcon: {
-      gap: 8,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& > img": {
-        maxHeight: 20, // Tab image max height.
+export const MuiTab = (theme: Theme): Components["MuiTab"] => {
+  return {
+    styleOverrides: {
+      labelIcon: {
+        gap: 8,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& > img": {
+          maxHeight: 20, // Tab image max height.
+        },
+      },
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        color: theme.palette.ink.light,
+        marginBottom: 3,
+        minHeight: "unset",
+        minWidth: "unset",
+        opacity: 1,
+        padding: 12,
+        textTransform: "capitalize",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& > .MuiTab-iconWrapper": {
+          marginRight: 0,
+        },
+        "&.Mui-selected": {
+          color: theme.palette.ink.main,
+        },
       },
     },
-    root: {
-      ...textBody500,
-      color: inkLight,
-      marginBottom: 3,
-      minHeight: "unset",
-      minWidth: "unset",
-      opacity: 1,
-      padding: 12,
-      textTransform: "capitalize",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "& > .MuiTab-iconWrapper": {
-        marginRight: 0,
-      },
-      "&.Mui-selected": {
-        color: inkMain,
-      },
-    },
-  },
+  };
 };
 
 /**
  * MuiTableCell Component
+ * @param theme - Theme.
+ * @returns MuiTableCell component theme styles.
  */
-export const MuiTableCell: Components["MuiTableCell"] = {
-  styleOverrides: {
-    body: {
-      ...textBody400,
+export const MuiTableCell = (theme: Theme): Components["MuiTableCell"] => {
+  return {
+    styleOverrides: {
+      body: {
+        ...theme.typography[TEXT_BODY_400],
+      },
+      head: {
+        ...theme.typography[TEXT_BODY_SMALL_500],
+        padding: "20px",
+      },
+      root: {
+        padding: "18px 20px",
+      },
+      sizeSmall: {
+        padding: "14px 20px",
+      },
+      stickyHeader: {
+        boxShadow: `0 1px 0 ${theme.palette.smoke.main}`,
+      },
     },
-    head: {
-      ...textBodySmall500,
-      padding: "20px",
-    },
-    root: {
-      padding: "18px 20px",
-    },
-    sizeSmall: {
-      padding: "14px 20px",
-    },
-    stickyHeader: {
-      boxShadow: `0 1px 0 ${smokeMain}`,
-    },
-  },
+  };
 };
 
 /**
@@ -952,85 +1003,101 @@ export const MuiTableSortLabel: Components["MuiTableSortLabel"] = {
 
 /**
  * MuiTabs Component
+ * @param theme - Theme.
+ * @returns MuiTabs component theme styles.
  */
-export const MuiTabs: Components["MuiTabs"] = {
-  defaultProps: {
-    textColor: "inherit",
-    variant: "scrollable",
-  },
-  styleOverrides: {
-    flexContainer: {
-      gap: 8,
+export const MuiTabs = (theme: Theme): Components["MuiTabs"] => {
+  return {
+    defaultProps: {
+      textColor: "inherit",
+      variant: "scrollable",
     },
-    indicator: {
-      borderTopLeftRadius: 12,
-      borderTopRightRadius: 12,
-      height: 3,
-    },
-    root: {
-      boxShadow: strokeBottomSmoke,
-      minHeight: "unset",
-      position: "relative", // Positions scroll fuzz.
-    },
-    scroller: {
-      margin: "0 16px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      [tabletUp]: {
-        margin: 0,
+    styleOverrides: {
+      flexContainer: {
+        gap: 8,
+      },
+      indicator: {
+        borderTopLeftRadius: 12,
+        borderTopRightRadius: 12,
+        height: 3,
+      },
+      root: {
+        boxShadow: `${strokeBottom} ${theme.palette.smoke.main}`,
+        minHeight: "unset",
+        position: "relative", // Positions scroll fuzz.
+      },
+      scroller: {
+        margin: "0 16px",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        [tabletUp]: {
+          margin: 0,
+        },
       },
     },
-  },
+  };
 };
 
 /**
  * MuiToggleButton Component
+ * @param theme - Theme.
+ * @returns MuiToggleButton component theme styles.
  */
-export const MuiToggleButton: Components["MuiToggleButton"] = {
-  styleOverrides: {
-    root: {
-      ...textBody500,
-      backgroundColor: smokeMain,
-      border: "none",
-      borderRadius: 4,
-      color: inkMain,
-      flex: 1,
-      padding: "8px 12px",
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:hover": {
-        backgroundColor: smokeLightest,
-      },
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&.Mui-selected": {
-        backgroundColor: white,
+export const MuiToggleButton = (
+  theme: Theme
+): Components["MuiToggleButton"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        backgroundColor: theme.palette.smoke.main,
+        border: "none",
+        borderRadius: 4,
+        color: theme.palette.ink.main,
+        flex: 1,
+        padding: "8px 12px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         "&:hover": {
+          backgroundColor: theme.palette.smoke.lightest,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-selected": {
           backgroundColor: white,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            backgroundColor: white,
+          },
         },
       },
     },
-  },
+  };
 };
 
 /**
  * MuiToggleButtonGroup Component
+ * @param theme - Theme.
+ * @returns MuiToggleButtonGroup component theme styles.
  */
-export const MuiToggleButtonGroup: Components["MuiToggleButtonGroup"] = {
-  styleOverrides: {
-    grouped: {
-      border: "none !important", // Overrides "grouped" css selector specificity.
-      borderRadius: "4px !important", // Overrides "grouped" css selector specificity.
-      margin: "0 !important", // Overrides "grouped" css selector specificity.
+export const MuiToggleButtonGroup = (
+  theme: Theme
+): Components["MuiToggleButtonGroup"] => {
+  return {
+    styleOverrides: {
+      grouped: {
+        border: "none !important", // Overrides "grouped" css selector specificity.
+        borderRadius: "4px !important", // Overrides "grouped" css selector specificity.
+        margin: "0 !important", // Overrides "grouped" css selector specificity.
+      },
+      root: {
+        backgroundColor: theme.palette.smoke.main,
+        borderRadius: 6,
+        color: theme.palette.ink.main,
+        display: "grid",
+        gridAutoColumns: "1fr",
+        gridAutoFlow: "column",
+        padding: 2,
+      },
     },
-    root: {
-      backgroundColor: smokeMain,
-      borderRadius: 6,
-      color: inkMain,
-      display: "grid",
-      gridAutoColumns: "1fr",
-      gridAutoFlow: "column",
-      padding: 2,
-    },
-  },
+  };
 };
 
 /**
@@ -1054,23 +1121,27 @@ export const MuiToolbar: Components["MuiToolbar"] = {
 
 /**
  * MuiTooltip Component
+ * @param theme - Theme.
+ * @returns MuiTooltip component theme styles.
  */
-export const MuiTooltip: Components["MuiTooltip"] = {
-  styleOverrides: {
-    arrow: {
-      color: inkMain,
-      // eslint-disable-next-line sort-keys -- disabling key order for readability
-      "&:before": {
-        borderRadius: 1,
+export const MuiTooltip = (theme: Theme): Components["MuiTooltip"] => {
+  return {
+    styleOverrides: {
+      arrow: {
+        color: theme.palette.ink.main,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:before": {
+          borderRadius: 1,
+        },
+      },
+      tooltip: {
+        ...theme.typography[TEXT_BODY_SMALL_400],
+        backgroundColor: theme.palette.ink.main,
+        boxShadow: theme.shadows[2], // elevation02
+        padding: "8px 12px",
       },
     },
-    tooltip: {
-      ...textBodySmall400,
-      backgroundColor: inkMain,
-      boxShadow: elevation02,
-      padding: "8px 12px",
-    },
-  },
+  };
 };
 
 /**
