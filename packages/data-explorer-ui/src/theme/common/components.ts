@@ -31,11 +31,11 @@ import {
   fontFamily,
   textBody400,
   textBody500,
-  textBodyLarge500,
   textBodySmall400,
   textBodySmall500,
   TEXT_BODY_400_2_LINES,
   TEXT_BODY_500,
+  TEXT_BODY_LARGE_500,
   TEXT_HEADING,
 } from "./typography";
 
@@ -179,14 +179,18 @@ export const MuiAlert = (theme: Theme): Components["MuiAlert"] => {
 
 /**
  * MuiAlertTitle Component
+ * @param theme - Theme.
+ * @returns MuiAlertTitle component theme styles.
  */
-export const MuiAlertTitle: Components["MuiAlertTitle"] = {
-  styleOverrides: {
-    root: {
-      ...textBodyLarge500,
-      margin: 0,
+export const MuiAlertTitle = (theme: Theme): Components["MuiAlertTitle"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_LARGE_500],
+        margin: 0,
+      },
     },
-  },
+  };
 };
 
 /**
