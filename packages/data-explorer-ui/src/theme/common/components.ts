@@ -36,6 +36,7 @@ import {
   TEXT_BODY_400_2_LINES,
   TEXT_BODY_500,
   TEXT_BODY_LARGE_500,
+  TEXT_BODY_SMALL_400,
   TEXT_HEADING,
 } from "./typography";
 
@@ -229,25 +230,29 @@ export const MuiBackdrop = (theme: Theme): Components["MuiBackdrop"] => {
 
 /**
  * MuiBreadcrumbs Component
+ * @param theme - Theme.
+ * @returns MuiBreadcrumbs component theme styles.
  */
-export const MuiBreadcrumbs: Components["MuiBreadcrumbs"] = {
-  styleOverrides: {
-    li: {
-      ...textBodySmall400,
-      "& .MuiLink-root": {
-        color: "inherit",
+export const MuiBreadcrumbs = (theme: Theme): Components["MuiBreadcrumbs"] => {
+  return {
+    styleOverrides: {
+      li: {
+        ...theme.typography[TEXT_BODY_SMALL_400],
+        "& .MuiLink-root": {
+          color: "inherit",
+        },
+      },
+      ol: {
+        gap: 2,
+      },
+      root: {
+        color: theme.palette.ink.light,
+      },
+      separator: {
+        margin: 0,
       },
     },
-    ol: {
-      gap: 2,
-    },
-    root: {
-      color: inkLight,
-    },
-    separator: {
-      margin: 0,
-    },
-  },
+  };
 };
 
 /**
