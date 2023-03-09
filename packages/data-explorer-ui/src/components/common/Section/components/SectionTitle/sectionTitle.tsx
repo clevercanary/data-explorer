@@ -12,6 +12,7 @@ export const SectionTitle = ({
 }: SectionTitleProps): JSX.Element => {
   return (
     <Typography
+      align="left"
       className={className}
       color="ink.main"
       component="h3"
