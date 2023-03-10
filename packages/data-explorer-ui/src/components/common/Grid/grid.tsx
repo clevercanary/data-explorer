@@ -1,8 +1,11 @@
-import { Box } from "@mui/material";
+import { Box, SxProps } from "@mui/material";
 import React, { ReactNode } from "react";
 
+// TODO the prop "children" should not necessarily be optional, but it is for now to avoid typescript errors with the use of this component within site configuration files.
+
 export interface GridProps {
-  children: ReactNode | ReactNode[];
+  children?: ReactNode | ReactNode[];
+  gridSx?: SxProps;
 }
 
 /**
@@ -11,10 +14,11 @@ export interface GridProps {
 
 export const Grid = ({
   children,
-  ...props /* Spread props to allow for Mui Box specific prop overrides e.g. "sx" or system props. */
+  gridSx,
+  ...props /* Spread props to allow for Mui Box specific prop overrides. */
 }: GridProps): JSX.Element => {
   return (
-    <Box display="grid" {...props}>
+    <Box display="grid" sx={gridSx} {...props}>
       {children}
     </Box>
   );
