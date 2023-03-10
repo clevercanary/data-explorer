@@ -1,7 +1,7 @@
 import { Box, SxProps } from "@mui/material";
 import React, { ReactNode } from "react";
 
-// TODO the prop "children" should not necessarily be optional, but it is for now to avoid breaking changes with the use of this component within site configuration files.
+// TODO the prop "children" should not necessarily be optional, but it is for now to avoid typescript errors with the use of this component within site configuration files.
 
 export interface GridItemProps {
   children?: ReactNode | ReactNode[];
