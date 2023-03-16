@@ -7,16 +7,22 @@ import {
 import { DESKTOP_SM } from "../../../../../../theme/common/breakpoints";
 import { SearchIcon } from "../../../../../common/CustomIcon/components/SearchIcon/searchIcon";
 
-export const Search = (): JSX.Element => {
+type OpenSearchFn = () => void;
+
+export interface SearchProps {
+  openSearchFn: OpenSearchFn;
+}
+
+export const Search = ({ openSearchFn }: SearchProps): JSX.Element => {
   const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
   return (
     <>
       {smDesktop ? (
-        <Button startIcon={<SearchIcon />} variant="nav">
+        <Button onClick={openSearchFn} startIcon={<SearchIcon />} variant="nav">
           Search
         </Button>
       ) : (
-        <IconButton color="ink">
+        <IconButton color="ink" onClick={openSearchFn}>
           <SearchIcon fontSize="medium" />
         </IconButton>
       )}

@@ -7,7 +7,13 @@ export default {
   title: "Components/Common/Button",
 } as ComponentMeta<typeof Search>;
 
-const SearchTemplate: ComponentStory<typeof Search> = () => <Search />;
+const SearchTemplate: ComponentStory<typeof Search> = (args) => (
+  <Search {...args} />
+);
 
 export const SearchStory = SearchTemplate.bind({});
-SearchStory.args = {};
+SearchStory.args = {
+  openSearchFn: (): void => {
+    // openSearchFn function
+  },
+};

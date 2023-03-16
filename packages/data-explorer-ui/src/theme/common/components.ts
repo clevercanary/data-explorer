@@ -629,6 +629,15 @@ export const MuiIconButton = (theme: Theme): Components["MuiIconButton"] => {
       },
       {
         props: {
+          edge: "end",
+          size: "small",
+        },
+        style: {
+          marginRight: -6,
+        },
+      },
+      {
+        props: {
           size: "xlarge",
         },
         style: {
@@ -835,6 +844,23 @@ export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
           borderStyle: "solid",
           borderWidth: 1,
           boxShadow: theme.shadows[1], // elevation01
+        },
+      },
+      {
+        props: { variant: "searchbar" },
+        style: {
+          alignSelf: "flex-start",
+          borderColor: theme.palette.smoke.main,
+          borderRadius: 0,
+          borderStyle: "solid",
+          borderWidth: "0 0 1px 0",
+          boxShadow: theme.shadows[1], // elevation01,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&.MuiDialog-paper": {
+            marginLeft: 0,
+            marginRight: 0,
+            width: "100%",
+          },
         },
       },
       {
