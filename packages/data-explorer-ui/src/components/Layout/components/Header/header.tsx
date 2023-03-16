@@ -19,6 +19,7 @@ import {
 } from "./components/NavLinks/navLinks";
 import { ProfileComponent } from "./components/ProfileComponent/profileComponent";
 import { Search } from "./components/Search/search";
+import SearchBar from "./components/SearchBar/searchBar";
 import { Header as AppBar, HEADER_HEIGHT } from "./header.styles";
 
 export interface HeaderProps {
@@ -27,6 +28,7 @@ export interface HeaderProps {
   navAlignment?: NavAlignment;
   navLinks: NavLinkItem[];
   searchEnabled?: boolean;
+  searchURL?: string;
   slogan?: string;
   socials: Social[];
 }
@@ -37,15 +39,38 @@ export const Header = ({
   navAlignment = ELEMENT_ALIGNMENT.LEFT,
   navLinks,
   searchEnabled,
+  searchURL,
   slogan,
   socials,
 }: HeaderProps): JSX.Element => {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState<boolean>(false);
   const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
   const onlySmDesktop = useBreakpointHelper(
     BREAKPOINT_FN_NAME.ONLY,
     DESKTOP_SM
   );
+
+  /**
+   * Opens search bar.
+   */
+  const openSearch = (): void => {
+    setSearchOpen(true);
+  };
+
+  /**
+   * Closes menu.
+   */
+  const closeMenu = (): void => {
+    setDrawerOpen(false);
+  };
+
+  /**
+   * Closes search bar.
+   */
+  const closeSearch = (): void => {
+    setSearchOpen(false);
+  };
 
   // Set drawer open state to false on change of media breakpoint from mobile to "small desktop".
   useEffect(() => {
@@ -62,7 +87,7 @@ export const Header = ({
         <Content
           desktopSm={smDesktop}
           drawerOpen={drawerOpen}
-          onDrawerClose={(): void => setDrawerOpen(false)}
+          onDrawerClose={closeMenu}
         >
           {/* Slogan divider */}
           {slogan && smDesktop && (
@@ -106,13 +131,24 @@ export const Header = ({
             sx={{
               alignItems: "center",
               display: "flex",
-              flex: { desktopSm: "none", mobile: 1 },
-              gap: { desktopSm: 2, mobile: 3 },
+              flex: { md: "none", xs: 1 },
+              gap: { md: 2, xs: 3 },
               justifyContent: "flex-end",
             }}
           >
             {/* Search */}
-            {searchEnabled && <Search />}
+            {searchEnabled && (
+              <>
+                <Search openSearchFn={openSearch} />
+                <SearchBar
+                  closeMenuFn={closeMenu}
+                  closeSearchFn={closeSearch}
+                  modalPosition={HEADER_HEIGHT}
+                  searchOpen={searchOpen}
+                  searchURL={searchURL}
+                />
+              </>
+            )}
             {/* LoginView */}
             {authenticationEnabled && <ProfileComponent />}
             {/* Menu */}
