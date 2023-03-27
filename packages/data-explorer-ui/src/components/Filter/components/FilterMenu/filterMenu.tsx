@@ -5,7 +5,6 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
-import { matchSorter } from "match-sorter";
 import React, { useState } from "react";
 import {
   CategoryKey,
@@ -34,9 +33,7 @@ export const FilterMenu = ({
   const [searchTerm, setSearchTerm] = useState<string>("");
   const isSearchable = values.length > MAX_DISPLAYABLE_LIST_ITEMS;
   const filteredValues = isSearchable
-    ? matchSorter(values, searchTerm, {
-        keys: ["key", "label"],
-      })
+    ? applyMenuFilter(values, searchTerm)
     : values;
   return (
     <FilterView menuWidth={menuWidth}>
@@ -79,3 +76,16 @@ export const FilterMenu = ({
     </FilterView>
   );
 };
+
+export function applyMenuFilter(
+  values: SelectCategoryValueView[],
+  searchTerm: string
+): SelectCategoryValueView[] {
+  if (!searchTerm) return values;
+  searchTerm = searchTerm.toLowerCase();
+  return values.filter(
+    ({ key, label }) =>
+      key?.toLowerCase().includes(searchTerm) ||
+      label?.toLowerCase().includes(searchTerm)
+  );
+}
