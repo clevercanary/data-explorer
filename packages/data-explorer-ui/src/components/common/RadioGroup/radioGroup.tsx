@@ -5,6 +5,8 @@ import {
   RadioGroupProps as MRadioGroupProps,
 } from "@mui/material";
 import React from "react";
+import { RadioCheckedIcon } from "../CustomIcon/components/RadioCheckedIcon/radioCheckedIcon";
+import { RadioUncheckedIcon } from "../CustomIcon/components/RadioUncheckedIcon/radioUncheckedIcon";
 
 export type RadioGroupValue = MRadioGroupProps["value"]; // any
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Allows for any value to be used as a radio value.
@@ -36,7 +38,13 @@ export const RadioGroup = ({
       {radios.map(({ disabled, label, value: radioValue }, r) => (
         <MFormControlLabel
           key={`${label}${r}`}
-          control={<MRadio />}
+          control={
+            <MRadio
+              checkedIcon={<RadioCheckedIcon />}
+              icon={<RadioUncheckedIcon />}
+              size="small"
+            />
+          }
           disabled={disabled}
           label={label}
           value={radioValue}

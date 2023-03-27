@@ -582,6 +582,39 @@ export const MuiDrawer: Components["MuiDrawer"] = {
 };
 
 /**
+ * MuiFormControlLabel Component
+ * @param theme - Theme.
+ * @returns MuiFormControlLabel component theme styles.
+ */
+export const MuiFormControlLabel = (
+  theme: Theme
+): Components["MuiFormControlLabel"] => {
+  return {
+    styleOverrides: {
+      label: {
+        ...theme.typography[TEXT_BODY_400],
+      },
+      root: {
+        gap: 8,
+        margin: 0,
+      },
+    },
+  };
+};
+
+/**
+ * MuiFormGroup Component
+ */
+export const MuiFormGroup: Components["MuiFormGroup"] = {
+  styleOverrides: {
+    root: {
+      alignItems: FLEX_START,
+      gap: 12,
+    },
+  },
+};
+
+/**
  * MuiIconButton Component
  * @param theme - Theme.
  * @returns MuiIconButton component theme styles.
@@ -849,7 +882,7 @@ export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
       {
         props: { variant: "searchbar" },
         style: {
-          alignSelf: "flex-start",
+          alignSelf: FLEX_START,
           borderColor: theme.palette.smoke.main,
           borderRadius: 0,
           borderStyle: "solid",
@@ -872,6 +905,33 @@ export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
         },
       },
     ],
+  };
+};
+
+/**
+ * MuiRadio Component
+ * @param theme - Theme.
+ * @returns MuiRadio component theme styles.
+ */
+export const MuiRadio = (theme: Theme): Components["MuiRadio"] => {
+  return {
+    defaultProps: {
+      disableRipple: true,
+    },
+    styleOverrides: {
+      root: {
+        color: theme.palette.smoke.dark,
+        padding: 0,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-disabled": {
+          color: theme.palette.smoke.dark,
+          opacity: "50%",
+        },
+        "&:hover": {
+          backgroundColor: "transparent",
+        },
+      },
+    },
   };
 };
 

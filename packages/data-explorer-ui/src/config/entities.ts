@@ -146,6 +146,8 @@ export interface GoogleGISAuthConfig {
 export type GridTrackAuto = "auto"; // Dimension specifying the track's maximum of the largest max-content size of the items in that track.
 export type GridTrackFlex = `${number}fr`; // Dimension specifying the track's flex factor; unit in "fr".
 export type GridTrackLength = `${number}px`; // Dimension specifying the track's (fixed) width; unit in "px".
+export type GridTrackMaxContent = "max-content"; // Dimension specifying the track's size by the largest maximal content of the grid items in that track.
+export type GridTrackMinContent = "min-content"; // Dimension specifying the track's size by the largest minimal content of the grid items in that track.
 
 /**
  * A min and max dimension specifying a size range greater than or equal to min and less than or equal to max.
@@ -164,6 +166,8 @@ export type GridTrackSize =
   | GridTrackAuto
   | GridTrackLength
   | GridTrackFlex
+  | GridTrackMaxContent
+  | GridTrackMinContent
   | GridTrackMinMax;
 
 /**
