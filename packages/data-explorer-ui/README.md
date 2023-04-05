@@ -12,7 +12,8 @@
 
 1. Clone this repository into the same parent folder as
    the [Clever Canary Data Browser](https://github.com/clevercanary/data-browser).
-2. In the Data Explorer `packages/data-explorer-ui` directory (e.g. `data-explorer/packages/data-explorer-ui`):
+2. Set `node` version to `16.15.0` (this is also the version used by the Data Browser).
+3. In the Data Explorer `packages/data-explorer-ui` directory (e.g. `data-explorer/packages/data-explorer-ui`):
     - Run `npm ci`.
     - [Bump the version number](https://docs.npmjs.com/cli/v6/commands/npm-version) in `package.json`
       e.g. `npm version <update_type>`.
@@ -20,7 +21,7 @@
       source files; one way this can be done more efficiently is
       by [setting the default build task](https://code.visualstudio.com/docs/typescript/typescript-compiling#_step-3-make-the-typescript-build-the-default)
       in VS Code so that it can be done with a keyboard shortcut).
-3. In the Data Browser `explorer` directory (e.g. `data-browser/explorer`):
+4. In the Data Browser `explorer` directory (e.g. `data-browser/explorer`):
     - Run `npm ci`.
     - Update the `@clevercanary/data-explorer-ui` dependency in the `package.json` file to use the new version
       of `data-explorer-ui`.
