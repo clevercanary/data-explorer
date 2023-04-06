@@ -12,6 +12,7 @@ import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
 import type {} from "@mui/material/SvgIcon";
 import type {} from "@mui/material/Typography";
 import { RowData } from "@tanstack/react-table";
+import { DataLayer } from "../src/common/analytics/entities";
 import { GridTrackSize } from "../src/config/entities";
 
 /**
@@ -216,5 +217,11 @@ declare module "@tanstack/table-core" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TData and TValue are unused variables.
   interface ColumnMeta<TData extends RowData, TValue> {
     width: GridTrackSize;
+  }
+}
+
+declare global {
+  interface Window {
+    dataLayer: DataLayer;
   }
 }
