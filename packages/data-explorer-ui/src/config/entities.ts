@@ -8,6 +8,13 @@ import { HeaderProps } from "../components/Layout/components/Header/header";
 import { ExploreState } from "../providers/exploreState";
 
 /**
+ * Interface to define the analytics configuration for a given site.
+ */
+export interface AnalyticsConfig {
+  gtmId: string;
+}
+
+/**
  * Interface to define the authentication configuration for a given site.
  */
 export interface AuthenticationConfig {
@@ -238,6 +245,7 @@ export interface RelatedViewConfig {
  * Interface that will hold the whole configuration for a given site.
  */
 export interface SiteConfig {
+  analytics?: AnalyticsConfig;
   authentication?: AuthenticationConfig;
   browserURL: string;
   categoryConfigs?: CategoryConfig[];
