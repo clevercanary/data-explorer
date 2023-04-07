@@ -92,6 +92,9 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
         payload: entityListType,
         type: ExploreActionKind.SelectEntityType,
       });
+      track(EVENT_NAME.ENTITY_SELECTED, {
+        [EVENT_PARAM.ENTITY_NAME]: entityListType
+      });
     }
   }, [entityListType, exploreDispatch]);
 

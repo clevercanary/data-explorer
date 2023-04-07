@@ -39,6 +39,8 @@ import { EntityViewToggle } from "./components/EntityViewToggle/entityViewToggle
 import { Pagination as DXPagination } from "./components/Pagination/pagination";
 import { PaginationSummary } from "./components/PaginationSummary/paginationSummary";
 import { Alert, Table as GridTable, TableToolbar } from "./table.styles";
+import { track } from "common/analytics/analytics";
+import { EVENT_NAME, EVENT_PARAM, PAGINATION_DIRECTION, SORT_DIRECTION } from "common/analytics/entities";
 
 export interface TableProps<T extends object> {
   columns: ColumnDef<T>[];
@@ -91,6 +93,12 @@ TableProps<T>): JSX.Element => {
       payload: typeof updater === "function" ? updater(sorting) : updater,
       type: ExploreActionKind.UpdateSorting,
     });
+    // Execute GTM tracking.
+    track(EVENT_NAME.ENTITY_TABLE_SORTED, {
+      [EVENT_PARAM.ENTITY_NAME]: exploreState.tabValue,
+      [EVENT_PARAM.COLUMN_NAME]: sorting[0].id,
+      [EVENT_PARAM.SORT_DIRECTION]: sorting[0].desc ? SORT_DIRECTION.DESC : SORT_DIRECTION.ASC
+    })
   };
   const state = {
     pagination: {
@@ -149,6 +157,11 @@ TableProps<T>): JSX.Element => {
           payload: "next",
           type: ExploreActionKind.PaginateTable,
         });
+        // Execute GTM tracking.
+        track(EVENT_NAME.ENTITY_TABLE_PAGINATED, {
+          [EVENT_PARAM.ENTITY_NAME]: exploreState.tabValue,
+          [EVENT_PARAM.PAGINATION_DIRECTION]: PAGINATION_DIRECTION.NEXT
+        })
       };
     }
     // const nextPage = pagination?.nextPage ?? tableNextPage;
@@ -165,6 +178,10 @@ TableProps<T>): JSX.Element => {
           payload: "prev",
           type: ExploreActionKind.PaginateTable,
         });
+        track(EVENT_NAME.ENTITY_TABLE_PAGINATED, {
+          [EVENT_PARAM.ENTITY_NAME]: exploreState.tabValue,
+          [EVENT_PARAM.PAGINATION_DIRECTION]: PAGINATION_DIRECTION.PREV
+        })
       };
     }
     previousPage();

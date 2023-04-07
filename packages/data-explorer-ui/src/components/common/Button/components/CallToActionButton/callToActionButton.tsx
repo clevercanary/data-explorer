@@ -3,6 +3,8 @@ import React, { ElementType } from "react";
 import { ANCHOR_TARGET } from "../../../../Links/common/entities";
 import { isClientSideNavigation } from "../../../../Links/common/utils";
 import { ButtonPrimary } from "../../button.styles";
+import { track } from "common/analytics/analytics";
+import { EVENT_NAME, EVENT_PARAM } from "common/analytics/entities";
 
 export interface CallToAction {
   label: string;
@@ -42,6 +44,11 @@ export const CallToActionButton = ({
       className={className}
       disabled={disabled}
       href={url}
+        onClick={() => {
+          track(EVENT_NAME.CTA_BUTTON_CLICKED, {
+            [EVENT_PARAM.CTA_BUTTON_CLICKED]: url.split("=")[1]
+          })
+        }}
       rel="noopener"
       target={target || ANCHOR_TARGET.BLANK}
     >
