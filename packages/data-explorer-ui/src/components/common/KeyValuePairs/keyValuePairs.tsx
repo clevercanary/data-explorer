@@ -1,4 +1,4 @@
-import React, { ElementType, ReactNode } from "react";
+import React, { ElementType, Fragment, ReactNode } from "react";
 import { Stack } from "../Stack/stack";
 
 /**
@@ -7,9 +7,9 @@ import { Stack } from "../Stack/stack";
  */
 
 export type Key = ReactNode;
-export type Value = ReactNode | ReactNode[] | ValueKeyValueFnTuple;
-export type ValueKeyValueFnTuple = [Value, KeyValueFn | undefined];
-export type KeyValueFn = () => void; // An KeyValue element onClick function.
+export type KeyValue = [Key, Value];
+export type Value = ReactNode | ReactNode[];
+export type KeyValueFn = (keyValue: KeyValue) => void; // An KeyValue element onClick function.
 export type KeyValues = Map<Key, Value>;
 
 export interface KeyValuePairsProps {
@@ -29,9 +29,10 @@ export const KeyValuePairs = ({
 }: KeyValuePairsProps): JSX.Element => {
   return (
     <KeyValues>
-      {[...keyValuePairs].map(([key, valueKeyValueFn], k) => {
-        const [value, keyValueFn] = partitionValueKeyValueFn(valueKeyValueFn);
-        const keyValueProps = keyValueFn ? { keyValueFn } : {};
+      {[...keyValuePairs].map(([key, value], k) => {
+        // Pass through the keyValue to the KeyValue element (for the KeyValueFn if defined).
+        const keyValueProps =
+          KeyValue === Fragment ? {} : { keyValue: [key, value] };
         return (
           <KeyValue key={`${key}${k}`} {...keyValueProps}>
             <Key>{key}</Key>
@@ -42,30 +43,3 @@ export const KeyValuePairs = ({
     </KeyValues>
   );
 };
-
-/**
- * Determine if the given value is a tuple of value and function, and not a singular value.
- * @param value - Value, either a tuple of Value and KeyValueFn, or a singular Value.
- * @returns true if the given value is a tuple of value and function.
- */
-function isValueValueKeyValueFnTuple(
-  value: Value
-): value is ValueKeyValueFnTuple {
-  if (Array.isArray(value) && value.length === 2) {
-    return typeof value[1] === "function";
-  }
-  return false;
-}
-
-/**
- * Partitions value into a tuple of value and function.
- * The given value may be typed as a singular Value (see type Value) and therefore the partition facilitates this possibility.
- * @param value - Value, either a tuple of Value and KeyValueFn, or a singular Value.
- * @returns Tuple containing a ReactNode or ReactNode array, and an optional function.
- */
-function partitionValueKeyValueFn(value: Value): ValueKeyValueFnTuple {
-  if (isValueValueKeyValueFnTuple(value)) {
-    return value;
-  }
-  return [value, undefined];
-}

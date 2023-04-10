@@ -1,7 +1,6 @@
-import { SxProps } from "@mui/material";
+import { Box, SxProps } from "@mui/material";
 import React, { ReactNode } from "react";
-import { KeyValueFn } from "../../keyValuePairs";
-import { KeyValueElType as Box } from "./keyValueElType.styles";
+import { KeyValue, KeyValueFn } from "../../keyValuePairs";
 
 /**
  * Basic KeyValuePairs "key value" component.
@@ -11,17 +10,24 @@ import { KeyValueElType as Box } from "./keyValueElType.styles";
 export interface KeyValueElTypeProps {
   boxSx?: SxProps;
   children: ReactNode;
-  keyValueFn: KeyValueFn;
+  keyValue: KeyValue; // From KeyValuePairs component.
+  keyValueFn?: KeyValueFn; // Optional, not all keyValue pairs may have a corresponding function.
 }
 
 export const KeyValueElType = ({
   boxSx,
   children,
+  keyValue,
   keyValueFn,
   ...props /* Spread props to allow for Mui Box specific prop overrides. */
 }: KeyValueElTypeProps): JSX.Element => {
   return (
-    <Box onClick={keyValueFn} role="button" sx={boxSx} {...props}>
+    <Box
+      onClick={(): void => keyValueFn && keyValueFn(keyValue)}
+      role="button"
+      sx={{ cursor: keyValueFn ? "pointer" : "default", ...boxSx }}
+      {...props}
+    >
       {children}
     </Box>
   );
