@@ -21,6 +21,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import React, { useEffect } from "react";
+import { track } from "../../common/analytics/analytics";
+import {
+  EVENT_NAME,
+  EVENT_PARAM,
+  SORT_DIRECTION,
+} from "../../common/analytics/entities";
 import { Pagination } from "../../common/entities";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
@@ -90,6 +96,14 @@ TableProps<T>): JSX.Element => {
     exploreDispatch({
       payload: typeof updater === "function" ? updater(sorting) : updater,
       type: ExploreActionKind.UpdateSorting,
+    });
+    // Execute GTM tracking.
+    track(EVENT_NAME.ENTITY_TABLE_SORTED, {
+      [EVENT_PARAM.ENTITY_NAME]: exploreState.tabValue,
+      [EVENT_PARAM.COLUMN_NAME]: sorting[0].id,
+      [EVENT_PARAM.SORT_DIRECTION]: sorting[0].desc
+        ? SORT_DIRECTION.DESC
+        : SORT_DIRECTION.ASC,
     });
   };
   const state = {
