@@ -5,6 +5,7 @@ export type DataLayer = any;
  * Set of analytics event actions.
  */
 export enum EVENT_NAME {
+  ENTITY_SELECTED = "entity_selected",
   ENTITY_TABLE_PAGINATED = "entity_table_paginated",
   ENTITY_TABLE_SORTED = "entity_table_sorted",
   FILTER_SELECTED = "filter_selected",
@@ -42,6 +43,7 @@ export enum SORT_DIRECTION {
  * Model of event parameters mapped to the event name.
  */
 export type EventParams = {
+  [EVENT_NAME.ENTITY_SELECTED]: { [EVENT_PARAM.ENTITY_NAME]: string };
   [EVENT_NAME.ENTITY_TABLE_PAGINATED]: {
     [EVENT_PARAM.ENTITY_NAME]: string;
     [EVENT_PARAM.PAGINATION_DIRECTION]: PAGINATION_DIRECTION;
