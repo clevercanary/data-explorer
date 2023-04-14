@@ -4,6 +4,8 @@ import {
   AzulEntitiesStaticResponse,
   AzulSummaryResponse,
 } from "../../apis/azul/common/entities";
+import { track } from "../../common/analytics/analytics";
+import { EVENT_NAME, EVENT_PARAM } from "../../common/analytics/entities";
 import { CategoryKey, CategoryValueKey } from "../../common/entities";
 import { Tab, Tabs, TabValue } from "../../components/common/Tabs/tabs";
 import { ComponentCreator } from "../../components/ComponentCreator/ComponentCreator";
@@ -66,6 +68,13 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
       },
       type: ExploreActionKind.UpdateFilter,
     });
+    // Execute GTM tracking.
+    if (selected) {
+      track(EVENT_NAME.FILTER_SELECTED, {
+        [EVENT_PARAM.FILTER_NAME]: categoryKey,
+        [EVENT_PARAM.FILTER_VALUE]: selectedCategoryValue,
+      });
+    }
   };
 
   /**
