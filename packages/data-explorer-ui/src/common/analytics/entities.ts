@@ -7,6 +7,7 @@ export type DataLayer = any;
 export enum EVENT_NAME {
   ENTITY_TABLE_PAGINATED = "entity_table_paginated",
   ENTITY_TABLE_SORTED = "entity_table_sorted",
+  FILTER_SELECTED = "filter_selected",
 }
 
 /**
@@ -15,6 +16,8 @@ export enum EVENT_NAME {
 export enum EVENT_PARAM {
   COLUMN_NAME = "column_name",
   ENTITY_NAME = "entity_name",
+  FILTER_NAME = "filter_name",
+  FILTER_VALUE = "filter_value",
   PAGINATION_DIRECTION = "pagination_direction",
   SORT_DIRECTION = "sort_direction",
 }
@@ -47,5 +50,9 @@ export type EventParams = {
     [EVENT_PARAM.ENTITY_NAME]: string;
     [EVENT_PARAM.COLUMN_NAME]: string;
     [EVENT_PARAM.SORT_DIRECTION]: SORT_DIRECTION;
+  };
+  [EVENT_NAME.FILTER_SELECTED]: {
+    [EVENT_PARAM.FILTER_NAME]: string;
+    [EVENT_PARAM.FILTER_VALUE]: string;
   };
 };
