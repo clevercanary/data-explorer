@@ -11,6 +11,7 @@ import { ExploreState } from "../providers/exploreState";
  * Interface to define the analytics configuration for a given site.
  */
 export interface AnalyticsConfig {
+  gtmAuth: string;
   gtmId: string;
 }
 
