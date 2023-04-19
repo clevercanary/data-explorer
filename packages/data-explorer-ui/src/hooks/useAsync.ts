@@ -31,6 +31,10 @@ export const useAsync = <T>(state: State<T> = { status: "idle" }) => {
     [safeSetState]
   );
 
+  if (error) {
+    throw error;
+  }
+
   const run = useCallback(
     (promise: Promise<T>) => {
       if (!promise || !promise.then) {
