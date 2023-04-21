@@ -3,11 +3,11 @@ import React from "react";
 import { ErrorBox } from "./components/errorBox";
 
 interface TempErrorProps {
-  error?: Error | AxiosError;
+  error: Error | AxiosError;
 }
 
 export const TempError = ({ error }: TempErrorProps): JSX.Element => {
-  const { code, message, request } = isAxiosError(error)
+  const { code, request } = isAxiosError(error)
     ? {
         ...error,
         code: error.response?.status,
@@ -19,7 +19,7 @@ export const TempError = ({ error }: TempErrorProps): JSX.Element => {
     <div>
       {code && <ErrorBox title="Error Code" message={`${code}`} />}
       {request && <ErrorBox title="Request URL" message={request} />}
-      {message && <ErrorBox title="Error Message" message={message} />}
+      <ErrorBox title="Error Message" message={error.message} />
     </div>
   );
 };
