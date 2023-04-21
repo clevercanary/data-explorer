@@ -17,6 +17,7 @@ import {
   getURL,
 } from "../../shared/utils";
 import { convertUrlParams } from "../../utils/url";
+import { api } from "./client";
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
 function createFetchOptions(accessToken: string | undefined): any {
@@ -49,15 +50,17 @@ export const fetchEntitiesFromQuery = async (
 
 /**
  * Fetch entites list corresponding to the givenURL
- * @param url - url to request the list from
+ * @param path - path to request the list from
  * @param accessToken - auth token
  */
 export const fetchEntitiesFromURL = async (
-  url: string,
+  path: string,
   accessToken: string | undefined
 ): Promise<AzulEntitiesResponse> => {
-  const res = await fetch(url, createFetchOptions(accessToken));
-  return await res.json();
+  const res = await api().get<AzulEntitiesResponse>(path, {
+    headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
+  });
+  return res.data;
 };
 
 /**
