@@ -4,9 +4,27 @@ import { Alert } from "./alert";
 
 export default {
   argTypes: {
-    children: { control: "text" },
-    icon: { control: "text" },
-    title: { control: "text" },
+    children: {
+      control: "text",
+      description: "Inner text",
+    },
+    color: {
+      description: "Color of alert",
+    },
+    icon: {
+      control: "text",
+      description: "Top left icon. If provided will replace severity.",
+    },
+    severity: {
+      description: "Top left predefined icon. Combine with color.",
+    },
+    title: {
+      control: "text",
+      description: "Highlighted text",
+    },
+    variant: {
+      description: "[deprecated] Type of the alert",
+    },
   },
   component: Alert,
   title: "Components/Common/Alert",
