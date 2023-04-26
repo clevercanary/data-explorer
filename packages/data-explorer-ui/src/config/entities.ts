@@ -11,8 +11,9 @@ import { ExploreState } from "../providers/exploreState";
  * Interface to define the analytics configuration for a given site.
  */
 export interface AnalyticsConfig {
-  gtmAuth: string;
+  gtmAuth: string; // Required for GTM env configurations (e.g. staging vs Live)
   gtmId: string;
+  gtmPreview: string; // Required for GTM env configurations (e.g. staging vs Live)
 }
 
 /**
