@@ -1,12 +1,9 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { AuthenticationMenu } from "./authenticationMenu";
 
 export default {
   argTypes: {
-    menuPosition: {
-      description: "Defines direction where menu grows",
-    },
     onLogout: {
       description: "Callback to be called when 'Logout' button is clicked",
     },
@@ -16,9 +13,9 @@ export default {
   },
   component: AuthenticationMenu,
   title: "Components/Navigation/AuthenticationMenu",
-} satisfies ComponentMeta<typeof AuthenticationMenu>;
+} satisfies Meta<typeof AuthenticationMenu>;
 
-const AuthenticationMenuTemplate: ComponentStory<typeof AuthenticationMenu> = (
+const AuthenticationMenuTemplate: StoryFn<typeof AuthenticationMenu> = (
   args
 ) => <AuthenticationMenu {...args} />;
 

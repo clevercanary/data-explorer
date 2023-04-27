@@ -20,6 +20,6 @@ export const UserNames = styled(Typography)`
 `;
 
 export const Avatar = styled(MAvatar)`
-  width: 32px;
   height: 32px;
+  width: 32px;
 `;
