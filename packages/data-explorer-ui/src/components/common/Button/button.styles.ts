@@ -59,3 +59,12 @@ export const TextButtonPrimary = styled(MButtonBase)`
     text-decoration: underline;
   }
 `;
+
+// White text button
+export const TextButtonWhite = styled(MButtonBase)`
+  color: ${({ theme }) => theme.palette.common.white};
+  font-size: 13px;
+  font-weight: ${({ theme }) => theme.typography[textBody500].fontWeight};
+  line-height: ${({ theme }) => theme.typography[textBody500].lineHeight};
+  text-decoration: underline;
+`;
