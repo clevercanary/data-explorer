@@ -12,7 +12,7 @@ export interface AlertProps {
   icon?: MAlertProps["icon"];
   severity: MAlertProps["severity"];
   title?: ReactNode;
-  variant?: MAlertProps["variant"];
+  variant?: MAlertProps["variant"] | "banner" | "neutral";
 }
 
 export const Alert = ({
