@@ -12,6 +12,7 @@ export type TabValue = MTabProps["value"]; // any
 export type OnTabChangeFn = (tabValue: TabValue) => void; // Function invoked when selected tab value changes.
 
 export interface Tab {
+  count?: string;
   icon?: MTabProps["icon"]; // element or string
   iconPosition?: MTabProps["iconPosition"]; // "bottom" or "end" or "start" or "top
   label: string;
@@ -32,12 +33,15 @@ export const Tabs = ({ onTabChange, tabs, value }: TabsProps): JSX.Element => {
       value={value}
     >
       {tabs.map(
-        ({ icon, iconPosition = "start", label, value: tabValue }, t) => (
+        (
+          { count, icon, iconPosition = "start", label, value: tabValue },
+          t
+        ) => (
           <MTab
             icon={icon}
             iconPosition={icon ? iconPosition : undefined}
             key={`${label}${t}`}
-            label={label}
+            label={count ? `${label} (${count})` : label}
             value={tabValue}
           />
         )
