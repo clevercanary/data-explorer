@@ -23,7 +23,7 @@ export default {
       description: "Highlighted text",
     },
     variant: {
-      description: "[deprecated] Type of the alert",
+      description: "Type of the alert",
     },
   },
   component: Alert,
