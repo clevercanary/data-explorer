@@ -34,3 +34,10 @@ CallToActionButtonWithCustomComponentStory.args = {
   ButtonElType: "a",
   callToAction,
 };
+
+export const CallToActionButtonWithCustomReactComponentStory =
+  CallToActionButtonTemplate.bind({});
+CallToActionButtonWithCustomReactComponentStory.args = {
+  ButtonElType: "ButtonSecondary",
+  callToAction,
+};

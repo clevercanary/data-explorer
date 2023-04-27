@@ -28,7 +28,7 @@ BannerPrimaryStory.args = {
         Optional announcements text goes here followed by a
       </Typography>{" "}
       <CallToActionButton
-        ButtonElType={"a"}
+        ButtonElType={"TextButtonWhite"}
         callToAction={{
           label: "Call to Action",
           url: "https://www.google.com",
