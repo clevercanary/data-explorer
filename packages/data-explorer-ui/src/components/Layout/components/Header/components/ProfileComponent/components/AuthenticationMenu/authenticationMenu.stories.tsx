@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { ComponentStory, Meta } from "@storybook/react";
 import React from "react";
 import { AuthenticationMenu } from "./authenticationMenu";
 
@@ -15,7 +15,7 @@ export default {
   title: "Components/Navigation/AuthenticationMenu",
 } satisfies Meta<typeof AuthenticationMenu>;
 
-const AuthenticationMenuTemplate: StoryFn<typeof AuthenticationMenu> = (
+const AuthenticationMenuTemplate: ComponentStory<typeof AuthenticationMenu> = (
   args
 ) => <AuthenticationMenu {...args} />;
 
