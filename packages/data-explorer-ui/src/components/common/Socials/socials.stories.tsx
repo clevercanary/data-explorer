@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { SOCIAL, Socials } from "./socials";
 
@@ -8,11 +8,11 @@ export default {
   },
   component: Socials,
   title: "Components/Navigation/SocialLinks",
-} as ComponentMeta<typeof Socials>;
+} as Meta<typeof Socials>;
 
 const GITHUB_URL = "https://github.com";
 
-const SocialsTemplate: ComponentStory<typeof Socials> = (args) => (
+const SocialsTemplate: StoryFn<typeof Socials> = (args) => (
   <Socials {...args} />
 );
 
