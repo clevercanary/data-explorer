@@ -15,7 +15,6 @@ import { FilterState } from "../../hooks/useCategoryFilter";
 import {
   getDefaultDetailParams,
   getDefaultListParams,
-  getURL,
 } from "../../shared/utils";
 import { convertUrlParams } from "../../utils/url";
 import { api } from "./client";
@@ -43,7 +42,7 @@ export const fetchEntitiesFromQuery = async (
 ): Promise<AzulEntitiesResponse> => {
   const params = { ...getDefaultListParams(), ...listParams };
   return await fetchEntitiesFromURL(
-    `${getURL()}${apiPath}?${convertUrlParams(params)}`,
+    `${apiPath}?${convertUrlParams(params)}`,
     accessToken
   );
 };
@@ -100,7 +99,7 @@ export const fetchEntityDetail = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
   const res = await api().get(
-    `${getURL()}${apiPath}/${id}?${convertUrlParams({ ...param })}`
+    `${apiPath}/${id}?${convertUrlParams({ ...param })}`
   );
   return res.data;
 };
@@ -132,7 +131,7 @@ export const fetchSummary = async (
 
   const options = createFetchOptions(accessToken);
   const res = await api().get<AzulSummaryResponse>(
-    `${getURL()}${apiPath}?${convertUrlParams({ ...summaryParams })}`,
+    `${apiPath}?${convertUrlParams({ ...summaryParams })}`,
     options
   );
   return res.data;
