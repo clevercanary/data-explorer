@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { STATUS, StatusBadge } from "./statusBadge";
 
@@ -8,9 +8,9 @@ export default {
   },
   component: StatusBadge,
   title: "Components/Common/Alert",
-} as ComponentMeta<typeof StatusBadge>;
+} as Meta<typeof StatusBadge>;
 
-const StatusBadgeTemplate: ComponentStory<typeof StatusBadge> = (args) => (
+const StatusBadgeTemplate: StoryFn<typeof StatusBadge> = (args) => (
   <StatusBadge {...args} />
 );
 
