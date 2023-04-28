@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { Error as ErrorComponent } from "./error";
 
@@ -8,9 +8,9 @@ export default {
     layout: "fullscreen",
   },
   title: "Components/Communication",
-} as ComponentMeta<typeof ErrorComponent>;
+} as Meta<typeof ErrorComponent>;
 
-const Template: ComponentStory<typeof ErrorComponent> = (args) => (
+const Template: StoryFn<typeof ErrorComponent> = (args) => (
   <ErrorComponent {...args} />
 );
 
