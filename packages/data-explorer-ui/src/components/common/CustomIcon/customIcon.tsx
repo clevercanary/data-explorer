@@ -2,7 +2,11 @@ import { SvgIcon, SvgIconProps } from "@mui/material";
 import React from "react";
 import { IconName, IconSvgPathShapes } from "./common/iconSvgPathShapes";
 
-export interface CustomIconProps extends SvgIconProps {
+type SvgIconBaseProps = Pick<
+  SvgIconProps,
+  "color" | "fontSize" | "htmlColor" | "titleAccess" | "ref"
+>;
+export interface CustomIconProps extends SvgIconBaseProps {
   iconName: IconName;
 }
 
