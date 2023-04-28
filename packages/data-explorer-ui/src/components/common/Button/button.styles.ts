@@ -66,5 +66,6 @@ export const TextButtonWhite = styled(MButtonBase)`
   font-size: 13px;
   font-weight: ${({ theme }) => theme.typography[textBody500].fontWeight};
   line-height: ${({ theme }) => theme.typography[textBody500].lineHeight};
+  line-height: 1;
   text-decoration: underline;
 `;

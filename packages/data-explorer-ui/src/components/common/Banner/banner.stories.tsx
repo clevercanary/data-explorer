@@ -1,9 +1,8 @@
 import { Typography } from "@mui/material";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
-import { CallToActionButton } from "../Button/components/CallToActionButton/callToActionButton";
-import { Banner } from "./banner";
-import { BannerPrimary } from "./banner.styles";
+import { CallToActionButtonWithCustomReactComponentStory as CallToActionButton } from "../Button/components/CallToActionButton/callToActionButton.stories";
+import { Banner } from "./banner.styles";
 
 export default {
   argTypes: {
@@ -16,31 +15,32 @@ export default {
   title: "Components/Common/Banner",
 } as ComponentMeta<typeof Banner>;
 
-const BannerPrimaryTemplate: ComponentStory<typeof Banner> = (args) => (
-  <BannerPrimary {...args} />
+const BannerTemplate: ComponentStory<typeof Banner> = (args) => (
+  <Banner {...args} />
 );
 
-export const BannerPrimaryStory = BannerPrimaryTemplate.bind({});
-BannerPrimaryStory.args = {
+export const BannerStory = BannerTemplate.bind({});
+BannerStory.args = {
   children: (
     <>
       <Typography component="span" variant="text-body-small-500">
         Optional announcements text goes here followed by a
       </Typography>{" "}
       <CallToActionButton
-        ButtonElType={"TextButtonWhite"}
-        callToAction={{
-          label: "Call to Action",
-          url: "https://www.google.com",
-        }}
+        ButtonElType={CallToActionButton.args?.ButtonElType}
+        callToAction={
+          CallToActionButton.args?.callToAction || {
+            label: "Call to Action",
+            url: "https://www.google.com",
+          }
+        }
       />
     </>
   ),
 };
 
-export const BannerPrimaryWithoutCallToActionTextStory =
-  BannerPrimaryTemplate.bind({});
-BannerPrimaryWithoutCallToActionTextStory.args = {
+export const BannerWithoutCallToActionTextStory = BannerTemplate.bind({});
+BannerWithoutCallToActionTextStory.args = {
   children: (
     <>
       <Typography component="span" variant="text-body-small-500">

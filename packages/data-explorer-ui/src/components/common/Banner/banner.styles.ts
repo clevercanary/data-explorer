@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import { Banner } from "./banner";
 
-export const BannerPrimary = styled(Banner)`
+export const Banner = styled.div`
   background-color: ${({ theme }) => theme.palette.primary.main};
   color: ${({ theme }) => theme.palette.common.white};
   padding: 8px;
+  line-height: 1;
   text-align: center;
 `;
