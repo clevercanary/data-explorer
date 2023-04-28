@@ -1,14 +1,12 @@
-import {
-  ListItemIcon,
-  ListItemText,
-  MenuItem as MMenuItem,
-} from "@mui/material";
+import { ListItemIcon, MenuItem as MMenuItem } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { MouseEvent, ReactNode, useState } from "react";
 import { NavLinkDropdownButton } from "../../../../../common/Button/components/NavLinkDropdownButton/navLinkDropdownButton";
+import { NavMenuItemBody } from "./components/navMenuItemBody";
 import { NavLinkMenu as Menu } from "./navLinkMenu.styles";
 
 export interface MenuItem {
+  description?: string;
   icon?: ReactNode;
   label: string;
   url: string;
@@ -52,7 +50,7 @@ export const NavLinkMenu = ({
           vertical: "top",
         }}
       >
-        {menuItems.map(({ icon, label, url }) => (
+        {menuItems.map(({ description, icon, label, url }) => (
           <MMenuItem
             key={label}
             onClick={(): void => {
@@ -61,9 +59,7 @@ export const NavLinkMenu = ({
             }}
           >
             {icon && <ListItemIcon>{icon}</ListItemIcon>}
-            <ListItemText primaryTypographyProps={{ variant: "text-body-400" }}>
-              {label}
-            </ListItemText>
+            <NavMenuItemBody label={label} description={description} />
           </MMenuItem>
         ))}
       </Menu>

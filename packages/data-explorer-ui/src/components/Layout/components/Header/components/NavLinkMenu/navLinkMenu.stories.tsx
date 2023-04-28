@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { CustomIcon } from "../../../../../common/CustomIcon/customIcon";
 import { NavLinkMenu } from "./navLinkMenu";
@@ -10,9 +10,9 @@ export default {
   },
   component: NavLinkMenu,
   title: "Components/Navigation/NavLinkMenu",
-} as ComponentMeta<typeof NavLinkMenu>;
+} satisfies Meta<typeof NavLinkMenu>;
 
-const NavLinkMenuTemplate: ComponentStory<typeof NavLinkMenu> = (args) => (
+const NavLinkMenuTemplate: StoryFn<typeof NavLinkMenu> = (args) => (
   <NavLinkMenu {...args} />
 );
 
@@ -71,4 +71,22 @@ FollowUsMenuStory.args = {
     },
   ],
   menuLabel: "Follow Us",
+};
+
+export const MenuWithDescriptionsStory = NavLinkMenuTemplate.bind({});
+MenuWithDescriptionsStory.args = {
+  menuItems: [
+    {
+      description: "An open-access view of studies, workspaces, and consortia.",
+      label: "Catalog",
+      url: "#",
+    },
+    {
+      description:
+        "Build, download, and export cross-study cohorts of open and managed access data.",
+      label: "Explorer",
+      url: "#",
+    },
+  ],
+  menuLabel: "Datasets",
 };
