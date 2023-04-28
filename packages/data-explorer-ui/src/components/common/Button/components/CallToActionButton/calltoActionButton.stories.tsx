@@ -32,13 +32,6 @@ CallToActionButtonStory.args = {
 export const CallToActionButtonWithCustomComponentStory =
   CallToActionButtonTemplate.bind({});
 CallToActionButtonWithCustomComponentStory.args = {
-  ButtonElType: "a",
-  callToAction,
-};
-
-export const CallToActionButtonWithCustomReactComponentStory =
-  CallToActionButtonTemplate.bind({});
-CallToActionButtonWithCustomReactComponentStory.args = {
   ButtonElType: TextButtonWhiteStory,
   callToAction,
 };

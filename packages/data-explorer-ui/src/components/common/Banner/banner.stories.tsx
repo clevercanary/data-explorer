@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
-import { CallToActionButtonWithCustomReactComponentStory } from "../Button/components/CallToActionButton/callToActionButton.stories";
+import { CallToActionButtonWithCustomComponentStory } from "../Button/components/CallToActionButton/callToActionButton.stories";
 import { Banner } from "./banner.styles";
 
 export default {
@@ -24,13 +24,12 @@ BannerStory.args = {
       <Typography component="span" variant="text-body-small-500">
         Optional announcements text goes here followed by a
       </Typography>{" "}
-      <CallToActionButtonWithCustomReactComponentStory
+      <CallToActionButtonWithCustomComponentStory
         ButtonElType={
-          CallToActionButtonWithCustomReactComponentStory.args?.ButtonElType
+          CallToActionButtonWithCustomComponentStory.args?.ButtonElType
         }
         callToAction={
-          CallToActionButtonWithCustomReactComponentStory.args
-            ?.callToAction || {
+          CallToActionButtonWithCustomComponentStory.args?.callToAction || {
             label: "Call to Action",
             url: "https://www.google.com",
           }
