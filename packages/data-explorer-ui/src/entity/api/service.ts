@@ -2,6 +2,7 @@
  * Handles Project's API requests
  */
 // TODO move to Azul APIs section
+import { AxiosRequestConfig } from "axios";
 import {
   AzulEntitiesResponse,
   AzulListParams,
@@ -19,14 +20,13 @@ import {
 import { convertUrlParams } from "../../utils/url";
 import { api } from "./client";
 
-// eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
-function createFetchOptions(accessToken: string | undefined): any {
+function createFetchOptions(
+  accessToken: string | undefined
+): AxiosRequestConfig {
   // TODO https://github.com/clevercanary/data-browser/issues/545
-  if (accessToken) {
-    const headers = new Headers();
-    headers.append("authorization", "Bearer " + accessToken);
-    return { headers };
-  } else return {};
+  return {
+    headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
+  };
 }
 
 /**
@@ -57,9 +57,10 @@ export const fetchEntitiesFromURL = async (
   path: string,
   accessToken: string | undefined
 ): Promise<AzulEntitiesResponse> => {
-  const res = await api().get<AzulEntitiesResponse>(path, {
-    headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
-  });
+  const res = await api().get<AzulEntitiesResponse>(
+    path,
+    createFetchOptions(accessToken)
+  );
   return res.data;
 };
 
@@ -76,8 +77,9 @@ export const fetchAllEntities = async (
   let hits = result.hits;
   let nextPage = result.pagination.next;
   while (nextPage) {
-    const resNextPage = await fetch(nextPage);
-    const nextPageJson: AzulEntitiesResponse = await resNextPage.json();
+    const { data: nextPageJson } = await api().get<AzulEntitiesResponse>(
+      nextPage
+    );
     nextPage = nextPageJson.pagination.next;
     hits = [...hits, ...nextPageJson.hits];
   }
@@ -97,10 +99,10 @@ export const fetchEntityDetail = async (
   param = getDefaultDetailParams()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
-  const res = await fetch(
+  const res = await api().get(
     `${getURL()}${apiPath}/${id}?${convertUrlParams({ ...param })}`
   );
-  return await res.json();
+  return res.data;
 };
 
 /**
@@ -129,9 +131,9 @@ export const fetchSummary = async (
   }
 
   const options = createFetchOptions(accessToken);
-  const res = await fetch(
+  const res = await api().get<AzulSummaryResponse>(
     `${getURL()}${apiPath}?${convertUrlParams({ ...summaryParams })}`,
     options
   );
-  return await res.json();
+  return res.data;
 };
