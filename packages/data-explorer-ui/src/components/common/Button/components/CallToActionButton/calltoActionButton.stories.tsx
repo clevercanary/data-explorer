@@ -1,6 +1,7 @@
 import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { ANCHOR_TARGET } from "../../../../Links/common/entities";
+import { TextButtonWhiteStory } from "../../button.stories";
 import { CallToAction, CallToActionButton } from "./callToActionButton";
 
 export default {
@@ -38,6 +39,6 @@ CallToActionButtonWithCustomComponentStory.args = {
 export const CallToActionButtonWithCustomReactComponentStory =
   CallToActionButtonTemplate.bind({});
 CallToActionButtonWithCustomReactComponentStory.args = {
-  ButtonElType: "TextButtonWhite",
+  ButtonElType: TextButtonWhiteStory,
   callToAction,
 };
