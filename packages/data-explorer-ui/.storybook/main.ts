@@ -1,7 +1,8 @@
-const path = require("path");
-const toPath = (filePath) => path.join(process.cwd(), filePath);
+import * as path from "path";
 
-module.exports = {
+const toPath = (filePath: string) => path.join(process.cwd(), filePath);
+
+export default {
   stories: ["../src/**/*.stories.mdx", "../src/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
     "@storybook/addon-links",
@@ -9,11 +10,22 @@ module.exports = {
     "@storybook/addon-interactions",
     "@storybook/addon-mdx-gfm",
   ],
+  typescript: {
+    reactDocgen: "react-docgen-typescript",
+    reactDocgenTypescriptOptions: {
+      shouldExtractLiteralValuesFromEnum: true,
+      // Filter out third-party props from node_modules except @mui packages
+      propFilter: (prop: any) =>
+        prop.parent
+          ? !/node_modules\/(?!@mui)/.test(prop.parent.fileName)
+          : true,
+    },
+  },
   framework: {
     name: "@storybook/nextjs",
     options: {},
   },
-  webpackFinal: async (config) => {
+  webpackFinal: async (config: any) => {
     return {
       ...config,
       resolve: {
