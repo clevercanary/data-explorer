@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { CallToActionButtonWithCustomReactComponentStory as CallToActionButton } from "../Button/components/CallToActionButton/callToActionButton.stories";
 import { Banner } from "./banner.styles";
@@ -13,11 +13,9 @@ export default {
     layout: "fullscreen",
   },
   title: "Components/Common/Banner",
-} as ComponentMeta<typeof Banner>;
+} as Meta<typeof Banner>;
 
-const BannerTemplate: ComponentStory<typeof Banner> = (args) => (
-  <Banner {...args} />
-);
+const BannerTemplate: StoryFn<typeof Banner> = (args) => <Banner {...args} />;
 
 export const BannerStory = BannerTemplate.bind({});
 BannerStory.args = {

@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { ANCHOR_TARGET } from "../../../../Links/common/entities";
 import { CallToAction, CallToActionButton } from "./callToActionButton";
@@ -9,9 +9,9 @@ export default {
   },
   component: CallToActionButton,
   title: "Components/Common/CallToActionButton",
-} as ComponentMeta<typeof CallToActionButton>;
+} as Meta<typeof CallToActionButton>;
 
-const CallToActionButtonTemplate: ComponentStory<typeof CallToActionButton> = (
+const CallToActionButtonTemplate: StoryFn<typeof CallToActionButton> = (
   args
 ) => <CallToActionButton {...args} />;
 
