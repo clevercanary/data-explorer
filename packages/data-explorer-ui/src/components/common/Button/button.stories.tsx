@@ -50,7 +50,7 @@ NavDropdownButtonStory.args = {
   children: "More",
 };
 
-export const WhiteTextButtonStory = TextButtonWhiteTemplate.bind({});
-WhiteTextButtonStory.args = {
+export const TextButtonWhiteStory = TextButtonWhiteTemplate.bind({});
+TextButtonWhiteStory.args = {
   children: "Click here",
 };
