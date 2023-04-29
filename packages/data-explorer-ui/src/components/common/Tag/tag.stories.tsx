@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryFn } from "@storybook/react";
 import React from "react";
 import { Tag } from "./tag";
 import { TagWarning } from "./tag.styles";
@@ -9,9 +9,9 @@ export default {
   },
   component: Tag,
   title: "Components/Common/Alert/Tag",
-} as ComponentMeta<typeof Tag>;
+} as Meta<typeof Tag>;
 
-const WarningTagTemplate: ComponentStory<typeof Tag> = (args) => (
+const WarningTagTemplate: StoryFn<typeof Tag> = (args) => (
   <TagWarning {...args}>{args.children}</TagWarning>
 );
 
