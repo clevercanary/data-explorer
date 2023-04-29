@@ -1,21 +1,29 @@
-import { Meta, StoryFn } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { Tag } from "./tag";
-import { TagWarning } from "./tag.styles";
+import { TagDefault, TagWarning } from "./tag.styles";
 
-export default {
+const meta: Meta<typeof Tag> = {
   argTypes: {
-    children: { control: { disabled: true } },
+    children: { type: "string" },
   },
   component: Tag,
   title: "Components/Common/Alert/Tag",
-} as Meta<typeof Tag>;
+};
 
-const WarningTagTemplate: StoryFn<typeof Tag> = (args) => (
-  <TagWarning {...args}>{args.children}</TagWarning>
-);
+export default meta;
+type Story = StoryObj<typeof Tag>;
 
-export const WarningTagStory = WarningTagTemplate.bind({});
-WarningTagStory.args = {
-  children: "Please note",
+export const Default: Story = {
+  args: {
+    children: "Default",
+  },
+  render: ({ children }) => <TagDefault>{children}</TagDefault>,
+};
+
+export const Warning: Story = {
+  args: {
+    children: "Warning",
+  },
+  render: ({ children }) => <TagWarning>{children}</TagWarning>,
 };
