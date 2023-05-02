@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Button as MButton, ButtonBase as MButtonBase } from "@mui/material";
+import { textBodySmall400 } from "../../../styles/common/mixins/fonts";
 import { Button } from "./button";
 
 // Template constants
@@ -62,10 +63,8 @@ export const TextButtonPrimary = styled(MButtonBase)`
 
 // White text button
 export const TextButtonWhite = styled(MButtonBase)`
+  ${textBodySmall400}
   color: ${({ theme }) => theme.palette.common.white};
-  font-size: 13px;
-  font-weight: ${({ theme }) => theme.typography[textBody500].fontWeight};
-  line-height: ${({ theme }) => theme.typography[textBody500].lineHeight};
-  line-height: 1;
   text-decoration: underline;
+  vertical-align: unset;
 `;

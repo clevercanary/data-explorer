@@ -1,7 +1,8 @@
-import { Typography } from "@mui/material";
-import { Meta, StoryFn } from "@storybook/react";
+import { Button, Typography } from "@mui/material";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { CallToActionButtonWithCustomComponentStory } from "../Button/components/CallToActionButton/callToActionButton.stories";
+import { TextButtonWhiteStory } from "../Button/button.stories";
+import { CallToActionButtonStory } from "../Button/components/CallToActionButton/callToActionButton.stories";
 import { Banner } from "./banner.styles";
 
 export default {
@@ -15,37 +16,31 @@ export default {
   title: "Components/Common/Banner",
 } as Meta<typeof Banner>;
 
-const BannerTemplate: StoryFn<typeof Banner> = (args) => <Banner {...args} />;
+type Story = StoryObj<typeof Button>;
 
-export const BannerStory = BannerTemplate.bind({});
-BannerStory.args = {
-  children: (
-    <>
-      <Typography component="span" variant="text-body-small-500">
-        Optional announcements text goes here followed by a
-      </Typography>{" "}
-      <CallToActionButtonWithCustomComponentStory
-        ButtonElType={
-          CallToActionButtonWithCustomComponentStory.args?.ButtonElType
-        }
-        callToAction={
-          CallToActionButtonWithCustomComponentStory.args?.callToAction || {
+export const BannerStory: Story = {
+  render: () => (
+    <Banner>
+      <Typography component="span" variant="text-body-small-400">
+        Optional announcements text goes here followed by a{" "}
+        <CallToActionButtonStory
+          ButtonElType={TextButtonWhiteStory}
+          callToAction={{
             label: "Call to Action",
             url: "https://www.google.com",
-          }
-        }
-      />
-    </>
+          }}
+        />
+      </Typography>
+    </Banner>
   ),
 };
 
-export const BannerWithoutCallToActionTextStory = BannerTemplate.bind({});
-BannerWithoutCallToActionTextStory.args = {
-  children: (
-    <>
-      <Typography component="span" variant="text-body-small-500">
+export const BannerStoryWithoutCallToAction: Story = {
+  render: () => (
+    <Banner>
+      <Typography component="span" variant="text-body-small-400">
         Optional announcements text goes here
-      </Typography>{" "}
-    </>
+      </Typography>
+    </Banner>
   ),
 };
