@@ -193,6 +193,7 @@ export interface ListConfig<T = any> {
  */
 export interface ListViewConfig {
   disablePagination?: boolean;
+  enableDownload?: boolean;
   relatedView?: RelatedViewConfig;
 }
 

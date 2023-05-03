@@ -13,6 +13,7 @@ import {
 } from "@tanstack/react-table";
 import { Column } from "@tanstack/table-core";
 import { VisibilityState } from "@tanstack/table-core/src/features/Visibility";
+import { stringify } from "csv-stringify/dist/esm/sync";
 import { SelectCategory } from "../../../common/entities";
 import {
   ColumnConfig,
@@ -99,6 +100,30 @@ export function getColumnSortDirection(
     return;
   }
   return sortDirection;
+}
+
+/**
+ * Returns filtered entity results as a blob.
+ * @param rows - Table rows.
+ * @returns filtered entity results as a blob.
+ */
+export function generateDownloadBlob<T>(rows: Row<T>[]): Blob | undefined {
+  if (rows.length === 0) {
+    return;
+  }
+  const headers = rows[0]
+    .getVisibleCells()
+    .map((cell) => cell.column.columnDef.header as string);
+  const data = rows.map((row) =>
+    row.getVisibleCells().map((cell) => cell.getValue() as string)
+  );
+  const tsv = stringify([headers, ...data], {
+    cast: {
+      object: (value) => value.join(", "),
+    },
+    delimiter: "\t",
+  });
+  return new Blob([tsv], { type: "text/tab-separated-values" });
 }
 
 /**

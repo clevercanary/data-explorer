@@ -29,6 +29,7 @@ import {
   SORT_DIRECTION,
 } from "../../common/analytics/entities";
 import { Pagination } from "../../common/entities";
+import { ListViewConfig } from "../../config/entities";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
 import { EntityView, ExploreActionKind } from "../../providers/exploreState";
@@ -42,17 +43,23 @@ import {
   getTableSortLabelProps,
 } from "./common/utils";
 import { CheckboxMenu } from "./components/CheckboxMenu/checkboxMenu";
+import { DownloadEntityResults } from "./components/DownloadEntityResults/downloadEntityResults";
 import { EntityViewToggle } from "./components/EntityViewToggle/entityViewToggle";
 import { Pagination as DXPagination } from "./components/Pagination/pagination";
 import { PaginationSummary } from "./components/PaginationSummary/paginationSummary";
-import { Alert, Table as GridTable, TableToolbar } from "./table.styles";
+import {
+  Alert,
+  Table as GridTable,
+  TableToolbar,
+  ToolbarActions,
+} from "./table.styles";
 
 export interface TableProps<T extends object> {
   columns: ColumnDef<T>[];
   count?: number;
-  disablePagination?: boolean;
   initialState: InitialTableState;
   items: T[];
+  listView?: ListViewConfig;
   loading?: boolean;
   pages?: number;
   pageSize: number;
@@ -67,17 +74,17 @@ export interface TableProps<T extends object> {
  * Uncontrolled table will take advantage of React Table's state and will be used for static loads.
  * @param tableProps - Set of props required for displaying the table.
  * @param tableProps.columns - Set of columns to display.
- * @param tableProps.disablePagination - Determine if the table shouldn't be paginated.
  * @param tableProps.initialState - Initial table state.
  * @param tableProps.items - Row data to display.
+ * @param tableProps.listView - List view configuration.
  * @param tableProps.total - Total number of rows in the result set.
  * @returns Configured table element for display.
  */
 export const TableComponent = <T extends object>({
   columns,
-  disablePagination,
   initialState,
   items,
+  listView,
   total,
 }: // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO fix component length / complexity
 TableProps<T>): JSX.Element => {
@@ -93,6 +100,7 @@ TableProps<T>): JSX.Element => {
     sorting,
   } = exploreState;
   const { currentPage, pages, pageSize, rows } = paginationState;
+  const { disablePagination = false, enableDownload } = listView || {};
   const onSortingChange = (updater: Updater<ColumnSort[]>): void => {
     exploreDispatch({
       payload: typeof updater === "function" ? updater(sorting) : updater,
@@ -283,11 +291,19 @@ TableProps<T>): JSX.Element => {
                 totalResult={rows}
               />
             )}
-            <CheckboxMenu
-              label="Edit Columns"
-              onReset={onResetColumnVisibility}
-              options={editColumnOptions}
-            />
+            <ToolbarActions>
+              {enableDownload && (
+                <DownloadEntityResults
+                  entityName={exploreState.tabValue}
+                  rows={tableInstance.getFilteredRowModel().rows}
+                />
+              )}
+              <CheckboxMenu
+                label="Edit Columns"
+                onReset={onResetColumnVisibility}
+                options={editColumnOptions}
+              />
+            </ToolbarActions>
           </TableToolbar>
         )}
         {isRelatedView && (
