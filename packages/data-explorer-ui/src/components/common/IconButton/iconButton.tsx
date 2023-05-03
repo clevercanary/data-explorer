@@ -10,24 +10,15 @@ import React, { ElementType } from "react";
  */
 
 export interface IconButtonProps extends MIconButtonProps {
-  className?: string;
-  disabled?: boolean;
   Icon: ElementType;
 }
 
 export const IconButton = ({
-  className,
-  disabled = false,
   Icon,
   ...props /* Spread props to allow for Mui IconButtonProps specific prop overrides e.g. "onClick". */
 }: IconButtonProps): JSX.Element => {
   return (
-    <MIconButton
-      className={className}
-      disabled={disabled}
-      size="large"
-      {...props}
-    >
+    <MIconButton size="large" {...props}>
       <Icon fontSize="small" />
     </MIconButton>
   );
