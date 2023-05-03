@@ -1,7 +1,7 @@
 import { CellContext, ColumnDef, ColumnSort } from "@tanstack/react-table";
 import React, { useMemo } from "react";
 import { Pagination } from "../../common/entities";
-import { ColumnConfig } from "../../config/entities";
+import { ColumnConfig, ListViewConfig } from "../../config/entities";
 import { ComponentCreator } from "../ComponentCreator/ComponentCreator";
 import { Loading } from "../Loading/loading";
 import {
@@ -14,8 +14,8 @@ import { Table } from "../Table/table";
 export interface TableCreatorProps<T> {
   columns: ColumnConfig<T>[];
   defaultSort: ColumnSort | undefined;
-  disablePagination?: boolean;
   items: T[];
+  listView?: ListViewConfig;
   loading?: boolean;
   pageCount?: number;
   pages: number;
@@ -39,8 +39,8 @@ const createCell = <T extends object>(config: ColumnConfig<T>) =>
 export const TableCreator = <T extends object>({
   columns,
   defaultSort,
-  disablePagination,
   items,
+  listView,
   loading,
   pageCount,
   pages,
@@ -73,9 +73,9 @@ export const TableCreator = <T extends object>({
       <Table<T>
         columns={columnDefs}
         count={pageCount}
-        disablePagination={disablePagination}
         initialState={initialState}
         items={items}
+        listView={listView}
         loading={loading}
         pages={pages}
         pageSize={pageSize}

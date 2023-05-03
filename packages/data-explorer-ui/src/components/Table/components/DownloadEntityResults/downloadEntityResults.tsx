@@ -6,12 +6,12 @@ import { DownloadIcon } from "../../../common/CustomIcon/components/DownloadIcon
 import { generateDownloadBlob } from "../../common/utils";
 
 export interface DownloadEntityResultsProps<T> {
-  fileName: string;
+  entityName: string;
   rows: Row<T>[];
 }
 
 export const DownloadEntityResults = <T extends object>({
-  fileName,
+  entityName,
   rows,
 }: DownloadEntityResultsProps<T>): JSX.Element => {
   const [fileUrl, setFileUrl] = React.useState<string | undefined>(undefined);
@@ -31,7 +31,7 @@ export const DownloadEntityResults = <T extends object>({
       >
         Download TSV
       </ButtonSecondary>
-      <FileDownloadButton fileName={fileName} fileUrl={fileUrl} />
+      <FileDownloadButton fileName={`${entityName}.tsv`} fileUrl={fileUrl} />
     </>
   );
 };

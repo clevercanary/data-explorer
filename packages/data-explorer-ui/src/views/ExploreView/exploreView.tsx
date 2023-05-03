@@ -143,7 +143,6 @@ function renderEntities(
   } = exploreState;
   const { list, listView, staticLoad } = entityConfig;
   const { columns: columnsConfig, defaultSort } = list;
-  const { disablePagination = false } = listView || {};
 
   if (!exploreState || !tabValue) {
     return <></>; //TODO: return the loading UI component
@@ -160,10 +159,10 @@ function renderEntities(
     <TableCreator
       columns={columnsConfig}
       defaultSort={defaultSort}
-      disablePagination={disablePagination}
       items={
         isRelatedView && relatedListItems ? relatedListItems : listItems ?? []
       }
+      listView={listView}
       loading={loading}
       pages={paginationState.pages}
       pageSize={paginationState.pageSize}
