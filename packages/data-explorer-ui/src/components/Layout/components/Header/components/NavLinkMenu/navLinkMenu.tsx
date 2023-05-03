@@ -1,8 +1,11 @@
-import { ListItemIcon, MenuItem as MMenuItem } from "@mui/material";
+import {
+  ListItemIcon,
+  ListItemText,
+  MenuItem as MMenuItem,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import React, { MouseEvent, ReactNode, useState } from "react";
 import { NavLinkDropdownButton } from "../../../../../common/Button/components/NavLinkDropdownButton/navLinkDropdownButton";
-import { NavMenuItemBody } from "./components/navMenuItemBody";
 import { NavLinkMenu as Menu } from "./navLinkMenu.styles";
 
 export interface MenuItem {
@@ -59,7 +62,16 @@ export const NavLinkMenu = ({
             }}
           >
             {icon && <ListItemIcon>{icon}</ListItemIcon>}
-            <NavMenuItemBody label={label} description={description} />
+            <ListItemText
+              primary={label}
+              primaryTypographyProps={{
+                variant: description ? "text-body-500" : "text-body-400",
+              }}
+              secondary={description}
+              secondaryTypographyProps={{
+                variant: "text-body-small-400-2lines",
+              }}
+            />
           </MMenuItem>
         ))}
       </Menu>
