@@ -1,8 +1,7 @@
-import { Meta, StoryFn } from "@storybook/react";
-import React from "react";
+import { Meta, StoryObj } from "@storybook/react";
 import { CustomIcon } from "./customIcon";
 
-export default {
+const meta = {
   argTypes: {
     iconName: {
       description: "Name of the icon",
@@ -12,12 +11,12 @@ export default {
   title: "Components/Common/CustomIcon",
 } satisfies Meta<typeof CustomIcon>;
 
-const CustomIconTemplate: StoryFn<typeof CustomIcon> = (args) => (
-  <CustomIcon {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const CustomIconStory = CustomIconTemplate.bind({});
-CustomIconStory.args = {
-  iconName: "github",
-  titleAccess: "Github icon",
+export const CustomIconStory: Story = {
+  args: {
+    iconName: "github",
+    titleAccess: "Github icon",
+  },
 };
