@@ -35,11 +35,6 @@ export type DataCurator = string;
 export type Description = string;
 
 /**
- * Model of project path to be used as props for the Citation component.
- */
-export type ProjectPath = string;
-
-/**
  * Model of project publication to be used as props for the Publication component.
  */
 export interface Publication {

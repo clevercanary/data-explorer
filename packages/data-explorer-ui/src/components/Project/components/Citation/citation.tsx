@@ -1,26 +1,21 @@
 import { Typography } from "@mui/material";
 import React, { ReactNode } from "react";
-import { useConfig } from "../../../../hooks/useConfig";
 import { CollapsableSection } from "../../../common/Section/components/CollapsableSection/collapsableSection";
 import { SectionDetailsEmpty } from "../../../common/Section/components/SectionDetailsEmpty/sectionDetailsEmpty";
 import { Stack } from "../../../common/Stack/stack";
 import { ANCHOR_TARGET } from "../../../Links/common/entities";
 import { Link } from "../../../Links/components/Link/link";
-import { ProjectPath } from "../../common/entities";
 import { CitationLink } from "./citation.styles";
 
 export interface CitationProps {
-  projectPath?: ProjectPath;
+  projectPath?: string;
+  url?: string;
 }
 
-export const Citation = ({ projectPath }: CitationProps): JSX.Element => {
-  const { config } = useConfig();
-  const { browserURL, redirectRootToPath: path } = config;
-  const citationLink = `${browserURL}${path}${projectPath}`;
-  const showCitation = browserURL && path && projectPath;
+export const Citation = ({ projectPath, url }: CitationProps): JSX.Element => {
   return (
     <CollapsableSection collapsable title="Citation">
-      {showCitation ? (
+      {projectPath && url ? (
         <Stack gap={1}>
           <Typography>
             To reference this project, please use the following link:
@@ -28,9 +23,9 @@ export const Citation = ({ projectPath }: CitationProps): JSX.Element => {
           <CitationLink>
             <Link
               copyable
-              label={buildCitationLinkLabel(browserURL, path, projectPath)}
+              label={buildCitationLinkLabel(url, projectPath)}
               target={ANCHOR_TARGET.BLANK}
-              url={citationLink}
+              url={`${url}${projectPath}`}
             />
           </CitationLink>
         </Stack>
@@ -43,23 +38,19 @@ export const Citation = ({ projectPath }: CitationProps): JSX.Element => {
 
 /**
  * Builds citation label for display as citation link.
- * @param origin - UURLrl origin.
- * @param path - Citation path.
+ * @param url - URL.
  * @param projectPath - Project path.
  * @returns Element to display as citation text.
  */
-function buildCitationLinkLabel(
-  origin: string,
-  path: string,
-  projectPath: string
-): ReactNode {
+function buildCitationLinkLabel(url: string, projectPath: string): ReactNode {
+  const { origin, pathname } = new URL(url);
   return (
     <>
       {origin}/
       <wbr />
-      {removeLeadingSlash(path)}/
+      {removeLeadingSlash(pathname)}
       <wbr />
-      {removeLeadingSlash(projectPath)}
+      {projectPath}
     </>
   );
 }
