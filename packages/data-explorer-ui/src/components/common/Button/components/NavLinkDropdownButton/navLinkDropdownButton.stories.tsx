@@ -6,11 +6,8 @@ const meta = {
     children: { control: "text" },
   },
   component: NavLinkDropdownButton,
-  parameters: {
-    layout: "centered",
-  },
   title: "Components/Common/Button",
-} as Meta<typeof NavLinkDropdownButton>;
+} satisfies Meta<typeof NavLinkDropdownButton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
@@ -18,5 +15,6 @@ type Story = StoryObj<typeof meta>;
 export const NavDropdownButtonStory: Story = {
   args: {
     children: "More",
+    isActive: true,
   },
 };
