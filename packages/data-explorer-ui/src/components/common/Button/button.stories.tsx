@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { Button } from "./button";
 import {
@@ -6,9 +6,8 @@ import {
   ButtonSecondary,
   TextButtonWhite,
 } from "./button.styles";
-import { NavLinkDropdownButton } from "./components/NavLinkDropdownButton/navLinkDropdownButton";
 
-export default {
+const meta = {
   argTypes: {
     children: { control: "text" },
   },
@@ -17,40 +16,28 @@ export default {
     layout: "centered",
   },
   title: "Components/Common/Button",
-} as ComponentMeta<typeof Button>;
+} satisfies Meta<typeof Button>;
 
-const PrimaryButtonTemplate: ComponentStory<typeof Button> = (args) => (
-  <ButtonPrimary {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-const SecondaryButtonTemplate: ComponentStory<typeof Button> = (args) => (
-  <ButtonSecondary {...args} />
-);
-
-const TextButtonWhiteTemplate: ComponentStory<typeof Button> = (args) => (
-  <TextButtonWhite {...args} />
-);
-
-const NavDropdownButtonTemplate: ComponentStory<
-  typeof NavLinkDropdownButton
-> = (args) => <NavLinkDropdownButton {...args} />;
-
-export const SecondaryButtonStory = SecondaryButtonTemplate.bind({});
-SecondaryButtonStory.args = {
-  children: "Secondary Button",
+export const PrimaryButtonStory: Story = {
+  args: {
+    children: "Primary Button",
+  },
+  render: (args) => <ButtonPrimary {...args} />,
 };
 
-export const PrimaryButtonStory = PrimaryButtonTemplate.bind({});
-PrimaryButtonStory.args = {
-  children: "Primary Button",
+export const SecondaryButtonStory: Story = {
+  args: {
+    children: "Secondary Button",
+  },
+  render: (args) => <ButtonSecondary {...args} />,
 };
 
-export const NavDropdownButtonStory = NavDropdownButtonTemplate.bind({});
-NavDropdownButtonStory.args = {
-  children: "More",
-};
-
-export const TextButtonWhiteStory = TextButtonWhiteTemplate.bind({});
-TextButtonWhiteStory.args = {
-  children: "Click here",
+export const TextButtonWhiteStory: Story = {
+  args: {
+    children: "Click here",
+  },
+  render: (args) => <TextButtonWhite {...args} />,
 };
