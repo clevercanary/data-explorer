@@ -15,6 +15,7 @@ import {
   buildNextFilterState,
 } from "../hooks/useCategoryFilter";
 import { useConfig } from "../hooks/useConfig";
+import { useURLFilterParams } from "../hooks/useURLFilterParams";
 
 // Template constants
 const defaultPaginationState = {
@@ -172,12 +173,13 @@ export function ExploreStateProvider({
   entityListType: string;
 }): JSX.Element {
   const { config, defaultEntityListType, entityConfig } = useConfig();
+  const { decodedFilterParam } = useURLFilterParams();
   const [exploreState, exploreDispatch] = useReducer(
     (s: ExploreState, a: ExploreAction) =>
       exploreReducer(s, a, { config, entityConfig }),
     {
       categoryViews: [],
-      filterState: [],
+      filterState: JSON.parse(decodedFilterParam),
       isRelatedView: false,
       listItems: [],
       listStaticLoad: entityConfig.staticLoad ?? false,

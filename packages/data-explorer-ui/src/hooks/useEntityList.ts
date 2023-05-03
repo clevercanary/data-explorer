@@ -14,6 +14,7 @@ import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
 import { useEntityService } from "./useEntityService";
 import { useExploreState } from "./useExploreState";
+import { useURLFilterParams } from "./useURLFilterParams";
 
 /**
  * Hook handling the load and transformation of the values used by index pages. If the current entity loaded statically,
@@ -31,6 +32,11 @@ export const useEntityList = (
   const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
   const { filterState, sorting } = exploreState;
   const { termFacets } = data || {};
+  const { updateFilter } = useURLFilterParams();
+
+  useEffect(() => {
+    updateFilter(filterState);
+  }, [filterState, updateFilter]);
 
   /**
    * Hook for fetching entities matching the current query and authentication state.
