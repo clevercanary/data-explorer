@@ -22,6 +22,7 @@ export default {
       control: "text",
       description: "Highlighted text",
     },
+    // TODO: at the moment "banner" | "neutral" are not included in variants, because doc generator ignores custom d.ts overrides
     variant: {
       description: "Type of the alert",
     },
