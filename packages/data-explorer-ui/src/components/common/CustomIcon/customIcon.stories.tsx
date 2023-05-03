@@ -3,6 +3,10 @@ import { CustomIcon } from "./customIcon";
 
 const meta = {
   argTypes: {
+    htmlColor: {
+      control: "color",
+      description: `Applies a color attribute to the SVG element when color is "inherit" or "undefined".`,
+    },
     iconName: {
       description: "Name of the icon",
     },
