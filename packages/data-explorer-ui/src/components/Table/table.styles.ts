@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { Table as MTable } from "@mui/material";
 import { FlatAlert } from "../common/Alert/alert.styles";
+import { Grid } from "../common/Grid/grid";
 
 interface Props {
   gridTemplateColumns: string;
@@ -44,6 +45,11 @@ export const TableToolbar = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 20px;
+`;
+
+export const ToolbarActions = styled(Grid)`
+  gap: 8px;
+  grid-auto-flow: column;
 `;
 
 export const Alert = styled(FlatAlert)`

@@ -42,10 +42,16 @@ import {
   getTableSortLabelProps,
 } from "./common/utils";
 import { CheckboxMenu } from "./components/CheckboxMenu/checkboxMenu";
+import { DownloadEntityResults } from "./components/DownloadEntityResults/downloadEntityResults";
 import { EntityViewToggle } from "./components/EntityViewToggle/entityViewToggle";
 import { Pagination as DXPagination } from "./components/Pagination/pagination";
 import { PaginationSummary } from "./components/PaginationSummary/paginationSummary";
-import { Alert, Table as GridTable, TableToolbar } from "./table.styles";
+import {
+  Alert,
+  Table as GridTable,
+  TableToolbar,
+  ToolbarActions,
+} from "./table.styles";
 
 export interface TableProps<T extends object> {
   columns: ColumnDef<T>[];
@@ -283,11 +289,17 @@ TableProps<T>): JSX.Element => {
                 totalResult={rows}
               />
             )}
-            <CheckboxMenu
-              label="Edit Columns"
-              onReset={onResetColumnVisibility}
-              options={editColumnOptions}
-            />
+            <ToolbarActions>
+              <DownloadEntityResults
+                fileName={`${exploreState.tabValue}.tsv`}
+                rows={tableInstance.getFilteredRowModel().rows}
+              />
+              <CheckboxMenu
+                label="Edit Columns"
+                onReset={onResetColumnVisibility}
+                options={editColumnOptions}
+              />
+            </ToolbarActions>
           </TableToolbar>
         )}
         {isRelatedView && (
