@@ -7,7 +7,7 @@ import { Banner } from "./banner";
 
 export default {
   argTypes: {
-    children: { control: { disabled: true } },
+    children: { table: { disable: true } },
   },
   component: Banner,
   parameters: {
