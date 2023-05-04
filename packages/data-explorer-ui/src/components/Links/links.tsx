@@ -13,7 +13,7 @@ export const Links = ({ divider, links }: LinksProps): JSX.Element => {
       {links.map(({ copyable, label, noWrap, target, url }, i) => {
         const showDivider = i < lastLinkIndex && divider;
         return (
-          <span key={url}>
+          <span key={`${url}${i}`}>
             <Link
               copyable={copyable}
               label={label}
