@@ -1,9 +1,9 @@
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { TextButtonWhiteStory } from "../Button/button.stories";
 import { CallToActionButtonStory } from "../Button/components/CallToActionButton/callToActionButton.stories";
-import { Banner } from "./banner.styles";
+import { Banner } from "./banner";
 
 export default {
   argTypes: {
@@ -16,11 +16,11 @@ export default {
   title: "Components/Common/Banner",
 } as Meta<typeof Banner>;
 
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<typeof Banner>;
 
 export const BannerStory: Story = {
-  render: () => (
-    <Banner>
+  args: {
+    children: (
       <Typography component="span" variant="text-body-small-400">
         Optional announcements text goes here followed by a{" "}
         <CallToActionButtonStory
@@ -31,16 +31,16 @@ export const BannerStory: Story = {
           }}
         />
       </Typography>
-    </Banner>
-  ),
+    ),
+  },
 };
 
 export const BannerStoryWithoutCallToAction: Story = {
-  render: () => (
-    <Banner>
+  args: {
+    children: (
       <Typography component="span" variant="text-body-small-400">
         Optional announcements text goes here
       </Typography>
-    </Banner>
-  ),
+    ),
+  },
 };
