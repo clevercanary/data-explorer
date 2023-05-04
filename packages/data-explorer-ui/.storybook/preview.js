@@ -9,6 +9,7 @@ import { createAppTheme } from "../src/theme/theme";
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
   controls: {
+    exclude: ["className", "ref", "sx"],
     matchers: {
       color: /(background|color)$/i,
       date: /Date$/,
