@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Button as MButton, ButtonBase as MButtonBase } from "@mui/material";
+import { textBodySmall400 } from "../../../styles/common/mixins/fonts";
 import { Button } from "./button";
 
 // Template constants
@@ -58,4 +59,12 @@ export const TextButtonPrimary = styled(MButtonBase)`
   :hover {
     text-decoration: underline;
   }
+`;
+
+// White text button
+export const TextButtonWhite = styled(MButtonBase)`
+  ${textBodySmall400}
+  color: ${({ theme }) => theme.palette.common.white};
+  text-decoration: underline;
+  vertical-align: unset;
 `;
