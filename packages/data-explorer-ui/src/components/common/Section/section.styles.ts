@@ -11,6 +11,10 @@ export const sectionMarginSm = css`
   margin: 20px;
 `;
 
+export const sectionMarginXsm = css`
+  margin: 16px;
+`;
+
 export const Section = styled.div`
   display: flex;
   flex-direction: column;

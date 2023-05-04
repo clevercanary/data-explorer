@@ -1,5 +1,7 @@
 import styled from "@emotion/styled";
-import { Section } from "../common/Section/section.styles";
+import { textBody4002Lines } from "../../styles/common/mixins/fonts";
+import { TABLET } from "../../theme/common/breakpoints";
+import { Section, sectionMarginXsm } from "../common/Section/section.styles";
 
 export const Error = styled.div`
   margin: 0 auto;
@@ -15,21 +17,20 @@ export const Error = styled.div`
 export const ErrorSection = styled(Section)`
   align-items: center;
   padding: 0;
+
+  ${({ theme }) => theme.breakpoints.up(TABLET)} {
+    padding: 0;
+  }
 `;
 
 export const SectionContent = styled.div`
   text-align: center;
 `;
 
-export const ErrorDetailsWrapper = styled(Section)`
-  padding: 0;
-  text-align: left;
-`;
-
-export const ErrorDetailSectionContent = styled(ErrorSection)`
+export const ErrorCode = styled.div`
+  ${sectionMarginXsm}
+  ${textBody4002Lines}
   font-family: "Roboto Mono", monospace;
   font-size: 12px;
-  max-width: 608px;
   overflow-wrap: anywhere;
-  word-break: normal;
 `;

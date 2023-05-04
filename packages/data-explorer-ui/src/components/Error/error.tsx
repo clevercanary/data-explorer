@@ -4,12 +4,15 @@ import Link from "next/link";
 import React from "react";
 import { ButtonPrimary } from "../common/Button/button.styles";
 import { AlertIcon } from "../common/CustomIcon/components/AlertIcon/alertIcon";
-import { SectionActions } from "../common/Section/section.styles";
+import { Grid } from "../common/Grid/grid";
+import {
+  SectionActions,
+  SectionContent as Content,
+} from "../common/Section/section.styles";
 import { PRIORITY, StatusIcon } from "../common/StatusIcon/statusIcon";
 import {
   Error as CustomError,
-  ErrorDetailSectionContent,
-  ErrorDetailsWrapper,
+  ErrorCode,
   ErrorSection,
   SectionContent,
 } from "./error.styles";
@@ -19,18 +22,18 @@ interface ErrorDetailSectionProps {
   title: string;
 }
 
-const ErrorDetailSection = ({
+const ErrorMessage = ({
   detail,
   title,
 }: ErrorDetailSectionProps): JSX.Element => (
-  <ErrorDetailsWrapper>
+  <Content>
     <Typography component="h3" variant="text-body-large-500">
       {title}
     </Typography>
     <RoundedPaper>
-      <ErrorDetailSectionContent>{detail}</ErrorDetailSectionContent>
+      <ErrorCode>{detail}</ErrorCode>
     </RoundedPaper>
-  </ErrorDetailsWrapper>
+  </Content>
 );
 
 export interface ErrorProps {
@@ -67,16 +70,14 @@ export const Error = ({
       {(requestUrlMessage || errorMessage) && (
         <>
           <Divider />
-          {requestUrlMessage && (
-            <ErrorDetailSection
-              detail={requestUrlMessage}
-              title="Request URL"
-            />
-          )}
-
-          {errorMessage && (
-            <ErrorDetailSection detail={errorMessage} title="Error Message" />
-          )}
+          <Grid gridSx={{ gap: 6 }}>
+            {requestUrlMessage && (
+              <ErrorMessage detail={requestUrlMessage} title="Request URL" />
+            )}
+            {errorMessage && (
+              <ErrorMessage detail={errorMessage} title="Error Message" />
+            )}
+          </Grid>
         </>
       )}
     </CustomError>
