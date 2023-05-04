@@ -1,4 +1,4 @@
-import { Divider, Grid, Typography } from "@mui/material";
+import { Divider, Typography } from "@mui/material";
 import { RoundedPaper } from "components/common/Paper/paper.styles";
 import Link from "next/link";
 import React from "react";
@@ -23,18 +23,14 @@ const ErrorDetailSection = ({
   detail,
   title,
 }: ErrorDetailSectionProps): JSX.Element => (
-  <Grid container spacing={2}>
-    <Grid item xs={12}>
-      <Typography component="h3" variant="text-body-large-500">
-        {title}
-      </Typography>
-    </Grid>
-    <Grid item xs={12}>
-      <RoundedPaper variant={"outlined"}>
-        <ErrorDetailSectionContent>{detail}</ErrorDetailSectionContent>
-      </RoundedPaper>
-    </Grid>
-  </Grid>
+  <ErrorDetailsWrapper>
+    <Typography component="h3" variant="text-body-large-500">
+      {title}
+    </Typography>
+    <RoundedPaper>
+      <ErrorDetailSectionContent>{detail}</ErrorDetailSectionContent>
+    </RoundedPaper>
+  </ErrorDetailsWrapper>
 );
 
 export interface ErrorProps {
@@ -67,22 +63,22 @@ export const Error = ({
             </Link>
           </SectionActions>
         )}
-        {(requestUrlMessage || errorMessage) && (
-          <ErrorDetailsWrapper>
-            <Divider />
-            {requestUrlMessage && (
-              <ErrorDetailSection
-                title="Request URL"
-                detail={requestUrlMessage}
-              />
-            )}
-
-            {errorMessage && (
-              <ErrorDetailSection title="Error Message" detail={errorMessage} />
-            )}
-          </ErrorDetailsWrapper>
-        )}
       </ErrorSection>
+      {(requestUrlMessage || errorMessage) && (
+        <>
+          <Divider />
+          {requestUrlMessage && (
+            <ErrorDetailSection
+              detail={requestUrlMessage}
+              title="Request URL"
+            />
+          )}
+
+          {errorMessage && (
+            <ErrorDetailSection detail={errorMessage} title="Error Message" />
+          )}
+        </>
+      )}
     </CustomError>
   );
 };
