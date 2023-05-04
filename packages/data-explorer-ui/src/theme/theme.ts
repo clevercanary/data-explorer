@@ -44,6 +44,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
         [T.TEXT_BODY_LARGE_400_2_LINES]: T.textBodyLarge4002Lines,
         [T.TEXT_BODY_LARGE_500]: T.textBodyLarge500,
         [T.TEXT_BODY_SMALL_400]: T.textBodySmall400,
+        [T.TEXT_BODY_SMALL_400_2_LINES]: T.textBodySmall4002Lines,
         [T.TEXT_BODY_SMALL_500]: T.textBodySmall500,
         [T.TEXT_HEADING]: T.textHeading,
         [T.TEXT_HEADING_LARGE]: T.textHeadingLarge,

@@ -9,6 +9,7 @@ import { NavLinkDropdownButton } from "../../../../../common/Button/components/N
 import { NavLinkMenu as Menu } from "./navLinkMenu.styles";
 
 export interface MenuItem {
+  description?: string;
   icon?: ReactNode;
   label: string;
   url: string;
@@ -52,7 +53,7 @@ export const NavLinkMenu = ({
           vertical: "top",
         }}
       >
-        {menuItems.map(({ icon, label, url }) => (
+        {menuItems.map(({ description, icon, label, url }) => (
           <MMenuItem
             key={label}
             onClick={(): void => {
@@ -61,9 +62,16 @@ export const NavLinkMenu = ({
             }}
           >
             {icon && <ListItemIcon>{icon}</ListItemIcon>}
-            <ListItemText primaryTypographyProps={{ variant: "text-body-400" }}>
-              {label}
-            </ListItemText>
+            <ListItemText
+              primary={label}
+              primaryTypographyProps={{
+                variant: description ? "text-body-500" : "text-body-400",
+              }}
+              secondary={description}
+              secondaryTypographyProps={{
+                variant: "text-body-small-400-2lines",
+              }}
+            />
           </MMenuItem>
         ))}
       </Menu>

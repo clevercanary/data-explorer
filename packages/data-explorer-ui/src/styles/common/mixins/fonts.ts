@@ -8,6 +8,7 @@ import {
   TEXT_BODY_LARGE_400_2_LINES,
   TEXT_BODY_LARGE_500,
   TEXT_BODY_SMALL_400,
+  TEXT_BODY_SMALL_400_2_LINES,
   TEXT_BODY_SMALL_500,
   TEXT_HEADING,
   TEXT_HEADING_LARGE,
@@ -40,6 +41,9 @@ export const textBodyLarge4002Lines = typographyToCSS(
 );
 export const textBodyLarge500 = typographyToCSS(TEXT_BODY_LARGE_500);
 export const textBodySmall400 = typographyToCSS(TEXT_BODY_SMALL_400);
+export const textBodySmall4002Lines = typographyToCSS(
+  TEXT_BODY_SMALL_400_2_LINES
+);
 export const textBodySmall500 = typographyToCSS(TEXT_BODY_SMALL_500);
 export const textHeading = typographyToCSS(TEXT_HEADING);
 export const textHeadingLarge = typographyToCSS(TEXT_HEADING_LARGE);

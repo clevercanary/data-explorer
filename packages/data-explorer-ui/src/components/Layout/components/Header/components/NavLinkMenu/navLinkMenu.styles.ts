@@ -11,4 +11,15 @@ export const NavLinkMenu = styled(Menu)`
   && .MuiListItemIcon-root {
     min-width: 24px;
   }
+
+  .MuiListItemText-root {
+    display: grid;
+    gap: 4px;
+
+    .MuiListItemText-secondary {
+      color: ${({ theme }) => theme.palette.ink.light};
+      max-width: 290px;
+      white-space: normal;
+    }
+  }
 `;
