@@ -13,7 +13,7 @@ const meta = {
 } satisfies Meta<typeof NavLinkMenu>;
 
 export default meta;
-type Story = StoryObj<typeof meta>;
+type Story = StoryObj<typeof NavLinkMenu>;
 
 export const NavLinkMenuStory: Story = {
   args: {
