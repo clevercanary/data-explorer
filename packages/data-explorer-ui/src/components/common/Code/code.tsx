@@ -1,5 +1,4 @@
 import React, { ReactNode } from "react";
-import { CodeBlock } from "./code.styles";
 
 /**
  * Block of code.
@@ -11,8 +10,8 @@ export interface CodeProps {
 
 export const Code = ({ children }: CodeProps): JSX.Element => {
   return (
-    <CodeBlock>
+    <pre>
       <code>{children}</code>
-    </CodeBlock>
+    </pre>
   );
 };
