@@ -21,21 +21,23 @@ export const useURLFilterParams = (): UseURLFilterParamsResult => {
 
   const updateFilter = useCallback(
     (filterState: SelectedFilter[]) => {
-      const filter =
-        filterState.length > 0 ? { filter: JSON.stringify(filterState) } : {};
-      push(
-        {
-          pathname: location?.pathname.replace(basePath, ""),
-          query: { ...filter },
-        },
-        undefined,
-        {
-          shallow: true,
-        }
-      );
+      if (decodedFilterParam !== JSON.stringify(filterState)) {
+        const filter =
+          filterState.length > 0 ? { filter: JSON.stringify(filterState) } : {};
+        push(
+          {
+            pathname: location?.pathname.replace(basePath, ""),
+            query: { ...filter },
+          },
+          undefined,
+          {
+            shallow: true,
+          }
+        );
+      }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- push method isn't memoized and shouldn't be added as deps https://github.com/vercel/next.js/issues/18127
-    [location?.href]
+    [location?.href, decodedFilterParam]
   );
 
   return {
