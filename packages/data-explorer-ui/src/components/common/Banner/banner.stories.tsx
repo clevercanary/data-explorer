@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import { TextButtonWhiteStory } from "../Button/button.stories";
+import { TextButtonWhite } from "../Button/button.styles";
 import { CallToActionButtonStory } from "../Button/components/CallToActionButton/callToActionButton.stories";
 import { Banner } from "./banner";
 
@@ -24,7 +24,7 @@ export const BannerStory: Story = {
       <Typography component="span" variant="text-body-small-400">
         Optional announcements text goes here followed by a{" "}
         <CallToActionButtonStory
-          ButtonElType={TextButtonWhiteStory}
+          ButtonElType={TextButtonWhite}
           callToAction={{
             label: "Call to Action",
             url: "https://www.google.com",

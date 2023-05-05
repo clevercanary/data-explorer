@@ -1,12 +1,9 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
-import {
-  PrimaryButtonStory,
-  SecondaryButtonStory,
-} from "../common/Button/button.stories";
+import { ButtonPrimary, ButtonSecondary } from "../common/Button/button.styles";
 import { NoResults } from "./noResults";
 
-export default {
+const meta: Meta<typeof NoResults> = {
   argTypes: {
     actions: { control: { disabled: true } },
     description: { control: "text" },
@@ -14,21 +11,21 @@ export default {
   },
   component: NoResults,
   title: "Components/Communication/NoResults",
-} as ComponentMeta<typeof NoResults>;
+};
 
-const NoResultsTemplate: ComponentStory<typeof NoResults> = (args) => (
-  <NoResults {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const NoResultsStory = NoResultsTemplate.bind({});
-NoResultsStory.args = {
-  actions: (
-    <>
-      <PrimaryButtonStory>Remove last filter</PrimaryButtonStory>
-      <SecondaryButtonStory>Clear all filters</SecondaryButtonStory>
-    </>
-  ),
-  description:
-    "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
-  title: "No Results found",
+export const NoResultsStory: Story = {
+  args: {
+    actions: (
+      <>
+        <ButtonPrimary>Remove last filter</ButtonPrimary>
+        <ButtonSecondary>Clear all filters</ButtonSecondary>
+      </>
+    ),
+    description:
+      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+    title: "No Results found",
+  },
 };
