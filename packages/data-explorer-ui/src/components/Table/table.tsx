@@ -213,6 +213,10 @@ TableProps<T>): JSX.Element => {
     }
   }, [filterState, isRelatedView, listStaticLoad, tableInstance]);
 
+  /**
+   * TODO: (Dave) Consider removing this useEffect and just dispatching the ExploreActionKind.ProcessExploreResponse action
+   * whenever we need it.
+   */
   // Builds categoryViews using react table `getFacetedUniqueValues`, for statically loaded api only, with update of columnFilters.
   useEffect(() => {
     if (!isRelatedView && listStaticLoad) {

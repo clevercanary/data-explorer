@@ -102,6 +102,10 @@ export const useEntityList = (
     termFacets,
   ]);
 
+  /**
+   * TODO: (Dave) Consider removing this useEffect and just dispatching the ExploreActionKind.ProcessExploreResponse action
+   * whenever we need it.
+   */
   useEffect(() => {
     if (
       listStaticLoad &&
