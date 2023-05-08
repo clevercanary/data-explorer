@@ -1017,6 +1017,7 @@ export const MuiTab = (theme: Theme): Components["MuiTab"] => {
         minHeight: "unset",
         minWidth: "unset",
         opacity: 1,
+        overflow: "visible",
         padding: 12,
         textTransform: "capitalize",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
@@ -1025,6 +1026,22 @@ export const MuiTab = (theme: Theme): Components["MuiTab"] => {
         },
         "&.Mui-selected": {
           color: theme.palette.ink.main,
+        },
+        "&:hover": {
+          color: theme.palette.ink.main,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&::after": {
+            backgroundColor: theme.palette.smoke.dark,
+            borderTopLeftRadius: "12px",
+            borderTopRightRadius: "12px",
+            content: "''",
+            display: "block",
+            height: "3px",
+            left: 0,
+            position: "absolute",
+            right: 0,
+            top: "100%",
+          },
         },
       },
     },
