@@ -13,7 +13,6 @@ import {
 } from "@tanstack/react-table";
 import { Column } from "@tanstack/table-core";
 import { VisibilityState } from "@tanstack/table-core/src/features/Visibility";
-import { stringify } from "csv-stringify/dist/esm/sync";
 import { SelectCategory } from "../../../common/entities";
 import {
   ColumnConfig,
@@ -27,6 +26,11 @@ import { CheckboxMenuListItem } from "../components/CheckboxMenu/checkboxMenu";
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This type matches react table getFacetedUniqueValues return type see https://github.com/TanStack/table/blob/6d4a91e74676da0b28fe07fcc1b7d26f535db0f4/packages/table-core/src/utils/getFacetedUniqueValues.ts.
 type CountByTerms = Map<any, number>;
+
+/**
+ * Model of possible table data values.
+ */
+type TableData = number | string | string[];
 
 /**
  * Returns true if the row should be included in the filtered rows.
@@ -89,6 +93,27 @@ export function buildCategoryViews<T>(
 }
 
 /**
+ * Format data to TSV string.
+ * @param data - Table data.
+ * @returns table data formatted into a TSV string.
+ */
+function formatDataToTSV(data: TableData[][]): string {
+  return data
+    .map((row) => {
+      return row
+        .map((data) => {
+          // Concatenate array values.
+          if (Array.isArray(data)) {
+            return data.join(", ");
+          }
+          return data;
+        })
+        .join("\t");
+    })
+    .join("\n");
+}
+
+/**
  * Returns the column sort direction.
  * @param sortDirection - Column sort direction.
  * @returns the coumn sort direction.
@@ -111,18 +136,9 @@ export function generateDownloadBlob<T>(rows: Row<T>[]): Blob | undefined {
   if (rows.length === 0) {
     return;
   }
-  const headers = rows[0]
-    .getVisibleCells()
-    .map((cell) => cell.column.columnDef.header as string);
-  const data = rows.map((row) =>
-    row.getVisibleCells().map((cell) => cell.getValue() as string)
-  );
-  const tsv = stringify([headers, ...data], {
-    cast: {
-      object: (value) => value.join(", "),
-    },
-    delimiter: "\t",
-  });
+  const tableHeaders = getVisibleHeadersTableData(rows);
+  const tableData = getVisibleRowsTableData(rows);
+  const tsv = formatDataToTSV([tableHeaders, ...tableData]);
   return new Blob([tsv], { type: "text/tab-separated-values" });
 }
 
@@ -270,6 +286,28 @@ export function getTableSortLabelProps<T>(
     disabled: !getCanSort(),
     onClick: getToggleSortingHandler(),
   };
+}
+
+/**
+ * Returns the list of visible table headers.
+ * @param rows - Table rows.
+ * @returns list of visible headers.
+ */
+function getVisibleHeadersTableData<T>(rows: Row<T>[]): TableData[] {
+  return rows[0]
+    .getVisibleCells()
+    .map((cell) => cell.column.columnDef.header as TableData);
+}
+
+/**
+ * Returns the list of visible table data.
+ * @param rows - Table rows.
+ * @returns list of visible data.
+ */
+function getVisibleRowsTableData<T>(rows: Row<T>[]): TableData[][] {
+  return rows.map((row) =>
+    row.getVisibleCells().map((cell) => cell.getValue() as TableData)
+  );
 }
 
 /**
