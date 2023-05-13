@@ -73,8 +73,12 @@ export const useEntityList = (
   ]);
 
   // Builds categoryViews with an update of term facets.
+  /**
+   * Server filtering - ProcessExploreResponse
+   */
   useEffect(() => {
     if (!listStaticLoad && termFacets) {
+      console.log("It's me! - server filtering");
       exploreDispatch({
         payload: {
           listItems: data?.hits,
@@ -96,6 +100,9 @@ export const useEntityList = (
     termFacets,
   ]);
 
+  /**
+   * Client side filtering - ProcessExploreResponse
+   */
   useEffect(() => {
     if (
       listStaticLoad &&
@@ -105,6 +112,7 @@ export const useEntityList = (
       staticResponse.data.termFacets &&
       staticResponse.entityListType === exploreState.tabValue
     ) {
+      console.log("It's me! - client filtering");
       const listItems = staticResponse?.data?.hits ?? [];
       exploreDispatch({
         payload: {

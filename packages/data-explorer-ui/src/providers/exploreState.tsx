@@ -304,6 +304,8 @@ function exploreReducer(
   const { config, entityConfig } = exploreContext;
   const { categoryConfigs } = config;
 
+  console.log(type, payload);
+
   switch (type) {
     /**
      * Paginate table

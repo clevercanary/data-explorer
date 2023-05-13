@@ -224,6 +224,7 @@ TableProps<T>): JSX.Element => {
   // Builds categoryViews using react table `getFacetedUniqueValues`, for statically loaded api only, with update of columnFilters.
   useEffect(() => {
     if (!isRelatedView && listStaticLoad) {
+      console.log("It's me! - getFacetedUniqueValues client filtering");
       exploreDispatch({
         payload: {
           listItems,
