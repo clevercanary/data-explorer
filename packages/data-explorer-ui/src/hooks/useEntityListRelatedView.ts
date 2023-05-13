@@ -56,15 +56,23 @@ export const useEntityListRelatedView = (): void => {
   }, [relatedSearchFn, resultKey, run, searchKey, selectedCategoryValues]);
 
   useEffect(() => {
-    exploreDispatch({
-      payload: {
-        relatedListItems: buildRelatedEntityList(
-          listItems,
-          relatedSearchResult,
-          selectedCategoryValues
-        ),
-      },
-      type: ExploreActionKind.ProcessRelatedResponse,
-    });
-  }, [exploreDispatch, listItems, relatedSearchResult, selectedCategoryValues]);
+    if (relatedSearchFn) {
+      exploreDispatch({
+        payload: {
+          relatedListItems: buildRelatedEntityList(
+            listItems,
+            relatedSearchResult,
+            selectedCategoryValues
+          ),
+        },
+        type: ExploreActionKind.ProcessRelatedResponse,
+      });
+    }
+  }, [
+    exploreDispatch,
+    listItems,
+    relatedSearchFn,
+    relatedSearchResult,
+    selectedCategoryValues,
+  ]);
 };
