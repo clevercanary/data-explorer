@@ -2,7 +2,7 @@
  * Hook to make API async calls and handles the API result state.
  */
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
-import { DataExplorerError } from "types/error";
+import { DataExplorerError } from "../types/error";
 
 /**
  * Hook to safely call async functions and managing the result's state.

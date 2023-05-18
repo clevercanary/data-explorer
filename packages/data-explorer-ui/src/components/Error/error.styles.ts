@@ -6,7 +6,7 @@ import { Section, sectionMarginXsm } from "../common/Section/section.styles";
 export const Error = styled.div`
   margin: 0 auto;
   max-width: 648px;
-  padding: 20px;
+  padding: 40px 20px;
   width: 100%;
 
   hr {
