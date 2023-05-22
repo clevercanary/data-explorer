@@ -2,6 +2,7 @@
  * Hook to make API async calls and handles the API result state.
  */
 import React, { useCallback, useEffect, useReducer, useRef } from "react";
+import { DataExplorerError } from "../types/error";
 
 /**
  * Hook to safely call async functions and managing the result's state.
@@ -32,7 +33,7 @@ export const useAsync = <T>(state: State<T> = { status: "idle" }) => {
   );
 
   if (error) {
-    throw error;
+    throw new DataExplorerError(error);
   }
 
   const run = useCallback(

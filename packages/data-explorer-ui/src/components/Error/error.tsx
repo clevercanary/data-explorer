@@ -1,10 +1,10 @@
 import { Divider, Typography } from "@mui/material";
-import { RoundedPaper } from "components/common/Paper/paper.styles";
 import Link from "next/link";
 import React from "react";
 import { ButtonPrimary } from "../common/Button/button.styles";
 import { AlertIcon } from "../common/CustomIcon/components/AlertIcon/alertIcon";
 import { Grid } from "../common/Grid/grid";
+import { RoundedPaper } from "../common/Paper/paper.styles";
 import {
   SectionActions,
   SectionContent as Content,
