@@ -1,6 +1,6 @@
 import { ThemeOptions } from "@mui/material";
 import { ColumnSort } from "@tanstack/react-table";
-import { JSXElementConstructor } from "react";
+import { JSXElementConstructor, ReactNode } from "react";
 import { CategoryKey, SelectedFilterValue } from "../common/entities";
 import { HeroTitle } from "../components/common/Title/title";
 import { FooterProps } from "../components/Layout/components/Footer/footer";
@@ -21,9 +21,10 @@ export interface AnalyticsConfig {
  */
 export interface AuthenticationConfig {
   googleGISAuthConfig?: GoogleGISAuthConfig;
-  loginNotice?: LoginNotice;
-  text?: string;
+  termsOfService?: ReactNode;
+  text?: ReactNode;
   title: string;
+  warning?: ReactNode;
 }
 
 /**
