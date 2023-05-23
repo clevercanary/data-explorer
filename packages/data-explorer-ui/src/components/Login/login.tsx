@@ -1,30 +1,58 @@
-import { Typography } from "@mui/material";
-import React, { ReactNode, useContext } from "react";
+import { Checkbox, Typography } from "@mui/material";
+import React, { ChangeEvent, ReactNode, useContext, useState } from "react";
 import { AuthContext } from "../../providers/authentication";
 import { LoginButton } from "../common/Button/components/LoginButton/loginButton";
+import { CheckedIcon } from "../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { GoogleIcon } from "../common/CustomIcon/components/GoogleIcon/googleIcon";
+import { UncheckedErrorIcon } from "../common/CustomIcon/components/UncheckedErrorIcon/uncheckedErrorIcon";
+import { UncheckedIcon } from "../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
 import { RoundedPaper } from "../common/Paper/paper.styles";
 import { SectionContent } from "../common/Section/section.styles";
 import {
+  LoginAgreement,
   LoginSection,
   LoginSectionActions,
+  LoginText,
+  LoginWarning,
   LoginWrapper,
+  TermsOfService,
 } from "./login.styles";
 
 export interface LoginProps {
   isGoogle?: boolean;
-  loginNotice?: ReactNode;
-  text?: string;
+  termsOfService?: ReactNode;
+  text?: ReactNode;
   title: string;
+  warning?: ReactNode;
 }
 
 export const Login = ({
   isGoogle = false,
-  loginNotice,
+  termsOfService,
   text,
   title,
+  warning,
 }: LoginProps): JSX.Element => {
   const authorizeUser = useContext(AuthContext).authorizeUser;
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isInAgreement, setIsInAgreement] = useState<boolean>(!termsOfService);
+
+  // Authorizes the user, if the user has agreed to the terms of service.
+  // If the terms of service are not accepted, set the terms of service error state to true.
+  const onAuthorizeUser = (): void => {
+    if (!isInAgreement) {
+      setIsError(true);
+      return;
+    }
+    authorizeUser();
+  };
+
+  // Callback fired when the checkbox value is changed.
+  // Clears the terms of service error state and sets state isInAgreement with checkbox selected value.
+  const handleChange = (changeEvent: ChangeEvent<HTMLInputElement>): void => {
+    setIsError(false); // Clears terms of service error state when checkbox is touched.
+    setIsInAgreement(changeEvent.target.checked);
+  };
 
   return (
     <LoginWrapper>
@@ -34,21 +62,28 @@ export const Login = ({
             <Typography color="ink.main" component="h3" variant="text-heading">
               {title}
             </Typography>
-            {text && <Typography variant="text-body-400">{text}</Typography>}
+            {text && <LoginText>{text}</LoginText>}
           </SectionContent>
           <LoginSectionActions>
+            {termsOfService && (
+              <LoginAgreement>
+                <Checkbox
+                  checkedIcon={<CheckedIcon />}
+                  icon={isError ? <UncheckedErrorIcon /> : <UncheckedIcon />}
+                  onChange={handleChange}
+                />
+                <TermsOfService>{termsOfService}</TermsOfService>
+              </LoginAgreement>
+            )}
             {isGoogle && (
-              <LoginButton
-                EndIcon={GoogleIcon}
-                onClick={(): void => authorizeUser()}
-              >
+              <LoginButton EndIcon={GoogleIcon} onClick={onAuthorizeUser}>
                 Google
               </LoginButton>
             )}
           </LoginSectionActions>
         </LoginSection>
       </RoundedPaper>
-      {loginNotice}
+      {warning && <LoginWarning>{warning}</LoginWarning>}
     </LoginWrapper>
   );
 };
