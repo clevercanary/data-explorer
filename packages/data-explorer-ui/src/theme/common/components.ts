@@ -335,6 +335,17 @@ export const MuiButtonGroup = (theme: Theme): Components["MuiButtonGroup"] => {
 };
 
 /**
+ * MuiCard Component
+ */
+export const MuiCard: Components["MuiCard"] = {
+  styleOverrides: {
+    root: {
+      borderRadius: 8,
+    },
+  },
+};
+
+/**
  * MuiCheckbox Component
  * @param theme - Theme.
  * @returns MuiCheckbox component theme styles.
