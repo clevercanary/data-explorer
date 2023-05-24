@@ -38,6 +38,7 @@ function getTabs(entities: EntityConfig[]): Tab[] {
 
 // TODO(Dave) create an interface for props and maybe not drill the static load through here
 export const ExploreView = (props: ExploreViewProps): JSX.Element => {
+  console.log("ExploreViewProps:", props);
   const { config, entityConfig } = useConfig(); // Get app level config.
   const { exploreDispatch, exploreState } = useExploreState(); // Get the useReducer state and dispatch for "Explore".
   const { entities, explorerTitle, summaryConfig } = config;
@@ -47,7 +48,11 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   const { response: summaryResponse } = useSummary(); // Fetch summary.
   useEntityList(props); // Fetch entities.
   useEntityListRelatedView(); // Fetch related entities.
-  const { entityListType } = props;
+  const entityListType = exploreState.tabValue;
+  const {staticLoad } = entityConfig;
+
+  console.log("Explore View!");
+  console.log("Entity List Type: ", entityListType);
 
   /**
    * Callback fired when selected state of a category value is toggled.
@@ -84,21 +89,32 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
    * @param tabValue - Selected tab value.
    */
   const onTabChange = (tabValue: TabValue): void => {
-    push(`/${tabValue}`);
+    console.log("onTabChange: ", tabValue);
+    console.log("staticLoad: ", staticLoad);
+  
+    if(staticLoad){
+      console.log("pushing : ", tabValue);
+       push(`/${tabValue}`);
+    }
+
+    exploreDispatch({
+      payload: tabValue,
+      type: ExploreActionKind.SelectEntityType,
+    });
+    track(EVENT_NAME.ENTITY_SELECTED, {
+      [EVENT_PARAM.ENTITY_NAME]: tabValue.name,
+    });
   };
 
-  // Selects entity type with update to entity list type.
+  // // Selects entity type with update to entity list type.
   useEffect(() => {
-    if (entityListType) {
-      exploreDispatch({
-        payload: entityListType,
-        type: ExploreActionKind.SelectEntityType,
-      });
-      track(EVENT_NAME.ENTITY_SELECTED, {
-        [EVENT_PARAM.ENTITY_NAME]: entityListType,
-      });
+    console.log("entityListType before push: ", entityListType);
+    if (entityListType && !staticLoad) {
+      console.log("pushing in hooke : ", entityListType);
+
+      push(`/${entityListType}`);
     }
-  }, [entityListType, exploreDispatch]);
+  }, [entityListType,staticLoad]);
 
   return (
     <>

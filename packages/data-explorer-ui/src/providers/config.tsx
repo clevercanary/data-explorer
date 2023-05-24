@@ -35,6 +35,7 @@ export function ConfigProvider({
   const defaultEntityListType = config.redirectRootToPath.slice(1);
   const entityName = entityListType || defaultEntityListType;
   const entityConfig = getEntityConfig(entities, entityName);
+  console.log("Entity Config", entityConfig);
   return (
     <ConfigContext.Provider
       value={{

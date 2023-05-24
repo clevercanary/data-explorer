@@ -16,6 +16,7 @@ import { useEntityService } from "./useEntityService";
 import { useExploreState } from "./useExploreState";
 
 /**
+ *
  * Hook handling the load and transformation of the values used by index pages. If the current entity loaded statically,
  * this hook will return the already loaded data. Otherwise, it will make a request for the entity's pathUrl.
  * @param staticResponse - Statically loaded data, if any.
@@ -24,6 +25,7 @@ import { useExploreState } from "./useExploreState";
 export const useEntityList = (
   staticResponse: AzulEntitiesStaticResponse
 ): void => {
+  // TODO: Update documentation
   // Load up the relevant contexts
   const { token } = useAuthentication();
   const { fetchEntitiesFromQuery, listStaticLoad, path } = useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
@@ -32,14 +34,21 @@ export const useEntityList = (
   const { filterState, sorting } = exploreState;
   const { termFacets } = data || {};
 
+  console.log("Use Entity List!");
   /**
    * Hook for fetching entities matching the current query and authentication state.
    * Only runs if one of its deps changes. Skipped if staticLoaded entity
    */
   useEffect(() => {
-    if (!listStaticLoad) {
+    if (
+      !listStaticLoad &&
+      staticResponse.entityListType === exploreState.tabValue
+    ) {
+      console.log("Sorting! ", sorting);
+      console.log(exploreState.sorting);
       // Build basic list params
       const [sort] = sorting;
+      console.log("Query sorting!", sort);
       const listParams: AzulListParams = sort
         ? { order: sort.desc ? "desc" : "asc", sort: sort.id }
         : {};
@@ -63,12 +72,14 @@ export const useEntityList = (
     }
   }, [
     exploreState.paginationState.index,
+    exploreState.tabValue,
     fetchEntitiesFromQuery,
     filterState,
     path,
     run,
     sorting,
     listStaticLoad,
+    staticResponse,
     token,
   ]);
 
@@ -79,6 +90,8 @@ export const useEntityList = (
   useEffect(() => {
     if (!listStaticLoad && termFacets) {
       console.log("It's me! - server filtering");
+      console.log("Idle", isIdle);
+      console.log("Loading", isLoading);
       exploreDispatch({
         payload: {
           listItems: data?.hits,

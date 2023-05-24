@@ -9,7 +9,7 @@ import {
   SelectedFilter,
 } from "../common/entities";
 import { EntityConfig, SiteConfig } from "../config/entities";
-import { getDefaultSorting } from "../config/utils";
+import { getDefaultSorting, getEntityConfigFromConfig } from "../config/utils";
 import {
   buildCategoryViews,
   buildNextFilterState,
@@ -149,7 +149,7 @@ export const ExploreStateContext = createContext<ExploreStateContextProps>({
     listItems: [],
     listStaticLoad: false,
     listView: undefined,
-    loading: false,
+    loading: true,
     paginationState: defaultPaginationState,
     relatedListItems: undefined,
     sorting: [],
@@ -365,11 +365,15 @@ function exploreReducer(
      * Select entity type
      **/
     case ExploreActionKind.SelectEntityType: {
+      console.log("Select Entity Type running: ", payload, state.tabValue);
       if (payload === state.tabValue) {
         return state;
       }
-      const nextSort = getDefaultSorting(entityConfig);
-      const { staticLoad } = entityConfig;
+
+      const nextEntityConfig = getEntityConfigFromConfig(payload);
+      console.log("...Select entityType: entity config", nextEntityConfig);
+      const nextSort = getDefaultSorting(nextEntityConfig);
+      const { staticLoad } = nextEntityConfig;
       const listStaticLoad = staticLoad;
 
       return {
