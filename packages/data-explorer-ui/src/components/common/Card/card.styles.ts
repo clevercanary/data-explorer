@@ -10,10 +10,6 @@ export const CardSection = styled.div`
   ${({ theme }) => theme.breakpoints.up(TABLET)} {
     padding: 20px;
   }
-
-  .MuiCardMedia-root {
-    grid-column: 2; // Card media positioned into the second column.
-  }
 `;
 
 export const CardContent = styled(SectionContent)``;

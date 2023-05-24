@@ -1,16 +1,23 @@
-import { CardMedia as MCardMedia } from "@mui/material";
 import React from "react";
-import { StaticImageProps } from "../../../StaticImage/staticImage";
+import {
+  StaticImage,
+  StaticImageProps,
+} from "../../../StaticImage/staticImage";
+import { CardMedia as Media } from "./cardMedia.styles";
 
 export interface CardMediaProps {
-  media: Omit<StaticImageProps, "alt">;
+  media: StaticImageProps;
 }
 
 export const CardMedia = ({ media }: CardMediaProps): JSX.Element => {
   return (
-    <MCardMedia
-      image={media.src}
-      sx={{ height: media.height, width: media.width }}
-    />
+    <Media>
+      <StaticImage
+        alt={media.alt}
+        height={media.height}
+        src={media.src}
+        width={media.width}
+      />
+    </Media>
   );
 };

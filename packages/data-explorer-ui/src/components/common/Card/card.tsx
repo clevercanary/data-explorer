@@ -5,10 +5,7 @@ import {
   CardAction,
   CardActionProps,
 } from "./components/CardAction/cardAction";
-import {
-  CardActionArea as ActionArea,
-  CardFn,
-} from "./components/CardActionArea/cardActionArea";
+import { CardActionArea as ActionArea } from "./components/CardActionArea/cardActionArea";
 import { CardActions } from "./components/CardActions/cardActions";
 import { CardMedia } from "./components/CardMedia/cardMedia";
 import { CardSecondaryText } from "./components/CardSecondaryText/cardSecondaryText";
@@ -19,8 +16,8 @@ import { RoundedCard } from "./components/RoundedCard/roundedCard";
 
 export interface CardProps {
   cardActions?: CardActionProps[];
-  cardFn?: CardFn;
-  media?: Omit<StaticImageProps, "alt">;
+  cardUrl?: string;
+  media?: StaticImageProps;
   secondaryText?: ReactNode; // e.g. Date.
   secondaryTitle?: ReactNode;
   text?: ReactNode;
@@ -29,15 +26,15 @@ export interface CardProps {
 
 export const Card = ({
   cardActions,
-  cardFn,
+  cardUrl,
   media,
   secondaryText,
   secondaryTitle,
   text,
   title,
 }: CardProps): JSX.Element => {
-  const CardActionArea = cardFn ? ActionArea : Fragment;
-  const cardActionAreaProps = cardFn ? { cardFn } : {};
+  const CardActionArea = cardUrl ? ActionArea : Fragment;
+  const cardActionAreaProps = cardUrl ? { cardUrl } : {};
   return (
     <RoundedCard>
       <CardActionArea {...cardActionAreaProps}>
