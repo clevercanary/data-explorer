@@ -261,10 +261,20 @@ export interface SiteConfig {
   layout: {
     footer: FooterProps;
     header: HeaderProps;
+    support?: SupportConfig;
   };
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   themeOptions?: ThemeOptions;
+}
+
+/**
+ * Support configuration.
+ * Facilitates configuration for support button and corresponding form or navigation to a configured url.
+ */
+export interface SupportConfig {
+  supportForm?: ComponentsConfig;
+  url?: string;
 }
 
 /**

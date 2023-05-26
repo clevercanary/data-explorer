@@ -6,6 +6,10 @@ import * as P from "./common/palette";
 import { shadows } from "./common/shadows";
 import * as T from "./common/typography";
 
+export interface ThemeProps {
+  theme: Theme;
+}
+
 /**
  * Returns a generated theme with customization.
  * @param customOptions - Custom theme option overrides.
