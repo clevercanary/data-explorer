@@ -1,7 +1,9 @@
 import { EntityConfig } from "../config/entities";
+import { getEntityConfig } from "../config/utils";
 import { createEntityService } from "../entity/service/factory";
 import { EntityService } from "../entity/service/model";
 import { useConfig } from "./useConfig";
+import { useExploreState } from "./useExploreState";
 
 interface FetcherResponse extends EntityService {
   detailStaticLoad: boolean;
@@ -41,6 +43,11 @@ export const getEntityService = (
  * @returns @see FetcherResponse
  */
 export const useEntityService = (): FetcherResponse => {
-  const { entityConfig } = useConfig();
+  const { config } = useConfig();
+  const { exploreState } = useExploreState();
+  const entityConfig = getEntityConfig(
+    config.entities,
+    exploreState.tabValue // always use the current state's tab value.
+  );
   return getEntityService(entityConfig);
 };
