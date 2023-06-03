@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { useIdleTimer } from "react-idle-timer";
 import { useConfig } from "../hooks/useConfig";
 
 // Template constants
@@ -72,16 +73,18 @@ export const AuthContext = createContext<AuthContextProps>({
 
 interface Props {
   children: ReactNode | ReactNode[];
+  sessionTimeout?: number;
 }
 
 /**
  * Auth provider for consuming components to subscribe to changes in auth-related state.
  * @param props - Component inputs.
  * @param props.children - Set of children components that can possibly consume the query provider.
+ * @param props.sessionTimeout - If provided, will set the value for a session timeout (in mili)
  * @returns Provider element to be used by consumers to both update authentication state and subscribe to changes in authentication state.
  */
-export function AuthProvider({ children }: Props): JSX.Element {
-  const authConfig = useConfig().config.authentication;
+export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
+  const { authentication: authConfig, redirectRootToPath } = useConfig().config;
   const { googleGISAuthConfig } = authConfig || {};
   const { clientId, scope } = googleGISAuthConfig || {};
   const router = useRouter();
@@ -93,6 +96,18 @@ export function AuthProvider({ children }: Props): JSX.Element {
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
   const [tokenClient, setTokenClient] = useState<any>(); // TODO see https://github.com/clevercanary/data-browser/issues/544.
   const [userProfile, setUserProfile] = useState<UserProfile>();
+
+  /**
+   * If sessionTimeout is set, the app will reload and redirect to
+   * @var redirectRootToPath
+   */
+  useIdleTimer({
+    onIdle: () =>
+      isAuthorized &&
+      sessionTimeout &&
+      (window.location.href = redirectRootToPath),
+    timeout: sessionTimeout,
+  });
 
   /**
    * Requests access token and authorizes user.
