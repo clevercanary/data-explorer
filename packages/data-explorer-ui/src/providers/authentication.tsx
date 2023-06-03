@@ -84,11 +84,11 @@ interface Props {
  * @returns Provider element to be used by consumers to both update authentication state and subscribe to changes in authentication state.
  */
 export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
-  const { authentication: authConfig, redirectRootToPath } = useConfig().config;
+  const { authentication: authConfig } = useConfig().config;
   const { googleGISAuthConfig } = authConfig || {};
   const { clientId, scope } = googleGISAuthConfig || {};
   const router = useRouter();
-  const { asPath } = router;
+  const { asPath, basePath } = router;
   const routeHistoryRef = useRef<string>(asPath);
   const [hasTerraAccount, setHasTerraAccount] = useState<boolean>(false);
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
@@ -105,7 +105,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
     onIdle: () =>
       isAuthorized &&
       sessionTimeout &&
-      (window.location.href = redirectRootToPath),
+      (window.location.href = window.location.origin + basePath),
     timeout: sessionTimeout,
   });
 
