@@ -1,4 +1,5 @@
 import {
+  CategoryKey,
   Filters,
   SelectCategory,
   SelectCategoryValue,
@@ -15,44 +16,39 @@ import {
   AZUL_FILTER_OPERATOR,
   LABEL,
 } from "./entities";
+import { getFilterParameterValue } from "./utils";
+
+export type ParamValue = string | boolean | null;
+export type Params = Record<
+  CategoryKey,
+  Record<AZUL_FILTER_OPERATOR, ParamValue[]>
+>;
 
 /**
- * Transform generic filter (selected categories and category values) into an Azul-specific filter query param.
- * @param filters - Set of selected filter values.
+ * Transform selected categories and category values to query string format.
+ * Return JSON string (for example):
+ * - { file: { primarySite: { is: ["Brain"] } } }, or
+ * - {} when there are no selected values.
+ * @param filters - Set of selected categories and cateogry values.
  * @returns Azul-specific filter query string param.
  */
 export function transformFilters(filters: Filters): string {
-  // Build up model of filter params from filters.
-  const initialFilterParams: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any -- we can't determine the filter value.
-    [k: string]: { [key in AZUL_FILTER_OPERATOR]?: any };
-  } = {};
-  const filterParams = filters.reduce((accum, filter) => {
-    const { categoryKey, value } = filter;
-
+  // Build up filter from selected categories and category values.
+  const params = filters.reduce((accum, { categoryKey, value }) => {
     // Only handling "is" operator for now.
     const operator = AZUL_FILTER_OPERATOR.IS;
-
     // Add the category to the filter if not already added.
     if (!accum[categoryKey]) {
       accum[categoryKey] = {
         [operator]: [],
       };
     }
-
-    // Add each selected value to the filter.
-    value.forEach((v) => accum[categoryKey][operator].push(v));
-
+    // Accumulate the category parameter values.
+    accum[categoryKey][operator].push(...value.map(getFilterParameterValue));
     return accum;
-  }, initialFilterParams);
+  }, {} as Params);
 
-  // Return if there are currently no filters
-  if (!Object.keys(filterParams).length) {
-    JSON.stringify({}); // TODO Test!
-  }
-
-  // Convert filter to query string param
-  return JSON.stringify(filterParams);
+  return JSON.stringify(params);
 }
 
 export function transformAzulPagination(

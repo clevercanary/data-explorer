@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React from "react";
 import { ButtonPrimary } from "../../../common/Button/button.styles";
 import { FluidPaper } from "../../../common/Paper/paper.styles";
@@ -11,14 +10,11 @@ import {
 } from "../../../common/Section/section.styles";
 import { ANCHOR_TARGET } from "../../../Links/common/entities";
 import { BatchNormalizationWarning } from "../BatchNormalizationWarning/batchNormalizationWarning";
-
-export interface ExportToTerraReadyProps {
-  terraUrl: string;
-}
+import { ExportToTerraReadyProps } from "../ExportToTerra/components/ExportToTerraReady/exportToTerraReady";
 
 export const ExportToTerraReady = ({
-  terraUrl,
-}: ExportToTerraReadyProps): JSX.Element => {
+  exportURL,
+}: Pick<ExportToTerraReadyProps, "exportURL">): JSX.Element => {
   return (
     <FluidPaper>
       <Section>
@@ -33,15 +29,13 @@ export const ExportToTerraReady = ({
           </SectionText>
         </SectionContent>
         <SectionActions>
-          <Link href={terraUrl} passHref>
-            <ButtonPrimary
-              href="passHref"
-              rel="noopener"
-              target={ANCHOR_TARGET.BLANK}
-            >
-              Open Terra
-            </ButtonPrimary>
-          </Link>
+          <ButtonPrimary
+            href={exportURL}
+            rel="noopener"
+            target={ANCHOR_TARGET.BLANK}
+          >
+            Open Terra
+          </ButtonPrimary>
         </SectionActions>
       </Section>
     </FluidPaper>
