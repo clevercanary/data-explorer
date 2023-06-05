@@ -474,6 +474,11 @@ export const MuiCssBaseline = (theme: Theme): Components["MuiCssBaseline"] => {
       body: {
         fontFamily: theme.typography.fontFamily,
       },
+      code: {
+        ...theme.typography[TEXT_BODY_400_2_LINES],
+        fontFamily: "Roboto Mono, monospace",
+        fontSize: 12,
+      },
       img: {
         display: "block",
       },
@@ -483,6 +488,11 @@ export const MuiCssBaseline = (theme: Theme): Components["MuiCssBaseline"] => {
         "&:last-child": {
           margin: 0,
         },
+      },
+      pre: {
+        margin: 0,
+        whiteSpace: "pre-wrap",
+        wordBreak: "break-word",
       },
       strong: {
         fontWeight: 500,

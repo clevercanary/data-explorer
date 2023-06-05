@@ -8,16 +8,11 @@ import {
   SectionContent,
 } from "../../../common/Section/section.styles";
 import { BatchNormalizationWarning } from "../BatchNormalizationWarning/batchNormalizationWarning";
-
-export type RunFn = () => void;
-
-export interface ExportToTerraNotStartedProps {
-  run: RunFn;
-}
+import { ExportToTerraNotStartedProps } from "../ExportToTerra/components/ExportToTerraNotStarted/exportToTerraNotStarted";
 
 export const ExportToTerraNotStarted = ({
   run,
-}: ExportToTerraNotStartedProps): JSX.Element => {
+}: Pick<ExportToTerraNotStartedProps, "run">): JSX.Element => {
   return (
     <FluidPaper>
       <Section>

@@ -4,7 +4,7 @@ import { ExportToTerraReady } from "./exportToTerraReady";
 
 export default {
   argTypes: {
-    terraUrl: { control: "text" },
+    exportURL: { control: "text" },
   },
   component: ExportToTerraReady,
   title: "Components/Section/Export/ExportToTerra",
@@ -16,5 +16,5 @@ const Template: ComponentStory<typeof ExportToTerraReady> = (args) => (
 
 export const ExportReady = Template.bind({});
 ExportReady.args = {
-  terraUrl: "/",
+  exportURL: "/",
 };
