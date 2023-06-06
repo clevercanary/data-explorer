@@ -1,7 +1,13 @@
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import React, { MouseEvent, useState } from "react";
 import { UserProfile } from "../../../../../../../../providers/authentication";
-import { Avatar, UserNames, UserSummary } from "./authenticationMenu.styles";
+import {
+  AuthenticationMenu as Menu,
+  Avatar,
+  UserIcon,
+  UserNames,
+  UserSummary,
+} from "./authenticationMenu.styles";
 
 export interface AuthenticationMenuProps {
   onLogout: () => void;
@@ -25,23 +31,23 @@ export const AuthenticationMenu = ({
 
   return (
     <>
-      <IconButton onClick={onOpenMenu}>
+      <UserIcon onClick={onOpenMenu}>
         <Avatar
           alt={`${userProfile.given_name} ${userProfile.family_name}`}
           src={userProfile.picture}
         />
-      </IconButton>
+      </UserIcon>
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         autoFocus={false}
         onClose={onCloseMenu}
         open={open}
+        PaperProps={{ variant: "menu" }}
         transformOrigin={{
           horizontal: "right",
           vertical: "top",
         }}
-        PaperProps={{ variant: "menu" }}
       >
         <UserSummary>
           You are signed in as:
