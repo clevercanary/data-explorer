@@ -98,8 +98,8 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const [userProfile, setUserProfile] = useState<UserProfile>();
 
   /**
-   * If sessionTimeout is set, the app will reload and redirect to
-   * @var redirectRootToPath
+   * If sessionTimeout is set and user is authorized, the app will reload and redirect to
+   * origin (including basePath)
    */
   useIdleTimer({
     onIdle: () =>
