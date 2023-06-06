@@ -1,5 +1,19 @@
 import styled from "@emotion/styled";
-import { Avatar as MAvatar, MenuItem, Typography } from "@mui/material";
+import {
+  Avatar as MAvatar,
+  IconButton as MIconButton,
+  Menu as MMenu,
+  MenuItem,
+  Typography,
+} from "@mui/material";
+
+export const AuthenticationMenu = styled(MMenu)`
+  margin: 4px 0;
+`;
+
+export const UserIcon = styled(MIconButton)`
+  padding: 0;
+`;
 
 export const UserSummary = styled(MenuItem)`
   display: block;
