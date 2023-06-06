@@ -14,6 +14,7 @@ import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
 import { useEntityService } from "./useEntityService";
 import { useExploreState } from "./useExploreState";
+import { useURLFilterParams } from "./useURLFilterParams";
 
 /**
  * Hook handling the load and transformation of the values used by index pages. If the current entity loaded statically,
@@ -31,6 +32,11 @@ export const useEntityList = (
   const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
   const { filterState, sorting } = exploreState;
   const { termFacets } = data || {};
+  const { updateFilterQueryString } = useURLFilterParams();
+
+  useEffect(() => {
+    updateFilterQueryString(filterState);
+  }, [filterState, updateFilterQueryString]);
 
   /**
    * Hook for fetching entities matching the current query and authentication state.
@@ -96,6 +102,10 @@ export const useEntityList = (
     termFacets,
   ]);
 
+  /**
+   * For static loaded data (client side filtering) update the listItems with
+   * the static response if it exists when the page loads
+   **/
   useEffect(() => {
     if (
       listStaticLoad &&
@@ -103,7 +113,8 @@ export const useEntityList = (
       staticResponse.data &&
       staticResponse.data.hits &&
       staticResponse.data.termFacets &&
-      staticResponse.entityListType === exploreState.tabValue
+      staticResponse.entityListType === exploreState.tabValue &&
+      !exploreState.staticLoaded
     ) {
       const listItems = staticResponse?.data?.hits ?? [];
       exploreDispatch({
@@ -117,15 +128,15 @@ export const useEntityList = (
             previousIndex: null,
             rows: listItems.length,
           },
-          selectCategories: [],
         },
-        type: ExploreActionKind.ProcessExploreResponse,
+        type: ExploreActionKind.ProcessExploreStaticResponse,
       });
     }
   }, [
     staticResponse?.data?.hits,
     staticResponse.entityListType,
     exploreState.tabValue,
+    exploreState.staticLoaded,
     exploreDispatch,
     listStaticLoad,
     staticResponse,

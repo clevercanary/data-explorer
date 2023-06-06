@@ -247,7 +247,7 @@ TableProps<T>): JSX.Element => {
     isRelatedView,
     listItems,
     listStaticLoad,
-    tableInstance,
+    tableInstance.getFilteredRowModel().rows
   ]);
 
   // Unmount - reset entity view to "exact".

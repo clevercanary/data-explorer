@@ -1,5 +1,5 @@
 import { ColumnSort } from "@tanstack/react-table";
-import React, { createContext, Dispatch, ReactNode, useReducer } from "react";
+import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from "react";
 import { AzulSearchIndex } from "../apis/azul/common/entities";
 import {
   CategoryKey,
@@ -15,6 +15,7 @@ import {
   buildNextFilterState,
 } from "../hooks/useCategoryFilter";
 import { useConfig } from "../hooks/useConfig";
+import { useURLFilterParams } from "../hooks/useURLFilterParams";
 
 // Template constants
 const defaultPaginationState = {
@@ -54,6 +55,15 @@ export interface ExploreResponse {
 }
 
 /**
+ * Explore static response.
+ */
+export interface ExploreStaticResponse {
+  listItems: ListItems;
+  loading: boolean;
+  paginationResponse: PaginationResponse;
+}
+
+/**
  * Explore state.
  */
 export type ExploreState = {
@@ -67,6 +77,7 @@ export type ExploreState = {
   paginationState: PaginationState;
   relatedListItems: RelatedListItems;
   sorting: ColumnSort[];
+  staticLoaded: boolean;
   tabValue: string;
 };
 
@@ -153,6 +164,7 @@ export const ExploreStateContext = createContext<ExploreStateContextProps>({
     paginationState: defaultPaginationState,
     relatedListItems: undefined,
     sorting: [],
+    staticLoaded: false,
     tabValue: "",
   },
 });
@@ -172,12 +184,13 @@ export function ExploreStateProvider({
   entityListType: string;
 }): JSX.Element {
   const { config, defaultEntityListType, entityConfig } = useConfig();
+  const { decodedFilterParam } = useURLFilterParams();
   const [exploreState, exploreDispatch] = useReducer(
     (s: ExploreState, a: ExploreAction) =>
       exploreReducer(s, a, { config, entityConfig }),
     {
       categoryViews: [],
-      filterState: [],
+      filterState: JSON.parse(decodedFilterParam),
       isRelatedView: false,
       listItems: [],
       listStaticLoad: entityConfig.staticLoad ?? false,
@@ -186,12 +199,18 @@ export function ExploreStateProvider({
       paginationState: defaultPaginationState,
       relatedListItems: undefined,
       sorting: getDefaultSorting(entityConfig),
+      staticLoaded: false,
       tabValue: entityListType || defaultEntityListType,
     }
   );
 
+  // does this help? https://hswolff.com/blog/how-to-usecontext-with-usereducer/
+  const exploreContextValue = useMemo(() => {
+    return { exploreState, exploreDispatch };
+  }, [exploreState, exploreDispatch]);
+
   return (
-    <ExploreStateContext.Provider value={{ exploreDispatch, exploreState }}>
+    <ExploreStateContext.Provider value={exploreContextValue}>
       {children}
     </ExploreStateContext.Provider>
   );
@@ -204,6 +223,7 @@ export enum ExploreActionKind {
   // ClearFilters = "CLEAR_FILTERS",
   PaginateTable = "PAGINATE_TABLE",
   ProcessExploreResponse = "PROCESS_EXPLORE_RESPONSE",
+  ProcessExploreStaticResponse = "PROCESS_EXPLORE_STATIC_RESPONSE",
   ProcessRelatedResponse = "PROCESS_RELATED_RESPONSE",
   SelectEntityType = "SELECT_ENTITY_TYPE",
   ToggleEntityView = "TOGGLE_ENTITY_VIEW",
@@ -217,6 +237,7 @@ export enum ExploreActionKind {
 type ExploreAction =
   | PaginateTableAction
   | ProcessExploreResponseAction
+  | ProcessExploreStaticResponseAction
   | ProcessRelatedResponseAction
   | SelectEntityTypeAction
   | ToggleEntityView
@@ -238,6 +259,15 @@ type ProcessExploreResponseAction = {
   payload: ExploreResponse;
   type: ExploreActionKind.ProcessExploreResponse;
 };
+
+/**
+ * Process explore static response action.
+ */
+type ProcessExploreStaticResponseAction = {
+  payload: ExploreStaticResponse;
+  type: ExploreActionKind.ProcessExploreStaticResponse;
+};
+
 
 /**
  * Process related response action.
@@ -350,6 +380,30 @@ function exploreReducer(
         },
       };
     }
+     /**
+     * Process explore response
+     **/
+     case ExploreActionKind.ProcessExploreStaticResponse: {
+      let listItems: ListItems = [];
+      if (!payload.loading) {
+        listItems = payload.listItems;
+      }
+      return {
+        ...state,
+        listItems: listItems,
+        loading: payload.loading,
+        paginationState: {
+          currentPage: state.paginationState.currentPage,
+          index: state.paginationState.index,
+          nextIndex: payload.paginationResponse.nextIndex,
+          pageSize: payload.paginationResponse.pageSize,
+          pages: payload.paginationResponse.pages,
+          previousIndex: payload.paginationResponse.previousIndex,
+          rows: payload.paginationResponse.rows,
+        },
+        staticLoaded: true,
+      };
+    }
     /**
      * Process related response
      */
@@ -377,6 +431,7 @@ function exploreReducer(
         loading: true,
         paginationState: resetPage(state.paginationState),
         sorting: nextSort,
+        staticLoaded: false,
         tabValue: payload,
       };
     }

@@ -151,7 +151,6 @@ function renderEntities(
   if (entityListType !== tabValue) {
     // required currently for static load site as the pre-rendered page
     // loads with the previous tabs data on the first render after switching tabs. (or similar)
-    //console.log("Entity list type != tab value", entityListType, tabValue);
     return <></>; // TODO(Fran) review loading and return.
   }
 
