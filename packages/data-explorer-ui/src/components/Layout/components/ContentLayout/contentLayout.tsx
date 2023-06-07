@@ -9,19 +9,34 @@ import {
   OutlineGrid,
 } from "./contentLayout.styles";
 
+/**
+ * Possible set of layout style values.
+ */
+export enum LAYOUT_STYLE {
+  CONTRAST = "CONTRAST",
+  DEFAULT = "DEFAULT",
+}
+
+/**
+ * Model of layout style.
+ */
+export type LayoutStyle = keyof typeof LAYOUT_STYLE;
+
 export interface ContentLayoutProps {
   content: ReactNode;
+  layoutStyle?: LayoutStyle;
   navigation?: ReactNode;
   outline?: ReactNode;
 }
 
 export const ContentLayout = ({
   content,
+  layoutStyle,
   navigation,
   outline,
 }: ContentLayoutProps): JSX.Element => {
   return (
-    <Layout>
+    <Layout layoutStyle={layoutStyle}>
       {navigation && (
         <NavigationGrid>
           <NavigationPositioner>{navigation}</NavigationPositioner>
