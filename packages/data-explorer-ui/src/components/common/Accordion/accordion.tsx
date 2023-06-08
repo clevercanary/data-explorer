@@ -1,6 +1,7 @@
 import {
   Accordion as MAccordion,
   AccordionDetails,
+  AccordionProps as MAccordionProps,
   AccordionSummary,
   Typography,
 } from "@mui/material";
@@ -9,31 +10,36 @@ import { TEXT_BODY_LARGE_500 } from "../../../theme/common/typography";
 import { AddIcon } from "../CustomIcon/components/AddIcon/addIcon";
 import { RemoveIcon } from "../CustomIcon/components/RemoveIcon/removeIcon";
 
-export interface AccordionProps {
+export interface AccordionProps extends MAccordionProps {
   collapseIcon?: ReactNode;
-  details: ReactNode;
   expandIcon?: ReactNode;
   title: string;
 }
 
 export const Accordion = ({
-  expandIcon = <AddIcon color="primary" fontSize="medium" />,
+  children,
   collapseIcon = <RemoveIcon color="primary" fontSize="medium" />,
-  details,
+  expanded,
+  expandIcon = <AddIcon color="primary" fontSize="medium" />,
   title,
+  ...props /* Spread props to allow for Accordion specific props AccordionProps e.g. "disabled". */
 }: AccordionProps): JSX.Element => {
-  const [expanded, setExpanded] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(expanded || false);
 
   const onToggleExpanded = (): void => {
-    setExpanded((expanded) => !expanded);
+    setIsExpanded((expanded) => !expanded);
   };
 
   return (
-    <MAccordion expanded={expanded} onClick={onToggleExpanded}>
-      <AccordionSummary expandIcon={expanded ? collapseIcon : expandIcon}>
+    <MAccordion
+      expanded={isExpanded}
+      onClick={expanded ? undefined : onToggleExpanded}
+      {...props}
+    >
+      <AccordionSummary expandIcon={isExpanded ? collapseIcon : expandIcon}>
         <Typography variant={TEXT_BODY_LARGE_500}>{title}</Typography>
       </AccordionSummary>
-      <AccordionDetails>{details}</AccordionDetails>
+      <AccordionDetails>{children}</AccordionDetails>
     </MAccordion>
   );
 };

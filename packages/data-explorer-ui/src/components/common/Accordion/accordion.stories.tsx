@@ -12,7 +12,7 @@ type Story = StoryObj<typeof Accordion>;
 
 export const AccordionStory: Story = {
   args: {
-    details:
+    children:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.",
     title: "CSER Phase II Harmonized Measures",
   },
@@ -21,18 +21,15 @@ export const AccordionStory: Story = {
 export const AccordionsStory: Story = {
   render: () => (
     <Box bgcolor="white">
-      <Accordion
-        details={AccordionStory.args?.details}
-        title={AccordionStory.args?.title || ""}
-      />
-      <Accordion
-        details={AccordionStory.args?.details}
-        title={"Information about the CSER1 Consortium"}
-      />
-      <Accordion
-        details={AccordionStory.args?.details}
-        title={"Genetic and genomic online CME courses"}
-      />
+      <Accordion title={AccordionStory.args?.title || ""}>
+        {AccordionStory.args?.children || ""}
+      </Accordion>
+      <Accordion title={"Information about the CSER1 Consortium"}>
+        {AccordionStory.args?.children || ""}
+      </Accordion>
+      <Accordion title={"Genetic and genomic online CME courses"}>
+        {AccordionStory.args?.children || ""}
+      </Accordion>
     </Box>
   ),
 };
