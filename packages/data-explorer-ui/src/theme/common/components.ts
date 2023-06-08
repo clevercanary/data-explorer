@@ -214,8 +214,14 @@ export const MuiBreadcrumbs = (theme: Theme): Components["MuiBreadcrumbs"] => {
     styleOverrides: {
       li: {
         ...theme.typography[TEXT_BODY_SMALL_400],
+        margin: 0,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
         "& .MuiLink-root": {
           color: "inherit",
+        },
+        "& .MuiTypography-root": {
+          color: "inherit",
+          font: "inherit",
         },
       },
       ol: {

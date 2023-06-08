@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import { textBodyLarge4002Lines } from "../../../../styles/common/mixins/fonts";
 import { DESKTOP_SM, TABLET } from "../../../../theme/common/breakpoints";
+import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
 
 const CONTENT_GRID_WIDTH = 734;
 const NAV_MAX_WIDTH = 232;
@@ -8,8 +9,15 @@ const PADDING = 24;
 const PADDING_X = PADDING;
 const PADDING_Y = PADDING;
 
-export const ContentLayout = styled.div`
-  background-color: ${({ theme }) => theme.palette.common.white};
+interface Props {
+  layoutStyle?: LayoutStyle;
+}
+
+export const ContentLayout = styled.div<Props>`
+  background-color: ${({ layoutStyle, theme }) =>
+    layoutStyle === LAYOUT_STYLE.CONTRAST
+      ? theme.palette.common.white
+      : theme.palette.smoke.light};
   display: grid;
   flex: 1;
   grid-template-areas: "navigation content outline";
