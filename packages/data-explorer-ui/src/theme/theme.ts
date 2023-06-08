@@ -68,6 +68,9 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
 
   // Theme components.
   theme.components = {
+    MuiAccordion: C.MuiAccordion(theme),
+    MuiAccordionDetails: C.MuiAccordionDetails,
+    MuiAccordionSummary: C.MuiAccordionSummary,
     MuiAlert: C.MuiAlert(theme),
     MuiAlertTitle: C.MuiAlertTitle(theme),
     MuiAppBar: C.MuiAppBar,

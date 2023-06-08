@@ -20,6 +20,62 @@ import {
 const FLEX_START = "flex-start";
 
 /**
+ * MuiAccordion Component
+ * @param theme - Theme.
+ * @returns MuiAccordion component theme styles.
+ */
+export const MuiAccordion = (theme: Theme): Components["MuiAccordion"] => {
+  return {
+    defaultProps: {
+      disableGutters: true,
+      elevation: 0,
+      square: true,
+    },
+    styleOverrides: {
+      root: {
+        backgroundColor: "transparent",
+        boxShadow: `${strokeTop} ${theme.palette.smoke.main}, ${strokeBottom} ${theme.palette.smoke.main}`,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:before": {
+          display: "none",
+        },
+        "&:nth-of-type(n+2)": {
+          boxShadow: `${strokeBottom} ${theme.palette.smoke.main}`,
+        },
+      },
+    },
+  };
+};
+
+/**
+ * MuiAccordionDetails Component
+ */
+export const MuiAccordionDetails: Components["MuiAccordionDetails"] = {
+  styleOverrides: {
+    root: {
+      marginBottom: 16,
+      padding: "0 32px",
+    },
+  },
+};
+
+/**
+ * MuiAccordionSummary Component
+ */
+export const MuiAccordionSummary: Components["MuiAccordionSummary"] = {
+  styleOverrides: {
+    content: {
+      margin: "16px 0",
+    },
+    root: {
+      flexDirection: "row-reverse",
+      gap: 8,
+      padding: 0,
+    },
+  },
+};
+
+/**
  * MuiAlert Component
  * @param theme - Theme.
  * @returns MuiAlert component theme styles.
