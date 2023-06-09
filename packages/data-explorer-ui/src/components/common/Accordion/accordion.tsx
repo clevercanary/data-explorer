@@ -33,7 +33,7 @@ export const Accordion = ({
   return (
     <MAccordion
       expanded={isExpanded}
-      onClick={expanded ? undefined : onToggleExpanded}
+      onChange={expanded ? undefined : onToggleExpanded}
       {...props}
     >
       <AccordionSummary expandIcon={isExpanded ? collapseIcon : expandIcon}>
