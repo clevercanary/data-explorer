@@ -31,11 +31,7 @@ export const Accordion = ({
   };
 
   return (
-    <MAccordion
-      expanded={isExpanded}
-      onChange={expanded ? undefined : onToggleExpanded}
-      {...props}
-    >
+    <MAccordion expanded={isExpanded} onChange={onToggleExpanded} {...props}>
       <AccordionSummary expandIcon={isExpanded ? collapseIcon : expandIcon}>
         <Typography variant={TEXT_BODY_LARGE_500}>{title}</Typography>
       </AccordionSummary>
