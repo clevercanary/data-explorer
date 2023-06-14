@@ -142,21 +142,6 @@ enum AZUL_TERM_TYPE {
 }
 
 /**
- * Set of export to Terra formats, use when requesting export to Terra location from Azul.
- */
-export enum EXPORT_TO_TERRA_FORMAT {
-  "BDBAG" = "terra.bdbag",
-  "PFB" = "terra.pfb",
-}
-
-/**
- * Set of valid request params accepted by Azul when requesting an export to Terra location.
- */
-export enum EXPORT_TO_TERRA_PARAM {
-  "FORMAT" = "format",
-}
-
-/**
  * Model of fileFormat value included in the response from index/summary API endpoint.
  */
 export interface FileFormatResponse {
@@ -168,6 +153,7 @@ export interface FileFormatResponse {
  * Model of the response to get a download link, using a get-retry approach
  */
 export interface FileLocationResponse {
+  CommandLine: { [key: string]: string };
   Location: string;
   "Retry-After"?: number;
   Status: number;
@@ -181,4 +167,15 @@ export enum LABEL {
   "ERROR" = "Error",
   "NONE" = "None",
   "UNSPECIFIED" = "Unspecified",
+}
+
+/**
+ * Set of possible manifest download formats.
+ */
+export enum MANIFEST_DOWNLOAD_FORMAT {
+  "COMPACT" = "compact",
+  "CURL" = "curl",
+  "FULL" = "full",
+  "TERRA_BDBAG" = "terra.bdbag",
+  "TERRA_PFB" = "terra.pfb",
 }
