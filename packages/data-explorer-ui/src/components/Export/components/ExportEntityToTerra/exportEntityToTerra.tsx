@@ -1,13 +1,13 @@
 import React, { ElementType } from "react";
+import { MANIFEST_DOWNLOAD_FORMAT } from "../../../../apis/azul/common/entities";
 import {
   FileLocation,
   useRequestFileLocation,
 } from "../../../../hooks/useRequestFileLocation";
+import { UseExportParams, UseExportRequestURL } from "../../common/entities";
 import { ExportToTerraNotStarted } from "../ExportToTerra/components/ExportToTerraNotStarted/exportToTerraNotStarted";
 import { ExportToTerraReady } from "../ExportToTerra/components/ExportToTerraReady/exportToTerraReady";
 
-export type UseExportParams = () => URLSearchParams;
-export type UseExportRequestURL = (requestParams: URLSearchParams) => string;
 export type UseExportResponseURL = (
   requestParams: URLSearchParams,
   fileLocation?: FileLocation
@@ -30,7 +30,7 @@ export const ExportEntityToTerra = ({
   useExportRequestURL,
   useExportResponseURL,
 }: ExportEntityToTerraProps): JSX.Element => {
-  const requestParams = useExportParams();
+  const requestParams = useExportParams(MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB);
   const requestURL = useExportRequestURL(requestParams);
   const { data, isLoading, run } = useRequestFileLocation(requestURL);
   const exportURL = useExportResponseURL(requestParams, data);

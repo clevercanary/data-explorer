@@ -7,6 +7,7 @@ import { FileLocationResponse } from "../apis/azul/common/entities";
 import { useAsync } from "./useAsync";
 
 export interface FileLocation {
+  commandLine?: { [key: string]: string };
   location: string;
   retryAfter?: number;
   status: number;
@@ -32,6 +33,7 @@ export const getFileLocation = async (url: string): Promise<FileLocation> => {
   const res = await fetch(url);
   const jsonRes: FileLocationResponse = await res.json();
   return {
+    commandLine: jsonRes.CommandLine,
     location: jsonRes.Location,
     retryAfter: jsonRes["Retry-After"],
     status: jsonRes.Status,

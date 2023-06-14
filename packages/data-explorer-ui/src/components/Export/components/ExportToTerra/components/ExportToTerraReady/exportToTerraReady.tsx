@@ -7,7 +7,7 @@ import {
   Section,
   SectionActions,
   SectionContent,
-} from "../../exportToTerra.styles";
+} from "../../../../export.styles";
 
 export interface ExportToTerraReadyProps {
   ExportToTerraSuccess: ElementType;

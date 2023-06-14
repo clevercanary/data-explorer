@@ -1,5 +1,5 @@
 import { EXPORT_TO_TERRA_URL_PFB_FORMAT } from "../../../apis/azul/common/constants";
-import { EXPORT_TO_TERRA_FORMAT } from "../../../apis/azul/common/entities";
+import { MANIFEST_DOWNLOAD_FORMAT } from "../../../apis/azul/common/entities";
 
 /**
  * Build URL to open Azul-generated location in Terra. Export URL requires encoded location and Terra-specific format
@@ -31,7 +31,7 @@ export function buildExportToTerraUrl(
 
   // Build up request params for export link: format if PFB and the encoded location.
   const paramTokens = [];
-  if (format === EXPORT_TO_TERRA_FORMAT.PFB) {
+  if (format === MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB) {
     // Translate Azul PFB format param value to Terra PFB format value. That is, terra.pfb to PFB.
     paramTokens.push(`format=${EXPORT_TO_TERRA_URL_PFB_FORMAT}`);
   }

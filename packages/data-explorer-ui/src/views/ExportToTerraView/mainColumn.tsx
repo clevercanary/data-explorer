@@ -1,8 +1,7 @@
 import React from "react";
 import {
   AZUL_PARAM,
-  EXPORT_TO_TERRA_FORMAT,
-  EXPORT_TO_TERRA_PARAM,
+  MANIFEST_DOWNLOAD_FORMAT,
 } from "../../apis/azul/common/entities";
 import { transformFilters } from "../../apis/azul/common/filterTransformer";
 import { ExportToTerra } from "../../components/Export/components/ExportToTerra/exportToTerra";
@@ -30,7 +29,7 @@ export const MainColumn = (): JSX.Element => {
   // Build request params.
   const requestParams: URLSearchParams = new URLSearchParams({
     [AZUL_PARAM.CATALOG]: catalog,
-    [EXPORT_TO_TERRA_PARAM.FORMAT]: EXPORT_TO_TERRA_FORMAT.PFB,
+    format: MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB,
   });
 
   // Add filters to request params, if any.
