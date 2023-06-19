@@ -30,6 +30,7 @@ export function createAppTheme(customOptions?: ThemeOptions): Theme {
       palette: {
         alert: P.alert,
         background: P.background,
+        common: P.common,
         info: P.info,
         ink: P.ink,
         primary: P.primary,
