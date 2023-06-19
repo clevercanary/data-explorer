@@ -4,7 +4,15 @@ import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon
 import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
 import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
 import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
-import { alpha32, alpha60, alpha80, black04, white } from "./palette";
+import {
+  alpha32,
+  alpha60,
+  alpha64,
+  alpha80,
+  black04,
+  black08,
+  white,
+} from "./palette";
 import { strokeBottom, strokeTop } from "./shadows";
 import {
   TEXT_BODY_400,
@@ -305,8 +313,49 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
       disableTouchRipple: true,
     },
     styleOverrides: {
+      containedSecondary: {
+        backgroundColor: theme.palette.common.white,
+        boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,
+        color: theme.palette.ink.main,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          backgroundColor: theme.palette.smoke.lightest,
+          boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:active": {
+          backgroundColor: theme.palette.smoke.lightest,
+          boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}`,
+        },
+        "&:disabled": {
+          backgroundColor: theme.palette.common.white,
+          boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,
+          color: theme.palette.ink.main,
+          opacity: 0.5,
+        },
+      },
       endIcon: {
         margin: 0,
+      },
+      outlinedSecondary: {
+        backgroundColor: "transparent",
+        border: "none",
+        boxShadow: `inset 0 0 0 1px ${theme.palette.ink.main}${alpha32}`,
+        color: theme.palette.ink.main,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          backgroundColor: "transparent",
+          border: "none",
+          boxShadow: `inset 0 0 0 1px ${theme.palette.ink.main}${alpha64}`,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:disabled": {
+          backgroundColor: "transparent",
+          border: "none",
+          boxShadow: `inset 0 0 0 1px ${theme.palette.ink.main}${alpha32}`,
+          color: theme.palette.ink.main,
+          opacity: 0.5,
+        },
       },
       root: {
         ...theme.typography[TEXT_BODY_500],
@@ -314,6 +363,9 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
         letterSpacing: "normal",
         padding: "10px 16px",
         textTransform: "capitalize",
+      },
+      sizeSmall: {
+        padding: "6px 12px",
       },
       startIcon: {
         marginRight: 0,

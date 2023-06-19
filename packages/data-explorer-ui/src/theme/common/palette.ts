@@ -1,5 +1,9 @@
 import { PaletteColorOptions } from "@mui/material";
-import { TypeBackground, TypeText } from "@mui/material/styles/createPalette";
+import {
+  CommonColors,
+  TypeBackground,
+  TypeText,
+} from "@mui/material/styles/createPalette";
 
 /**
  * Palette "Alert"
@@ -98,8 +102,10 @@ enum WHITE {
  */
 enum ALPHA {
   A04 = "0a",
+  A08 = "14",
   A32 = "52",
   A60 = "99",
+  A64 = "a3",
   A80 = "cc",
 }
 
@@ -137,14 +143,17 @@ export const white = WHITE.DEFAULT;
  * Color alpha constants
  */
 export const alpha04 = ALPHA.A04;
+export const alpha08 = ALPHA.A08;
 export const alpha32 = ALPHA.A32;
 export const alpha60 = ALPHA.A60;
+export const alpha64 = ALPHA.A64;
 export const alpha80 = ALPHA.A80;
 
 /**
  * Shades
  */
 export const black04 = `${black}${alpha04}`;
+export const black08 = `${black}${alpha08}`;
 
 /**
  * Palette Option "Alert"
@@ -160,6 +169,14 @@ export const alert: PaletteColorOptions = {
  */
 export const background: Pick<TypeBackground, "default"> = {
   default: backgroundDefault,
+};
+
+/**
+ * Palette Option "Common"
+ */
+export const common: CommonColors = {
+  black: black,
+  white: white,
 };
 
 /**
