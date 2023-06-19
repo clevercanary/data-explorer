@@ -40,6 +40,8 @@ export const List = styled(MList)`
       }
 
       &.Mui-selected {
+        color: ${({ theme }) => theme.palette.primary.main};
+
         .MuiListItemText-root {
           ${textBody500};
         }
