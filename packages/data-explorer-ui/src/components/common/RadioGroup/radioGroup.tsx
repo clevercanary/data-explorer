@@ -20,18 +20,21 @@ export interface Radio {
 }
 
 export interface RadioGroupProps {
+  className?: string;
   onRadioChange: OnRadioChangeFn;
   radios: Radio[];
   value: RadioGroupValue;
 }
 
 export const RadioGroup = ({
+  className,
   onRadioChange,
   radios,
   value,
 }: RadioGroupProps): JSX.Element => {
   return (
     <MRadioGroup
+      className={className}
       onChange={(_, radioValue: RadioValue): void => onRadioChange(radioValue)}
       value={value}
     >

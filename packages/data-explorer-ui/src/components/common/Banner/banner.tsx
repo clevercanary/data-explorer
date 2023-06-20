@@ -3,8 +3,9 @@ import { Banner as Alert } from "./banner.styles";
 
 export interface BannerProps {
   children: ReactNode;
+  className?: string;
 }
 
-export const Banner = ({ children }: BannerProps): JSX.Element => {
-  return <Alert>{children}</Alert>;
+export const Banner = ({ children, className }: BannerProps): JSX.Element => {
+  return <Alert className={className}>{children}</Alert>;
 };
