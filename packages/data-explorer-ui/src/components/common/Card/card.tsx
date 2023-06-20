@@ -1,4 +1,6 @@
+import { Card as MCard } from "@mui/material";
 import React, { Fragment, ReactNode } from "react";
+import { FlatPaper, FluidPaper, RoundedPaper } from "../Paper/paper.styles";
 import { StaticImageProps } from "../StaticImage/staticImage";
 import { CardContent, CardSection } from "./card.styles";
 import {
@@ -12,12 +14,12 @@ import { CardSecondaryText } from "./components/CardSecondaryText/cardSecondaryT
 import { CardSecondaryTitle } from "./components/CardSecondaryTitle/cardSecondaryTitle";
 import { CardText } from "./components/CardText/cardText";
 import { CardTitle } from "./components/CardTitle/cardTitle";
-import { RoundedCard } from "./components/RoundedCard/roundedCard";
 
 export interface CardProps {
   cardActions?: CardActionProps[];
   cardUrl?: string;
   media?: StaticImageProps;
+  Paper?: typeof FlatPaper | typeof FluidPaper | typeof RoundedPaper;
   secondaryText?: ReactNode; // e.g. Date.
   secondaryTitle?: ReactNode;
   text?: ReactNode;
@@ -28,6 +30,7 @@ export const Card = ({
   cardActions,
   cardUrl,
   media,
+  Paper = RoundedPaper,
   secondaryText,
   secondaryTitle,
   text,
@@ -36,7 +39,7 @@ export const Card = ({
   const CardActionArea = cardUrl ? ActionArea : Fragment;
   const cardActionAreaProps = cardUrl ? { cardUrl } : {};
   return (
-    <RoundedCard>
+    <MCard component={Paper}>
       <CardActionArea {...cardActionAreaProps}>
         <CardSection>
           <CardContent>
@@ -59,6 +62,6 @@ export const Card = ({
           )}
         </CardSection>
       </CardActionArea>
-    </RoundedCard>
+    </MCard>
   );
 };
