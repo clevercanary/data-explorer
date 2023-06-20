@@ -14,17 +14,19 @@ export interface Breadcrumb {
 
 export interface BreadcrumbsProps {
   breadcrumbs: Breadcrumb[];
+  className?: string;
   Separator?: ReactNode;
 }
 
 export const Breadcrumbs = ({
   breadcrumbs,
+  className,
   Separator = <ChevronRightRoundedIcon fontSize="xxsmall" />,
 }: BreadcrumbsProps): JSX.Element => {
   return (
     <>
       {breadcrumbs.length > 0 ? (
-        <MBreadcrumbs separator={Separator}>
+        <MBreadcrumbs className={className} separator={Separator}>
           {breadcrumbs.map(({ path, text }, b) =>
             path ? (
               <Link key={`${path}${b}`} href={path} passHref>

@@ -11,6 +11,7 @@ import { ButtonGroupButton } from "./components/ButtonGroupButton/buttonGroupBut
 
 export interface ButtonGroupProps {
   Buttons: (ReactElement<typeof ButtonGroupButton> | null)[];
+  className?: string;
   color?: MButtonGroupProps["color"];
   disabled?: boolean;
   fullWidth?: boolean;
@@ -21,6 +22,7 @@ export interface ButtonGroupProps {
 
 export const ButtonGroup = ({
   Buttons,
+  className,
   color = "primary",
   disabled = false,
   fullWidth = false,
@@ -30,6 +32,7 @@ export const ButtonGroup = ({
 }: ButtonGroupProps): JSX.Element => {
   return (
     <MButtonGroup
+      className={className}
       color={color}
       disabled={disabled}
       fullWidth={fullWidth}

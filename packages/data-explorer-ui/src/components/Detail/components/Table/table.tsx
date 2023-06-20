@@ -24,6 +24,7 @@ export interface TableView {
 }
 
 export interface TableProps<T extends object> {
+  className?: string;
   columns: ColumnDef<T>[];
   gridTemplateColumns: string;
   items: T[];
@@ -31,6 +32,7 @@ export interface TableProps<T extends object> {
 }
 
 export const Table = <T extends object>({
+  className,
   columns,
   gridTemplateColumns,
   items,
@@ -47,7 +49,7 @@ export const Table = <T extends object>({
   });
   const { getHeaderGroups, getRowModel } = tableInstance;
   return (
-    <TableContainer sx={tableContainerSx}>
+    <TableContainer className={className} sx={tableContainerSx}>
       <GridTable
         gridTemplateColumns={gridTemplateColumns}
         stickyHeader={stickyHeader}

@@ -20,14 +20,21 @@ export interface Tab {
 }
 
 export interface TabsProps {
+  className?: string;
   onTabChange: OnTabChangeFn;
   tabs: Tab[];
   value: TabsValue;
 }
 
-export const Tabs = ({ onTabChange, tabs, value }: TabsProps): JSX.Element => {
+export const Tabs = ({
+  className,
+  onTabChange,
+  tabs,
+  value,
+}: TabsProps): JSX.Element => {
   return (
     <MTabs
+      className={className}
       onChange={(_, tabValue): void => onTabChange(tabValue)}
       ScrollButtonComponent={TabScrollFuzz} // Utilizing MuiTabScrollButton to show/hide scroll fuzz.
       value={value}
