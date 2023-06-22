@@ -1,5 +1,4 @@
 import styled from "@emotion/styled";
-import { textBodyLarge4002Lines } from "../../../../styles/common/mixins/fonts";
 import { DESKTOP_SM, TABLET } from "../../../../theme/common/breakpoints";
 import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
 
@@ -71,10 +70,6 @@ export const Navigation = styled.div`
 
 export const Content = styled.div`
   padding: ${PADDING_Y}px 40px;
-
-  p {
-    ${textBodyLarge4002Lines}
-  }
 
   ${({ theme }) => theme.breakpoints.down(TABLET)} {
     padding: ${PADDING_Y}px 16px;
