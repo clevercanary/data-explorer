@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, ReactNode } from "react";
 import {
   Breadcrumb,
   Breadcrumbs,
@@ -9,12 +9,13 @@ import {
   Status,
   StatusBadge,
 } from "../../../../../common/StatusBadge/statusBadge";
-import { HeroTitle, Title } from "../../../../../common/Title/title";
+import { Title } from "../../../../../common/Title/title";
 import {
   BackPageHeroHeadline,
   CallToActionButton,
   HeroHeader,
 } from "./backPageHero.styles";
+import { SubTitle } from "./components/SubTitle/subTitle";
 
 /**
  * Back page hero component comprising breadcrumbs, title, status and tabs.
@@ -24,13 +25,15 @@ export interface BackPageHeroProps {
   breadcrumbs?: Breadcrumb[];
   callToAction?: CallToAction;
   status?: Status;
-  title?: HeroTitle;
+  subTitle?: ReactNode;
+  title?: ReactNode;
 }
 
 export const BackPageHero = ({
   breadcrumbs,
   callToAction,
   status,
+  subTitle,
   title,
 }: BackPageHeroProps): JSX.Element => {
   const HeroHeadline = callToAction ? BackPageHeroHeadline : Fragment;
@@ -41,6 +44,7 @@ export const BackPageHero = ({
           <HeroHeader gap={1}>
             {breadcrumbs && <Breadcrumbs breadcrumbs={breadcrumbs} />}
             {title && <Title title={title} />}
+            <SubTitle subTitle={subTitle} />
           </HeroHeader>
           {callToAction && (
             <CallToActionButton

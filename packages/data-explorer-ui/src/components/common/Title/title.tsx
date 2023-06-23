@@ -1,16 +1,31 @@
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { ReactNode } from "react";
+import { TEXT_HEADING_LARGE } from "../../../theme/common/typography";
 
-export type HeroTitle = string;
+export type HeroTitle = ReactNode;
 
 export interface TitleProps {
   title: HeroTitle;
 }
 
-export const Title = ({ title }: TitleProps): JSX.Element => {
+export const Title = ({
+  title,
+  ...props /* Spread props to allow for Typography specific props TypographyProps e.g. "gutterBottom" or "noWrap". */
+}: TitleProps): JSX.Element => {
   return (
-    <Typography color="ink.main" component="h1" variant="text-heading-large">
-      {title}
-    </Typography>
+    <>
+      {typeof title === "string" ? (
+        <Typography
+          color="ink.main"
+          component="h1"
+          variant={TEXT_HEADING_LARGE}
+          {...props}
+        >
+          {title}
+        </Typography>
+      ) : (
+        title
+      )}
+    </>
   );
 };
