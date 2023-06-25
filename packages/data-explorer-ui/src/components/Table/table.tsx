@@ -221,7 +221,9 @@ TableProps<T>): JSX.Element => {
     }
   }, [filterState, isRelatedView, listStaticLoad, tableInstance]);
 
-  // Builds categoryViews using react table `getFacetedUniqueValues`, for statically loaded api only, with update of columnFilters.
+  /**
+   * Static List Mode - Process Explore Response
+   */
   useEffect(() => {
     if (!isRelatedView && listStaticLoad) {
       exploreDispatch({
@@ -247,7 +249,7 @@ TableProps<T>): JSX.Element => {
     isRelatedView,
     listItems,
     listStaticLoad,
-    tableInstance.getFilteredRowModel().rows
+    tableInstance.getFilteredRowModel().rows,
   ]);
 
   // Unmount - reset entity view to "exact".

@@ -10,7 +10,7 @@ interface Result {
 
 /**
  * Hook used to get the url properties from the location object
- * Most of the times you can get the same result with useRouter(). This hook has a single use case:
+ * Most of the time you can get the same result with useRouter(). This hook has a single use case:
  *  - When you need to get the url properties ready on the first render, before ReactDOM.hydrate
  * @returns an object containing url's pathname and search params
  */

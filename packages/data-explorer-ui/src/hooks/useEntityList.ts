@@ -34,13 +34,16 @@ export const useEntityList = (
   const { termFacets } = data || {};
   const { updateFilterQueryString } = useURLFilterParams();
 
+  /**
+   * Update the filter query string when the filter state changes.
+   */
   useEffect(() => {
     updateFilterQueryString(filterState);
   }, [filterState, updateFilterQueryString]);
 
   /**
-   * Hook for fetching entities matching the current query and authentication state.
-   * Only runs if one of its deps changes. Skipped if staticLoaded entity
+   * Fetch Entities from the API when the filter state changes.
+   * Server-side filtering
    */
   useEffect(() => {
     if (!listStaticLoad) {
@@ -78,7 +81,11 @@ export const useEntityList = (
     token,
   ]);
 
-  // Builds categoryViews with an update of term facets.
+  /**
+   * Process Explore Response when data changes.
+   * TODO filre this directly when the API respnse returns
+   * Server-side filtering
+   */
   useEffect(() => {
     if (!listStaticLoad && termFacets) {
       exploreDispatch({
@@ -103,6 +110,7 @@ export const useEntityList = (
   ]);
 
   /**
+   * Process Static Explore Response
    * For static loaded data (client side filtering) update the listItems with
    * the static response if it exists when the page loads
    **/

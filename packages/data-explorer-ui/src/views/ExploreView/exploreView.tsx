@@ -87,7 +87,9 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
     push(`/${tabValue}`);
   };
 
-  // Selects entity type with update to entity list type.
+  /**
+   * Dispach a SelectdEntityType action when entityListType changes.
+   */
   useEffect(() => {
     if (entityListType) {
       exploreDispatch({

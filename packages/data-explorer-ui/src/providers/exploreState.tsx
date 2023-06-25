@@ -1,5 +1,11 @@
 import { ColumnSort } from "@tanstack/react-table";
-import React, { createContext, Dispatch, ReactNode, useMemo, useReducer } from "react";
+import React, {
+  createContext,
+  Dispatch,
+  ReactNode,
+  useMemo,
+  useReducer,
+} from "react";
 import { AzulSearchIndex } from "../apis/azul/common/entities";
 import {
   CategoryKey,
@@ -206,8 +212,8 @@ export function ExploreStateProvider({
 
   // does this help? https://hswolff.com/blog/how-to-usecontext-with-usereducer/
   const exploreContextValue = useMemo(() => {
-    return { exploreState, exploreDispatch };
-  }, [exploreState, exploreDispatch]);
+    return { exploreDispatch, exploreState };
+  }, [exploreDispatch, exploreState]);
 
   return (
     <ExploreStateContext.Provider value={exploreContextValue}>
@@ -267,7 +273,6 @@ type ProcessExploreStaticResponseAction = {
   payload: ExploreStaticResponse;
   type: ExploreActionKind.ProcessExploreStaticResponse;
 };
-
 
 /**
  * Process related response action.
@@ -380,10 +385,10 @@ function exploreReducer(
         },
       };
     }
-     /**
+    /**
      * Process explore response
      **/
-     case ExploreActionKind.ProcessExploreStaticResponse: {
+    case ExploreActionKind.ProcessExploreStaticResponse: {
       let listItems: ListItems = [];
       if (!payload.loading) {
         listItems = payload.listItems;
