@@ -15,18 +15,17 @@ interface UseURLFilterParamsResult {
  */
 export const useURLFilterParams = (): UseURLFilterParamsResult => {
   const { basePath, push } = useRouter();
-  const location = useLocation();
-  const filterParam = location?.search?.filter ?? "[]";
-  const decodedFilterParam = decodeURIComponent(filterParam);
+  const { href, pathname, search } = useLocation() || {};
+  const filterParam = search?.get("filter") ?? "[]";
 
   const updateFilterQueryString = useCallback(
     (filterState: SelectedFilter[]) => {
-      if (decodedFilterParam !== JSON.stringify(filterState)) {
+      if (filterParam !== JSON.stringify(filterState)) {
         const filter =
           filterState.length > 0 ? { filter: JSON.stringify(filterState) } : {};
         push(
           {
-            pathname: location?.pathname.replace(basePath, ""),
+            pathname: pathname?.replace(basePath, ""),
             query: { ...filter },
           },
           undefined,
@@ -37,11 +36,11 @@ export const useURLFilterParams = (): UseURLFilterParamsResult => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- push method isn't memoized and shouldn't be added as deps https://github.com/vercel/next.js/issues/18127
-    [location?.href, decodedFilterParam]
+    [filterParam, href]
   );
 
   return {
-    decodedFilterParam,
+    decodedFilterParam: filterParam,
     updateFilterQueryString,
   };
 };

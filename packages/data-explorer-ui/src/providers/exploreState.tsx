@@ -191,12 +191,19 @@ export function ExploreStateProvider({
 }): JSX.Element {
   const { config, defaultEntityListType, entityConfig } = useConfig();
   const { decodedFilterParam } = useURLFilterParams();
+  // Define filter state, from URL "filter" parameter, if present and valid.
+  let filterState: SelectedFilter[] = [];
+  try {
+    filterState = JSON.parse(decodedFilterParam);
+  } catch {
+    // do nothing
+  }
   const [exploreState, exploreDispatch] = useReducer(
     (s: ExploreState, a: ExploreAction) =>
       exploreReducer(s, a, { config, entityConfig }),
     {
       categoryViews: [],
-      filterState: JSON.parse(decodedFilterParam),
+      filterState,
       isRelatedView: false,
       listItems: [],
       listStaticLoad: entityConfig.staticLoad ?? false,

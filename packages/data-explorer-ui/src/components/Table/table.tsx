@@ -224,7 +224,6 @@ TableProps<T>): JSX.Element => {
   /**
    * Static List Mode - Process Explore Response
    */
-  const tableRows = tableInstance.getFilteredRowModel().rows;
   useEffect(() => {
     if (!isRelatedView && listStaticLoad) {
       exploreDispatch({
@@ -233,10 +232,10 @@ TableProps<T>): JSX.Element => {
           loading: false,
           paginationResponse: {
             nextIndex: null,
-            pageSize: tableRows.length,
+            pageSize: results.length,
             pages: 1,
             previousIndex: null,
-            rows: tableRows.length,
+            rows: results.length,
           },
           selectCategories: buildCategoryViews(allColumns, columnFilters),
         },
@@ -250,7 +249,7 @@ TableProps<T>): JSX.Element => {
     isRelatedView,
     listItems,
     listStaticLoad,
-    tableRows,
+    results,
   ]);
 
   // Unmount - reset entity view to "exact".

@@ -1,11 +1,9 @@
 import { isSSR } from "../utils/ssr";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- The result will be a object containing anything set on the url parameters
-type Search = any;
 interface Result {
   href: string;
   pathname: string;
-  search: Search;
+  search: URLSearchParams;
 }
 
 /**
@@ -18,14 +16,10 @@ export const useLocation = (): Result | null => {
   if (isSSR()) {
     return null;
   }
-
-  const { href, pathname, search: locationSearch } = window.location;
-  const search = Object.fromEntries(
-    new URLSearchParams(locationSearch).entries()
-  );
+  const { href, pathname, search } = window.location;
   return {
     href,
     pathname,
-    search,
+    search: new URLSearchParams(search),
   };
 };
