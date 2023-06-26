@@ -1,6 +1,6 @@
-import { SelectedFilter } from "common/entities";
 import { useRouter } from "next/router";
 import { useCallback } from "react";
+import { SelectedFilter } from "../common/entities";
 import { useLocation } from "./useLocation";
 
 interface UseURLFilterParamsResult {
