@@ -14,6 +14,7 @@ import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
 import { useEntityService } from "./useEntityService";
 import { useExploreState } from "./useExploreState";
+import { useURLFilterParams } from "./useURLFilterParams";
 
 /**
  * Hook handling the load and transformation of the values used by index pages. If the current entity loaded statically,
@@ -31,10 +32,18 @@ export const useEntityList = (
   const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
   const { filterState, sorting } = exploreState;
   const { termFacets } = data || {};
+  const { updateFilterQueryString } = useURLFilterParams();
 
   /**
-   * Hook for fetching entities matching the current query and authentication state.
-   * Only runs if one of its deps changes. Skipped if staticLoaded entity
+   * Update the filter query string when the filter state changes.
+   */
+  useEffect(() => {
+    updateFilterQueryString(filterState);
+  }, [filterState, updateFilterQueryString]);
+
+  /**
+   * Fetch Entities from the API when the filter state changes.
+   * Server-side filtering
    */
   useEffect(() => {
     if (!listStaticLoad) {
@@ -72,7 +81,11 @@ export const useEntityList = (
     token,
   ]);
 
-  // Builds categoryViews with an update of term facets.
+  /**
+   * Process Explore Response when data changes.
+   * TODO filre this directly when the API respnse returns
+   * Server-side filtering
+   */
   useEffect(() => {
     if (!listStaticLoad && termFacets) {
       exploreDispatch({
@@ -96,6 +109,11 @@ export const useEntityList = (
     termFacets,
   ]);
 
+  /**
+   * Process Static Explore Response
+   * For static loaded data (client side filtering) update the listItems with
+   * the static response if it exists when the page loads
+   **/
   useEffect(() => {
     if (
       listStaticLoad &&
@@ -103,7 +121,8 @@ export const useEntityList = (
       staticResponse.data &&
       staticResponse.data.hits &&
       staticResponse.data.termFacets &&
-      staticResponse.entityListType === exploreState.tabValue
+      staticResponse.entityListType === exploreState.tabValue &&
+      !exploreState.staticLoaded
     ) {
       const listItems = staticResponse?.data?.hits ?? [];
       exploreDispatch({
@@ -117,15 +136,15 @@ export const useEntityList = (
             previousIndex: null,
             rows: listItems.length,
           },
-          selectCategories: [],
         },
-        type: ExploreActionKind.ProcessExploreResponse,
+        type: ExploreActionKind.ProcessExploreStaticResponse,
       });
     }
   }, [
     staticResponse?.data?.hits,
     staticResponse.entityListType,
     exploreState.tabValue,
+    exploreState.staticLoaded,
     exploreDispatch,
     listStaticLoad,
     staticResponse,
