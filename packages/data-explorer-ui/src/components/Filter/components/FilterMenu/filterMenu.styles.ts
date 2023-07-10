@@ -3,7 +3,7 @@ import styled from "@emotion/styled";
 const LIST_ITEM_HEIGHT = 40;
 const LIST_PADDING_TOP = 8;
 export const MAX_DISPLAYABLE_LIST_ITEMS = 8;
-const MAX_LIST_HEIGHT_PX =
+export const MAX_LIST_HEIGHT_PX =
   (MAX_DISPLAYABLE_LIST_ITEMS + 0.5) * LIST_ITEM_HEIGHT + LIST_PADDING_TOP;
 
 interface Props {
@@ -15,10 +15,7 @@ export const FilterView = styled.div<Props>`
 
   // List
   .MuiList-root {
-    max-height: ${MAX_LIST_HEIGHT_PX}px;
-    overflow: auto;
     overflow-wrap: break-word;
-    padding: 8px 0;
   }
 
   // List item
@@ -37,4 +34,8 @@ export const FilterView = styled.div<Props>`
       min-width: 0; /* required; flexbox child min-width property is "auto" by default making overflow-wrap ineffectual */
     }
   }
+`;
+
+export const ListPadding = styled.div`
+  height: 8px;
 `;
