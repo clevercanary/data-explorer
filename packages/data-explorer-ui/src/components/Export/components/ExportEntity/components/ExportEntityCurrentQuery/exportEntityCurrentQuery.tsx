@@ -1,10 +1,10 @@
 import React, { Fragment } from "react";
-import { Filters } from "../../../../common/entities";
-import { useDetailState } from "../../../../hooks/useDetailState";
-import { CategoryKeyLabel } from "../../../../viewModelBuilders/common/entities";
-import { SectionTitle } from "../../../common/Section/components/SectionTitle/sectionTitle";
-import { GridPaperSection } from "../../../common/Section/section.styles";
-import { Label, Values } from "./exportEntityCurrentQuery.styles";
+import { Filters } from "../../../../../../common/entities";
+import { useDetailState } from "../../../../../../hooks/useDetailState";
+import { CategoryKeyLabel } from "../../../../../../viewModelBuilders/common/entities";
+import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
+import { GridPaperSection } from "../../../../../common/Section/section.styles";
+import { Label, Values } from "../../exportEntity.styles";
 
 interface CurrentQuery {
   label: string;
