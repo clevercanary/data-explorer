@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React, { ChangeEvent, ElementType } from "react";
+import React, { ChangeEvent, ElementType, forwardRef } from "react";
 import { SetSearchTermFn } from "../../Filter/common/entities";
 import { InputField, InputFormControl } from "./input.styles";
 
@@ -30,15 +30,18 @@ function onChangeInputField(
   setSearchTerm(searchTerm);
 }
 
-export const Input = ({
-  className,
-  label,
-  placeholder,
-  searchTerm,
-  setSearchTerm,
-  StartAdornment,
-  ...props /* Spread props to allow for Mui OutlinedInputProps specific prop overrides e.g. "disabled". */
-}: InputProps): JSX.Element => {
+export const Input = forwardRef(function Input(
+  {
+    className,
+    label,
+    placeholder,
+    searchTerm,
+    setSearchTerm,
+    StartAdornment,
+    ...props /* Spread props to allow for Mui OutlinedInputProps specific prop overrides e.g. "disabled". */
+  }: InputProps,
+  ref
+): JSX.Element {
   return (
     <InputFormControl className={className}>
       {label && <Typography variant="text-body-400">{label}</Typography>}
@@ -49,6 +52,7 @@ export const Input = ({
         isFilled={!!searchTerm}
         onChange={(event): void => onChangeInputField(event, setSearchTerm)}
         placeholder={placeholder}
+        ref={ref}
         size="small"
         startAdornment={
           StartAdornment ? <StartAdornment fontSize="small" /> : undefined
@@ -58,4 +62,4 @@ export const Input = ({
       />
     </InputFormControl>
   );
-};
+});
