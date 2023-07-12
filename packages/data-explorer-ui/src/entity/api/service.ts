@@ -136,3 +136,19 @@ export const fetchSummary = async (
   );
   return res.data;
 };
+
+/**
+ * Fetch summary from given URL.
+ * @param path - URL.
+ * @param accessToken - Auth token.
+ */
+export const fetchSummaryFromURL = async (
+  path: string,
+  accessToken: string | undefined
+): Promise<AzulSummaryResponse> => {
+  const res = await api().get<AzulSummaryResponse>(
+    path,
+    createFetchOptions(accessToken)
+  );
+  return res.data;
+};
