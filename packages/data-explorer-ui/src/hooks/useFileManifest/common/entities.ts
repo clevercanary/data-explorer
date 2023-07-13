@@ -33,6 +33,11 @@ export interface FileFacet {
   total: number;
 }
 
+export interface FileManifest {
+  filesFacets: FileFacet[];
+  fileSummary: FileSummary;
+}
+
 /**
  * Model of counts, file sizes and other summary values of the current selection of facets.
  */

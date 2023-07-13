@@ -1,6 +1,6 @@
 import { Filters } from "../../common/entities";
 import { SearchParams } from "../../utils/fetchQueryParams";
-import { FileFacet, FileSummary } from "./common/entities";
+import { FileManifest } from "./common/entities";
 import { useFetchFilesFacets } from "./useFetchFilesFacets";
 import { useFetchSummary } from "./useFetchSummary";
 
@@ -8,9 +8,8 @@ export enum FileManifestAction {
   FETCH_ENTITY_FILE_MANIFEST = "FETCH_ENTITY_FILE_MANIFEST",
 }
 
-export interface FileManifest {
-  filesFacets: FileFacet[];
-  fileSummary: FileSummary;
+export interface FetchFileManifest {
+  fileManifest: FileManifest;
   isLoading: boolean;
 }
 
@@ -28,7 +27,7 @@ export const useFileManifest = (
   filters: Filters,
   catalog: string,
   searchParams?: SearchParams
-): FileManifest => {
+): FetchFileManifest => {
   const isDisabled = FileManifestAction.FETCH_ENTITY_FILE_MANIFEST
     ? filters.length === 0
     : false; // Disable the entity file manifest when entityId is undefined (typically on first render).
@@ -47,8 +46,10 @@ export const useFileManifest = (
   );
 
   return {
-    fileSummary,
-    filesFacets,
+    fileManifest: {
+      fileSummary,
+      filesFacets,
+    },
     isLoading: isFacetsLoading || isSummaryLoading,
   };
 };

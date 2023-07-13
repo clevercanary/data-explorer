@@ -3,7 +3,7 @@ import { buildFetchSearchResultsPaginationParams } from "../../components/Table/
 import { useCatalog } from "../useCatalog";
 import { useDetailState } from "../useDetailState";
 import {
-  FileManifest,
+  FetchFileManifest,
   FileManifestAction,
   useFileManifest,
 } from "../useFileManifest/useFileManifest";
@@ -12,7 +12,7 @@ import {
  * Returns entity file manifest i.e. file facets and summary.
  * @returns entity file manifest.
  */
-export const useEntityExportSummary = (): FileManifest => {
+export const useEntityExportSummary = (): FetchFileManifest => {
   // Grab the selected filters, catalog and custom search params i.e. "size" and sorting behaviour.
   const { exportFilters } = useDetailState();
   const [, catalog] = useCatalog();

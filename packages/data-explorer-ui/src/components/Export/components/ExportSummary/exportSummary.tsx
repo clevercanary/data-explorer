@@ -1,9 +1,6 @@
 import React from "react";
-import {
-  FileFacet,
-  FileSummary,
-} from "../../../../hooks/useFileManifest/common/entities";
-import { FileManifest } from "../../../../hooks/useFileManifest/useFileManifest";
+import { FileManifest } from "../../../../hooks/useFileManifest/common/entities";
+import { FetchFileManifest } from "../../../../hooks/useFileManifest/useFileManifest";
 import { SectionTitle } from "../../../common/Section/components/SectionTitle/sectionTitle";
 import { GridPaperSection } from "../../../common/Section/section.styles";
 import { Loading, LOADING_PANEL_STYLE } from "../../../Loading/loading";
@@ -11,11 +8,8 @@ import { Label, Values } from "../ExportEntity/exportEntity.styles";
 
 export type Summary = [string, string];
 
-export type GetExportSummaryFn = (
-  filesFacets: FileFacet[],
-  summary: FileSummary
-) => Summary[];
-export type UseExportSummary = () => FileManifest;
+export type GetExportSummaryFn = (fileManifest: FileManifest) => Summary[];
+export type UseExportSummary = () => FetchFileManifest;
 
 export interface ExportSummaryProps {
   getExportSummary: GetExportSummaryFn;
@@ -26,8 +20,8 @@ export const ExportSummary = ({
   getExportSummary,
   useExportSummary,
 }: ExportSummaryProps): JSX.Element => {
-  const { filesFacets, fileSummary, isLoading } = useExportSummary();
-  const summaries = getExportSummary(filesFacets, fileSummary);
+  const { fileManifest, isLoading } = useExportSummary();
+  const summaries = getExportSummary(fileManifest);
   return (
     <GridPaperSection>
       <Loading loading={isLoading} panelStyle={LOADING_PANEL_STYLE.INHERIT} />
