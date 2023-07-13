@@ -1,9 +1,10 @@
 import styled from "@emotion/styled";
+import { Virtuoso } from "react-virtuoso";
 
 const LIST_ITEM_HEIGHT = 40;
 const LIST_PADDING_TOP = 8;
 export const MAX_DISPLAYABLE_LIST_ITEMS = 8;
-export const MAX_LIST_HEIGHT_PX =
+const MAX_LIST_HEIGHT_PX =
   (MAX_DISPLAYABLE_LIST_ITEMS + 0.5) * LIST_ITEM_HEIGHT + LIST_PADDING_TOP;
 
 interface Props {
@@ -33,6 +34,14 @@ export const FilterView = styled.div<Props>`
     > span {
       min-width: 0; /* required; flexbox child min-width property is "auto" by default making overflow-wrap ineffectual */
     }
+  }
+`;
+
+export const VirtuosoList = styled(Virtuoso)`
+  max-height: ${MAX_LIST_HEIGHT_PX}px;
+
+  > div {
+    position: relative !important;
   }
 `;
 

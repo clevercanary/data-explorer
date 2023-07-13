@@ -6,7 +6,6 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { Virtuoso } from "react-virtuoso";
 import {
   CategoryKey,
   SelectCategoryValueView,
@@ -20,7 +19,7 @@ import {
   FilterView,
   ListPadding,
   MAX_DISPLAYABLE_LIST_ITEMS,
-  MAX_LIST_HEIGHT_PX,
+  VirtuosoList,
 } from "./filterMenu.styles";
 
 export interface FilterMenuProps {
@@ -43,7 +42,6 @@ export const FilterMenu = ({
   values,
 }: FilterMenuProps): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [listHeight, setListHeight] = useState(MAX_LIST_HEIGHT_PX);
   const isSearchable = values.length > MAX_DISPLAYABLE_LIST_ITEMS;
   const filteredValues = isSearchable
     ? applyMenuFilter(values, searchTerm)
@@ -80,17 +78,11 @@ export const FilterMenu = ({
         />
       )}
       {filteredValues.length > 0 ? (
-        <Virtuoso
-          style={{ height: listHeight }}
+        <VirtuosoList
           components={muiComponents}
           totalCount={filteredValues.length + 2} // add 2 for padding items
           defaultItemHeight={40}
           increaseViewportBy={200}
-          totalListHeightChanged={(height): void =>
-            setListHeight(
-              height < MAX_LIST_HEIGHT_PX ? height : MAX_LIST_HEIGHT_PX
-            )
-          }
           computeItemKey={(index): string =>
             getListEdge(index) || getFilteredValue(index).key
           }
