@@ -1,10 +1,9 @@
 import React from "react";
 import {
-  FetchFilesFacets,
-  FetchFileSummary,
   FileFacet,
   FileSummary,
 } from "../../../../hooks/useFileManifest/common/entities";
+import { FileManifest } from "../../../../hooks/useFileManifest/useFileManifest";
 import { SectionTitle } from "../../../common/Section/components/SectionTitle/sectionTitle";
 import { GridPaperSection } from "../../../common/Section/section.styles";
 import { Loading, LOADING_PANEL_STYLE } from "../../../Loading/loading";
@@ -16,29 +15,22 @@ export type GetExportSummaryFn = (
   filesFacets: FileFacet[],
   summary: FileSummary
 ) => Summary[];
-export type UseFetchFileFacets = () => FetchFilesFacets;
-export type UseFetchSummary = () => FetchFileSummary;
+export type UseExportSummary = () => FileManifest;
 
 export interface ExportSummaryProps {
   getExportSummary: GetExportSummaryFn;
-  useFetchFileFacets: UseFetchFileFacets;
-  useFetchSummary: UseFetchSummary;
+  useExportSummary: UseExportSummary;
 }
 
 export const ExportSummary = ({
   getExportSummary,
-  useFetchFileFacets,
-  useFetchSummary,
+  useExportSummary,
 }: ExportSummaryProps): JSX.Element => {
-  const { filesFacets, isLoading: isFacetsLoading } = useFetchFileFacets();
-  const { fileSummary, isLoading: isSummaryLoading } = useFetchSummary();
+  const { filesFacets, fileSummary, isLoading } = useExportSummary();
   const summaries = getExportSummary(filesFacets, fileSummary);
   return (
     <GridPaperSection>
-      <Loading
-        loading={isFacetsLoading || isSummaryLoading}
-        panelStyle={LOADING_PANEL_STYLE.INHERIT}
-      />
+      <Loading loading={isLoading} panelStyle={LOADING_PANEL_STYLE.INHERIT} />
       <SectionTitle title="Selected Data Summary" />
       {summaries.length > 0 ? (
         summaries.map(([label, value]) => (
