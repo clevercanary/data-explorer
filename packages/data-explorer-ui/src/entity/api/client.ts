@@ -11,7 +11,7 @@ export const api = (): AxiosInstance => {
   if (!axiosInstance) {
     axiosInstance = axios.create({
       baseURL: getURL(),
-      timeout: 10 * 1000,
+      timeout: 20 * 1000,
     });
   }
   return axiosInstance;
