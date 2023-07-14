@@ -371,7 +371,7 @@ function basicSort<TValue>(val0: TValue, val1: TValue): number {
  * @param columns - Column configuration.
  * @returns initial table visibility state.
  */
-function getInitialTableColumnVisibility(
+export function getInitialTableColumnVisibility(
   columns: ColumnConfig[]
 ): VisibilityState {
   return columns.reduce((acc, { columnVisible = true, id }) => {

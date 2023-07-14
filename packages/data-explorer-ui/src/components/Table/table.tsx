@@ -17,8 +17,10 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   InitialTableState,
+  TableState,
   Updater,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table";
 import React, { useEffect } from "react";
 import { track } from "../../common/analytics/analytics";
@@ -90,6 +92,7 @@ export const TableComponent = <T extends object>({
 TableProps<T>): JSX.Element => {
   const { exploreDispatch, exploreState } = useExploreState();
   const {
+    entityPageState,
     filterState,
     isRelatedView,
     listItems,
@@ -97,8 +100,9 @@ TableProps<T>): JSX.Element => {
     loading,
     paginationState,
     relatedListItems,
-    sorting,
+    tabValue,
   } = exploreState;
+  const { columnsVisibility, sorting } = entityPageState[tabValue];
   const { currentPage, pages, pageSize, rows } = paginationState;
   const { disablePagination = false, enableDownload } = listView || {};
   const onSortingChange = (updater: Updater<ColumnSort[]>): void => {
@@ -115,7 +119,19 @@ TableProps<T>): JSX.Element => {
         : SORT_DIRECTION.ASC,
     });
   };
-  const state = {
+
+  const onColumnVisibilityChange = (
+    updater: Updater<VisibilityState>
+  ): void => {
+    exploreDispatch({
+      payload:
+        typeof updater === "function" ? updater(columnsVisibility) : updater,
+      type: ExploreActionKind.UpdateColumnVisibility,
+    });
+  };
+
+  const state: Partial<TableState> = {
+    columnVisibility: columnsVisibility,
     pagination: {
       pageIndex: 0,
       pageSize: disablePagination ? Number.MAX_SAFE_INTEGER : pageSize,
@@ -141,6 +157,7 @@ TableProps<T>): JSX.Element => {
     initialState,
     manualPagination: listStaticLoad,
     manualSorting: !listStaticLoad,
+    onColumnVisibilityChange,
     onSortingChange,
     pageCount: total,
     state,

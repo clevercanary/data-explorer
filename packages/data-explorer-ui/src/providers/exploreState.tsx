@@ -14,7 +14,8 @@ import {
   SelectCategory,
   SelectedFilter,
 } from "../common/entities";
-import { EntityConfig, SiteConfig } from "../config/entities";
+import { getInitialTableColumnVisibility } from "../components/Table/common/utils";
+import { EntityConfig, EntityPath, SiteConfig } from "../config/entities";
 import { getDefaultSorting } from "../config/utils";
 import {
   buildCategoryViews,
@@ -70,10 +71,26 @@ export interface ExploreStaticResponse {
 }
 
 /**
+ * State for each entity
+ */
+export interface EntityPageState {
+  columnsVisibility: Record<string, boolean>;
+  sorting: ColumnSort[];
+}
+
+/**
+ * State for all entities
+ */
+export interface EntityPageStateMapper {
+  [key: EntityPath]: EntityPageState;
+}
+
+/**
  * Explore state.
  */
 export type ExploreState = {
   categoryViews: SelectCategory[];
+  entityPageState: EntityPageStateMapper;
   filterState: SelectedFilter[];
   isRelatedView: boolean;
   listItems: ListItems;
@@ -82,7 +99,6 @@ export type ExploreState = {
   loading: boolean;
   paginationState: PaginationState;
   relatedListItems: RelatedListItems;
-  sorting: ColumnSort[];
   staticLoaded: boolean;
   tabValue: string;
 };
@@ -161,6 +177,7 @@ export const ExploreStateContext = createContext<ExploreStateContextProps>({
   exploreDispatch: () => {},
   exploreState: {
     categoryViews: [],
+    entityPageState: {},
     filterState: [],
     isRelatedView: false,
     listItems: [],
@@ -169,7 +186,6 @@ export const ExploreStateContext = createContext<ExploreStateContextProps>({
     loading: false,
     paginationState: defaultPaginationState,
     relatedListItems: undefined,
-    sorting: [],
     staticLoaded: false,
     tabValue: "",
   },
@@ -203,6 +219,16 @@ export function ExploreStateProvider({
       exploreReducer(s, a, { config, entityConfig }),
     {
       categoryViews: [],
+      entityPageState: config.entities.reduce(
+        (acc, { list: { columns }, route }) => ({
+          ...acc,
+          [route]: {
+            columnsVisibility: getInitialTableColumnVisibility(columns),
+            sorting: getDefaultSorting(entityConfig),
+          },
+        }),
+        {}
+      ),
       filterState,
       isRelatedView: false,
       listItems: [],
@@ -211,7 +237,6 @@ export function ExploreStateProvider({
       loading: true,
       paginationState: defaultPaginationState,
       relatedListItems: undefined,
-      sorting: getDefaultSorting(entityConfig),
       staticLoaded: false,
       tabValue: entityListType || defaultEntityListType,
     }
@@ -240,6 +265,7 @@ export enum ExploreActionKind {
   ProcessRelatedResponse = "PROCESS_RELATED_RESPONSE",
   SelectEntityType = "SELECT_ENTITY_TYPE",
   ToggleEntityView = "TOGGLE_ENTITY_VIEW",
+  UpdateColumnVisibility = "UPDATE_COLUMN_VISIBILITY",
   UpdateFilter = "UPDATE_FILTER",
   UpdateSorting = "UPDATE_SORTING",
 }
@@ -254,6 +280,7 @@ type ExploreAction =
   | ProcessRelatedResponseAction
   | SelectEntityTypeAction
   | ToggleEntityView
+  | UpdateColumnVisibilityAction
   | UpdateFilterAction
   | UpdateSortingAction;
 
@@ -328,6 +355,14 @@ type UpdateFilterPayload = {
 type UpdateSortingAction = {
   payload: ColumnSort[];
   type: ExploreActionKind.UpdateSorting;
+};
+
+/**
+ * Update column visibility action.
+ */
+type UpdateColumnVisibilityAction = {
+  payload: Record<string, boolean>;
+  type: ExploreActionKind.UpdateColumnVisibility;
 };
 
 /**
@@ -432,7 +467,6 @@ function exploreReducer(
       if (payload === state.tabValue) {
         return state;
       }
-      const nextSort = getDefaultSorting(entityConfig);
       const { staticLoad } = entityConfig;
       const listStaticLoad = staticLoad;
 
@@ -442,7 +476,6 @@ function exploreReducer(
         listStaticLoad,
         loading: true,
         paginationState: resetPage(state.paginationState),
-        sorting: nextSort,
         staticLoaded: false,
         tabValue: payload,
       };
@@ -476,12 +509,38 @@ function exploreReducer(
      * Update sorting
      **/
     case ExploreActionKind.UpdateSorting: {
+      const currentEntity = state.tabValue;
+      const currentPageState = state.entityPageState[currentEntity];
       return {
         ...state,
+        entityPageState: {
+          ...state.entityPageState,
+          [currentEntity]: {
+            ...currentPageState,
+            sorting: payload,
+          },
+        },
         paginationState: resetPage(state.paginationState),
-        sorting: payload,
       };
     }
+    /**
+     * Update column visibility
+     **/
+    case ExploreActionKind.UpdateColumnVisibility: {
+      const currentEntity = state.tabValue;
+      const currentPageState = state.entityPageState[currentEntity];
+      return {
+        ...state,
+        entityPageState: {
+          ...state.entityPageState,
+          [currentEntity]: {
+            ...currentPageState,
+            columnsVisibility: payload,
+          },
+        },
+      };
+    }
+
     default:
       return state;
   }
