@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { Paper } from "@mui/material";
 
 const LIST_ITEM_HEIGHT = 40;
 const LIST_PADDING_TOP = 8;
@@ -6,11 +7,17 @@ export const MAX_DISPLAYABLE_LIST_ITEMS = 8;
 const MAX_LIST_HEIGHT_PX =
   (MAX_DISPLAYABLE_LIST_ITEMS + 0.5) * LIST_ITEM_HEIGHT + LIST_PADDING_TOP;
 
-interface Props {
+interface FilterViewProps {
   menuWidth: number;
 }
 
-export const FilterView = styled.div<Props>`
+export const SearchAllFiltersMenuPaper = styled(Paper)`
+  width: fit-content;
+  position: relative;
+  top: 8px;
+`;
+
+export const FilterView = styled.div<FilterViewProps>`
   width: ${({ menuWidth }) => `${menuWidth}px`};
 
   // List
@@ -18,7 +25,12 @@ export const FilterView = styled.div<Props>`
     max-height: ${MAX_LIST_HEIGHT_PX}px;
     overflow: auto;
     overflow-wrap: break-word;
+    padding: 0;
+  }
+
+  .MuiAutocomplete-listbox {
     padding: 8px 0;
+    max-height: unset;
   }
 
   // List item

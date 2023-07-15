@@ -1,7 +1,26 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { Input } from "../../../common/Input/input";
+import { TextField } from "@mui/material";
 
-export const SearchAllFiltersSearch = styled(Input)`
-  margin-bottom: 16px;
-  padding: 0 16px;
+export const InputField = styled(TextField)`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  .MuiInputBase-root ::placeholder {
+    opacity: 1;
+    color: ${({ theme }) => theme.palette.ink.light};
+  }
+
+  .MuiInputBase-root.Mui-focused ::placeholder {
+    opacity: 0;
+  }
+
+  ${({ theme }) =>
+    css`
+      .MuiOutlinedInput-input,
+      .MuiSvgIcon-root {
+        color: ${theme.palette.ink.main};
+      }
+    `};
 `;

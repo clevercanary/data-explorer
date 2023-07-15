@@ -1,88 +1,137 @@
-import { Paper } from "@mui/material";
-import React, { useRef, useState } from "react";
-import { SelectCategoryView } from "../../../../common/entities";
+import {
+  Checkbox,
+  ListItemButton,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import React, { Fragment, useMemo } from "react";
+import {
+  SelectCategoryValueView,
+  SelectCategoryView,
+} from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
+import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
+import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFound";
 import { SearchAllFiltersMenu } from "../SearchAllFiltersMenu/searchAllFiltersMenu";
 import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFiltersSearch";
-import { FilterPopper } from "./searchAllFilters.styles";
+import {
+  GroupHeading,
+  SearchAllFilters as Autocomplete,
+} from "./searchAllFilters.styles";
+
+enum SPECIAL_OPTION {
+  NONE = "SPECIAL_OPTION_NONE",
+}
 
 interface SearchAllFiltersProps {
   categoryViews: SelectCategoryView[];
   onFilter: OnFilterFn;
 }
 
+interface CategoryValueOption {
+  categoryKey: SelectCategoryView["key"];
+  categoryLabel: SelectCategoryView["label"];
+  value: SelectCategoryValueView;
+}
+
+export type FilterOption = CategoryValueOption | SPECIAL_OPTION.NONE;
+
 export const SearchAllFilters = ({
   categoryViews,
   onFilter,
 }: SearchAllFiltersProps): JSX.Element => {
-  const [searchTerm, setSearchTerm] = useState<string>("");
-
-  const [openPopper, setOpenPopper] = useState<boolean>(false);
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  /**
-   * Closes filter popper.
-   */
-  const closeFilter = (): void => {
-    setOpenPopper(false);
-  };
-
-  /**
-   * Opens filter popper.
-   */
-  const openFilter = (): void => {
-    setOpenPopper(true);
-  };
-
-  if (searchTerm) {
-    if (!openPopper) openFilter();
-  } else {
-    if (openPopper) closeFilter();
-  }
-
-  const filteredCategoryViews = applyMenuFilter(categoryViews, searchTerm);
+  const options = useMemo(
+    () =>
+      categoryViews
+        .map(({ isDisabled, key: categoryKey, label: categoryLabel, values }) =>
+          isDisabled
+            ? []
+            : values.map((value) => ({ categoryKey, categoryLabel, value }))
+        )
+        .flat(),
+    [categoryViews]
+  );
 
   return (
-    <>
-      <SearchAllFiltersSearch
-        ref={inputRef}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-      />
-      <FilterPopper
-        anchorEl={inputRef.current}
-        placement="bottom-start"
-        open={openPopper}
-      >
-        <Paper variant="menu">
-          <SearchAllFiltersMenu
-            filteredCategoryViews={filteredCategoryViews}
-            onFilter={onFilter}
-            setSearchTerm={setSearchTerm}
-          />
-        </Paper>
-      </FilterPopper>
-    </>
+    <Autocomplete
+      freeSolo
+      options={options}
+      renderInput={(params): JSX.Element => (
+        <SearchAllFiltersSearch {...params} />
+      )}
+      PaperComponent={({ children, ...props }): JSX.Element => (
+        <SearchAllFiltersMenu PaperProps={props}>
+          {children}
+        </SearchAllFiltersMenu>
+      )}
+      filterOptions={applyMenuFilter}
+      groupBy={(option): string =>
+        typeof option === "string" ? "" : option.categoryLabel
+      }
+      renderGroup={({ children, group, key }): JSX.Element =>
+        group ? (
+          <Fragment key={key}>
+            <GroupHeading>
+              <Typography color="ink" variant="text-body-500">
+                {group}
+              </Typography>
+            </GroupHeading>
+            {children}
+          </Fragment>
+        ) : (
+          <Fragment key={key}>{children}</Fragment>
+        )
+      }
+      getOptionLabel={(option): string =>
+        typeof option === "string" ? option : option.value.label
+      }
+      renderOption={(props, option): JSX.Element => {
+        if (option === SPECIAL_OPTION.NONE)
+          return <FilterNoResultsFound key={SPECIAL_OPTION.NONE} />;
+        const {
+          categoryKey,
+          value: { count, key, label, selected },
+        } = option;
+        return (
+          <ListItemButton
+            key={key}
+            onClick={(): void => onFilter(categoryKey, key, !selected)}
+            selected={selected}
+          >
+            <Checkbox
+              checked={selected}
+              checkedIcon={<CheckedIcon />}
+              icon={<UncheckedIcon />}
+            />
+            <ListItemText
+              disableTypography
+              primary={<span>{label}</span>}
+              secondary={
+                <Typography color="inkLight" variant="text-body-small-400">
+                  {count}
+                </Typography>
+              }
+            />
+          </ListItemButton>
+        );
+      }}
+    />
   );
 };
 
 function applyMenuFilter(
-  categoryViews: SelectCategoryView[],
-  searchTerm: string
-): SelectCategoryView[] {
-  if (!searchTerm) return [];
-  searchTerm = searchTerm.toLowerCase();
-  return categoryViews.reduce((filteredCategoryViews, category) => {
-    if (!category.isDisabled) {
-      const filteredValues = category.values.filter(
-        ({ key, label }) =>
-          key?.toLowerCase().includes(searchTerm) ||
-          label?.toLowerCase().includes(searchTerm)
-      );
-      if (filteredValues.length)
-        filteredCategoryViews.push({ ...category, values: filteredValues });
-    }
-    return filteredCategoryViews;
-  }, [] as SelectCategoryView[]);
+  options: FilterOption[],
+  { inputValue }: { inputValue: string }
+): FilterOption[] {
+  if (!inputValue) return options;
+  inputValue = inputValue.toLowerCase();
+  const filteredOptions = options.filter(
+    (option) =>
+      typeof option !== "string" &&
+      (option.value.key?.toLowerCase().includes(inputValue) ||
+        option.value.label?.toLowerCase().includes(inputValue))
+  );
+  if (filteredOptions.length === 0) return [SPECIAL_OPTION.NONE];
+  return filteredOptions;
 }

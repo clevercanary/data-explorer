@@ -1,26 +1,34 @@
-import React, { forwardRef } from "react";
+import { OutlinedTextFieldProps } from "@mui/material";
+import React from "react";
 import { SearchIcon } from "../../../common/CustomIcon/components/SearchIcon/searchIcon";
-import { SetSearchTermFn } from "../../common/entities";
-import { SearchAllFiltersSearch as Search } from "./searchAllFiltersSearch.styles";
+import { InputField } from "./searchAllFiltersSearch.styles";
 
-export interface SearchAllFiltersSearchProps {
-  searchTerm: string;
-  setSearchTerm: SetSearchTermFn;
+/**
+ * Basic input component.
+ */
+
+export interface InputProps {
+  InputProps: OutlinedTextFieldProps["InputProps"];
+  inputProps: OutlinedTextFieldProps["inputProps"];
 }
 
-export const SearchAllFiltersSearch = forwardRef(
-  function SearchAllFiltersSearch(
-    { searchTerm, setSearchTerm }: SearchAllFiltersSearchProps,
-    ref
-  ): JSX.Element {
-    return (
-      <Search
-        placeholder="Search all filters"
-        ref={ref}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        StartAdornment={SearchIcon}
-      />
-    );
-  }
-);
+export const SearchAllFiltersSearch = ({
+  inputProps,
+  InputProps,
+  ...props /* Receive props from Autocomplete */
+}: InputProps): JSX.Element => {
+  return (
+    <InputField
+      {...props}
+      variant="outlined"
+      fullWidth
+      InputProps={{
+        ...(InputProps || {}),
+        startAdornment: <SearchIcon fontSize="small" />,
+      }}
+      inputProps={{ ...(inputProps || {}), spellCheck: false }}
+      placeholder="Search all filters"
+      size="small"
+    />
+  );
+};
