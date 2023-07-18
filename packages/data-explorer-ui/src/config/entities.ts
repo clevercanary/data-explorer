@@ -114,12 +114,17 @@ export interface DataSourceConfig {
 }
 
 /**
+ * Path for the entity
+ */
+export type EntityPath = string;
+
+/**
  * Interface used to define the entities and router that will be used on the application, alongside with
  * the detail and the list page configuration.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This config model is part of a generic array
 export interface EntityConfig<D = any, I = any> extends TabConfig {
-  apiPath?: string;
+  apiPath?: EntityPath;
   detail: BackPageConfig;
   getId?: GetIdFunction<D>;
   list: ListConfig;

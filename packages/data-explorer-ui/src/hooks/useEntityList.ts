@@ -30,9 +30,10 @@ export const useEntityList = (
   const { fetchEntitiesFromQuery, listStaticLoad, path } = useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
   const { exploreDispatch, exploreState } = useExploreState();
   const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
-  const { filterState, sorting } = exploreState;
+  const { entityPageState, filterState, tabValue } = exploreState;
   const { termFacets } = data || {};
   const { updateFilterQueryString } = useURLFilterParams();
+  const { sorting } = entityPageState[tabValue];
 
   /**
    * Update the filter query string when the filter state changes.
