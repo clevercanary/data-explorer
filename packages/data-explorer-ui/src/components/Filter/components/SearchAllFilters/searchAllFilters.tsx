@@ -1,7 +1,12 @@
 import {
+  AutocompleteRenderGroupParams,
+  AutocompleteRenderInputParams,
   Checkbox,
   ListItemButton,
   ListItemText,
+  PaperProps,
+  Popper,
+  PopperProps,
   Typography,
 } from "@mui/material";
 import React, { Fragment, useMemo } from "react";
@@ -16,12 +21,15 @@ import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFou
 import { SearchAllFiltersMenu } from "../SearchAllFiltersMenu/searchAllFiltersMenu";
 import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFiltersSearch";
 import {
+  GroupDivider,
   GroupHeading,
   SearchAllFilters as Autocomplete,
+  SearchAllFiltersMenuPaper,
 } from "./searchAllFilters.styles";
 
+// Special option values, for insterting menu content other than actual options
 enum SPECIAL_OPTION {
-  NONE = "SPECIAL_OPTION_NONE",
+  NO_RESULTS = "SPECIAL_OPTION_NO_RESULTS",
 }
 
 interface SearchAllFiltersProps {
@@ -35,7 +43,49 @@ interface CategoryValueOption {
   value: SelectCategoryValueView;
 }
 
-export type FilterOption = CategoryValueOption | SPECIAL_OPTION.NONE;
+export type FilterOption = CategoryValueOption | SPECIAL_OPTION;
+
+const PaperComponent = (props: PaperProps): JSX.Element => (
+  <SearchAllFiltersMenuPaper variant="menu" {...props} />
+);
+
+const PopperComponent = ({ modifiers, ...props }: PopperProps): JSX.Element => (
+  <Popper
+    modifiers={[
+      {
+        name: "offset",
+        options: {
+          offset: [0, 8],
+        },
+      },
+      ...(modifiers || []),
+    ]}
+    {...props}
+  />
+);
+
+const renderGroup = ({
+  children,
+  group,
+  key,
+}: AutocompleteRenderGroupParams): JSX.Element =>
+  group ? (
+    <Fragment key={key}>
+      <GroupDivider />
+      <GroupHeading>
+        <Typography color="ink" variant="text-body-500">
+          {group}
+        </Typography>
+      </GroupHeading>
+      {children}
+    </Fragment>
+  ) : (
+    <Fragment key={key}>{children}</Fragment>
+  );
+
+const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
+  <SearchAllFiltersSearch {...params} />
+);
 
 export const SearchAllFilters = ({
   categoryViews,
@@ -53,69 +103,54 @@ export const SearchAllFilters = ({
     [categoryViews]
   );
 
+  const renderOption = (props: unknown, option: FilterOption): JSX.Element => {
+    if (option === SPECIAL_OPTION.NO_RESULTS)
+      return <FilterNoResultsFound key={SPECIAL_OPTION.NO_RESULTS} />;
+    const {
+      categoryKey,
+      value: { count, key, label, selected },
+    } = option;
+    return (
+      <ListItemButton
+        key={key}
+        onClick={(): void => onFilter(categoryKey, key, !selected)}
+        selected={selected}
+      >
+        <Checkbox
+          checked={selected}
+          checkedIcon={<CheckedIcon />}
+          icon={<UncheckedIcon />}
+        />
+        <ListItemText
+          disableTypography
+          primary={<span>{label}</span>}
+          secondary={
+            <Typography color="inkLight" variant="text-body-small-400">
+              {count}
+            </Typography>
+          }
+        />
+      </ListItemButton>
+    );
+  };
+
   return (
     <Autocomplete
-      freeSolo
-      options={options}
-      renderInput={(params): JSX.Element => (
-        <SearchAllFiltersSearch {...params} />
-      )}
-      PaperComponent={({ children, ...props }): JSX.Element => (
-        <SearchAllFiltersMenu PaperProps={props}>
-          {children}
-        </SearchAllFiltersMenu>
-      )}
       filterOptions={applyMenuFilter}
-      groupBy={(option): string =>
-        typeof option === "string" ? "" : option.categoryLabel
-      }
-      renderGroup={({ children, group, key }): JSX.Element =>
-        group ? (
-          <Fragment key={key}>
-            <GroupHeading>
-              <Typography color="ink" variant="text-body-500">
-                {group}
-              </Typography>
-            </GroupHeading>
-            {children}
-          </Fragment>
-        ) : (
-          <Fragment key={key}>{children}</Fragment>
-        )
-      }
+      freeSolo
       getOptionLabel={(option): string =>
         typeof option === "string" ? option : option.value.label
       }
-      renderOption={(props, option): JSX.Element => {
-        if (option === SPECIAL_OPTION.NONE)
-          return <FilterNoResultsFound key={SPECIAL_OPTION.NONE} />;
-        const {
-          categoryKey,
-          value: { count, key, label, selected },
-        } = option;
-        return (
-          <ListItemButton
-            key={key}
-            onClick={(): void => onFilter(categoryKey, key, !selected)}
-            selected={selected}
-          >
-            <Checkbox
-              checked={selected}
-              checkedIcon={<CheckedIcon />}
-              icon={<UncheckedIcon />}
-            />
-            <ListItemText
-              disableTypography
-              primary={<span>{label}</span>}
-              secondary={
-                <Typography color="inkLight" variant="text-body-small-400">
-                  {count}
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        );
-      }}
+      groupBy={(option): string =>
+        typeof option === "string" ? "" : option.categoryLabel
+      }
+      ListboxComponent={SearchAllFiltersMenu}
+      options={options}
+      PaperComponent={PaperComponent}
+      PopperComponent={PopperComponent}
+      renderGroup={renderGroup}
+      renderInput={renderInput}
+      renderOption={renderOption}
     />
   );
 };
@@ -132,6 +167,7 @@ function applyMenuFilter(
       (option.value.key?.toLowerCase().includes(inputValue) ||
         option.value.label?.toLowerCase().includes(inputValue))
   );
-  if (filteredOptions.length === 0) return [SPECIAL_OPTION.NONE];
+  // noOptionsText isn't supported for freeSolo Autocomplete, so simulate with a special option value
+  if (filteredOptions.length === 0) return [SPECIAL_OPTION.NO_RESULTS];
   return filteredOptions;
 }

@@ -16,6 +16,14 @@ export const InputField = styled(TextField)`
     opacity: 0;
   }
 
+  .MuiOutlinedInput-root.MuiInputBase-sizeSmall {
+    padding: 0 0 0 12px;
+  }
+
+  .MuiOutlinedInput-root.MuiInputBase-sizeSmall .MuiAutocomplete-input {
+    padding: 10px 14px 10px 0;
+  }
+
   ${({ theme }) =>
     css`
       .MuiOutlinedInput-input,

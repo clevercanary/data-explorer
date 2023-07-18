@@ -1,26 +1,22 @@
-import { List, PaperProps } from "@mui/material";
-import React, { ReactNode } from "react";
-import {
-  FilterView,
-  SearchAllFiltersMenuPaper,
-} from "./searchAllFiltersMenu.styles";
+import { List } from "@mui/material";
+import React, { forwardRef, HTMLAttributes, ReactNode } from "react";
+import { FilterView } from "./searchAllFiltersMenu.styles";
 
 export interface SearchAllFiltersMenuProps {
-  children: ReactNode;
+  children?: ReactNode;
   menuWidth?: number;
-  PaperProps?: Omit<PaperProps, "children">;
 }
 
-export const SearchAllFiltersMenu = ({
-  children,
-  menuWidth = 312,
-  PaperProps,
-}: SearchAllFiltersMenuProps): JSX.Element => {
+export const SearchAllFiltersMenu = forwardRef<
+  HTMLUListElement,
+  HTMLAttributes<HTMLElement>
+>(function SearchAllFiltersMenu(
+  { children, menuWidth = 312 }: SearchAllFiltersMenuProps,
+  ref
+): JSX.Element {
   return (
-    <SearchAllFiltersMenuPaper variant="menu" {...(PaperProps || {})}>
-      <FilterView menuWidth={menuWidth}>
-        <List>{children}</List>
-      </FilterView>
-    </SearchAllFiltersMenuPaper>
+    <FilterView menuWidth={menuWidth}>
+      <List ref={ref}>{children}</List>
+    </FilterView>
   );
-};
+});

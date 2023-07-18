@@ -20,7 +20,7 @@ export const FilterNoResultsFound = ({
       <Typography
         component="div"
         color="ink.light"
-        mb={2}
+        mb={onClearSearchTerm ? 2 : 0}
         mt={1}
         variant="text-body-400"
       >
