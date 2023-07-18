@@ -17,7 +17,7 @@ interface Props {
   categoryKey: CategoryKey;
   listItem: SelectCategoryValueView;
   onFilter: OnFilterFn;
-  setItemSizeByItemKey: (itemKey: string, itemSize: number) => void;
+  onUpdateItemSizeByItemKey: (itemKey: string, itemSize: number) => void;
   style: CSSProperties;
 }
 
@@ -25,19 +25,17 @@ export default function VariableSizeListItem({
   categoryKey,
   listItem,
   onFilter,
-  setItemSizeByItemKey,
+  onUpdateItemSizeByItemKey,
   style,
 }: Props): JSX.Element {
   const listItemRef = useRef<HTMLDivElement>(null);
   const { count, key, label, selected } = listItem;
   delete style.height; // Remove height style to allow variable size list to set item height.
 
-  // Sets map of menu item key to its height.
+  // Sets map of list item key to its height.
   useEffect(() => {
-    if (listItemRef.current) {
-      setItemSizeByItemKey(key, listItemRef.current.clientHeight);
-    }
-  }, [key, setItemSizeByItemKey]);
+    onUpdateItemSizeByItemKey(key, listItemRef.current?.clientHeight || 0);
+  }, [key, onUpdateItemSizeByItemKey]);
 
   return (
     <ListItemButton

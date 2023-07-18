@@ -1,5 +1,5 @@
 import { List as MList } from "@mui/material";
-import React, { useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import {
   ListChildComponentProps,
   VariableSizeList as List,
@@ -36,13 +36,13 @@ export interface VariableSizeListProps {
  */
 function renderListItem(props: ListChildComponentProps): JSX.Element {
   const { data, index, style } = props;
-  const { categoryKey, onFilter, setItemSizeByItemKey, values } = data;
+  const { categoryKey, onFilter, onUpdateItemSizeByItemKey, values } = data;
   return (
     <VariableSizeListItem
       categoryKey={categoryKey}
       listItem={values[index]}
       onFilter={onFilter}
-      setItemSizeByItemKey={setItemSizeByItemKey}
+      onUpdateItemSizeByItemKey={onUpdateItemSizeByItemKey}
       style={style}
     />
   );
@@ -60,18 +60,17 @@ export const VariableSizeList = ({
   const itemSizeByItemKeyRef = useRef<ItemSizeByItemKey>(new Map());
   const listRef = useRef<List>(null);
   const { current: itemSizeByItemKey } = itemSizeByItemKeyRef;
-
-  // Sets item size by item key map.
-  const setItemSizeByItemKey = useCallback(
-    (itemKey: string, itemSize: number) => {
-      listRef.current?.resetAfterIndex(0);
-      if (itemSizeByItemKeyRef.current.has(itemKey)) {
-        return;
-      }
-      itemSizeByItemKeyRef.current.set(itemKey, itemSize);
-    },
+  const onUpdateItemSizeByItemKey = useCallback(
+    (key: string, size: number): void =>
+      updateItemSizeByItemKey(itemSizeByItemKeyRef.current, key, size),
     []
   );
+
+  // Clears VariableSizeList cache (offsets and measurements) when values are updated (filtered).
+  // Facilitates correct positioning of list items when list is updated.
+  useEffect(() => {
+    listRef.current?.resetAfterIndex(0);
+  }, [values]);
 
   return (
     <List
@@ -81,12 +80,13 @@ export const VariableSizeList = ({
       itemData={{
         categoryKey,
         onFilter,
-        setItemSizeByItemKey,
+        onUpdateItemSizeByItemKey,
         values,
       }}
       itemSize={(index): number =>
         itemSizeByItemKey.get(values[index].key) || itemSize
       }
+      onItemsRendered={(): void => listRef.current?.resetAfterIndex(0)} // Facilitates correct positioning of list items when list scrolls.
       overscanCount={overscanCount}
       ref={listRef}
       width={width}
@@ -95,3 +95,20 @@ export const VariableSizeList = ({
     </List>
   );
 };
+
+/**
+ * Updates map of item size by item key.
+ * @param itemSizeByItemKey - Map of item size by item key.
+ * @param key - Key.
+ * @param size - Item size.
+ */
+function updateItemSizeByItemKey(
+  itemSizeByItemKey: ItemSizeByItemKey,
+  key: string,
+  size: number
+): void {
+  if (itemSizeByItemKey.has(key)) {
+    return;
+  }
+  itemSizeByItemKey.set(key, size);
+}
