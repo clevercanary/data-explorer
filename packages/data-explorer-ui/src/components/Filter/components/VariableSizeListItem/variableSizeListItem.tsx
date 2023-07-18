@@ -28,20 +28,20 @@ export default function VariableSizeListItem({
   setItemSizeByItemKey,
   style,
 }: Props): JSX.Element {
-  const listRef = useRef<HTMLDivElement>(null);
+  const listItemRef = useRef<HTMLDivElement>(null);
   const { count, key, label, selected } = listItem;
   delete style.height; // Remove height style to allow variable size list to set item height.
 
   // Sets map of menu item key to its height.
   useEffect(() => {
-    if (listRef.current) {
-      setItemSizeByItemKey(key, listRef.current.clientHeight);
+    if (listItemRef.current) {
+      setItemSizeByItemKey(key, listItemRef.current.clientHeight);
     }
   }, [key, setItemSizeByItemKey]);
 
   return (
     <ListItemButton
-      ref={listRef}
+      ref={listItemRef}
       onClick={(): void => onFilter(categoryKey, key, !selected)}
       selected={selected}
       style={style}
