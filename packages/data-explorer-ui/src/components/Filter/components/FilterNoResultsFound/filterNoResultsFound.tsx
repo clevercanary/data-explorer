@@ -26,12 +26,10 @@ export const FilterNoResultsFound = ({
       >
         Try adjusting your search or filter to find what you’re looking for.
       </Typography>
-      {onClearSearchTerm ? (
+      {onClearSearchTerm && (
         <TextButtonPrimary onClick={onClearSearchTerm}>
           Clear All
         </TextButtonPrimary>
-      ) : (
-        ""
       )}
     </FilterNoResults>
   );

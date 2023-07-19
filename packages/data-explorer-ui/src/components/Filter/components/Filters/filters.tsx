@@ -6,7 +6,6 @@ import { Filter } from "../Filter/filter";
 import { FilterLabel } from "../FilterLabel/filterLabel";
 import { FilterMenu } from "../FilterMenu/filterMenu";
 import { FilterTags } from "../FilterTags/filterTags";
-import { SearchAllFilters } from "../SearchAllFilters/searchAllFilters";
 import { Filters as FilterList } from "./filters.styles";
 
 export interface FiltersProps {
@@ -85,20 +84,17 @@ export const Filters = ({
   onFilter,
 }: FiltersProps): JSX.Element => {
   return (
-    <>
-      <SearchAllFilters categoryViews={categoryViews} onFilter={onFilter} />
-      <FilterList disabled={disabled}>
-        {categoryViews.map((categoryView) => (
-          <Filter
-            content={renderFilterMenu(categoryView, onFilter)}
-            key={categoryView.key}
-            tags={renderFilterTags(categoryView, onFilter)}
-            Target={(props): JSX.Element =>
-              renderFilterTarget(categoryView, props)
-            }
-          />
-        ))}
-      </FilterList>
-    </>
+    <FilterList disabled={disabled}>
+      {categoryViews.map((categoryView) => (
+        <Filter
+          content={renderFilterMenu(categoryView, onFilter)}
+          key={categoryView.key}
+          tags={renderFilterTags(categoryView, onFilter)}
+          Target={(props): JSX.Element =>
+            renderFilterTarget(categoryView, props)
+          }
+        />
+      ))}
+    </FilterList>
   );
 };

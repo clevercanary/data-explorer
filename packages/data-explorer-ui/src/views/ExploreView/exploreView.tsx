@@ -10,6 +10,7 @@ import { CategoryKey, CategoryValueKey } from "../../common/entities";
 import { Tab, Tabs, TabValue } from "../../components/common/Tabs/tabs";
 import { ComponentCreator } from "../../components/ComponentCreator/ComponentCreator";
 import { Filters } from "../../components/Filter/components/Filters/filters";
+import { SearchAllFilters } from "../../components/Filter/components/SearchAllFilters/searchAllFilters";
 import { Index as IndexView } from "../../components/Index/index";
 import { SidebarLabel } from "../../components/Layout/components/Sidebar/components/SidebarLabel/sidebarLabel";
 import { Sidebar } from "../../components/Layout/components/Sidebar/sidebar";
@@ -106,6 +107,10 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
     <>
       {categoryViews && !!categoryViews.length && (
         <Sidebar Label={<SidebarLabel label={"Filters"} />}>
+          <SearchAllFilters
+            categoryViews={categoryViews}
+            onFilter={onFilterChange}
+          />
           <Filters
             categoryViews={categoryViews}
             disabled={isRelatedView}
