@@ -12,6 +12,7 @@ import {
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import {
   LIST_ITEM_HEIGHT,
+  LIST_MARGIN,
   MAX_DISPLAYABLE_LIST_ITEMS,
   MAX_LIST_HEIGHT_PX,
 } from "../../common/constants";
@@ -74,7 +75,7 @@ export const VariableSizeList = ({
 
   return (
     <List
-      height={height}
+      height={calculateListHeight(height, values, itemSizeByItemKey)}
       innerElementType={MList}
       itemCount={values.length}
       itemData={{
@@ -95,6 +96,31 @@ export const VariableSizeList = ({
     </List>
   );
 };
+
+/**
+ * Returns given height of list if number of items is greater than max displayable list items, otherwise the minimum
+ * height of either the sum of the heights of the filtered list items or the given height of the list.
+ * @param height - Specified height of list.
+ * @param values - Set of category value view models for the given category.
+ * @param itemSizeByItemKey - Map of item size by item key.
+ * @returns calcualted height.
+ */
+function calculateListHeight(
+  height: ListProps["height"],
+  values: SelectCategoryValueView[],
+  itemSizeByItemKey: ItemSizeByItemKey
+): ListProps["height"] {
+  if (values.length > MAX_DISPLAYABLE_LIST_ITEMS) {
+    return height;
+  }
+  return Math.min(
+    values.reduce((acc, { key }) => {
+      acc += itemSizeByItemKey.get(key) || LIST_ITEM_HEIGHT;
+      return acc;
+    }, LIST_MARGIN * 2),
+    MAX_LIST_HEIGHT_PX
+  );
+}
 
 /**
  * Updates map of item size by item key.

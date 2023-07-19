@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { LIST_MARGIN } from "../../common/constants";
 
 interface Props {
   menuWidth: number;
@@ -10,7 +11,7 @@ export const FilterView = styled.div<Props>`
   // List
   .MuiList-root {
     overflow-wrap: break-word;
-    margin: 8px 0;
+    margin: ${LIST_MARGIN}px 0;
     padding: 0;
   }
 
