@@ -32,7 +32,7 @@ enum SPECIAL_OPTION {
   NO_RESULTS = "SPECIAL_OPTION_NO_RESULTS",
 }
 
-interface SearchAllFiltersProps {
+export interface SearchAllFiltersProps {
   categoryViews: SelectCategoryView[];
   onFilter: OnFilterFn;
 }
