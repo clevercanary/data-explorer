@@ -20,3 +20,9 @@ export const GroupHeading = styled.div`
 export const GroupDivider = styled(Divider)`
   margin: 8px 0;
 `;
+
+export const MatchHighlight = styled.mark`
+  background: ${({ theme }) => theme.palette.warning.light};
+  padding: 1px 0 2px 0;
+  color: inherit;
+`;
