@@ -1,21 +1,15 @@
-import {
-  Checkbox,
-  List,
-  ListItemButton,
-  ListItemText,
-  Typography,
-} from "@mui/material";
+import { List } from "@mui/material";
 import React, { useState } from "react";
 import {
   CategoryKey,
   SelectCategoryValueView,
 } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
-import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
-import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
+import { MAX_DISPLAYABLE_LIST_ITEMS } from "../../common/constants";
 import { FilterMenuSearch } from "../FilterMenuSearch/filterMenuSearch";
 import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFound";
-import { FilterView, MAX_DISPLAYABLE_LIST_ITEMS } from "./filterMenu.styles";
+import { VariableSizeList } from "../VariableSizeList/VariableSizeList";
+import { FilterView } from "./filterMenu.styles";
 
 export interface FilterMenuProps {
   categoryKey: CategoryKey;
@@ -43,36 +37,19 @@ export const FilterMenu = ({
           setSearchTerm={setSearchTerm}
         />
       )}
-      <List>
-        {filteredValues.length > 0 ? (
-          filteredValues.map(({ count, key, label, selected }) => (
-            <ListItemButton
-              key={key}
-              onClick={(): void => onFilter(categoryKey, key, !selected)}
-              selected={selected}
-            >
-              <Checkbox
-                checked={selected}
-                checkedIcon={<CheckedIcon />}
-                icon={<UncheckedIcon />}
-              />
-              <ListItemText
-                disableTypography
-                primary={<span>{label}</span>}
-                secondary={
-                  <Typography color="inkLight" variant="text-body-small-400">
-                    {count}
-                  </Typography>
-                }
-              />
-            </ListItemButton>
-          ))
-        ) : (
+      {filteredValues.length > 0 ? (
+        <VariableSizeList
+          categoryKey={categoryKey}
+          onFilter={onFilter}
+          values={filteredValues}
+        />
+      ) : (
+        <List>
           <FilterNoResultsFound
             onClearSearchTerm={(): void => setSearchTerm("")}
           />
-        )}
-      </List>
+        </List>
+      )}
     </FilterView>
   );
 };
