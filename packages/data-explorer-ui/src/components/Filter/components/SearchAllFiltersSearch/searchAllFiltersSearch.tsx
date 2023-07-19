@@ -18,7 +18,7 @@ export const SearchAllFiltersSearch = ({
         startAdornment: <SearchIcon fontSize="small" />,
       }}
       inputProps={{ ...(inputProps || {}), spellCheck: false }}
-      placeholder="Search all filters"
+      placeholder="Search all filters..."
       size="small"
     />
   );
