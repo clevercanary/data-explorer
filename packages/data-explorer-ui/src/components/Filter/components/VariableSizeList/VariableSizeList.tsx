@@ -22,7 +22,7 @@ export type ItemSizeByItemKey = Map<string, number>;
 
 export interface VariableSizeListProps {
   categoryKey: CategoryKey;
-  height?: ListProps["height"]; // Height of list.
+  height?: number; // Height of list; vertical list must be a number.
   itemSize?: number; // Default item size.
   onFilter: OnFilterFn;
   overscanCount?: ListProps["overscanCount"];
@@ -106,7 +106,7 @@ export const VariableSizeList = ({
  * @returns calcualted height.
  */
 function calculateListHeight(
-  height: ListProps["height"],
+  height: number,
   values: SelectCategoryValueView[],
   itemSizeByItemKey: ItemSizeByItemKey
 ): ListProps["height"] {
@@ -118,7 +118,7 @@ function calculateListHeight(
       acc += itemSizeByItemKey.get(key) || LIST_ITEM_HEIGHT;
       return acc;
     }, LIST_MARGIN * 2),
-    MAX_LIST_HEIGHT_PX
+    height
   );
 }
 
