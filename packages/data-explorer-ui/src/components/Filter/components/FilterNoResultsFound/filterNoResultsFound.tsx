@@ -6,7 +6,7 @@ import { FilterNoResultsFound as FilterNoResults } from "./filterNoResultsFound.
 type OnClearSearchTermFn = () => void;
 
 export interface FilterNoResultsFoundProps {
-  onClearSearchTerm: OnClearSearchTermFn;
+  onClearSearchTerm?: OnClearSearchTermFn;
 }
 
 export const FilterNoResultsFound = ({
@@ -20,15 +20,17 @@ export const FilterNoResultsFound = ({
       <Typography
         component="div"
         color="ink.light"
-        mb={2}
+        mb={onClearSearchTerm ? 2 : 0}
         mt={1}
         variant="text-body-400"
       >
         Try adjusting your search or filter to find what you’re looking for.
       </Typography>
-      <TextButtonPrimary onClick={onClearSearchTerm}>
-        Clear All
-      </TextButtonPrimary>
+      {onClearSearchTerm && (
+        <TextButtonPrimary onClick={onClearSearchTerm}>
+          Clear All
+        </TextButtonPrimary>
+      )}
     </FilterNoResults>
   );
 };
