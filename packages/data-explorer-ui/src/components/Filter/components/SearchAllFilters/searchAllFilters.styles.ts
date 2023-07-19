@@ -19,7 +19,4 @@ export const GroupHeading = styled.div`
 
 export const GroupDivider = styled(Divider)`
   margin: 8px 0;
-  &&:first-of-type {
-    display: none;
-  }
 `;

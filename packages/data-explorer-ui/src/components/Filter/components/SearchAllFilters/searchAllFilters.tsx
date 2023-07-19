@@ -68,10 +68,10 @@ const renderGroup = ({
   children,
   group,
   key,
-}: AutocompleteRenderGroupParams): JSX.Element =>
-  group ? (
+}: AutocompleteRenderGroupParams): JSX.Element => {
+  return group ? (
     <Fragment key={key}>
-      <GroupDivider />
+      {Number(key) !== 0 && <GroupDivider />}
       <GroupHeading>
         <Typography color="ink" variant="text-body-500">
           {group}
@@ -82,6 +82,7 @@ const renderGroup = ({
   ) : (
     <Fragment key={key}>{children}</Fragment>
   );
+};
 
 const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
   <SearchAllFiltersSearch {...params} />
