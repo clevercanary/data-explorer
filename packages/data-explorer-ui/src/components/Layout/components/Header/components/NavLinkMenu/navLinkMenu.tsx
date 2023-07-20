@@ -47,7 +47,7 @@ export const NavLinkMenu = ({
         autoFocus={false}
         onClose={onCloseMenu}
         open={open}
-        PaperProps={{ variant: "menu" }}
+        slotProps={{ paper: { variant: "menu" } }}
         transformOrigin={{
           horizontal: "left",
           vertical: "top",

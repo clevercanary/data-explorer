@@ -46,7 +46,7 @@ export const CheckboxMenu = ({
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
         onClose={onCloseMenu}
         open={open}
-        PaperProps={{ variant: "menu" }}
+        slotProps={{ paper: { variant: "menu" } }}
         transformOrigin={{
           horizontal: "right",
           vertical: "top",
