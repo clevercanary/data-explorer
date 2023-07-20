@@ -1,5 +1,5 @@
 import { List as MList } from "@mui/material";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ListChildComponentProps,
   VariableSizeList as List,
@@ -51,13 +51,14 @@ function renderListItem(props: ListChildComponentProps): JSX.Element {
 
 export const VariableSizeList = ({
   categoryKey,
-  height = MAX_LIST_HEIGHT_PX,
+  height: initHeight = MAX_LIST_HEIGHT_PX,
   itemSize = LIST_ITEM_HEIGHT,
   onFilter,
   overscanCount = MAX_DISPLAYABLE_LIST_ITEMS * 2,
   values,
   width = "100%",
 }: VariableSizeListProps): JSX.Element => {
+  const [height, setHeight] = useState<number>(initHeight);
   const itemSizeByItemKeyRef = useRef<ItemSizeByItemKey>(new Map());
   const listRef = useRef<List>(null);
   const { current: itemSizeByItemKey } = itemSizeByItemKeyRef;
@@ -67,6 +68,13 @@ export const VariableSizeList = ({
     []
   );
 
+  // Sets height of list.
+  useEffect(() => {
+    setHeight(
+      calculateListHeight(initHeight, values, itemSizeByItemKeyRef.current)
+    );
+  }, [initHeight, values]);
+
   // Clears VariableSizeList cache (offsets and measurements) when values are updated (filtered).
   // Facilitates correct positioning of list items when list is updated.
   useEffect(() => {
@@ -75,7 +83,7 @@ export const VariableSizeList = ({
 
   return (
     <List
-      height={calculateListHeight(height, values, itemSizeByItemKey)}
+      height={height}
       innerElementType={MList}
       itemCount={values.length}
       itemData={{
@@ -103,13 +111,13 @@ export const VariableSizeList = ({
  * @param height - Specified height of list.
  * @param values - Set of category value view models for the given category.
  * @param itemSizeByItemKey - Map of item size by item key.
- * @returns calcualted height.
+ * @returns calculated height.
  */
 function calculateListHeight(
   height: number,
   values: SelectCategoryValueView[],
   itemSizeByItemKey: ItemSizeByItemKey
-): ListProps["height"] {
+): number {
   if (values.length > MAX_DISPLAYABLE_LIST_ITEMS) {
     return height;
   }
