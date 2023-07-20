@@ -43,7 +43,7 @@ export const AuthenticationMenu = ({
         autoFocus={false}
         onClose={onCloseMenu}
         open={open}
-        PaperProps={{ variant: "menu" }}
+        slotProps={{ paper: { variant: "menu" } }}
         transformOrigin={{
           horizontal: "right",
           vertical: "top",

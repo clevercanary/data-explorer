@@ -44,7 +44,7 @@ export const Filter = ({ content, tags, Target }: FilterProps): JSX.Element => {
         anchorReference="anchorPosition"
         onClose={onCloseFilter}
         open={openPopover}
-        PaperProps={{ variant: "menu" }}
+        slotProps={{ paper: { variant: "menu" } }}
       >
         {content}
       </FilterPopover>
