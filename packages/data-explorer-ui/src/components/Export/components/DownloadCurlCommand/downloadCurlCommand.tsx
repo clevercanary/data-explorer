@@ -1,6 +1,10 @@
 import React, { ElementType, useState } from "react";
 import { MANIFEST_DOWNLOAD_FORMAT } from "../../../../apis/azul/common/entities";
-import { FileManifestAction } from "../../../../hooks/useFileManifest/common/entities";
+import { useExploreState } from "../../../../hooks/useExploreState";
+import {
+  FileManifestAction,
+  FILE_MANIFEST_ACTION,
+} from "../../../../hooks/useFileManifest/common/entities";
 import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
 import { useFileManifestState } from "../../../../hooks/useFileManifestState";
 import {
@@ -11,6 +15,7 @@ import {
   BULK_DOWNLOAD_EXECUTION_ENVIRONMENT,
   ExecutionEnvironment,
 } from "../../common/entities";
+import { bulkDownloadTracking } from "../../common/tracking";
 import { FormFacet } from "./components/DownloadCurlCommandForm/downloadCurlCommandForm";
 import { DownloadCurlCommandNotStarted } from "./components/DownloadCurlCommandNotStarted/downloadCurlCommandNotStarted";
 import { DownloadCurlCommandReady } from "./components/DownloadCurlCommandReady/downloadCurlCommandReady";
@@ -29,17 +34,16 @@ export const DownloadCurlCommand = ({
   DownloadCurlStart,
   DownloadCurlSuccess,
   entity,
-  fileManifestAction,
+  fileManifestAction: action,
   formFacets,
 }: DownloadCurlCommandProps): JSX.Element => {
-  useRequestFileManifest(
-    fileManifestAction,
-    MANIFEST_DOWNLOAD_FORMAT.CURL,
-    entity
-  );
+  useRequestFileManifest(action, MANIFEST_DOWNLOAD_FORMAT.CURL, entity);
   const [executionEnvironment, setExecutionEnvironment] =
     useState<ExecutionEnvironment>(BULK_DOWNLOAD_EXECUTION_ENVIRONMENT.BASH);
-  const { requestURL } = useFileManifestState();
+  const {
+    exploreState: { tabValue: entityList },
+  } = useExploreState();
+  const { requestParams, requestURL } = useFileManifestState();
   const { data, isLoading, run } = useRequestFileLocation(requestURL);
   const curlCommand = getBulkDownloadCurlCommand(data, executionEnvironment);
   return curlCommand ? (
@@ -54,10 +58,15 @@ export const DownloadCurlCommand = ({
       executionEnvironment={executionEnvironment}
       formFacets={formFacets}
       isLoading={isLoading}
+      onRequestManifest={(): void => {
+        // Execute GTM tracking.
+        track(action, entityList, executionEnvironment, requestParams);
+        // Request manifest.
+        run();
+      }}
       onUpdateExecutionEnvironment={(
         executionEnvironment: ExecutionEnvironment
       ): void => setExecutionEnvironment(executionEnvironment)}
-      run={run}
     />
   );
 };
@@ -77,4 +86,22 @@ function getBulkDownloadCurlCommand(
     return;
   }
   return commandLine[executionEnvironment];
+}
+
+/**
+ * Executes GTM tracking.
+ * @param action - File manifest action.
+ * @param index - Index.
+ * @param toolName - Execution environment.
+ * @param requestParams - Request params.
+ */
+function track(
+  action: FileManifestAction,
+  index: string,
+  toolName: string,
+  requestParams?: URLSearchParams
+): void {
+  if (action === FILE_MANIFEST_ACTION.BULK_DOWNLOAD) {
+    bulkDownloadTracking(index, toolName, requestParams);
+  }
 }

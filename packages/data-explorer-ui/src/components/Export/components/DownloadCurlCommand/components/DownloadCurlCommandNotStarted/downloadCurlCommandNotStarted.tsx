@@ -9,7 +9,6 @@ import {
   SectionContent,
   SectionFootnote,
 } from "../../../../export.styles";
-import { ExportToTerraRunFn } from "../../../ExportToTerra/components/ExportToTerraNotStarted/exportToTerraNotStarted";
 import {
   FormFacet,
   OnUpdateExecutionEnvironmentFn,
@@ -22,8 +21,8 @@ export interface DownloadCurlCommandNotStartedProps {
   executionEnvironment: ExecutionEnvironment;
   formFacets: FormFacet[];
   isLoading: boolean;
+  onRequestManifest: () => void;
   onUpdateExecutionEnvironment: OnUpdateExecutionEnvironmentFn;
-  run: ExportToTerraRunFn;
 }
 
 export const DownloadCurlCommandNotStarted = ({
@@ -32,8 +31,8 @@ export const DownloadCurlCommandNotStarted = ({
   executionEnvironment,
   formFacets,
   isLoading,
+  onRequestManifest,
   onUpdateExecutionEnvironment,
-  run,
 }: DownloadCurlCommandNotStartedProps): JSX.Element => {
   return (
     <div>
@@ -53,7 +52,7 @@ export const DownloadCurlCommandNotStarted = ({
             onUpdateExecutionEnvironment={onUpdateExecutionEnvironment}
           />
           <SectionActions>
-            <Button onClick={run}>
+            <Button onClick={onRequestManifest}>
               <span>Request curl Command</span>
             </Button>
           </SectionActions>
