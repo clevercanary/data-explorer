@@ -8,7 +8,6 @@ import { EntityConfig } from "../../config/entities";
 import { useConfig } from "../../hooks/useConfig";
 import { useCurrentDetailTab } from "../../hooks/useCurrentDetailTab";
 import { useFetchEntity } from "../../hooks/useFetchEntity";
-import { DetailStateProvider } from "../../providers/detailState";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this data type can't be determined beforehand
 export interface EntityDetailViewProps<T = any> {
@@ -54,20 +53,18 @@ export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
   };
 
   return (
-    <DetailStateProvider>
-      <DetailView
-        isDetailOverview={isDetailOverview}
-        mainColumn={
-          <ComponentCreator components={mainColumn} response={response} />
-        }
-        sideColumn={
-          sideColumn ? (
-            <ComponentCreator components={sideColumn} response={response} />
-          ) : undefined
-        }
-        Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabRoute} />}
-        top={<ComponentCreator components={top} response={response} />}
-      />
-    </DetailStateProvider>
+    <DetailView
+      isDetailOverview={isDetailOverview}
+      mainColumn={
+        <ComponentCreator components={mainColumn} response={response} />
+      }
+      sideColumn={
+        sideColumn ? (
+          <ComponentCreator components={sideColumn} response={response} />
+        ) : undefined
+      }
+      Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabRoute} />}
+      top={<ComponentCreator components={top} response={response} />}
+    />
   );
 };

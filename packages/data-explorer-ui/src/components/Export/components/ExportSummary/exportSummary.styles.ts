@@ -1,4 +1,4 @@
-import styled from "@emotion/styled";
+import styled from "@emotion/styled/dist/emotion-styled.cjs";
 import { textBody4002Lines } from "../../../../styles/common/mixins/fonts";
 
 export const Label = styled.div`

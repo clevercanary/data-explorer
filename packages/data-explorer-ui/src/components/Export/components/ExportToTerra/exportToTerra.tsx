@@ -1,4 +1,7 @@
 import React from "react";
+import { MANIFEST_DOWNLOAD_FORMAT } from "../../../../apis/azul/common/entities";
+import { FILE_MANIFEST_ACTION } from "../../../../hooks/useFileManifest/common/entities";
+import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
 import { useRequestFileLocation } from "../../../../hooks/useRequestFileLocation";
 import { PAPER_PANEL_STYLE } from "../../../common/Paper/paper";
 import { Loading } from "../../../Loading/loading";
@@ -17,6 +20,11 @@ export const ExportToTerra = ({
   params,
   url,
 }: ExportToTerraProps): JSX.Element => {
+  useRequestFileManifest(
+    FILE_MANIFEST_ACTION.ENTITY_BULK_DOWNLOAD,
+    MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB,
+    undefined
+  );
   const { data, isIdle, isLoading, isSuccess, run } = useRequestFileLocation(
     `${url}?${params.toString()}`
   );

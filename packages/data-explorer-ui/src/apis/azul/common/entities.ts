@@ -1,4 +1,12 @@
 /**
+ * Set of end point paths accepted by Azul.
+ */
+export enum APIEndpoints {
+  "FILES" = "/files",
+  "SUMMARY" = "/summary",
+}
+
+/**
  * Model of index (list) responses from Azul, such as projects (index/projects), samples (index/samples) and
  * files (index/files).
  */
@@ -88,12 +96,7 @@ export interface AzulSummaryResponse {
   donorCount: number;
   fileCount: number;
   fileFormats?: FileFormatResponse[]; // TODO revisit AnVIL specific.
-  fileTypeSummaries: {
-    count: number;
-    format: string;
-    matrixCellCount: number;
-    totalSize: number;
-  }[];
+  fileTypeSummaries: FileTypeSummary[];
   labCount: number;
   organTypes: string[];
   projectCount: number;
@@ -160,6 +163,18 @@ export interface FileLocationResponse {
 }
 
 /**
+ * Model of file type summary.
+ */
+export interface FileTypeSummary {
+  contentDescription: string[];
+  count: number;
+  format: string;
+  isIntermediate: boolean | null;
+  matrixCellCount: number | null;
+  totalSize: number;
+}
+
+/**
  * Set of labels that values returned from Azul can be sanitized to.
  */
 export enum LABEL {
@@ -168,6 +183,11 @@ export enum LABEL {
   "NONE" = "None",
   "UNSPECIFIED" = "Unspecified",
 }
+
+/**
+ * Manifest download format.
+ */
+export type ManifestDownloadFormat = MANIFEST_DOWNLOAD_FORMAT;
 
 /**
  * Set of possible manifest download formats.

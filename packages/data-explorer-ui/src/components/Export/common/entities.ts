@@ -1,10 +1,9 @@
 import { MANIFEST_DOWNLOAD_FORMAT } from "../../../apis/azul/common/entities";
 
 /**
- * Bulk download execution environment.
+ * Execution environment.
  */
-export type BulkDownloadExecutionEnvironment =
-  BULK_DOWNLOAD_EXECUTION_ENVIRONMENT;
+export type ExecutionEnvironment = BULK_DOWNLOAD_EXECUTION_ENVIRONMENT;
 
 /**
  * Set of supported shells that bulk download curl can be executed on.
