@@ -9,9 +9,20 @@ import { LoadingPaper, LoadingPositioner } from "./loading.styles";
  * For the loading component to consume its parent's container the component should be a direct descendant of the parent container.
  */
 
+export type LoadingPanelStyle =
+  | keyof typeof LOADING_PANEL_STYLE
+  | PaperPanelStyle;
+
+/**
+ * Possible set of loading variant "panel" style values.
+ */
+export enum LOADING_PANEL_STYLE {
+  INHERIT = "INHERIT",
+}
+
 export interface LoadingProps {
   loading: boolean;
-  panelStyle?: PaperPanelStyle; // Enables loading to mirror parent container styles.
+  panelStyle?: LoadingPanelStyle; // Enables loading to mirror parent container styles.
   text?: string;
 }
 
@@ -29,7 +40,7 @@ export const Loading = ({
       timeout={300}
       unmountOnExit
     >
-      <LoadingPositioner>
+      <LoadingPositioner panelStyle={panelStyle}>
         <LoadingPaper panelStyle={panelStyle}>
           <LoadingIcon color="primary" fontSize="large" />
           {text && <Typography variant="text-body-400">{text}</Typography>}

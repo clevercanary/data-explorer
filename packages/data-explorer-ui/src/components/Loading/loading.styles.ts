@@ -1,17 +1,14 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { TABLET } from "../../theme/common/breakpoints";
-import {
-  Paper,
-  PaperPanelStyle,
-  PAPER_PANEL_STYLE,
-} from "../common/Paper/paper";
+import { Paper, PAPER_PANEL_STYLE } from "../common/Paper/paper";
+import { LoadingPanelStyle, LOADING_PANEL_STYLE } from "./loading";
 
 interface Props {
-  panelStyle: PaperPanelStyle;
+  panelStyle: LoadingPanelStyle;
 }
 
-export const LoadingPositioner = styled.div`
+export const LoadingPositioner = styled.div<Props>`
   display: grid;
   height: 100%;
   left: 0;
@@ -19,6 +16,13 @@ export const LoadingPositioner = styled.div`
   top: 0;
   width: 100%;
   z-index: 10;
+
+  // Style "Inherit" - inherit border radius from parent container.
+  ${({ panelStyle }) =>
+    panelStyle === LOADING_PANEL_STYLE.INHERIT &&
+    css`
+      border-radius: inherit;
+    `};
 `;
 
 export const LoadingPaper = styled(Paper)<Props>`
@@ -50,6 +54,15 @@ export const LoadingPaper = styled(Paper)<Props>`
         border-right: none;
         box-shadow: none;
       }
+    `};
+
+  // Style "Inherit" - borderless with no elevation, inherit border-radius from parent container.
+  ${({ panelStyle }) =>
+    panelStyle === LOADING_PANEL_STYLE.INHERIT &&
+    css`
+      border: 0;
+      border-radius: inherit;
+      box-shadow: none;
     `};
 
   // No style - borderless with no elevation.

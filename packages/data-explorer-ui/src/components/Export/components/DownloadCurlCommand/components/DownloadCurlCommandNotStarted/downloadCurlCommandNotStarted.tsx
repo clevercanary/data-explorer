@@ -2,27 +2,37 @@ import React, { ElementType } from "react";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
+import { ExecutionEnvironment } from "../../../../common/entities";
 import {
   Section,
   SectionActions,
   SectionContent,
   SectionFootnote,
 } from "../../../../export.styles";
-import { ExportToTerraRunFn } from "../../../ExportToTerra/components/ExportToTerraNotStarted/exportToTerraNotStarted";
+import {
+  FormFacet,
+  OnUpdateExecutionEnvironmentFn,
+} from "../DownloadCurlCommandForm/downloadCurlCommandForm";
 import { Button } from "./downloadCurlCommandNotStarted.styles";
 
 export interface DownloadCurlCommandNotStartedProps {
   DownloadCurlForm: ElementType;
   DownloadCurlStart: ElementType;
+  executionEnvironment: ExecutionEnvironment;
+  formFacets: FormFacet[];
   isLoading: boolean;
-  run: ExportToTerraRunFn;
+  onRequestManifest: () => void;
+  onUpdateExecutionEnvironment: OnUpdateExecutionEnvironmentFn;
 }
 
 export const DownloadCurlCommandNotStarted = ({
   DownloadCurlForm,
   DownloadCurlStart,
+  executionEnvironment,
+  formFacets,
   isLoading,
-  run,
+  onRequestManifest,
+  onUpdateExecutionEnvironment,
 }: DownloadCurlCommandNotStartedProps): JSX.Element => {
   return (
     <div>
@@ -36,9 +46,13 @@ export const DownloadCurlCommandNotStarted = ({
           <SectionContent>
             <DownloadCurlStart />
           </SectionContent>
-          <DownloadCurlForm />
+          <DownloadCurlForm
+            executionEnvironment={executionEnvironment}
+            formFacets={formFacets}
+            onUpdateExecutionEnvironment={onUpdateExecutionEnvironment}
+          />
           <SectionActions>
-            <Button onClick={run}>
+            <Button onClick={onRequestManifest}>
               <span>Request curl Command</span>
             </Button>
           </SectionActions>
