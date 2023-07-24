@@ -23,6 +23,6 @@ export const GroupDivider = styled(Divider)`
 
 export const MatchHighlight = styled.mark`
   background: ${({ theme }) => theme.palette.warning.light};
-  padding: 1px 0 2px 0;
+  padding: 0 2px;
   color: inherit;
 `;
