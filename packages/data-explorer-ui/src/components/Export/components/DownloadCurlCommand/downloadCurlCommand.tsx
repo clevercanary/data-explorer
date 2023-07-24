@@ -37,7 +37,7 @@ export const DownloadCurlCommand = ({
   fileManifestAction: action,
   formFacets,
 }: DownloadCurlCommandProps): JSX.Element => {
-  useRequestFileManifest(action, MANIFEST_DOWNLOAD_FORMAT.CURL, entity);
+  useRequestFileManifest(MANIFEST_DOWNLOAD_FORMAT.CURL, entity);
   const [executionEnvironment, setExecutionEnvironment] =
     useState<ExecutionEnvironment>(BULK_DOWNLOAD_EXECUTION_ENVIRONMENT.BASH);
   const {

@@ -13,9 +13,7 @@ import { buildNextFilterState } from "../hooks/useCategoryFilter";
 import { DEFAULT_FILE_MANIFEST } from "../hooks/useFileManifest/common/constants";
 import {
   FileManifest,
-  FileManifestAction,
   FileManifestStateStatus,
-  FILE_MANIFEST_ACTION,
   FILE_MANIFEST_STATE_STATUS,
 } from "../hooks/useFileManifest/common/entities";
 import { fetchManifestParams } from "../hooks/useFileManifest/common/fetchManifestParams";
@@ -23,11 +21,6 @@ import { useFetchFilesFacets } from "../hooks/useFileManifest/useFetchFilesFacet
 import { useFetchSummary } from "../hooks/useFileManifest/useFetchSummary";
 import { useFileManifestRequestURL } from "../hooks/useFileManifest/useFileManifestRequestURL";
 
-const FILE_MANIFEST_ENTITY_ACTION = FILE_MANIFEST_ACTION.ENTITY_BULK_DOWNLOAD;
-
-export type UpdateFileManifestActionFn = (
-  fileManifestAction?: FileManifestAction
-) => void;
 export type UpdateFileManifestFormatFn = (
   fileManifestFormat?: ManifestDownloadFormat
 ) => void;
@@ -44,13 +37,10 @@ export type UpdateFiltersFn = (filters: Filters) => void;
 export type FileManifestStateContextProps = {
   fileManifest: FileManifest;
   fileManifestFormat?: ManifestDownloadFormat;
-  fileManifestRequestParams?: URLSearchParams;
-  fileManifestRequestURL?: string;
   filters: Filters;
   isLoading: boolean;
   requestParams?: URLSearchParams;
   requestURL?: string;
-  updateFileManifestAction: UpdateFileManifestActionFn;
   updateFileManifestFormat: UpdateFileManifestFormatFn;
   updateFileManifestStateStatus: UpdateFileManifestStateStatusFn;
   updateFilter: UpdateFilterFn;
@@ -65,14 +55,10 @@ export const FileManifestStateContext =
   createContext<FileManifestStateContextProps>({
     fileManifest: DEFAULT_FILE_MANIFEST,
     fileManifestFormat: undefined,
-    fileManifestRequestParams: undefined,
-    fileManifestRequestURL: undefined,
     filters: [],
     isLoading: false,
     requestParams: undefined,
     requestURL: undefined,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
-    updateFileManifestAction: (): void => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
     updateFileManifestFormat: (): void => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
@@ -90,10 +76,6 @@ export function FileManifestStateProvider({
   const isDisabledRef = useRef<boolean>(true);
   const { current: isDisabled } = isDisabledRef;
 
-  // File manifest action state.
-  const [fileManifestAction, setFileManifestAction] =
-    useState<FileManifestAction>();
-
   // File manifest format state.
   const [fileManifestFormat, setFileManifestFormat] =
     useState<ManifestDownloadFormat>();
@@ -102,14 +84,7 @@ export function FileManifestStateProvider({
   const [filters, setFilters] = useState<Filters>([]);
 
   // Determine catalog.
-  const [listCatalog, detailCatalog] = useCatalog();
-  const catalog = useMemo(
-    () =>
-      fileManifestAction === FILE_MANIFEST_ENTITY_ACTION
-        ? detailCatalog
-        : listCatalog,
-    [fileManifestAction, listCatalog, detailCatalog]
-  );
+  const [catalog] = useCatalog();
 
   // Fetch files facets.
   const { filesFacets, isLoading: isFacetsLoading } = useFetchFilesFacets(
@@ -134,14 +109,6 @@ export function FileManifestStateProvider({
 
   // Build request URL.
   const requestURL = useFileManifestRequestURL(requestParams);
-
-  // Updates file manifest action.
-  const updateFileManifestAction = useCallback(
-    (fileManifestAction?: FileManifestAction): void => {
-      setFileManifestAction(fileManifestAction);
-    },
-    []
-  );
 
   // Updates file manifest format.
   const updateFileManifestFormat = useCallback(
@@ -187,13 +154,10 @@ export function FileManifestStateProvider({
           filesFacets,
         },
         fileManifestFormat,
-        fileManifestRequestParams: requestParams,
-        fileManifestRequestURL: requestURL,
         filters,
         isLoading: isFacetsLoading || isSummaryLoading,
         requestParams,
         requestURL,
-        updateFileManifestAction,
         updateFileManifestFormat,
         updateFileManifestStateStatus,
         updateFilter, // Updates filters with given selected category value.

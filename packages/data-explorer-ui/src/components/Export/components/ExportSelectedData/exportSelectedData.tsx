@@ -8,6 +8,6 @@ export interface ExportSelectedDataProps {
 export const ExportSelectedData = ({
   children,
 }: ExportSelectedDataProps): JSX.Element => {
-  useRequestFileManifest(undefined, undefined, undefined);
+  useRequestFileManifest(undefined, undefined);
   return <>{children}</>;
 };

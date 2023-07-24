@@ -3,20 +3,15 @@ import { ManifestDownloadFormat } from "../../apis/azul/common/entities";
 import { Filters } from "../../common/entities";
 import { useExploreState } from "../useExploreState";
 import { useFileManifestState } from "../useFileManifestState";
-import {
-  FileManifestAction,
-  FILE_MANIFEST_STATE_STATUS,
-} from "./common/entities";
+import { FILE_MANIFEST_STATE_STATUS } from "./common/entities";
 
 /**
- * Initializes and fetches file manifest comprising file facets and summary for the given file manifest action.
- * @param fileManifestAction - File manifest action.
+ * Initializes and fetches file manifest comprising file facets and summary for the given file manifest format.
  * @param fileManifestFormat - File manifest format.
  * @param entity - Entity id key and value tuple, used to initialize filters for entity file manifest request.
  * @returns file manifest.
  */
 export const useRequestFileManifest = (
-  fileManifestAction: FileManifestAction | undefined,
   fileManifestFormat: ManifestDownloadFormat | undefined,
   entity: [string, string] | undefined
 ): void => {
@@ -26,7 +21,6 @@ export const useRequestFileManifest = (
 
   // File manifest state.
   const {
-    updateFileManifestAction,
     updateFileManifestFormat,
     updateFileManifestStateStatus,
     updateFilters,
@@ -45,17 +39,14 @@ export const useRequestFileManifest = (
     };
   }, [updateFileManifestStateStatus]);
 
-  // Initialize file manifest action and entity.
+  // Initialize file manifest status ("active"/"inactive") and entity.
   useEffect(() => {
     updateFileManifestStateStatus(FILE_MANIFEST_STATE_STATUS.ACTIVE);
-    updateFileManifestAction(fileManifestAction);
     updateFileManifestFormat(fileManifestFormat);
     updateFilters(filters);
   }, [
-    fileManifestAction,
     fileManifestFormat,
     filters,
-    updateFileManifestAction,
     updateFileManifestFormat,
     updateFileManifestStateStatus,
     updateFilters,
