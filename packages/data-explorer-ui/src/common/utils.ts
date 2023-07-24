@@ -19,3 +19,12 @@ export function isValidUrl(testUrl: string): boolean {
 export function stringifyValues(values: string[]): string {
   return values.join(", ");
 }
+
+/**
+ * Returns string with any special characters escaped.
+ * @param string - String to escape.
+ * @returns string with any special characters escaped.
+ */
+export function escapeRegExp(string: string): string {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}

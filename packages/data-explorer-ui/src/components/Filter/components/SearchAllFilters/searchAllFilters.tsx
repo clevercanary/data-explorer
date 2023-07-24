@@ -9,11 +9,12 @@ import {
   PopperProps,
   Typography,
 } from "@mui/material";
-import React, { Fragment, useMemo } from "react";
+import React, { Fragment, useMemo, useState } from "react";
 import {
   SelectCategoryValueView,
   SelectCategoryView,
 } from "../../../../common/entities";
+import { escapeRegExp } from "../../../../common/utils";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
@@ -23,6 +24,7 @@ import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFilte
 import {
   GroupDivider,
   GroupHeading,
+  MatchHighlight,
   SearchAllFilters as Autocomplete,
   SearchAllFiltersMenuPaper,
 } from "./searchAllFilters.styles";
@@ -104,6 +106,8 @@ export const SearchAllFilters = ({
     [categoryViews]
   );
 
+  const [searchTermRegExp, setSearchTermRegExp] = useState<RegExp | null>(null);
+
   const renderOption = (props: unknown, option: FilterOption): JSX.Element => {
     if (option === SPECIAL_OPTION.NO_RESULTS)
       return <FilterNoResultsFound key={SPECIAL_OPTION.NO_RESULTS} />;
@@ -124,7 +128,13 @@ export const SearchAllFilters = ({
         />
         <ListItemText
           disableTypography
-          primary={<span>{label}</span>}
+          primary={
+            <span>
+              {searchTermRegExp
+                ? markSearchTerm(label, searchTermRegExp)
+                : label}
+            </span>
+          }
           secondary={
             <Typography color="inkLight" variant="text-body-small-400">
               {count}
@@ -146,6 +156,11 @@ export const SearchAllFilters = ({
         typeof option === "string" ? "" : option.categoryLabel
       }
       ListboxComponent={SearchAllFiltersMenu}
+      onInputChange={(event, value): void =>
+        setSearchTermRegExp(
+          value ? new RegExp(escapeRegExp(value), "ig") : null
+        )
+      }
       options={options}
       PaperComponent={PaperComponent}
       PopperComponent={PopperComponent}
@@ -171,4 +186,22 @@ function applyMenuFilter(
   // noOptionsText isn't supported for freeSolo Autocomplete, so simulate with a special option value
   if (filteredOptions.length === 0) return [SPECIAL_OPTION.NO_RESULTS];
   return filteredOptions;
+}
+
+function markSearchTerm(
+  label: string,
+  searchTermRegExp: RegExp
+): React.ReactNode {
+  let prevIndex = 0;
+  return [
+    Array.from(label.matchAll(searchTermRegExp), (match, index) => {
+      const items = [
+        label.substring(prevIndex, match.index),
+        <MatchHighlight key={index}>{match[0]}</MatchHighlight>,
+      ];
+      prevIndex = (match.index as number) + match[0].length; // type conversion to get around a TypeScript bug: https://github.com/microsoft/TypeScript/issues/36788
+      return items;
+    }),
+    label.substring(prevIndex),
+  ];
 }
