@@ -1,6 +1,12 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Autocomplete, Divider, Paper } from "@mui/material";
 import { FilterOption } from "./searchAllFilters";
+
+interface MatchHighlightProps {
+  leftOpen: boolean;
+  rightOpen: boolean;
+}
 
 export const SearchAllFilters = styled(
   Autocomplete<FilterOption, false, false, true>
@@ -21,9 +27,22 @@ export const GroupDivider = styled(Divider)`
   margin: 8px 0;
 `;
 
-export const MatchHighlight = styled.mark`
+export const MatchHighlight = styled.mark<MatchHighlightProps>`
   background: ${({ theme }) => theme.palette.warning.light};
-  display: inline-block;
-  padding: 0 2px;
   color: inherit;
+  padding: 2px 0;
+
+  ${({ leftOpen }) =>
+    leftOpen &&
+    css`
+      padding-left: 2px;
+      margin-left: -2px;
+    `}
+
+  ${({ rightOpen }) =>
+    rightOpen &&
+    css`
+      padding-right: 2px;
+      margin-right: -2px;
+    `}
 `;

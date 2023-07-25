@@ -194,12 +194,25 @@ function markSearchTerm(
 ): React.ReactNode {
   let prevIndex = 0;
   return [
-    Array.from(label.matchAll(searchTermRegExp), (match, index) => {
+    Array.from(label.matchAll(searchTermRegExp), (match, itemIndex) => {
+      const [matchText] = match;
+      const matchIndex = match.index as number; // type assertion to get around a TypeScript bug: https://github.com/microsoft/TypeScript/issues/36788
+      const endIndex = matchIndex + matchText.length;
+      const leftChar = label[matchIndex - 1];
+      const rightChar = label[endIndex];
+      const leftOpen = !leftChar || /\s/.test(leftChar);
+      const rightOpen = !rightChar || /\s/.test(rightChar);
       const items = [
-        label.substring(prevIndex, match.index),
-        <MatchHighlight key={index}>{match[0]}</MatchHighlight>,
+        label.substring(prevIndex, matchIndex),
+        <MatchHighlight
+          key={itemIndex}
+          leftOpen={leftOpen}
+          rightOpen={rightOpen}
+        >
+          {matchText}
+        </MatchHighlight>,
       ];
-      prevIndex = (match.index as number) + match[0].length; // type conversion to get around a TypeScript bug: https://github.com/microsoft/TypeScript/issues/36788
+      prevIndex = endIndex;
       return items;
     }),
     label.substring(prevIndex),
