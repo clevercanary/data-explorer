@@ -1,5 +1,5 @@
-import { ButtonProps } from "@mui/material";
-import React from "react";
+import { ButtonProps, Divider } from "@mui/material";
+import React, { Fragment } from "react";
 import { CategoryTag, SelectCategoryView } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { Filter } from "../Filter/filter";
@@ -8,8 +8,13 @@ import { FilterMenu } from "../FilterMenu/filterMenu";
 import { FilterTags } from "../FilterTags/filterTags";
 import { Filters as FilterList } from "./filters.styles";
 
-export interface FiltersProps {
+export interface CategoryFilter {
   categoryViews: SelectCategoryView[];
+  label?: string;
+}
+
+export interface FiltersProps {
+  categoryFilters: CategoryFilter[];
   disabled: boolean; // Global disabling of filters; typically in "related" entity view.
   onFilter: OnFilterFn;
 }
@@ -79,21 +84,26 @@ function renderFilterTarget(
 }
 
 export const Filters = ({
-  categoryViews,
-  disabled = false, // Global disabling of filters; typically in "related" entity view.
+  categoryFilters,
+  disabled = false,
   onFilter,
 }: FiltersProps): JSX.Element => {
   return (
     <FilterList disabled={disabled}>
-      {categoryViews.map((categoryView) => (
-        <Filter
-          content={renderFilterMenu(categoryView, onFilter)}
-          key={categoryView.key}
-          tags={renderFilterTags(categoryView, onFilter)}
-          Target={(props): JSX.Element =>
-            renderFilterTarget(categoryView, props)
-          }
-        />
+      {categoryFilters.map(({ categoryViews }, i) => (
+        <Fragment key={i}>
+          {i !== 0 && <Divider />}
+          {categoryViews.map((categoryView) => (
+            <Filter
+              content={renderFilterMenu(categoryView, onFilter)}
+              key={categoryView.key}
+              tags={renderFilterTags(categoryView, onFilter)}
+              Target={(props): JSX.Element =>
+                renderFilterTarget(categoryView, props)
+              }
+            />
+          ))}
+        </Fragment>
       ))}
     </FilterList>
   );
