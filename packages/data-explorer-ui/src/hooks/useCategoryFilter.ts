@@ -35,55 +35,6 @@ export type OnFilterFn = (
 ) => void;
 
 /**
- * Hook for server-side filtering of entity lists.
- * @param categories - Full set of filter categories.
- * @param initialFilter - Initial set of selected categories.
- * @returns FilterInstance - a view model of the filter state.
- * Depends on filterState
- */
-// export const useCategoryFilter = (
-//   categories: SelectCategory[],
-//   initialFilter: Filters
-// ): FilterInstance => {
-//   // Complete set of categories and category values to be included for display and filtering.
-//   //const [filterState, setFilterState] = useState<FilterState>(initialFilter);
-//
-//   // Grab the list of categories for the current site.
-//   const { categoryConfigs = [] } = useConfig();
-//
-//   /**
-//    * Callback function to call when the selected filters change.
-//    * @param categoryKey - The category being filtered.
-//    * @param selectedValue - The value to set or clear.
-//    * @param selected - indicate if the selected value is being set or cleared.
-//    * @returns the callback.
-//    * Depends on: filterState
-//    */
-//   const onFilter = useCallback<OnFilterFn>(
-//     (
-//       categoryKey: CategoryKey,
-//       selectedValue: CategoryValueKey,
-//       selected: boolean
-//     ) => {
-//       const nextFilterState = buildNextFilterState(
-//         filterState,
-//         categoryKey,
-//         selectedValue,
-//         selected
-//       );
-//       setFilterState(nextFilterState);
-//     },
-//     [filterState]
-//   );
-//
-//   return {
-//     categories: buildCategoryViews(categories, categoryConfigs, filterState),
-//     filter: filterState,
-//     onFilter,
-//   };
-// };
-
-/**
  * Build the view-specific model of the given category value.
  * @param categoryValue - The category value to build a view model of.
  * @param categorySelectedFilter - Current filter state for a category.

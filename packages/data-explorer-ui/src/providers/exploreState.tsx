@@ -15,8 +15,9 @@ import {
   SelectedFilter,
 } from "../common/entities";
 import { getInitialTableColumnVisibility } from "../components/Table/common/utils";
-import { EntityConfig, EntityPath, SiteConfig } from "../config/entities";
+import { CategoryConfig, EntityConfig, EntityPath } from "../config/entities";
 import { getDefaultSorting } from "../config/utils";
+import { useCategoryConfigs } from "../hooks/useCategoryConfigs";
 import {
   buildCategoryViews,
   buildNextFilterState,
@@ -47,7 +48,7 @@ export enum EntityView {
  * Explore context.
  */
 export interface ExploreContext {
-  config: SiteConfig;
+  categoryConfigs?: CategoryConfig[];
   entityConfig: EntityConfig;
 }
 
@@ -206,6 +207,7 @@ export function ExploreStateProvider({
   entityListType: string;
 }): JSX.Element {
   const { config, defaultEntityListType, entityConfig } = useConfig();
+  const categoryConfigs = useCategoryConfigs();
   const { decodedFilterParam } = useURLFilterParams();
   // Define filter state, from URL "filter" parameter, if present and valid.
   let filterState: SelectedFilter[] = [];
@@ -216,7 +218,7 @@ export function ExploreStateProvider({
   }
   const [exploreState, exploreDispatch] = useReducer(
     (s: ExploreState, a: ExploreAction) =>
-      exploreReducer(s, a, { config, entityConfig }),
+      exploreReducer(s, a, { categoryConfigs, entityConfig }),
     {
       categoryViews: [],
       entityPageState: config.entities.reduce(
@@ -378,8 +380,7 @@ function exploreReducer(
   exploreContext: ExploreContext
 ): ExploreState {
   const { payload, type } = action;
-  const { config, entityConfig } = exploreContext;
-  const { categoryConfigs } = config;
+  const { categoryConfigs, entityConfig } = exploreContext;
 
   switch (type) {
     /**

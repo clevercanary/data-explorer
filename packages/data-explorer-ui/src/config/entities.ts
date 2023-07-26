@@ -46,6 +46,14 @@ export interface BackPageTabConfig extends TabConfig {
 }
 
 /**
+ * Model of grouped configured categories in site config.
+ */
+export interface CategoryGroupConfig {
+  categoryConfigs: CategoryConfig[];
+  label?: string;
+}
+
+/**
  * Model of category configured in site config.
  */
 export interface CategoryConfig {
@@ -257,7 +265,7 @@ export interface SiteConfig {
   analytics?: AnalyticsConfig;
   authentication?: AuthenticationConfig;
   browserURL: string;
-  categoryConfigs?: CategoryConfig[];
+  categoryGroupConfigs?: CategoryGroupConfig[];
   dataSource: DataSourceConfig;
   entities: EntityConfig[];
   explorerTitle: HeroTitle;

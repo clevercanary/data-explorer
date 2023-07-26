@@ -15,4 +15,8 @@ export const Filters = styled.div<Props>`
     css`
       pointer-events: none;
     `};
+
+  .MuiDivider-root {
+    margin: 8px 0;
+  }
 `;

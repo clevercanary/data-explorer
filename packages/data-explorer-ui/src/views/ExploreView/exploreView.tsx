@@ -1,21 +1,32 @@
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   AzulEntitiesStaticResponse,
   AzulSummaryResponse,
 } from "../../apis/azul/common/entities";
 import { track } from "../../common/analytics/analytics";
 import { EVENT_NAME, EVENT_PARAM } from "../../common/analytics/entities";
-import { CategoryKey, CategoryValueKey } from "../../common/entities";
+import {
+  CategoryKey,
+  CategoryValueKey,
+  SelectCategoryView,
+} from "../../common/entities";
 import { Tab, Tabs, TabValue } from "../../components/common/Tabs/tabs";
 import { ComponentCreator } from "../../components/ComponentCreator/ComponentCreator";
-import { Filters } from "../../components/Filter/components/Filters/filters";
+import {
+  CategoryFilter,
+  Filters,
+} from "../../components/Filter/components/Filters/filters";
 import { SearchAllFilters } from "../../components/Filter/components/SearchAllFilters/searchAllFilters";
 import { Index as IndexView } from "../../components/Index/index";
 import { SidebarLabel } from "../../components/Layout/components/Sidebar/components/SidebarLabel/sidebarLabel";
 import { Sidebar } from "../../components/Layout/components/Sidebar/sidebar";
 import { TableCreator } from "../../components/TableCreator/tableCreator";
-import { EntityConfig, SummaryConfig } from "../../config/entities";
+import {
+  CategoryGroupConfig,
+  EntityConfig,
+  SummaryConfig,
+} from "../../config/entities";
 import { useConfig } from "../../hooks/useConfig";
 import { useEntityList } from "../../hooks/useEntityList";
 import { useEntityListRelatedView } from "../../hooks/useEntityListRelatedView";
@@ -41,7 +52,8 @@ function getTabs(entities: EntityConfig[]): Tab[] {
 export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   const { config, entityConfig } = useConfig(); // Get app level config.
   const { exploreDispatch, exploreState } = useExploreState(); // Get the useReducer state and dispatch for "Explore".
-  const { entities, explorerTitle, summaryConfig } = config;
+  const { categoryGroupConfigs, entities, explorerTitle, summaryConfig } =
+    config;
   const { categoryViews, isRelatedView, tabValue } = exploreState;
   const { push } = useRouter();
   const tabs = getTabs(entities);
@@ -49,6 +61,10 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   useEntityList(props); // Fetch entities.
   useEntityListRelatedView(); // Fetch related entities.
   const { entityListType } = props;
+  const categoryFilters = useMemo(
+    () => buildCategoryFilters(categoryViews, categoryGroupConfigs),
+    [categoryViews, categoryGroupConfigs]
+  );
 
   /**
    * Callback fired when selected state of a category value is toggled.
@@ -89,7 +105,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   };
 
   /**
-   * Dispach a SelectdEntityType action when entityListType changes.
+   * Dispatch a SelectedEntityType action when entityListType changes.
    */
   useEffect(() => {
     if (entityListType) {
@@ -112,7 +128,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
             onFilter={onFilterChange}
           />
           <Filters
-            categoryViews={categoryViews}
+            categoryFilters={categoryFilters}
             disabled={isRelatedView}
             onFilter={onFilterChange}
           />
@@ -127,6 +143,38 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
     </>
   );
 };
+
+/**
+ * Builds the category views into category views grouped by the given category group configuration.
+ * @param selectCategoryViews - View models of categories to display.
+ * @param categoryGroupConfigs - Category group configuration.
+ * @returns category filters.
+ */
+function buildCategoryFilters(
+  selectCategoryViews: SelectCategoryView[],
+  categoryGroupConfigs?: CategoryGroupConfig[]
+): CategoryFilter[] {
+  if (!categoryGroupConfigs) {
+    return [{ categoryViews: selectCategoryViews }];
+  }
+  return categoryGroupConfigs.map(({ categoryConfigs, label }) => {
+    // Grab the category views for the configured grouped categories.
+    const categoryViews = categoryConfigs.reduce(
+      (acc, { key: categoryKey }) => {
+        const categoryView = selectCategoryViews.find(
+          ({ key }) => key === categoryKey
+        );
+        if (categoryView) {
+          acc.push(categoryView);
+        }
+        return acc;
+      },
+      [] as SelectCategoryView[]
+    );
+    // Return the configured label and category views.
+    return { categoryViews, label };
+  });
+}
 
 /**
  * Render either a loading view, empty result set notification or the table itself.
