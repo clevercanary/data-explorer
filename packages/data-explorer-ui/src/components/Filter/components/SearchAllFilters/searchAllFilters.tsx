@@ -1,12 +1,12 @@
 import {
+  Autocomplete,
   AutocompleteRenderGroupParams,
   AutocompleteRenderInputParams,
   Checkbox,
+  Divider,
   ListItemButton,
   ListItemText,
-  PaperProps,
-  Popper,
-  PopperProps,
+  ListSubheader,
   Typography,
 } from "@mui/material";
 import React, { Fragment, useMemo, useState } from "react";
@@ -16,20 +16,16 @@ import {
 } from "../../../../common/entities";
 import { escapeRegExp } from "../../../../common/utils";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { TEXT_BODY_SMALL_400 } from "../../../../theme/common/typography";
 import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
 import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFound";
-import { SearchAllFiltersMenu } from "../SearchAllFiltersMenu/searchAllFiltersMenu";
 import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFiltersSearch";
-import {
-  GroupDivider,
-  GroupHeading,
-  MatchHighlight,
-  SearchAllFilters as Autocomplete,
-  SearchAllFiltersMenuPaper,
-} from "./searchAllFilters.styles";
+import { PAPER_PROPS, POPPER_PROPS } from "./common/constants";
+import { List } from "./components/List/list";
+import { MatchHighlight } from "./searchAllFilters.styles";
 
-// Special option values, for insterting menu content other than actual options
+// Special option values, for inserting menu content other than actual options
 enum SPECIAL_OPTION {
   NO_RESULTS = "SPECIAL_OPTION_NO_RESULTS",
 }
@@ -47,25 +43,6 @@ interface CategoryValueOption {
 
 export type FilterOption = CategoryValueOption | SPECIAL_OPTION;
 
-const PaperComponent = (props: PaperProps): JSX.Element => (
-  <SearchAllFiltersMenuPaper variant="menu" {...props} />
-);
-
-const PopperComponent = ({ modifiers, ...props }: PopperProps): JSX.Element => (
-  <Popper
-    modifiers={[
-      {
-        name: "offset",
-        options: {
-          offset: [0, 8],
-        },
-      },
-      ...(modifiers || []),
-    ]}
-    {...props}
-  />
-);
-
 const renderGroup = ({
   children,
   group,
@@ -73,12 +50,8 @@ const renderGroup = ({
 }: AutocompleteRenderGroupParams): JSX.Element => {
   return group ? (
     <Fragment key={key}>
-      {Number(key) !== 0 && <GroupDivider />}
-      <GroupHeading>
-        <Typography color="ink" variant="text-body-500">
-          {group}
-        </Typography>
-      </GroupHeading>
+      {Number(key) !== 0 && <Divider />}
+      <ListSubheader>{group}</ListSubheader>
       {children}
     </Fragment>
   ) : (
@@ -136,7 +109,7 @@ export const SearchAllFilters = ({
             </span>
           }
           secondary={
-            <Typography color="inkLight" variant="text-body-small-400">
+            <Typography color="inkLight" variant={TEXT_BODY_SMALL_400}>
               {count}
             </Typography>
           }
@@ -155,18 +128,20 @@ export const SearchAllFilters = ({
       groupBy={(option): string =>
         typeof option === "string" ? "" : option.categoryLabel
       }
-      ListboxComponent={SearchAllFiltersMenu}
+      ListboxComponent={List}
       onInputChange={(event, value): void =>
         setSearchTermRegExp(
           value ? new RegExp(escapeRegExp(value), "ig") : null
         )
       }
       options={options}
-      PaperComponent={PaperComponent}
-      PopperComponent={PopperComponent}
       renderGroup={renderGroup}
       renderInput={renderInput}
       renderOption={renderOption}
+      slotProps={{
+        paper: { ...PAPER_PROPS },
+        popper: { ...POPPER_PROPS },
+      }}
     />
   );
 };

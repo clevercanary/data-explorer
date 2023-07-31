@@ -10,6 +10,7 @@ import {
   SelectCategoryValueView,
 } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { TEXT_BODY_SMALL_400 } from "../../../../theme/common/typography";
 import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
 
@@ -53,7 +54,7 @@ export default function VariableSizeListItem({
         disableTypography
         primary={<span>{label}</span>}
         secondary={
-          <Typography color="inkLight" variant="text-body-small-400">
+          <Typography color="inkLight" variant={TEXT_BODY_SMALL_400}>
             {count}
           </Typography>
         }

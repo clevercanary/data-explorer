@@ -1,4 +1,3 @@
-import { List } from "@mui/material";
 import React, { useState } from "react";
 import {
   CategoryKey,
@@ -6,6 +5,7 @@ import {
 } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { MAX_DISPLAYABLE_LIST_ITEMS } from "../../common/constants";
+import { List } from "../FilterList/filterList.styles";
 import { FilterMenuSearch } from "../FilterMenuSearch/filterMenuSearch";
 import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFound";
 import { VariableSizeList } from "../VariableSizeList/VariableSizeList";

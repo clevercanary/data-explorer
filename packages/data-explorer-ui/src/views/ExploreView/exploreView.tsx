@@ -20,6 +20,7 @@ import {
 import { SearchAllFilters } from "../../components/Filter/components/SearchAllFilters/searchAllFilters";
 import { Index as IndexView } from "../../components/Index/index";
 import { SidebarLabel } from "../../components/Layout/components/Sidebar/components/SidebarLabel/sidebarLabel";
+import { SidebarTools } from "../../components/Layout/components/Sidebar/components/SidebarTools/sidebarTools.styles";
 import { Sidebar } from "../../components/Layout/components/Sidebar/sidebar";
 import { TableCreator } from "../../components/TableCreator/tableCreator";
 import {
@@ -122,11 +123,14 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   return (
     <>
       {categoryViews && !!categoryViews.length && (
-        <Sidebar Label={<SidebarLabel label={"Filters"} />}>
-          <SearchAllFilters
-            categoryViews={categoryViews}
-            onFilter={onFilterChange}
-          />
+        <Sidebar>
+          <SidebarTools>
+            <SidebarLabel label={"Filters"} />
+            <SearchAllFilters
+              categoryViews={categoryViews}
+              onFilter={onFilterChange}
+            />
+          </SidebarTools>
           <Filters
             categoryFilters={categoryFilters}
             disabled={isRelatedView}
