@@ -913,6 +913,25 @@ export const MuiListItemText: Components["MuiListItemText"] = {
 };
 
 /**
+ * MuiListSubheader Component
+ * @param theme - Theme.
+ * @returns MuiListSubheader component theme styles.
+ */
+export const MuiListSubheader = (
+  theme: Theme
+): Components["MuiListSubheader"] => {
+  return {
+    defaultProps: { disableSticky: true },
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_500],
+        color: theme.palette.ink.main,
+      },
+    },
+  };
+};
+
+/**
  * MuiMenuItem Component
  * @param theme - Theme.
  * @returns MuiMenuItem component theme styles.

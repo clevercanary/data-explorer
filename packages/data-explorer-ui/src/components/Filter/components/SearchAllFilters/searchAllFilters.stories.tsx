@@ -1,4 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { FilterMenuStory } from "../FilterMenu/filterMenu.stories";
 import { SearchAllFilters } from "./searchAllFilters";
@@ -16,11 +16,9 @@ export default {
     ),
   ],
   title: "Components/Filter/SearchAllFilters",
-} as ComponentMeta<typeof SearchAllFilters>;
+} as Meta<typeof SearchAllFilters>;
 
-const SearchAllFiltersTemplate: ComponentStory<typeof SearchAllFilters> = (
-  args
-) => <SearchAllFilters {...args} />;
+type Story = StoryObj<typeof SearchAllFilters>;
 
 const onFilter = (): void => {
   // onFilter function
@@ -41,53 +39,54 @@ const defaultValues = [
   },
 ];
 
-export const SearchAllFiltersStory = SearchAllFiltersTemplate.bind({});
-SearchAllFiltersStory.args = {
-  categoryViews: [
-    {
-      isDisabled: false,
-      key: "genusSpecies",
-      label: "Genus Species",
-      values: [
-        {
-          count: 12,
-          key: "homoSapiens",
-          label: "Homo sapiens",
-          selected: false,
-        },
-        {
-          count: 6,
-          key: "musMusculus",
-          label: "Mus musculus",
-          selected: false,
-        },
-      ],
-    },
-    {
-      isDisabled: false,
-      key: "donorDisease",
-      label: "Donor Disease",
-      values: FilterMenuStory.args?.values || defaultValues,
-    },
-    {
-      isDisabled: true,
-      key: "anatomicalEntity",
-      label: "Anatomical Entity",
-      values: [
-        {
-          count: 12,
-          key: "oralCavity",
-          label: "oral cavity",
-          selected: true,
-        },
-        {
-          count: 6,
-          key: "pancreas",
-          label: "pancreas",
-          selected: false,
-        },
-      ],
-    },
-  ],
-  onFilter: onFilter,
+export const SearchAllFiltersStory: Story = {
+  args: {
+    categoryViews: [
+      {
+        isDisabled: false,
+        key: "genusSpecies",
+        label: "Genus Species",
+        values: [
+          {
+            count: 12,
+            key: "homoSapiens",
+            label: "Homo sapiens",
+            selected: false,
+          },
+          {
+            count: 6,
+            key: "musMusculus",
+            label: "Mus musculus",
+            selected: false,
+          },
+        ],
+      },
+      {
+        isDisabled: false,
+        key: "donorDisease",
+        label: "Donor Disease",
+        values: FilterMenuStory.args?.values || defaultValues,
+      },
+      {
+        isDisabled: true,
+        key: "anatomicalEntity",
+        label: "Anatomical Entity",
+        values: [
+          {
+            count: 12,
+            key: "oralCavity",
+            label: "oral cavity",
+            selected: true,
+          },
+          {
+            count: 6,
+            key: "pancreas",
+            label: "pancreas",
+            selected: false,
+          },
+        ],
+      },
+    ],
+    onFilter: onFilter,
+  },
 };

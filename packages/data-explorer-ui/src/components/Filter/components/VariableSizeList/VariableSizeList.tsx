@@ -1,4 +1,3 @@
-import { List as MList } from "@mui/material";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   ListChildComponentProps,
@@ -16,6 +15,7 @@ import {
   MAX_DISPLAYABLE_LIST_ITEMS,
   MAX_LIST_HEIGHT_PX,
 } from "../../common/constants";
+import { List as FilterList } from "../FilterList/filterList.styles";
 import VariableSizeListItem from "../VariableSizeListItem/variableSizeListItem";
 
 export type ItemSizeByItemKey = Map<string, number>;
@@ -84,7 +84,7 @@ export const VariableSizeList = ({
   return (
     <List
       height={height}
-      innerElementType={MList}
+      innerElementType={FilterList}
       itemCount={values.length}
       itemData={{
         categoryKey,

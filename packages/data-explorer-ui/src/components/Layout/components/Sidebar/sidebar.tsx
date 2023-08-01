@@ -15,14 +15,12 @@ import {
 export interface SidebarProps {
   children: ReactNode | ReactNode[];
   drawerOpen?: boolean;
-  Label?: ReactNode;
   onDrawerClose?: () => void;
 }
 
 export const Sidebar = ({
   children,
   drawerOpen,
-  Label,
   onDrawerClose,
 }: SidebarProps): JSX.Element => {
   const tablet = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, DESKTOP);
@@ -57,7 +55,6 @@ export const Sidebar = ({
             size="medium" // overrides size specification of IconButton component via destructured props
           />
         )}
-        {Label}
         {children}
       </SidebarPositioner>
     </Bar>
