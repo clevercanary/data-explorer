@@ -1,12 +1,16 @@
 import { ListProps as MListProps } from "@mui/material";
-import React, { useEffect, useRef, useState } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useWindowResize } from "../../../../../../hooks/useWindowResize";
 import { LIST_MARGIN } from "../../../../common/constants";
 import { List as FilterList } from "./list.styles";
 
 export const DEFAULT_LIST_HEIGHT = 0;
 
-export const List = ({ ...props }: MListProps): JSX.Element => {
+export const List = forwardRef<HTMLUListElement, MListProps>(function List(
+  { ...props }: MListProps,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO use ref with VariableSizeList and assign listRef to innerRef.
+  ref
+): JSX.Element {
   const listRef = useRef<HTMLUListElement>(null);
   const [height, setHeight] = useState<number>(DEFAULT_LIST_HEIGHT);
   const { height: windowHeight } = useWindowResize();
@@ -26,7 +30,7 @@ export const List = ({ ...props }: MListProps): JSX.Element => {
   }, []);
 
   return <FilterList ref={listRef} sx={{ height }} {...props} />;
-};
+});
 
 /**
  * Calculates list height, either to fit available window size, or if the list is filtered, a calculated height based on
