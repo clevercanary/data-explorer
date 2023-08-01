@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export interface WindowSize {
   height: number;
@@ -11,27 +11,34 @@ export interface WindowSize {
  */
 export const useWindowResize = (): WindowSize => {
   const timeoutRef = useRef<NodeJS.Timeout>();
-  const [windowSize, setWindowSize] = useState<WindowSize>({
-    height: 0,
-    width: 0,
-  });
-
-  const onResize = useCallback(() => {
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      const { innerHeight, innerWidth } = window;
-      setWindowSize({ height: innerHeight, width: innerWidth });
-    }, 500);
-    return () => clearTimeout(timeoutRef.current);
-  }, []);
+  const [windowSize, setWindowSize] = useState<WindowSize>(getWindowSize());
 
   useEffect(() => {
+    /**
+     * Resize event fired; window size recalculated.
+     */
+    const onResize = (): void => {
+      clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        setWindowSize(getWindowSize());
+      }, 200);
+    };
+    // Add resize event listener.
     window.addEventListener("resize", onResize);
-    onResize();
     return () => {
+      // Remove resize event listener.
       window.removeEventListener("resize", onResize);
     };
-  }, [onResize]);
+  }, []);
 
   return windowSize;
 };
+
+/**
+ * Returns window height and width.
+ * @returns window height and width.
+ */
+function getWindowSize(): WindowSize {
+  const { innerHeight, innerWidth } = window;
+  return { height: innerHeight, width: innerWidth };
+}

@@ -22,7 +22,8 @@ import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIc
 import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFound";
 import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFiltersSearch";
 import { PAPER_PROPS, POPPER_PROPS } from "./common/constants";
-import { List } from "./components/List/list";
+import { AutocompleteListbox } from "./components/AutocompleteListbox/autocompleteListbox";
+import { AutocompletePopper } from "./components/AutocompletePopper/autocompletePopper";
 import { MatchHighlight } from "./searchAllFilters.styles";
 
 // Special option values, for inserting menu content other than actual options
@@ -128,13 +129,14 @@ export const SearchAllFilters = ({
       groupBy={(option): string =>
         typeof option === "string" ? "" : option.categoryLabel
       }
-      ListboxComponent={List}
+      ListboxComponent={AutocompleteListbox}
       onInputChange={(event, value): void =>
         setSearchTermRegExp(
           value ? new RegExp(escapeRegExp(value), "ig") : null
         )
       }
       options={options}
+      PopperComponent={AutocompletePopper}
       renderGroup={renderGroup}
       renderInput={renderInput}
       renderOption={renderOption}

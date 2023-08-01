@@ -1,5 +1,7 @@
 import { PaperProps, PopperProps } from "@mui/material";
 
+export const DEFAULT_LIST_HEIGHT = 0;
+
 export const PAPER_PROPS: Partial<PaperProps> = {
   sx: {
     width: 368,
