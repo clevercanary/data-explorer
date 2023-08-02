@@ -21,11 +21,7 @@ export interface ExportCurrentQueryProps {
 export const ExportCurrentQuery = ({
   getExportCurrentQueries,
 }: ExportCurrentQueryProps): JSX.Element => {
-  const {
-    fileManifest: { filesFacets },
-    filters,
-    isLoading,
-  } = useFileManifestState();
+  const { filesFacets, filters, isLoading } = useFileManifestState();
   const queries = getExportCurrentQueries(filters, filesFacets);
   return (
     <GridPaperSection>

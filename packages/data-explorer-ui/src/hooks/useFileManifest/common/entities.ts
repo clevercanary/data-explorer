@@ -1,4 +1,4 @@
-import { FileTypeSummary } from "../../../apis/azul/common/entities";
+import { AzulSummaryResponse } from "../../../apis/azul/common/entities";
 import { CategoryKey, CategoryValueKey } from "../../../common/entities";
 
 /**
@@ -15,8 +15,8 @@ export interface FetchFilesFacets {
 }
 
 export interface FetchFileSummary {
-  fileSummary: FileSummary;
   isLoading: boolean;
+  summary?: AzulSummaryResponse;
 }
 
 /**
@@ -33,11 +33,6 @@ export interface FileFacet {
   total: number;
 }
 
-export interface FileManifest {
-  filesFacets: FileFacet[];
-  fileSummary: FileSummary;
-}
-
 export enum FILE_MANIFEST_ACTION {
   BULK_DOWNLOAD = "BULK_DOWNLOAD",
   ENTITY_BULK_DOWNLOAD = "ENTITY_BULK_DOWNLOAD",
@@ -51,20 +46,6 @@ export enum FILE_MANIFEST_STATE_STATUS {
 }
 
 export type FileManifestStateStatus = FILE_MANIFEST_STATE_STATUS;
-
-/**
- * Model of counts, file sizes and other summary values of the current selection of facets.
- */
-export interface FileSummary {
-  donorCount: number;
-  fileCount: number;
-  fileTypeSummaries: Omit<FileTypeSummary, "format">[];
-  organTypes: string[];
-  projectCount: number;
-  specimenCount: number;
-  totalCellCount: number;
-  totalFileSize: number;
-}
 
 export type SelectedSearchTermsBySearchKey = Map<
   CategoryKey,

@@ -1,17 +1,14 @@
 import {
   AzulEntitiesResponse,
-  AzulSummaryResponse,
   AzulTerm,
   AzulTermFacet,
   AzulTermFacets,
   LABEL,
 } from "../../../apis/azul/common/entities";
 import { Filters } from "../../../common/entities";
-import { DEFAULT_FILE_MANIFEST } from "./constants";
 import {
   EntitySearchResults,
   FileFacet,
-  FileSummary,
   SelectedSearchTermsBySearchKey,
   Term,
   TermsByName,
@@ -50,7 +47,7 @@ function bindFacets(
   responseFacetsByName: AzulTermFacets | undefined
 ): FileFacet[] {
   if (!responseFacetsByName) {
-    return DEFAULT_FILE_MANIFEST.filesFacets;
+    return [];
   }
   return Object.keys(responseFacetsByName).map((facetName) => {
     return buildFileFacet(
@@ -83,47 +80,6 @@ function bindFacetTerms(
     accum.push({ count: responseTerm.count, name, selected });
     return accum;
   }, []);
-}
-
-/**
- * Create a new file summary object (to trigger change detecting) from the file summary response, and fix erroneous
- * total file size count if applicable.
- * @param fileSummaryResponse - File summary response.
- * @returns file summary.
- */
-export function bindFileSummaryResponse(
-  fileSummaryResponse?: AzulSummaryResponse
-): FileSummary {
-  if (!fileSummaryResponse) {
-    return DEFAULT_FILE_MANIFEST.fileSummary;
-  }
-  const totalFileSize =
-    typeof fileSummaryResponse.totalFileSize === "string"
-      ? 0
-      : fileSummaryResponse.totalFileSize;
-  // Calculate total cell count (as per Azul 3521).
-  const totalCellCount = calculateSummaryTotalCellCount(fileSummaryResponse);
-  return {
-    donorCount: fileSummaryResponse.donorCount,
-    fileCount: fileSummaryResponse.fileCount,
-    fileTypeSummaries: fileSummaryResponse.fileTypeSummaries.map(
-      (fileTypeSummaryResponse) => {
-        return {
-          contentDescription: fileTypeSummaryResponse.contentDescription,
-          count: fileTypeSummaryResponse.count,
-          fileType: fileTypeSummaryResponse.format,
-          isIntermediate: fileTypeSummaryResponse.isIntermediate,
-          matrixCellCount: fileTypeSummaryResponse.matrixCellCount,
-          totalSize: fileTypeSummaryResponse.totalSize,
-        };
-      }
-    ),
-    organTypes: fileSummaryResponse.organTypes,
-    projectCount: fileSummaryResponse.projectCount,
-    specimenCount: fileSummaryResponse.specimenCount,
-    totalCellCount,
-    totalFileSize: totalFileSize,
-  };
 }
 
 /**
@@ -160,33 +116,6 @@ function buildFileFacet(
   );
   // Create facet from newly built terms and newly calculated total.
   return getFileFacet(facetName, responseFacet.total || 0, responseTerms);
-}
-
-/**
- * Calculate the summary total cell count using the projects and estimatedCellCount values returned in the response.
- * @param fileSummaryResponse - File summary response.
- * @returns summary total cell count.
- */
-function calculateSummaryTotalCellCount(
-  fileSummaryResponse: AzulSummaryResponse
-): number {
-  return (fileSummaryResponse.projects ?? []).reduce(
-    (accum, { cellSuspensions, projects }) => {
-      if (
-        projects &&
-        (projects.estimatedCellCount || projects.estimatedCellCount === 0)
-      ) {
-        accum += projects.estimatedCellCount;
-      } else if (
-        cellSuspensions &&
-        (cellSuspensions.totalCells || cellSuspensions.totalCells === 0)
-      ) {
-        accum += cellSuspensions.totalCells;
-      }
-      return accum;
-    },
-    0
-  );
 }
 
 /**
