@@ -1,5 +1,6 @@
 import React from "react";
-import { FileManifest } from "../../../../../../hooks/useFileManifest/common/entities";
+import { AzulSummaryResponse } from "../../../../../../apis/azul/common/entities";
+import { FileFacet } from "../../../../../../hooks/useFileManifest/common/entities";
 import { useFileManifestState } from "../../../../../../hooks/useFileManifestState";
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
 import { GridPaperSection } from "../../../../../common/Section/section.styles";
@@ -8,7 +9,10 @@ import { Label, Values } from "../../exportSummary.styles";
 
 export type Summary = [string, string];
 
-export type GetExportSummaryFn = (fileManifest: FileManifest) => Summary[];
+export type GetExportSummaryFn = (
+  filesFacets: FileFacet[],
+  summary?: AzulSummaryResponse
+) => Summary[];
 
 export interface ExportSelectedDataSummaryProps {
   getExportSelectedDataSummary: GetExportSummaryFn;
@@ -17,8 +21,8 @@ export interface ExportSelectedDataSummaryProps {
 export const ExportSelectedDataSummary = ({
   getExportSelectedDataSummary,
 }: ExportSelectedDataSummaryProps): JSX.Element => {
-  const { fileManifest, isLoading } = useFileManifestState();
-  const summaries = getExportSelectedDataSummary(fileManifest);
+  const { filesFacets, isLoading, summary } = useFileManifestState();
+  const summaries = getExportSelectedDataSummary(filesFacets, summary);
   return (
     <GridPaperSection>
       <Loading loading={isLoading} panelStyle={LOADING_PANEL_STYLE.INHERIT} />

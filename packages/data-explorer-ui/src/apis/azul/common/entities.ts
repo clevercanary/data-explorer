@@ -87,31 +87,8 @@ export type AzulSearchIndex = keyof Pick<
 /**
  * Model of response returned from /index/summary API endpoint.
  */
-export interface AzulSummaryResponse {
-  cellCountSummaries: {
-    countOfDocsWithOrganType: number;
-    organType: string[];
-    totalCellCountByOrgan: number;
-  }[];
-  donorCount: number;
-  fileCount: number;
-  fileFormats?: FileFormatResponse[]; // TODO revisit AnVIL specific.
-  fileTypeSummaries: FileTypeSummary[];
-  labCount: number;
-  organTypes: string[];
-  projectCount: number;
-  projects: {
-    cellSuspensions?: {
-      totalCells?: number;
-    };
-    projects: {
-      estimatedCellCount: number;
-    };
-  }[];
-  speciesCount: number;
-  specimenCount: number;
-  totalFileSize: number;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- this type can't be determined beforehand
+export type AzulSummaryResponse = any;
 
 /**
  * Model of term returned from Azul entity endpoint (e.g. index/files).
@@ -145,14 +122,6 @@ enum AZUL_TERM_TYPE {
 }
 
 /**
- * Model of fileFormat value included in the response from index/summary API endpoint.
- */
-export interface FileFormatResponse {
-  count: number;
-  format: string;
-}
-
-/**
  * Model of the response to get a download link, using a get-retry approach
  */
 export interface FileLocationResponse {
@@ -160,18 +129,6 @@ export interface FileLocationResponse {
   Location: string;
   "Retry-After"?: number;
   Status: number;
-}
-
-/**
- * Model of file type summary.
- */
-export interface FileTypeSummary {
-  contentDescription: string[];
-  count: number;
-  format: string;
-  isIntermediate: boolean | null;
-  matrixCellCount: number | null;
-  totalSize: number;
 }
 
 /**

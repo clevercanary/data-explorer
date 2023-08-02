@@ -9,7 +9,6 @@ import { fetchQueryParams } from "../../utils/fetchQueryParams";
 import { useAsync } from "../useAsync";
 import { useFetchRequestURL } from "../useFetchRequestURL";
 import { FetchFileSummary } from "./common/entities";
-import { bindFileSummaryResponse } from "./common/utils";
 
 /**
  * Fetch file summary from summary endpoint, to populate summary in download flows.
@@ -29,7 +28,6 @@ export const useFetchSummary = (
   const requestURL = useFetchRequestURL(APIEndpoints.SUMMARY, requestParams);
   // Fetch and bind summary.
   const { data, isLoading, run } = useAsync<AzulSummaryResponse>();
-  const fileSummary = bindFileSummaryResponse(data);
 
   // Fetch summary from summary endpoint.
   useEffect(() => {
@@ -39,7 +37,7 @@ export const useFetchSummary = (
   }, [isDisabled, requestURL, run]);
 
   return {
-    fileSummary,
     isLoading,
+    summary: data, // Binding of file summary is completed via configuration.
   };
 };

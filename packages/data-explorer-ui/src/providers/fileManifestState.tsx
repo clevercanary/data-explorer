@@ -6,13 +6,15 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { ManifestDownloadFormat } from "../apis/azul/common/entities";
+import {
+  AzulSummaryResponse,
+  ManifestDownloadFormat,
+} from "../apis/azul/common/entities";
 import { CategoryKey, CategoryValueKey, Filters } from "../common/entities";
 import { useCatalog } from "../hooks/useCatalog";
 import { buildNextFilterState } from "../hooks/useCategoryFilter";
-import { DEFAULT_FILE_MANIFEST } from "../hooks/useFileManifest/common/constants";
 import {
-  FileManifest,
+  FileFacet,
   FileManifestStateStatus,
   FILE_MANIFEST_STATE_STATUS,
 } from "../hooks/useFileManifest/common/entities";
@@ -35,12 +37,13 @@ export type UpdateFilterFn = (
 export type UpdateFiltersFn = (filters: Filters) => void;
 
 export type FileManifestStateContextProps = {
-  fileManifest: FileManifest;
   fileManifestFormat?: ManifestDownloadFormat;
+  filesFacets: FileFacet[];
   filters: Filters;
   isLoading: boolean;
   requestParams?: URLSearchParams;
   requestURL?: string;
+  summary?: AzulSummaryResponse;
   updateFileManifestFormat: UpdateFileManifestFormatFn;
   updateFileManifestStateStatus: UpdateFileManifestStateStatusFn;
   updateFilter: UpdateFilterFn;
@@ -53,12 +56,13 @@ export interface FileManifestStateProps {
 
 export const FileManifestStateContext =
   createContext<FileManifestStateContextProps>({
-    fileManifest: DEFAULT_FILE_MANIFEST,
     fileManifestFormat: undefined,
+    filesFacets: [],
     filters: [],
     isLoading: false,
     requestParams: undefined,
     requestURL: undefined,
+    summary: undefined,
     // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
     updateFileManifestFormat: (): void => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
@@ -94,8 +98,8 @@ export function FileManifestStateProvider({
     isDisabled
   );
 
-  // Fetch file summary.
-  const { fileSummary, isLoading: isSummaryLoading } = useFetchSummary(
+  // Fetch summary.
+  const { isLoading: isSummaryLoading, summary } = useFetchSummary(
     filters,
     catalog,
     isDisabled
@@ -149,15 +153,13 @@ export function FileManifestStateProvider({
   return (
     <FileManifestStateContext.Provider
       value={{
-        fileManifest: {
-          fileSummary,
-          filesFacets,
-        },
         fileManifestFormat,
+        filesFacets,
         filters,
         isLoading: isFacetsLoading || isSummaryLoading,
         requestParams,
         requestURL,
+        summary,
         updateFileManifestFormat,
         updateFileManifestStateStatus,
         updateFilter, // Updates filters with given selected category value.
