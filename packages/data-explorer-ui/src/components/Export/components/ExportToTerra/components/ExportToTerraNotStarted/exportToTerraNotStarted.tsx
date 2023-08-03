@@ -1,28 +1,29 @@
 import React, { ElementType } from "react";
-import { ButtonPrimary } from "../../../../../common/Button/button.styles";
+import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
+import { FormFacet } from "../../../../common/entities";
 import {
   Section,
   SectionActions,
   SectionContent,
 } from "../../../../export.styles";
 
-export type ExportToTerraRunFn = () => void;
-
 export interface ExportToTerraNotStartedProps {
-  ExportForm: ElementType;
-  ExportToTerra: ElementType;
+  ExportTerraForm: ElementType;
+  ExportToTerraStart: ElementType;
+  formFacets: FormFacet[];
   isLoading: boolean;
-  run: ExportToTerraRunFn;
+  onRequestManifest: () => void;
 }
 
 export const ExportToTerraNotStarted = ({
-  ExportForm,
-  ExportToTerra,
+  ExportTerraForm,
+  ExportToTerraStart,
+  formFacets,
   isLoading,
-  run,
+  onRequestManifest,
 }: ExportToTerraNotStartedProps): JSX.Element => {
   return (
     <div>
@@ -34,11 +35,13 @@ export const ExportToTerraNotStarted = ({
       <FluidPaper>
         <Section>
           <SectionContent>
-            <ExportToTerra />
+            <ExportToTerraStart />
           </SectionContent>
-          <ExportForm />
+          <ExportTerraForm formFacets={formFacets} />
           <SectionActions>
-            <ButtonPrimary onClick={run}>Request Link</ButtonPrimary>
+            <ButtonPrimary onClick={onRequestManifest}>
+              Request Link
+            </ButtonPrimary>
           </SectionActions>
         </Section>
       </FluidPaper>

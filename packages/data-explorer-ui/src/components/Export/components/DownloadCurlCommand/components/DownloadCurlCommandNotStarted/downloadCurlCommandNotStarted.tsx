@@ -2,17 +2,14 @@ import React, { ElementType } from "react";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
-import { ExecutionEnvironment } from "../../../../common/entities";
+import { ExecutionEnvironment, FormFacet } from "../../../../common/entities";
 import {
   Section,
   SectionActions,
   SectionContent,
   SectionFootnote,
 } from "../../../../export.styles";
-import {
-  FormFacet,
-  OnUpdateExecutionEnvironmentFn,
-} from "../DownloadCurlCommandForm/downloadCurlCommandForm";
+import { OnUpdateExecutionEnvironmentFn } from "../DownloadCurlCommandForm/downloadCurlCommandForm";
 import { Button } from "./downloadCurlCommandNotStarted.styles";
 
 export interface DownloadCurlCommandNotStartedProps {
