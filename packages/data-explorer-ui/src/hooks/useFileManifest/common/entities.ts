@@ -33,12 +33,14 @@ export interface FileFacet {
   total: number;
 }
 
-export enum FILE_MANIFEST_ACTION {
+export enum FILE_MANIFEST_TYPE {
   BULK_DOWNLOAD = "BULK_DOWNLOAD",
+  ENITY_EXPORT_TO_TERRA = "ENITY_EXPORT_TO_TERRA",
   ENTITY_BULK_DOWNLOAD = "ENTITY_BULK_DOWNLOAD",
+  EXPORT_TO_TERRA = "EXPORT_TO_TERRA",
 }
 
-export type FileManifestAction = FILE_MANIFEST_ACTION;
+export type FileManifestType = FILE_MANIFEST_TYPE;
 
 export enum FILE_MANIFEST_STATE_STATUS {
   ACTIVE = "ACTIVE",

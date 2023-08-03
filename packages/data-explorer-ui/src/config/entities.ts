@@ -149,6 +149,22 @@ export interface EntityConfig<D = any, I = any> extends TabConfig {
 type EntityImportMapper<I, D> = (input: I) => D;
 
 /**
+ * Interface to define the export configuration for a given site.
+ */
+export interface ExportConfig extends Omit<BackPageConfig, "detailOverviews"> {
+  exportMethods: ExportMethodConfig[];
+}
+
+/**
+ * Export method configuration.
+ */
+export interface ExportMethodConfig {
+  mainColumn: ComponentsConfig;
+  route: string;
+  top: ComponentsConfig;
+}
+
+/**
  * Get identifier function.
  */
 type GetIdFunction<T> = (detail: T) => string;
@@ -269,7 +285,7 @@ export interface SiteConfig {
   dataSource: DataSourceConfig;
   entities: EntityConfig[];
   explorerTitle: HeroTitle;
-  export?: BackPageConfig;
+  export?: ExportConfig;
   exportToTerraUrl?: string; // TODO(cc) revist location; possibly nest inside "export"?
   layout: {
     footer: FooterProps;

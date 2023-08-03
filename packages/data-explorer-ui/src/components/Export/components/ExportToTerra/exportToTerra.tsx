@@ -1,51 +1,46 @@
-import React from "react";
+import React, { ElementType } from "react";
 import { MANIFEST_DOWNLOAD_FORMAT } from "../../../../apis/azul/common/entities";
+import { useExportToTerraResponseURL } from "../../../../hooks/useExportToTerraResponseURL";
+import { FileManifestType } from "../../../../hooks/useFileManifest/common/entities";
 import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
+import { useFileManifestState } from "../../../../hooks/useFileManifestState";
 import { useRequestFileLocation } from "../../../../hooks/useRequestFileLocation";
-import { PAPER_PANEL_STYLE } from "../../../common/Paper/paper";
-import { Loading } from "../../../Loading/loading";
-import { buildExportToTerraUrl } from "../../common/utils";
-import { ExportToTerraNotStarted } from "../ExportToTerraNotStarted/exportToTerraNotStarted";
-import { ExportToTerraReady } from "../ExportToTerraReady/exportToTerraReady";
+import { FormFacet } from "../../common/entities";
+import { ExportToTerraNotStarted } from "./components/ExportToTerraNotStarted/exportToTerraNotStarted";
+import { ExportToTerraReady } from "./components/ExportToTerraReady/exportToTerraReady";
 
 export interface ExportToTerraProps {
-  exportTerraUrl: string; // Environment-specific origin used when redirecting user to Terra.
-  params: URLSearchParams;
-  url: string;
+  entity?: [string, string]; // [entityIdKey, entityId] (initializes entity export to terra filters).
+  ExportForm: ElementType;
+  ExportToTerraStart: ElementType;
+  ExportToTerraSuccess: ElementType;
+  fileManifestType: FileManifestType;
+  formFacets: FormFacet[];
 }
 
 export const ExportToTerra = ({
-  exportTerraUrl,
-  params,
-  url,
+  entity,
+  ExportForm,
+  ExportToTerraStart,
+  ExportToTerraSuccess,
+  formFacets,
 }: ExportToTerraProps): JSX.Element => {
-  useRequestFileManifest(MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB, undefined);
-  const { data, isIdle, isLoading, isSuccess, run } = useRequestFileLocation(
-    `${url}?${params.toString()}`
-  );
-  return (
-    <>
-      {/* Export is idle or loading */}
-      {(isIdle || isLoading) && (
-        <div>
-          <Loading
-            loading={isLoading}
-            panelStyle={PAPER_PANEL_STYLE.FLUID}
-            text="Your link will be ready shortly..."
-          />
-          <ExportToTerraNotStarted run={run} />
-        </div>
-      )}
-      {/* Export is successful */}
-      {isSuccess && (
-        <ExportToTerraReady
-          exportURL={buildExportToTerraUrl(
-            exportTerraUrl,
-            params,
-            data?.location
-          )}
-        />
-      )}
-    </>
+  useRequestFileManifest(MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB, entity);
+  const { requestParams, requestURL } = useFileManifestState();
+  const { data, isLoading, run } = useRequestFileLocation(requestURL);
+  const exportURL = useExportToTerraResponseURL(requestParams, data);
+  return exportURL ? (
+    <ExportToTerraReady
+      ExportToTerraSuccess={ExportToTerraSuccess}
+      exportURL={exportURL}
+    />
+  ) : (
+    <ExportToTerraNotStarted
+      ExportTerraForm={ExportForm}
+      ExportToTerraStart={ExportToTerraStart}
+      formFacets={formFacets}
+      isLoading={isLoading}
+      onRequestManifest={run}
+    />
   );
 };

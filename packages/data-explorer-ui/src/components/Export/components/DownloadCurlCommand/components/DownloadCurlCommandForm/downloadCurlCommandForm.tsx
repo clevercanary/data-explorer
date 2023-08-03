@@ -1,15 +1,9 @@
 import React from "react";
-import { CategoryKey } from "../../../../../../common/entities";
-import { ExecutionEnvironment } from "../../../../common/entities";
+import { ExecutionEnvironment, FormFacet } from "../../../../common/entities";
 
 export type OnUpdateExecutionEnvironmentFn = (
   executionEnvironment: ExecutionEnvironment
 ) => void;
-
-export interface FormFacet {
-  key: CategoryKey;
-  label: string;
-}
 
 export interface DownloadCurlCommandFormProps {
   executionEnvironment: ExecutionEnvironment;

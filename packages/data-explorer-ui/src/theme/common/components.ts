@@ -313,6 +313,27 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
       disableTouchRipple: true,
     },
     styleOverrides: {
+      containedPrimary: {
+        backgroundColor: theme.palette.primary.main,
+        boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+        color: theme.palette.common.white,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          backgroundColor: theme.palette.primary.dark,
+          boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:active": {
+          backgroundColor: theme.palette.primary.dark,
+          boxShadow: "none",
+        },
+        "&:disabled": {
+          backgroundColor: theme.palette.primary.main,
+          boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
+          color: theme.palette.common.white,
+          opacity: 0.5,
+        },
+      },
       containedSecondary: {
         backgroundColor: theme.palette.common.white,
         boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,

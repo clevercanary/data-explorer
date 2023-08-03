@@ -2,8 +2,8 @@ import React, { ElementType, useState } from "react";
 import { MANIFEST_DOWNLOAD_FORMAT } from "../../../../apis/azul/common/entities";
 import { useExploreState } from "../../../../hooks/useExploreState";
 import {
-  FileManifestAction,
-  FILE_MANIFEST_ACTION,
+  FileManifestType,
+  FILE_MANIFEST_TYPE,
 } from "../../../../hooks/useFileManifest/common/entities";
 import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
 import { useFileManifestState } from "../../../../hooks/useFileManifestState";
@@ -14,9 +14,9 @@ import {
 import {
   BULK_DOWNLOAD_EXECUTION_ENVIRONMENT,
   ExecutionEnvironment,
+  FormFacet,
 } from "../../common/entities";
 import { bulkDownloadTracking } from "../../common/tracking";
-import { FormFacet } from "./components/DownloadCurlCommandForm/downloadCurlCommandForm";
 import { DownloadCurlCommandNotStarted } from "./components/DownloadCurlCommandNotStarted/downloadCurlCommandNotStarted";
 import { DownloadCurlCommandReady } from "./components/DownloadCurlCommandReady/downloadCurlCommandReady";
 
@@ -25,7 +25,7 @@ interface DownloadCurlCommandProps {
   DownloadCurlStart: ElementType;
   DownloadCurlSuccess: ElementType;
   entity?: [string, string]; // [entityIdKey, entityId] (initializes entity bulk download filters).
-  fileManifestAction: FileManifestAction;
+  fileManifestType: FileManifestType;
   formFacets: FormFacet[];
 }
 
@@ -34,7 +34,7 @@ export const DownloadCurlCommand = ({
   DownloadCurlStart,
   DownloadCurlSuccess,
   entity,
-  fileManifestAction: action,
+  fileManifestType,
   formFacets,
 }: DownloadCurlCommandProps): JSX.Element => {
   useRequestFileManifest(MANIFEST_DOWNLOAD_FORMAT.CURL, entity);
@@ -60,7 +60,12 @@ export const DownloadCurlCommand = ({
       isLoading={isLoading}
       onRequestManifest={(): void => {
         // Execute GTM tracking.
-        track(action, entityList, executionEnvironment, requestParams);
+        track(
+          fileManifestType,
+          entityList,
+          executionEnvironment,
+          requestParams
+        );
         // Request manifest.
         run();
       }}
@@ -90,18 +95,18 @@ function getBulkDownloadCurlCommand(
 
 /**
  * Executes GTM tracking.
- * @param action - File manifest action.
+ * @param fileManifestType - File manifest type.
  * @param index - Index.
  * @param toolName - Execution environment.
  * @param requestParams - Request params.
  */
 function track(
-  action: FileManifestAction,
+  fileManifestType: FileManifestType,
   index: string,
   toolName: string,
   requestParams?: URLSearchParams
 ): void {
-  if (action === FILE_MANIFEST_ACTION.BULK_DOWNLOAD) {
+  if (fileManifestType === FILE_MANIFEST_TYPE.BULK_DOWNLOAD) {
     bulkDownloadTracking(index, toolName, requestParams);
   }
 }

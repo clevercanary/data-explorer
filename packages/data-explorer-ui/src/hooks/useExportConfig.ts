@@ -1,11 +1,11 @@
-import { BackPageConfig } from "../config/entities";
+import { ExportConfig } from "../config/entities";
 import { useConfig } from "./useConfig";
 
 /**
- * Hook to get the export config
- * @returns @see BackPageConfig used on the export field for the current config.
+ * Returns the export configuration for the given site.
+ * @returns export configuration.
  */
-export const useExportConfig = (): BackPageConfig => {
+export const useExportConfig = (): ExportConfig => {
   const { config } = useConfig();
 
   if (!config.export) {

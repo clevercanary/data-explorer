@@ -1,30 +1,42 @@
-import React, { ReactNode } from "react";
+import { useRouter } from "next/router";
+import React from "react";
 import { ComponentCreator } from "../../components/ComponentCreator/ComponentCreator";
 import { BackPageView } from "../../components/Layout/components/BackPage/backPageView";
-import { BackPageHero } from "../../components/Layout/components/BackPage/components/BackPageHero/backPageHero";
-import { useExportMethodConfig } from "../../hooks/useExport/useExportMethodConfig";
+import { ExportMethodConfig } from "../../config/entities";
+import { useExportConfig } from "../../hooks/useExportConfig";
 import { useUpdateURLSearchParams } from "../../hooks/useUpdateURLSearchParams";
 
-export interface DownloadCurlCommandViewProps {
-  ExportMethod: ReactNode;
-  title: string;
-}
-
-export const ExportMethodView = ({
-  ExportMethod,
-  title,
-}: DownloadCurlCommandViewProps): JSX.Element => {
+export const ExportMethodView = (): JSX.Element => {
   useUpdateURLSearchParams();
-  const { breadcrumbs, sideColumn } = useExportMethodConfig(title);
+  const { pathname } = useRouter();
+  const { exportMethods, tabs } = useExportConfig();
+  const { sideColumn } = tabs[0];
+  const { mainColumn, top } =
+    getExportMethodConfig(exportMethods, pathname) || {};
   return (
     <BackPageView
-      mainColumn={ExportMethod}
+      mainColumn={
+        <ComponentCreator components={mainColumn || []} response={{}} />
+      }
       sideColumn={
         sideColumn ? (
           <ComponentCreator components={sideColumn} response={{}} />
         ) : undefined
       }
-      top={<BackPageHero breadcrumbs={breadcrumbs} title={title} />}
+      top={<ComponentCreator components={top || []} response={{}} />}
     />
   );
 };
+
+/**
+ * Returns the export method configuration for the given pathname.
+ * @param exportMethods - Export methods config.
+ * @param pathname - Pathname.
+ * @returns export method configuration.
+ */
+function getExportMethodConfig(
+  exportMethods: ExportMethodConfig[],
+  pathname: string
+): ExportMethodConfig | undefined {
+  return exportMethods.find(({ route }) => route === pathname);
+}

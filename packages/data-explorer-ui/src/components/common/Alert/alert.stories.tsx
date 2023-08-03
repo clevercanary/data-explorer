@@ -1,5 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import * as React from "react";
+import { Meta, StoryObj } from "@storybook/react";
 import { Alert } from "./alert";
 
 export default {
@@ -28,16 +27,15 @@ export default {
   },
   component: Alert,
   title: "Components/Common/Alert",
-} satisfies ComponentMeta<typeof Alert>;
+} satisfies Meta<typeof Alert>;
 
-const AlertTemplate: ComponentStory<typeof Alert> = (args) => (
-  <Alert {...args} />
-);
+type Story = StoryObj<typeof Alert>;
 
-export const AlertStory = AlertTemplate.bind({});
-AlertStory.args = {
-  children: "Something certainly happened",
-  color: "warning",
-  severity: "warning",
-  title: "Ouch!",
+export const AlertStory = {
+  args: {
+    children: "Something certainly happened",
+    color: "warning",
+    severity: "warning",
+    title: "Ouch!",
+  },
 };
