@@ -31,7 +31,7 @@ export default {
 
 type Story = StoryObj<typeof Alert>;
 
-export const AlertStory = {
+export const AlertStory: Story = {
   args: {
     children: "Something certainly happened",
     color: "warning",
