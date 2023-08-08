@@ -1,4 +1,4 @@
-import React, { ElementType, useEffect } from "react";
+import React, { ElementType } from "react";
 import { ButtonPrimary } from "../../../../../common/Button/button.styles";
 import { Code } from "../../../../../common/Code/code";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
@@ -18,12 +18,6 @@ export const ExportToTerraReady = ({
   ExportToTerraSuccess,
   exportURL,
 }: ExportToTerraReadyProps): JSX.Element => {
-  // Opens export URL in new tab.
-  useEffect(() => {
-    if (exportURL) {
-      window.open(exportURL, ANCHOR_TARGET.BLANK);
-    }
-  }, [exportURL]);
   return (
     <FluidPaper>
       <Section>
