@@ -17,6 +17,7 @@ import {
 import { SelectCategoryView } from "../../../../../../common/entities";
 import { escapeRegExp } from "../../../../../../common/utils";
 import { OnFilterFn } from "../../../../../../hooks/useCategoryFilter";
+import { useWindowResize } from "../../../../../../hooks/useWindowResize";
 import {
   LIST_ITEM_HEIGHT,
   LIST_MARGIN,
@@ -93,24 +94,24 @@ const OuterElementContext = createContext<OuterElementContextValue>({
   autocompleteListProps: {},
 });
 
-const OuterElement = ({
-  children,
-  ...props
-}: HTMLAttributes<HTMLElement>): JSX.Element => {
+const OuterElement = forwardRef<HTMLDivElement>(function OuterElement(
+  { children, ...props }: HTMLAttributes<HTMLElement>,
+  ref
+): JSX.Element {
   const { autocompleteListProps, autocompleteListRef } =
     useContext(OuterElementContext);
   return (
-    <div {...props}>
+    <div ref={ref} {...props}>
       <MList
         ref={autocompleteListRef}
-        style={{ maxHeight: "none" }}
+        style={{ maxHeight: "none", padding: 0 }}
         {...autocompleteListProps}
       >
         {children}
       </MList>
     </div>
   );
-};
+});
 
 export const VariableSizeList = forwardRef<
   HTMLUListElement,
@@ -133,9 +134,12 @@ export const VariableSizeList = forwardRef<
     ? new RegExp(escapeRegExp(searchTerm), "ig")
     : null;
 
+  const { height: windowHeight } = useWindowResize();
   const [height, setHeight] = useState<number>(initHeight);
   const itemSizeByItemKeyRef = useRef<ItemSizeByItemKey>(new Map());
   const listRef = useRef<List>(null);
+  const innerRef = useRef<HTMLUListElement>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
   const { current: itemSizeByItemKey } = itemSizeByItemKeyRef;
   const onUpdateItemSizeByItemKey = useCallback(
     (key: string, size: number): void =>
@@ -145,14 +149,11 @@ export const VariableSizeList = forwardRef<
 
   // Sets height of list.
   useEffect(() => {
-    setHeight(
-      calculateListHeight(
-        initHeight,
-        filteredItems,
-        itemSizeByItemKeyRef.current
-      )
-    );
-  }, [initHeight, filteredItems]);
+    if (innerRef.current && outerRef.current)
+      setHeight(
+        calculateListHeight(outerRef.current, innerRef.current, windowHeight)
+      );
+  }, [filteredItems, windowHeight]);
 
   // Clears VariableSizeList cache (offsets and measurements) when values are updated (filtered).
   // Facilitates correct positioning of list items when list is updated.
@@ -167,6 +168,7 @@ export const VariableSizeList = forwardRef<
       <List
         height={height}
         innerElementType={FilterList}
+        innerRef={innerRef}
         itemCount={filteredItems.length}
         itemData={{
           filteredItems,
@@ -181,6 +183,7 @@ export const VariableSizeList = forwardRef<
         }}
         onItemsRendered={(): void => listRef.current?.resetAfterIndex(0)} // Facilitates correct positioning of list items when list scrolls.
         outerElementType={OuterElement}
+        outerRef={outerRef}
         overscanCount={overscanCount}
         ref={listRef}
         width={width}
@@ -232,27 +235,32 @@ function applyMenuFilter(
 }
 
 /**
- * Returns given height of list if number of items is greater than max displayable list items, otherwise the minimum
- * height of either the sum of the heights of the filtered list items or the given height of the list.
- * @param maxHeight - Specified height of list.
- * @param filteredItems - Model of filtered list items.
- * @param itemSizeByItemKey - Map of item size by item key.
+ * Calculates list height, either to fit available window size, or if the list is filtered, a calculated height based on
+ * first and last rendered list element position.
+ * @param outerListElem - Outer list element to reference list position from.
+ * @param innerListElem - Element containing list items.
+ * @param windowHeight - Window height.
  * @returns calculated height.
  */
 function calculateListHeight(
-  maxHeight: number,
-  filteredItems: SearchAllFiltersItem[],
-  itemSizeByItemKey: ItemSizeByItemKey
+  outerListElem: HTMLDivElement,
+  innerListElem: HTMLUListElement,
+  windowHeight: number
 ): number {
-  let height = LIST_MARGIN * 2;
-  for (const item of filteredItems) {
-    height +=
-      item.type === ITEM_TYPE.DIVIDER
-        ? DIVIDER_HEIGHT
-        : itemSizeByItemKey.get(item.key) || LIST_ITEM_HEIGHT;
-    if (height >= maxHeight) return maxHeight;
+  // Calculate max possible list height, based on window height and top position of the list element.
+  const maxHeight = windowHeight - outerListElem.getBoundingClientRect().top;
+  // Grab the first and last element in the list.
+  const { firstElementChild: firstListEl, lastElementChild: lastListEl } =
+    innerListElem;
+  // Grab the scroll position to adjust calculated list height.
+  const { scrollTop } = innerListElem;
+  if (firstListEl && lastListEl) {
+    const { top } = firstListEl.getBoundingClientRect();
+    const { bottom } = lastListEl.getBoundingClientRect();
+    const calcHeight = bottom - top - scrollTop + LIST_MARGIN * 2;
+    return Math.min(calcHeight, maxHeight);
   }
-  return height;
+  return maxHeight;
 }
 
 /**
