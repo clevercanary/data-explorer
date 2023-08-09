@@ -391,6 +391,19 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
       startIcon: {
         marginRight: 0,
       },
+      text: {
+        alignSelf: "center",
+        minWidth: 0,
+        padding: 0,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:hover": {
+          backgroundColor: "transparent",
+          textDecoration: "underline",
+        },
+      },
+      textPrimary: {
+        color: theme.palette.primary.main,
+      },
     },
     variants: [
       {

@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
-import { TextButtonPrimary } from "../../../common/Button/button.styles";
+import { ButtonTextPrimary } from "../../../common/Button/components/ButtonTextPrimary/buttonTextPrimary";
 import { FilterNoResultsFound as FilterNoResults } from "./filterNoResultsFound.styles";
 
 type OnClearSearchTermFn = () => void;
@@ -27,9 +27,9 @@ export const FilterNoResultsFound = ({
         Try adjusting your search or filter to find what you’re looking for.
       </Typography>
       {onClearSearchTerm && (
-        <TextButtonPrimary onClick={onClearSearchTerm}>
-          Clear All
-        </TextButtonPrimary>
+        <ButtonTextPrimary onClick={onClearSearchTerm}>
+          Clear Search
+        </ButtonTextPrimary>
       )}
     </FilterNoResults>
   );

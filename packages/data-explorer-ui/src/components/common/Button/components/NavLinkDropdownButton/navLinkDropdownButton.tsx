@@ -14,7 +14,12 @@ export const NavLinkDropdownButton = ({
   ...props /* Spread props to allow for Button specific props ButtonProps e.g. "onClick". */
 }: NavLinkDropdownButtonProps): JSX.Element => {
   return (
-    <Button EndIcon={ArrowDropDownRoundedIcon} isActive={isActive} {...props}>
+    <Button
+      EndIcon={ArrowDropDownRoundedIcon}
+      isActive={isActive}
+      variant="nav"
+      {...props}
+    >
       {children}
     </Button>
   );

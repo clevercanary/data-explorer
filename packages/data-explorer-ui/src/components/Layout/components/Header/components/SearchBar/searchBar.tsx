@@ -1,6 +1,6 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
-import { ButtonPrimary } from "../../../../../common/Button/button.styles";
+import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { SearchIcon } from "../../../../../common/CustomIcon/components/SearchIcon/searchIcon";
 import {
   ClearButton,

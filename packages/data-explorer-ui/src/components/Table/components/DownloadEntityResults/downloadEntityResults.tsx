@@ -1,6 +1,6 @@
 import { Row } from "@tanstack/react-table";
 import React from "react";
-import { ButtonSecondary } from "../../../common/Button/button.styles";
+import { ButtonSecondary } from "../../../common/Button/components/ButtonSecondary/buttonSecondary";
 import { FileDownloadButton } from "../../../common/Button/components/FileDownloadButton/fileDownloadButton";
 import { DownloadIcon } from "../../../common/CustomIcon/components/DownloadIcon/downloadIcon";
 import { generateDownloadBlob } from "../../common/utils";

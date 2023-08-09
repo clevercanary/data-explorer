@@ -260,7 +260,7 @@ export function ExploreStateProvider({
  * Explore action kind.
  */
 export enum ExploreActionKind {
-  // ClearFilters = "CLEAR_FILTERS",
+  ClearFilters = "CLEAR_FILTERS",
   PaginateTable = "PAGINATE_TABLE",
   ProcessExploreResponse = "PROCESS_EXPLORE_RESPONSE",
   ProcessExploreStaticResponse = "PROCESS_EXPLORE_STATIC_RESPONSE",
@@ -276,6 +276,7 @@ export enum ExploreActionKind {
  * Explore action.
  */
 type ExploreAction =
+  | ClearFiltersAction
   | PaginateTableAction
   | ProcessExploreResponseAction
   | ProcessExploreStaticResponseAction
@@ -285,6 +286,14 @@ type ExploreAction =
   | UpdateColumnVisibilityAction
   | UpdateFilterAction
   | UpdateSortingAction;
+
+/**
+ * Clear filters action.
+ */
+type ClearFiltersAction = {
+  payload: undefined;
+  type: ExploreActionKind.ClearFilters;
+};
 
 /**
  * Paginate table action.
@@ -383,6 +392,16 @@ function exploreReducer(
   const { categoryConfigs, entityConfig } = exploreContext;
 
   switch (type) {
+    /**
+     * Clear all filters
+     **/
+    case ExploreActionKind.ClearFilters: {
+      return {
+        ...state,
+        filterState: [],
+        paginationState: resetPage(state.paginationState),
+      };
+    }
     /**
      * Paginate table
      **/

@@ -13,6 +13,7 @@ import {
 } from "../../common/entities";
 import { Tab, Tabs, TabValue } from "../../components/common/Tabs/tabs";
 import { ComponentCreator } from "../../components/ComponentCreator/ComponentCreator";
+import { ClearAllFilters } from "../../components/Filter/components/ClearAllFilters/clearAllFilters";
 import {
   CategoryFilter,
   Filters,
@@ -126,6 +127,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
         <Sidebar>
           <SidebarTools>
             <SidebarLabel label={"Filters"} />
+            <ClearAllFilters />
             <SearchAllFilters
               categoryViews={categoryViews}
               onFilter={onFilterChange}
