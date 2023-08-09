@@ -1,8 +1,14 @@
-import React from "react";
-import { Button } from "../../button";
+import React, { forwardRef } from "react";
+import { Button, ButtonProps } from "../../button";
 
-export const ButtonSecondaryOutline = ({
-  ...props /* Spread props to allow for Button specific prop overrides. */
-}): JSX.Element => {
-  return <Button color="secondary" variant="outlined" {...props} />;
-};
+export const ButtonSecondaryOutline = forwardRef<
+  HTMLButtonElement,
+  ButtonProps
+>(function ButtonSecondaryOutline(
+  {
+    ...props /* Spread props to allow for Mui ButtonProps specific prop overrides e.g. "onClick". */
+  }: ButtonProps,
+  ref
+): JSX.Element {
+  return <Button color="secondary" ref={ref} variant="outlined" {...props} />;
+});

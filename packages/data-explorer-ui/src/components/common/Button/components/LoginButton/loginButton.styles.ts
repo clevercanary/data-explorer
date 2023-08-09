@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { ButtonSecondary } from "../../button.styles";
+import { ButtonSecondary } from "../ButtonSecondary/buttonSecondary";
 
 export const LoginButton = styled(ButtonSecondary)`
   .MuiButton-endIcon {

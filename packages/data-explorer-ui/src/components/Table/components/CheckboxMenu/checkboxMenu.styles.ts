@@ -1,8 +1,5 @@
 import styled from "@emotion/styled";
-import { ListItemButton, Menu } from "@mui/material";
-
-// Template constants
-const textBody500 = "text-body-500";
+import { Menu } from "@mui/material";
 
 export const CheckboxMenu = styled(Menu)`
   .MuiPaper-menu {
@@ -14,23 +11,12 @@ export const CheckboxMenu = styled(Menu)`
     gap: 8px;
   }
 
+  // List item
+  .MuiListItem-root {
+    padding: 10px 16px;
+  }
+
   .MuiListItemButton-root.Mui-disabled {
     opacity: 1;
-  }
-`;
-
-export const ResetButton = styled(ListItemButton)`
-  &:hover {
-    background-color: transparent;
-  }
-
-  // List item text
-  .MuiListItemText-root {
-    color: ${({ theme }) => theme.palette.primary.main};
-    font-weight: ${({ theme }) => theme.typography[textBody500].fontWeight};
-
-    &:hover {
-      text-decoration: underline;
-    }
   }
 `;

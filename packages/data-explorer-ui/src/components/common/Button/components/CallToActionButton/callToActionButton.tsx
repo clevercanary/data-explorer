@@ -2,7 +2,7 @@ import NLink from "next/link";
 import React, { ElementType } from "react";
 import { ANCHOR_TARGET } from "../../../../Links/common/entities";
 import { isClientSideNavigation } from "../../../../Links/common/utils";
-import { ButtonPrimary } from "../../button.styles";
+import { ButtonPrimary } from "../ButtonPrimary/buttonPrimary";
 
 export interface CallToAction {
   label: string;
