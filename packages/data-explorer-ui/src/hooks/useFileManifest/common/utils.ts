@@ -75,7 +75,7 @@ function bindFacetTerms(
     // Default term name to "Unspecified" if term name is null.
     const name = bindTermName(responseTerm);
     // Determine if term is currently selected as a search term.
-    const selected = searchTermNames.indexOf(name) >= 0;
+    const selected = searchTermNames.indexOf(responseTerm.term) >= 0;
     // Create new term - default name to "Unspecified" if no value is returned.
     accum.push({ count: responseTerm.count, name, selected });
     return accum;
