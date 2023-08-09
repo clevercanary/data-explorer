@@ -1,12 +1,12 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { Button } from "../../button";
+import { Button as DXButton } from "../../button";
 
 interface Props {
   isActive: boolean;
 }
 
-export const NavLinkDropdownButton = styled(Button, {
+export const Button = styled(DXButton, {
   shouldForwardProp: (prop) => prop !== "isActive",
 })<Props>`
   background-color: ${({ theme }) => theme.palette.common.white};

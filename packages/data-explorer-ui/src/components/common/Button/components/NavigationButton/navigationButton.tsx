@@ -1,18 +1,18 @@
 import ArrowDropDownRoundedIcon from "@mui/icons-material/ArrowDropDownRounded";
 import React from "react";
 import { ButtonProps } from "../../button";
-import { NavLinkDropdownButton as Button } from "./navLinkDropdownButton.styles";
+import { Button } from "./navigationButton.styles";
 
-export interface NavLinkDropdownButtonProps
+export interface NavigationButtonProps
   extends Exclude<ButtonProps, "StartIcon"> {
   isActive: boolean;
 }
 
-export const NavLinkDropdownButton = ({
+export const NavigationButton = ({
   children,
   isActive,
   ...props /* Spread props to allow for Button specific props ButtonProps e.g. "onClick". */
-}: NavLinkDropdownButtonProps): JSX.Element => {
+}: NavigationButtonProps): JSX.Element => {
   return (
     <Button
       EndIcon={ArrowDropDownRoundedIcon}

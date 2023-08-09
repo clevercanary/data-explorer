@@ -5,7 +5,7 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { MouseEvent, ReactNode, useState } from "react";
-import { NavLinkDropdownButton } from "../../../../../common/Button/components/NavLinkDropdownButton/navLinkDropdownButton";
+import { NavigationButton as Button } from "../../../../../common/Button/components/NavigationButton/navigationButton";
 import { NavLinkMenu as Menu } from "./navLinkMenu.styles";
 
 export interface MenuItem {
@@ -38,9 +38,9 @@ export const NavLinkMenu = ({
 
   return (
     <>
-      <NavLinkDropdownButton isActive={open} onClick={onOpenMenu}>
+      <Button isActive={open} onClick={onOpenMenu}>
         {menuLabel}
-      </NavLinkDropdownButton>
+      </Button>
       <Menu
         anchorEl={anchorEl}
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}

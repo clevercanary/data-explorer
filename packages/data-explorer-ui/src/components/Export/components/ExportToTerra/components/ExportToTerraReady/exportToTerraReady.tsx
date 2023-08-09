@@ -18,6 +18,9 @@ export const ExportToTerraReady = ({
   ExportToTerraSuccess,
   exportURL,
 }: ExportToTerraReadyProps): JSX.Element => {
+  const onOpenTerra = (): void => {
+    window.open(exportURL, ANCHOR_TARGET.BLANK, "noopener");
+  };
   return (
     <FluidPaper>
       <Section>
@@ -26,13 +29,7 @@ export const ExportToTerraReady = ({
           <Code code={exportURL} />
         </SectionContent>
         <SectionActions>
-          <ButtonPrimary
-            href={exportURL}
-            rel="noopener"
-            target={ANCHOR_TARGET.BLANK}
-          >
-            Open Terra
-          </ButtonPrimary>
+          <ButtonPrimary onClick={onOpenTerra}>Open Terra</ButtonPrimary>
         </SectionActions>
       </Section>
     </FluidPaper>
