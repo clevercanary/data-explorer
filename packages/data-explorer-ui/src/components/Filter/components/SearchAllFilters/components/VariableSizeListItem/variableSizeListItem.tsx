@@ -12,7 +12,7 @@ import { CheckedIcon } from "../../../../../common/CustomIcon/components/Checked
 import { UncheckedIcon } from "../../../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
 import { FilterNoResultsFound } from "../../../FilterNoResultsFound/filterNoResultsFound";
 import { ITEM_TYPE, SearchAllFiltersDynamicItem } from "../../common/entites";
-import { MatchHighlight } from "../../searchAllFilters.styles"; // TODO: review location of this
+import { MatchHighlight } from "../../searchAllFilters.styles";
 
 interface Props {
   item: SearchAllFiltersDynamicItem;

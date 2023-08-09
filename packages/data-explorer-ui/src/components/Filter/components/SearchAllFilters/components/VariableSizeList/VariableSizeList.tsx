@@ -194,6 +194,12 @@ export const VariableSizeList = forwardRef<
   );
 });
 
+/**
+ * Filter categories' values by a search term and return model of list items
+ * @param categoryViews - Select category views
+ * @param inputValue - Search term
+ * @returns array of objects representing list items to be rendered
+ */
 function applyMenuFilter(
   categoryViews: SelectCategoryView[],
   inputValue: string
@@ -202,7 +208,7 @@ function applyMenuFilter(
   const filteredItems = categoryViews.reduce((filteredItems, category) => {
     if (!category.isDisabled) {
       const categoryValueKeyPrefix =
-        "value_" + category.key.replaceAll(";", ";;") + ";_";
+        "value_" + category.key.replaceAll(";", ";;") + ";_"; // Terminating the category key with a semicolon (and escaping preceding semicolons) ensures a unique prefix
       const filteredCategoryValues = category.values.reduce((values, value) => {
         if (
           !inputValue ||

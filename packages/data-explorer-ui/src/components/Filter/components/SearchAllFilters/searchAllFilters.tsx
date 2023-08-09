@@ -37,7 +37,7 @@ const Listbox = React.forwardRef<HTMLUListElement, MListProps>(function Listbox(
   ref
 ): JSX.Element {
   props = Object.assign({}, props, {
-    children: undefined,
+    children: undefined, // Content is controlled by VariableSizeList
   });
   const { categoryViews, onFilter, searchTerm } = useContext(ListboxContext);
   return (
@@ -64,10 +64,9 @@ export const SearchAllFilters = ({
         freeSolo
         ListboxComponent={Listbox}
         onInputChange={(event, value): void => setSearchTerm(value)}
-        options={[""]}
+        options={[""]} // Placeholder options, since item rendering is fully controlled by VariableSizeList
         PopperComponent={AutocompletePopper}
         renderInput={renderInput}
-        renderOption={(): React.ReactNode => ""}
         slotProps={{
           paper: { ...PAPER_PROPS },
           popper: { ...POPPER_PROPS },
