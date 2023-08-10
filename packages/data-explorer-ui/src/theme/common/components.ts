@@ -395,11 +395,6 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
         alignSelf: "center",
         minWidth: 0,
         padding: 0,
-        // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "&:hover": {
-          backgroundColor: "transparent",
-          textDecoration: "underline",
-        },
       },
       textPrimary: {
         color: theme.palette.primary.main,
@@ -551,15 +546,31 @@ export const MuiChip = (theme: Theme): Components["MuiChip"] => {
         },
       },
       {
+        props: { color: "error" },
+        style: {
+          backgroundColor: theme.palette.alert.light,
+          color: theme.palette.alert.main,
+        },
+      },
+      {
         props: { color: "info" },
         style: {
           backgroundColor: theme.palette.info.light,
+          color: theme.palette.info.main,
+        },
+      },
+      {
+        props: { color: "success" },
+        style: {
+          backgroundColor: theme.palette.success.light,
+          color: theme.palette.success.main,
         },
       },
       {
         props: { color: "warning" },
         style: {
           backgroundColor: theme.palette.warning.light,
+          color: theme.palette.warning.main,
         },
       },
       {
@@ -582,10 +593,7 @@ export const MuiChip = (theme: Theme): Components["MuiChip"] => {
         style: {
           ...theme.typography[TEXT_BODY_SMALL_400],
           backgroundColor: theme.palette.smoke.main,
-          borderColor: white,
-          borderStyle: "solid",
-          borderWidth: 2,
-          boxSizing: "content-box",
+          boxShadow: `0 0 0 2px ${white}`,
           height: 24,
         },
       },
@@ -593,10 +601,9 @@ export const MuiChip = (theme: Theme): Components["MuiChip"] => {
         props: { variant: "status" },
         style: {
           ...theme.typography[TEXT_BODY_SMALL_500],
-          borderColor: white,
-          borderStyle: "solid",
-          borderWidth: 2,
-          height: 24,
+          boxShadow: `0 0 0 2px ${white}`,
+          height: 20,
+          maxWidth: "fit-content",
         },
       },
     ],

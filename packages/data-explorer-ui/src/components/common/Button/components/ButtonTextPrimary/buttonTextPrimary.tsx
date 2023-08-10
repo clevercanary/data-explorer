@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../../button";
+import { Button } from "./buttonTextPrimary.styles";
 
 export const ButtonTextPrimary = ({
   ...props /* Spread props to allow for Button specific prop overrides. */
