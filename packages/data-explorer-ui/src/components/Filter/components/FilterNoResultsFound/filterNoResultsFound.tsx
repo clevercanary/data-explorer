@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { forwardRef } from "react";
 import { ButtonTextPrimary } from "../../../common/Button/components/ButtonTextPrimary/buttonTextPrimary";
 import { FilterNoResultsFound as FilterNoResults } from "./filterNoResultsFound.styles";
 
@@ -9,11 +9,15 @@ export interface FilterNoResultsFoundProps {
   onClearSearchTerm?: OnClearSearchTermFn;
 }
 
-export const FilterNoResultsFound = ({
-  onClearSearchTerm,
-}: FilterNoResultsFoundProps): JSX.Element => {
+export const FilterNoResultsFound = forwardRef<
+  HTMLDivElement,
+  FilterNoResultsFoundProps
+>(function FilterNoResultsFound(
+  { onClearSearchTerm }: FilterNoResultsFoundProps,
+  ref
+): JSX.Element {
   return (
-    <FilterNoResults>
+    <FilterNoResults ref={ref}>
       <Typography component="div" variant="text-body-500">
         No results found!
       </Typography>
@@ -33,4 +37,4 @@ export const FilterNoResultsFound = ({
       )}
     </FilterNoResults>
   );
-};
+});
