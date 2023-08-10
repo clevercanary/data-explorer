@@ -133,6 +133,7 @@ export const VariableSizeList = forwardRef<
   const searchTermRegExp = searchTerm
     ? new RegExp(escapeRegExp(searchTerm), "ig")
     : null;
+  let resizeRequired = true;
 
   const { height: windowHeight } = useWindowResize();
   const [height, setHeight] = useState<number>(initHeight);
@@ -153,7 +154,7 @@ export const VariableSizeList = forwardRef<
       setHeight(
         calculateListHeight(outerRef.current, innerRef.current, windowHeight)
       );
-  }, [filteredItems, windowHeight]);
+  }, [windowHeight]);
 
   // Clears VariableSizeList cache (offsets and measurements) when values are updated (filtered).
   // Facilitates correct positioning of list items when list is updated.
@@ -181,7 +182,24 @@ export const VariableSizeList = forwardRef<
           if (item.type === ITEM_TYPE.DIVIDER) return DIVIDER_HEIGHT;
           return itemSizeByItemKey.get(item.key) || itemSize;
         }}
-        onItemsRendered={(): void => listRef.current?.resetAfterIndex(0)} // Facilitates correct positioning of list items when list scrolls.
+        onItemsRendered={(): void => {
+          if (
+            resizeRequired &&
+            innerRef.current?.childElementCount &&
+            outerRef.current
+          ) {
+            // Set height of list.
+            resizeRequired = false;
+            setHeight(
+              calculateListHeight(
+                outerRef.current,
+                innerRef.current,
+                windowHeight
+              )
+            );
+          }
+          listRef.current?.resetAfterIndex(0); // Facilitates correct positioning of list items when list scrolls.
+        }}
         outerElementType={OuterElement}
         outerRef={outerRef}
         overscanCount={overscanCount}
