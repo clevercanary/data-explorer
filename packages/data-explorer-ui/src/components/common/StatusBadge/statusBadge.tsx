@@ -1,43 +1,20 @@
-import { Chip } from "@mui/material";
+import { Chip as MChip, ChipProps as MChipProps } from "@mui/material";
 import React from "react";
 
-/**
- * Model of status.
- */
-export type Status = keyof typeof STATUS;
-
-/**
- * Possible set of project status values.
- */
-export enum STATUS {
-  NEW = "NEW",
-  NONE = "NONE",
-  UPDATED = "UPDATED",
+export enum STATUS_BADGE_COLOR {
+  DEFAULT = "default",
+  ERROR = "error",
+  INFO = "info",
+  SUCCESS = "success",
+  WARNING = "warning",
 }
 
-/**
- * Status config.
- */
-const STATUS_CONFIG = {
-  [STATUS.NEW]: { color: "info", label: "New" },
-  [STATUS.NONE]: { color: "default", label: "None" },
-  [STATUS.UPDATED]: { color: "warning", label: "Updated" },
-} as const;
-
-export interface StatusBadgeProps {
-  status: Status;
-}
-
-export const StatusBadge = ({ status }: StatusBadgeProps): JSX.Element => {
-  return (
-    <>
-      {status !== STATUS.NONE && (
-        <Chip
-          color={STATUS_CONFIG[status].color}
-          label={STATUS_CONFIG[status].label}
-          variant="status"
-        />
-      )}
-    </>
-  );
+export const StatusBadge = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- children is null for Mui ChipProps.
+  children,
+  color,
+  label,
+  ...props /* Spread props to allow for Mui ChipProps specific prop overrides e.g. "onDelete". */
+}: MChipProps): JSX.Element => {
+  return <MChip color={color} label={label} variant="status" {...props} />;
 };

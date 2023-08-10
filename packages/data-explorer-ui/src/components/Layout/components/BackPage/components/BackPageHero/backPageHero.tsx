@@ -4,11 +4,6 @@ import {
   Breadcrumbs,
 } from "../../../../../common/Breadcrumbs/breadcrumbs";
 import { CallToAction } from "../../../../../common/Button/components/CallToActionButton/callToActionButton";
-import { Stack } from "../../../../../common/Stack/stack";
-import {
-  Status,
-  StatusBadge,
-} from "../../../../../common/StatusBadge/statusBadge";
 import { Title } from "../../../../../common/Title/title";
 import {
   BackPageHeroHeadline,
@@ -24,7 +19,7 @@ import { SubTitle } from "./components/SubTitle/subTitle";
 export interface BackPageHeroProps {
   breadcrumbs?: Breadcrumb[];
   callToAction?: CallToAction;
-  status?: Status;
+  children?: ReactNode;
   subTitle?: ReactNode;
   title?: ReactNode;
 }
@@ -32,7 +27,7 @@ export interface BackPageHeroProps {
 export const BackPageHero = ({
   breadcrumbs,
   callToAction,
-  status,
+  children,
   subTitle,
   title,
 }: BackPageHeroProps): JSX.Element => {
@@ -46,19 +41,10 @@ export const BackPageHero = ({
             {title && <Title title={title} />}
             <SubTitle subTitle={subTitle} />
           </HeroHeader>
-          {callToAction && (
-            <CallToActionButton
-              callToAction={callToAction}
-              row={status ? 3 : 2}
-            />
-          )}
+          {callToAction && <CallToActionButton callToAction={callToAction} />}
         </HeroHeadline>
       )}
-      {status && (
-        <Stack direction="row" gap={4}>
-          <StatusBadge status={status} />
-        </Stack>
-      )}
+      {children}
     </>
   );
 };

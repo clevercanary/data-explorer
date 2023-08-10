@@ -3,10 +3,6 @@ import { Stack } from "@mui/material";
 import { TABLET } from "../../../../../../theme/common/breakpoints";
 import { CallToActionButton as CTAButton } from "../../../../../common/Button/components/CallToActionButton/callToActionButton";
 
-interface Props {
-  row: number;
-}
-
 export const BackPageHeroHeadline = styled.div`
   display: contents;
 
@@ -29,9 +25,8 @@ export const HeroHeader = styled(Stack)`
   flex: 1;
 `;
 
-export const CallToActionButton = styled(CTAButton)<Props>`
+export const CallToActionButton = styled(CTAButton)`
   align-self: center;
-  grid-row: ${({ row }) => row}; // Positions between status and tabs.
   justify-self: flex-start;
 
   ${({ theme }) => theme.breakpoints.up(TABLET)} {

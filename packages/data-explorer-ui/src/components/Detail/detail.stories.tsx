@@ -1,6 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
-import { BackPageHeroStory } from "../Layout/components/BackPage/components/BackPageHero/backPageHero.stories";
 import { CollaboratingOrganizationsStory } from "../Project/components/CollaboratingOrganizations/collaboratingOrganizations.stories";
 import { ContactsStory } from "../Project/components/Contacts/contacts.stories";
 import { ContributorsStory } from "../Project/components/Contributors/contributors.stories";
@@ -59,9 +58,5 @@ DetailStory.args = {
       />
     </>
   ),
-  top: (
-    <>
-      <BackPageHeroStory {...BackPageHeroStory.args} />
-    </>
-  ),
+  top: <></>,
 };

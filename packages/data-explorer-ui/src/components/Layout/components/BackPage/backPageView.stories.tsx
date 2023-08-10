@@ -10,7 +10,6 @@ import { DetailsStory } from "../../../Project/components/Details/details.storie
 import { PublicationsStory } from "../../../Project/components/Publications/publications.stories";
 import { SupplementaryLinksStory } from "../../../Project/components/SupplementaryLinks/supplementaryLinks.stories";
 import { BackPageView } from "./backPageView";
-import { BackPageHeroStory } from "./components/BackPageHero/backPageHero.stories";
 
 export default {
   argTypes: {
@@ -58,9 +57,5 @@ BackPageViewStory.args = {
       />
     </>
   ),
-  top: (
-    <>
-      <BackPageHeroStory {...BackPageHeroStory.args} />
-    </>
-  ),
+  top: <></>,
 };
