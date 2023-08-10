@@ -4,14 +4,18 @@ import { Hero } from "./components/Hero/hero";
 import { Index as IndexLayout } from "./index.styles";
 
 export interface IndexProps {
-  entities?: ReactNode;
+  List?: ReactNode;
+  ListHero?: ReactNode | ReactNode[];
+  SubTitleHero?: ReactNode | ReactNode[];
   Summaries?: ReactNode;
   Tabs?: ReactNode;
   title: HeroTitle;
 }
 
 export const Index = ({
-  entities,
+  List,
+  ListHero,
+  SubTitleHero,
   Summaries,
   Tabs,
   title,
@@ -19,8 +23,10 @@ export const Index = ({
   return (
     <IndexLayout>
       <Hero Summaries={Summaries} title={title} />
+      {SubTitleHero}
       {Tabs}
-      {entities}
+      {ListHero}
+      {List}
     </IndexLayout>
   );
 };
