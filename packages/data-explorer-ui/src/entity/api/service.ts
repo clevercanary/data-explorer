@@ -114,19 +114,23 @@ export const fetchSummary = async (
   filterState: FilterState,
   accessToken: string | undefined
 ): Promise<AzulSummaryResponse> => {
-  const { summaryConfig } = getConfig();
+  const { dataSource, summaryConfig } = getConfig();
 
   if (!summaryConfig) {
     throw new Error("Summary not configured!");
   }
 
   const apiPath = summaryConfig.apiPath;
+  const catalog = dataSource.defaultListParams?.catalog;
 
   // Build filter query params, if any
   let summaryParams;
   const filtersParam = transformFilters(filterState);
   if (filtersParam) {
-    summaryParams = { [AZUL_PARAM.FILTERS]: filtersParam }; //TODO Check if we need to add the catalog here (merge in default params)
+    summaryParams = {
+      [AZUL_PARAM.CATALOG]: catalog,
+      [AZUL_PARAM.FILTERS]: filtersParam,
+    };
   }
 
   const options = createFetchOptions(accessToken);
