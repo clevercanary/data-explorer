@@ -26,6 +26,7 @@ import { Sidebar } from "../../components/Layout/components/Sidebar/sidebar";
 import { TableCreator } from "../../components/TableCreator/tableCreator";
 import {
   CategoryGroupConfig,
+  ComponentsConfig,
   EntityConfig,
   SummaryConfig,
 } from "../../config/entities";
@@ -56,6 +57,8 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   const { exploreDispatch, exploreState } = useExploreState(); // Get the useReducer state and dispatch for "Explore".
   const { categoryGroupConfigs, entities, explorerTitle, summaryConfig } =
     config;
+  const { listView } = entityConfig;
+  const { listHero, subTitleHero } = listView || {};
   const { categoryViews, isRelatedView, tabValue } = exploreState;
   const { push } = useRouter();
   const tabs = getTabs(entities);
@@ -141,8 +144,10 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
         </Sidebar>
       )}
       <IndexView
-        entities={renderEntities(exploreState, entityConfig, entityListType)}
-        Summaries={renderSummary(exploreState, summaryConfig, summaryResponse)}
+        List={renderList(exploreState, entityConfig, entityListType)}
+        ListHero={renderComponent(listHero)}
+        SubTitleHero={renderComponent(subTitleHero)}
+        Summaries={renderSummary(summaryConfig, summaryResponse)}
         Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabValue} />}
         title={explorerTitle}
       />
@@ -183,13 +188,29 @@ function buildCategoryFilters(
 }
 
 /**
+ * Optionally renders component config.
+ * @param componentsConfig - SubHero config.
+ * @param response - Response data.
+ * @returns components.
+ */
+function renderComponent<T>(
+  componentsConfig?: ComponentsConfig | undefined,
+  response?: T
+): JSX.Element | undefined {
+  if (!componentsConfig) {
+    return;
+  }
+  return <ComponentCreator components={componentsConfig} response={response} />;
+}
+
+/**
  * Render either a loading view, empty result set notification or the table itself.
  * @param exploreState - ExploreView responses from Azul, such as projects (index/projects), samples (index/samples) and files (index/files).
  * @param entityConfig - Entity configuration.
  * @param entityListType - Entity list type.
  * @returns rendered Table component.
  */
-function renderEntities(
+function renderList(
   exploreState: ExploreState,
   entityConfig: EntityConfig,
   entityListType: string
@@ -238,13 +259,11 @@ function renderEntities(
  * - defined summary config,
  * - valid summary response, and
  * - defined summaries transformed from the given summary response.
- * @param exploreState - Global state.
  * @param summaryConfig - Summary config.
  * @param summaryResponse - Response model return from summary API.
  * @returns rendered Summaries component.
  */
 function renderSummary(
-  exploreState: ExploreState,
   summaryConfig?: SummaryConfig,
   summaryResponse?: AzulSummaryResponse
 ): JSX.Element | undefined {

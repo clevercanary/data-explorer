@@ -224,7 +224,9 @@ export interface ListConfig<T = any> {
 export interface ListViewConfig {
   disablePagination?: boolean;
   enableDownload?: boolean;
+  listHero?: ComponentsConfig;
   relatedView?: RelatedViewConfig;
+  subTitleHero?: ComponentsConfig;
 }
 
 /**

@@ -1,13 +1,13 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import { SummariesStory } from "./components/Hero/components/Summaries/summaries.stories";
 import { Index } from "./index";
 
 export default {
   argTypes: {
+    List: { table: { disable: true } },
     Summaries: { table: { disable: true } },
     Tabs: { table: { disable: true } },
-    entities: { table: { disable: true } },
     title: { table: { disable: true } },
   },
   component: Index,
@@ -15,16 +15,15 @@ export default {
     layout: "fullscreen",
   },
   title: "Views/ExploreView",
-} as ComponentMeta<typeof Index>;
+} as Meta<typeof Index>;
 
-const IndexTemplate: ComponentStory<typeof Index> = (args) => (
-  <Index {...args} />
-);
+type Story = StoryObj<typeof Index>;
 
-export const IndexStory = IndexTemplate.bind({});
-IndexStory.args = {
-  Summaries: <SummariesStory {...SummariesStory.args} />,
-  Tabs: undefined,
-  entities: undefined,
-  title: "Explore Data",
+export const IndexStory: Story = {
+  args: {
+    List: undefined,
+    Summaries: <SummariesStory {...SummariesStory.args} />,
+    Tabs: undefined,
+    title: "Explore Data",
+  },
 };
