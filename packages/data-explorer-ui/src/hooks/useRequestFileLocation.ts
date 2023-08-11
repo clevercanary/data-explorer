@@ -5,6 +5,7 @@ import {
 } from "../apis/azul/common/constants";
 import { FileLocationResponse } from "../apis/azul/common/entities";
 import { useAsync } from "./useAsync";
+import { useAuthentication } from "./useAuthentication";
 
 export interface FileLocation {
   commandLine?: { [key: string]: string };
@@ -25,12 +26,28 @@ type ResolveFn = (file: FileLocation | PromiseLike<FileLocation>) => void;
 type RejectFn = (reason: FileLocation) => void;
 
 /**
+ * Returns fetch request options.
+ * @param accessToken - Access token.
+ * @returns fetch request options.
+ */
+function createFetchOptions(accessToken: string | undefined): RequestInit {
+  return {
+    headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
+  };
+}
+
+/**
  * Function to make a get request and map the result to camelCase
  * @param url - url for the get request
+ * @param accessToken - Access token.
  * @returns @see FileLocation
  */
-export const getFileLocation = async (url: string): Promise<FileLocation> => {
-  const res = await fetch(url);
+export const getFileLocation = async (
+  url: string,
+  accessToken: string | undefined
+): Promise<FileLocation> => {
+  const options = createFetchOptions(accessToken);
+  const res = await fetch(url, options);
   const jsonRes: FileLocationResponse = await res.json();
   return {
     commandLine: jsonRes.CommandLine,
@@ -43,6 +60,7 @@ export const getFileLocation = async (url: string): Promise<FileLocation> => {
 /**
  * Function that will recursively keep making requests to get the file location until gets a 302 or an error.
  * @param url - url for the get request
+ * @param accessToken - Access token.
  * @param resolve - function to resolve the running promise
  * @param reject - function to reject the running promise
  * @param active - Mutable object used to check if the page is still mounted and the requests should keep executing
@@ -50,13 +68,14 @@ export const getFileLocation = async (url: string): Promise<FileLocation> => {
  */
 const scheduleFileLocation = (
   url: string,
+  accessToken: string | undefined,
   resolve: ResolveFn,
   reject: RejectFn,
   active: MutableRefObject<boolean>,
   retryAfter = 0
 ): void => {
   setTimeout(() => {
-    getFileLocation(url).then((result: FileLocation) => {
+    getFileLocation(url, accessToken).then((result: FileLocation) => {
       if (result.status === FILE_LOCATION_PENDING) {
         if (!active.current) {
           reject({
@@ -67,6 +86,7 @@ const scheduleFileLocation = (
         }
         scheduleFileLocation(
           result.location,
+          accessToken,
           resolve,
           reject,
           active,
@@ -89,6 +109,8 @@ const scheduleFileLocation = (
 export const useRequestFileLocation = (
   url?: string
 ): UseRequestFileLocationResult => {
+  // Grab token from authentication.
+  const { token } = useAuthentication();
   const {
     data,
     isIdle,
@@ -109,11 +131,11 @@ export const useRequestFileLocation = (
     if (url) {
       runAsync(
         new Promise<FileLocation>((resolve, reject) => {
-          scheduleFileLocation(url, resolve, reject, active);
+          scheduleFileLocation(url, token, resolve, reject, active);
         })
       );
     }
-  }, [runAsync, url]);
+  }, [runAsync, token, url]);
 
   return { data, isIdle, isLoading, isSuccess, run };
 };
