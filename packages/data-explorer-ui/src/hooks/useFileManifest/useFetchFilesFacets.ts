@@ -7,6 +7,7 @@ import { Filters } from "../../common/entities";
 import { fetchEntitiesFromURL } from "../../entity/api/service";
 import { fetchQueryParams, SearchParams } from "../../utils/fetchQueryParams";
 import { useAsync } from "../useAsync";
+import { useAuthentication } from "../useAuthentication";
 import { useFetchRequestURL } from "../useFetchRequestURL";
 import { FetchFilesFacets } from "./common/entities";
 import { bindEntitySearchResultsResponse } from "./common/utils";
@@ -25,6 +26,8 @@ export const useFetchFilesFacets = (
   searchParams: SearchParams | undefined,
   isDisabled: boolean
 ): FetchFilesFacets => {
+  // Grab token from authentication.
+  const { token } = useAuthentication();
   // Build request params.
   const requestParams = fetchQueryParams(filters, catalog, searchParams);
   // Build request URL.
@@ -36,9 +39,9 @@ export const useFetchFilesFacets = (
   // Fetch facets from files endpoint.
   useEffect(() => {
     if (!isDisabled) {
-      run(fetchEntitiesFromURL(requestURL, undefined));
+      run(fetchEntitiesFromURL(requestURL, token));
     }
-  }, [isDisabled, requestURL, run]);
+  }, [isDisabled, requestURL, run, token]);
 
   return {
     filesFacets: facets,

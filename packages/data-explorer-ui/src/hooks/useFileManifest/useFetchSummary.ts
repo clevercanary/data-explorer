@@ -7,6 +7,7 @@ import { Filters } from "../../common/entities";
 import { fetchSummaryFromURL } from "../../entity/api/service";
 import { fetchQueryParams } from "../../utils/fetchQueryParams";
 import { useAsync } from "../useAsync";
+import { useAuthentication } from "../useAuthentication";
 import { useFetchRequestURL } from "../useFetchRequestURL";
 import { FetchFileSummary } from "./common/entities";
 
@@ -22,6 +23,8 @@ export const useFetchSummary = (
   catalog: string,
   isDisabled: boolean
 ): FetchFileSummary => {
+  // Grab token from authentication.
+  const { token } = useAuthentication();
   // Build request params.
   const requestParams = fetchQueryParams(filters, catalog, undefined);
   // Build request URL.
@@ -32,9 +35,9 @@ export const useFetchSummary = (
   // Fetch summary from summary endpoint.
   useEffect(() => {
     if (!isDisabled) {
-      run(fetchSummaryFromURL(requestURL, undefined));
+      run(fetchSummaryFromURL(requestURL, token));
     }
-  }, [isDisabled, requestURL, run]);
+  }, [isDisabled, requestURL, run, token]);
 
   return {
     isLoading,
