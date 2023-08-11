@@ -47,7 +47,7 @@ export const BackPageContent = styled.div`
 
   ${({ theme }) => theme.breakpoints.up(TABLET)} {
     display: grid;
-    gap: 0 16px;
+    gap: 16px;
     grid-template-columns: inherit;
     margin: 0;
   }
