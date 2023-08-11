@@ -5,6 +5,7 @@ import { CategoryKey, SelectedFilterValue } from "../common/entities";
 import { HeroTitle } from "../components/common/Title/title";
 import { FooterProps } from "../components/Layout/components/Footer/footer";
 import { HeaderProps } from "../components/Layout/components/Header/header";
+import { AuthContextProps } from "../providers/authentication";
 import { ExploreState } from "../providers/exploreState";
 
 /**
@@ -334,6 +335,7 @@ interface TabConfig {
  * View context.
  */
 export interface ViewContext {
+  authState: Pick<AuthContextProps, "hasTerraAccount" | "isAuthorized">;
   entityConfig: EntityConfig;
   exploreState: ExploreState;
 }

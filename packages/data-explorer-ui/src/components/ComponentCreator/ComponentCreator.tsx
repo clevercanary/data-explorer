@@ -1,6 +1,7 @@
 import React from "react";
 import { v4 as uuid4 } from "uuid";
 import { ComponentsConfig } from "../../config/entities";
+import { useAuthentication } from "../../hooks/useAuthentication";
 import { useConfig } from "../../hooks/useConfig";
 import { useExploreState } from "../../hooks/useExploreState";
 
@@ -22,6 +23,7 @@ export const ComponentCreator = <T,>({
   components,
   response,
 }: ComponentCreatorProps<T>): JSX.Element => {
+  const { hasTerraAccount, isAuthorized } = useAuthentication();
   const { config, entityConfig } = useConfig();
   const { exploreState } = useExploreState();
   const componentsValue =
@@ -38,7 +40,11 @@ export const ComponentCreator = <T,>({
           />
         ) : null;
         const props = c.viewBuilder
-          ? c.viewBuilder(response, { entityConfig, exploreState })
+          ? c.viewBuilder(response, {
+              authState: { hasTerraAccount, isAuthorized },
+              entityConfig,
+              exploreState,
+            })
           : {};
         return React.createElement(
           c.component,
