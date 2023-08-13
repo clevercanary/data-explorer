@@ -25,7 +25,7 @@ export const Link = ({
     <>
       {isClientSideNavigation(url) ? (
         <>
-          <NLink href={url} passHref>
+          <NLink href={url} passHref legacyBehavior>
             <MLink
               rel="noopener"
               noWrap={noWrap}

@@ -22,9 +22,7 @@ export const Logo = ({
 }: LogoProps): JSX.Element => {
   return (
     <Link href={link} passHref>
-      <a href="passHref">
-        <StaticImage alt={alt} height={height} src={src} width={width} />
-      </a>
+      <StaticImage alt={alt} height={height} src={src} width={width} />
     </Link>
   );
 };

@@ -40,7 +40,7 @@ export const Footer = ({
         </Stack>
         <Stack alignItems="stretch" direction="row" gap={6}>
           {navLinks.map(({ label, url }) => (
-            <NLink key={label} href={url} passHref>
+            <NLink key={label} href={url} passHref legacyBehavior>
               <Link
                 alignItems="center"
                 color="ink.main"

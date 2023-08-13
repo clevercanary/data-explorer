@@ -37,7 +37,7 @@ export const NavLinks = ({
         menuItems ? (
           <NavLinkMenu key={label} menuItems={menuItems} menuLabel={label} />
         ) : (
-          <Link key={url} href={url} passHref>
+          <Link key={url} href={url} passHref legacyBehavior>
             <Button
               href="passHref"
               sx={{

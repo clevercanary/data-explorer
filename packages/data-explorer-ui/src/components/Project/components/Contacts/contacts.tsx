@@ -19,7 +19,7 @@ export const Contacts = ({ contacts }: ContactsProps): JSX.Element => {
             <Typography variant="text-body-500-2lines">{name}</Typography>
             {institution && <span>{institution}</span>}
             {email && (
-              <Link href={`mailto:${email}`} passHref>
+              <Link href={`mailto:${email}`} passHref legacyBehavior>
                 <EmailLink>{email}</EmailLink>
               </Link>
             )}

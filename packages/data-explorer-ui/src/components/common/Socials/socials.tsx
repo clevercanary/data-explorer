@@ -41,7 +41,7 @@ export const Socials = ({
   return (
     <Box display="flex" sx={[...(Array.isArray(sx) ? sx : [sx])]}>
       {socials.map(({ type, url }) => (
-        <Link key={type} href={url} passHref>
+        <Link key={type} href={url} passHref legacyBehavior>
           <IconButtonElType
             href="passHref"
             rel="noopener"

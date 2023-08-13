@@ -27,7 +27,7 @@ export const Hero = ({ Summaries, title }: HeroProps): JSX.Element => {
             {/* TODO +n link widget, and accompanying Dot separator */}
             {Summaries}
           </SummaryWidget>
-          <Link href="/export" passHref>
+          <Link href="/export" passHref legacyBehavior>
             <ExportButton href="passHref">Export</ExportButton>
           </Link>
         </Widgets>

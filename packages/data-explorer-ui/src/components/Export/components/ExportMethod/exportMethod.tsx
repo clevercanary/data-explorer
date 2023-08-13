@@ -33,7 +33,7 @@ export const ExportMethod = ({
           <Typography variant="text-body-400-2lines">{description}</Typography>
         </SectionContent>
         <SectionActions>
-          <Link href={route} passHref>
+          <Link href={route} passHref legacyBehavior>
             <ExportButton disabled={disabled}>{buttonLabel}</ExportButton>
           </Link>
         </SectionActions>
