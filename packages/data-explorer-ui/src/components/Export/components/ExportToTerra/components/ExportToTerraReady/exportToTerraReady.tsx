@@ -19,7 +19,7 @@ export const ExportToTerraReady = ({
   exportURL,
 }: ExportToTerraReadyProps): JSX.Element => {
   const onOpenTerra = (): void => {
-    window.open(exportURL, ANCHOR_TARGET.BLANK, "noopener");
+    window.open(exportURL, ANCHOR_TARGET.BLANK, "noopener noreferrer");
   };
   return (
     <FluidPaper>
