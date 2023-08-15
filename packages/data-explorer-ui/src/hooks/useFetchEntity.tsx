@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { AzulEntityStaticResponse } from "../apis/azul/common/entities";
 import { PARAMS_INDEX_UUID } from "../common/constants";
+import { EntityDetailViewProps } from "../views/EntityDetailView/entityDetailView";
 import { useAsync } from "./useAsync";
+import { useAuthentication } from "./useAuthentication";
 import { useEntityService } from "./useEntityService";
 
 interface UseEntityDetailResponse<T> {
@@ -13,34 +14,39 @@ interface UseEntityDetailResponse<T> {
 /**
  * Hook handling the load and transformation of the values used by detail pages. If the current entity loaded statically,
  * this hook will return the already loaded data. Otherwise, it will make a request for the entity's pathUrl
- * @param value - Statically loaded data, if any.
+ * @param detailViewProps - Statically loaded data, if any.
  * @returns Object with the loaded data and a flag indicating is the data is loading.
  */
 export const useFetchEntity = <T,>(
-  value?: AzulEntityStaticResponse
+  detailViewProps?: EntityDetailViewProps
 ): UseEntityDetailResponse<T> => {
-  const { detailStaticLoad, fetchEntityDetail, path } = useEntityService();
-  const router = useRouter();
-  const uuid = router.query.params?.[PARAMS_INDEX_UUID] as string;
+  const { data: entityList } = detailViewProps || {}; // Data is statically loaded if entity list is defined.
+  const { token } = useAuthentication();
+  const { fetchEntityDetail, listStaticLoad, path } = useEntityService();
   const {
-    data: response,
-    isIdle,
-    isLoading: apiIsLoading,
-    run,
-  } = useAsync<T>();
+    query: { params },
+  } = useRouter();
+  const uuid = params?.[PARAMS_INDEX_UUID] as string;
+  const { data: response, isIdle, isLoading, run } = useAsync<T>();
+  const isIdleOrLoading = isIdle || isLoading;
+  const shouldFetchEntityDetail = !listStaticLoad && !response;
 
   useEffect(() => {
-    if (!detailStaticLoad && uuid) {
-      run(fetchEntityDetail(uuid, path));
+    // Fetch entity if entity data originates from a request, and has not yet been requested.
+    if (shouldFetchEntityDetail && uuid) {
+      run(fetchEntityDetail(uuid, path, token));
     }
-  }, [fetchEntityDetail, path, run, detailStaticLoad, uuid]);
+  }, [fetchEntityDetail, path, run, shouldFetchEntityDetail, token, uuid]);
 
-  if (detailStaticLoad) {
-    return { isLoading: false, response: value?.data };
+  if (token) {
+    return {
+      isLoading: isIdleOrLoading,
+      response: response,
+    };
   }
 
   return {
-    isLoading: apiIsLoading || isIdle,
-    response,
+    isLoading: entityList ? false : isIdleOrLoading,
+    response: entityList ? entityList : response,
   };
 };
