@@ -89,17 +89,21 @@ export const fetchAllEntities = async (
  *  Request to get a single project.
  * @param id - entity's uuid.
  * @param apiPath - API endpoint URL.
+ * @param accessToken - Access token.
  * @param param - Catalog's version, if none passed it will default to the current one.
  * @returns @see ProjectResponse
  */
 export const fetchEntityDetail = async (
   id: string,
   apiPath: string,
+  accessToken: string | undefined,
   param = getDefaultDetailParams()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
+  const options = createFetchOptions(accessToken);
   const res = await api().get(
-    `${apiPath}/${id}?${convertUrlParams({ ...param })}`
+    `${apiPath}/${id}?${convertUrlParams({ ...param })}`,
+    options
   );
   return res.data;
 };
