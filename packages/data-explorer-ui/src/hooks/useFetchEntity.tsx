@@ -40,8 +40,8 @@ export const useFetchEntity = <T,>(
 
   if (token) {
     return {
-      isLoading: isIdleOrLoading,
-      response: response,
+      isLoading: entityList ? false : isIdleOrLoading,
+      response: response ? response : entityList,
     };
   }
 
