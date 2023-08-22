@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { RESPONSE_SOURCE } from "../apis/azul/common/entities";
 import { PARAMS_INDEX_UUID } from "../common/constants";
 import { EntityDetailViewProps } from "../views/EntityDetailView/entityDetailView";
 import { useAsync } from "./useAsync";
@@ -41,7 +42,12 @@ export const useFetchEntity = <T,>(
   if (token) {
     return {
       isLoading: entityList ? false : isIdleOrLoading,
-      response: response ? response : entityList,
+      response: response
+        ? {
+            ...response,
+            responseSource: RESPONSE_SOURCE.FETCH,
+          }
+        : { ...entityList, responseSource: RESPONSE_SOURCE.STATIC_GENERATION },
     };
   }
 
