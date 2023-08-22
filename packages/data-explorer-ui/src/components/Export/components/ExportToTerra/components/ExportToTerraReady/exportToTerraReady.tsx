@@ -1,6 +1,5 @@
 import React, { ElementType } from "react";
 import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
-import { Code } from "../../../../../common/Code/code";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { ANCHOR_TARGET } from "../../../../../Links/common/entities";
 import {
@@ -26,7 +25,6 @@ export const ExportToTerraReady = ({
       <Section>
         <SectionContent>
           <ExportToTerraSuccess />
-          <Code code={exportURL} />
         </SectionContent>
         <SectionActions>
           <ButtonPrimary onClick={onOpenTerra}>Open Terra</ButtonPrimary>
