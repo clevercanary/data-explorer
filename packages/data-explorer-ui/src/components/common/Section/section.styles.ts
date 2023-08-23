@@ -1,7 +1,9 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { Typography } from "@mui/material";
-import { TABLET } from "../../../theme/common/breakpoints";
+import { mediaTabletUp } from "../../../styles/common/mixins/breakpoints";
+import { white } from "../../../styles/common/mixins/colors";
+import { ThemeProps } from "../../../theme/theme";
 
 export const sectionMargin = css`
   margin: 20px 16px;
@@ -15,20 +17,24 @@ export const sectionMarginXsm = css`
   margin: 16px;
 `;
 
-export const Section = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px 0;
+export const sectionPadding = ({ theme }: ThemeProps) => css`
   padding: 20px 16px;
 
-  ${({ theme }) => theme.breakpoints.up(TABLET)} {
+  ${mediaTabletUp({ theme })} {
     padding: 20px;
   }
 `;
 
+export const Section = styled.div`
+  ${sectionPadding};
+  display: flex;
+  flex-direction: column;
+  gap: 16px 0;
+`;
+
 // Basic section with white background - typically used as a direct descendant of GridPaper component.
 export const GridPaperSection = styled(Section)`
-  background-color: ${({ theme }) => theme.palette.common.white};
+  background-color: ${white};
 `;
 
 export const SectionContent = styled.div`

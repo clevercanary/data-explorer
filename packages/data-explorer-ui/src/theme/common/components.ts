@@ -1122,6 +1122,14 @@ export const MuiRadio = (theme: Theme): Components["MuiRadio"] => {
           color: theme.palette.smoke.dark,
           opacity: "50%",
         },
+        "&.MuiRadio-colorDefault": {
+          color: theme.palette.ink.light,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&.Mui-disabled": {
+            color: theme.palette.smoke.main,
+            opacity: "100%",
+          },
+        },
         "&:hover": {
           backgroundColor: "transparent",
         },
