@@ -337,7 +337,7 @@ interface TabConfig {
  * View context.
  */
 export interface ViewContext {
-  authState: Pick<AuthContextProps, "hasTerraAccount" | "isAuthorized">;
+  authState: Pick<AuthContextProps, "isAuthorized" | "terraProfile">;
   entityConfig: EntityConfig;
   exploreState: ExploreState;
 }

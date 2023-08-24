@@ -1,4 +1,4 @@
-import { useRouter } from "next/router";
+import Router, { useRouter } from "next/router";
 import React, {
   createContext,
   ReactNode,
@@ -20,6 +20,14 @@ type AuthorizeUserFn = () => void;
 type RequestAuthorizationFn = () => void;
 
 /**
+ * Model of terra profile.
+ */
+interface TerraProfile {
+  authorized: boolean;
+  tosAccepted: boolean;
+}
+
+/**
  * Model of token response.
  */
 interface TokenResponse {
@@ -34,6 +42,7 @@ interface TokenResponse {
  * Model of user profile.
  */
 export interface UserProfile {
+  authorized: boolean;
   email: string;
   email_verified: boolean;
   family_name: string;
@@ -50,9 +59,9 @@ export interface UserProfile {
  */
 export interface AuthContextProps {
   authorizeUser: AuthorizeUserFn;
-  hasTerraAccount: boolean;
   isAuthorized: boolean;
   requestAuthorization: RequestAuthorizationFn;
+  terraProfile?: TerraProfile;
   token?: string;
   userProfile?: UserProfile;
 }
@@ -63,10 +72,10 @@ export interface AuthContextProps {
 export const AuthContext = createContext<AuthContextProps>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   authorizeUser: () => {},
-  hasTerraAccount: false,
   isAuthorized: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   requestAuthorization: () => {},
+  terraProfile: undefined,
   token: undefined,
   userProfile: undefined,
 });
@@ -80,22 +89,21 @@ interface Props {
  * Auth provider for consuming components to subscribe to changes in auth-related state.
  * @param props - Component inputs.
  * @param props.children - Set of children components that can possibly consume the query provider.
- * @param props.sessionTimeout - If provided, will set the value for a session timeout (in mili)
+ * @param props.sessionTimeout - If provided, will set the value for a session timeout (in milliseconds).
  * @returns Provider element to be used by consumers to both update authentication state and subscribe to changes in authentication state.
  */
 export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const { authentication: authConfig } = useConfig().config;
   const { googleGISAuthConfig } = authConfig || {};
   const { clientId, scope } = googleGISAuthConfig || {};
-  const router = useRouter();
-  const { asPath, basePath } = router;
-  const routeHistoryRef = useRef<string>(asPath);
-  const [hasTerraAccount, setHasTerraAccount] = useState<boolean>(false);
-  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const { asPath, basePath } = useRouter();
+  const routeHistoryRef = useRef<string>(initRouteHistory(asPath));
   const [token, setToken] = useState<string>();
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
   const [tokenClient, setTokenClient] = useState<any>(); // TODO see https://github.com/clevercanary/data-browser/issues/544.
+  const [terraProfile, setTerraProfile] = useState<TerraProfile>();
   const [userProfile, setUserProfile] = useState<UserProfile>();
+  const isAuthorized = Boolean(userProfile?.authorized);
 
   /**
    * If sessionTimeout is set and user is authorized, the app will reload and redirect to
@@ -120,12 +128,11 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
    * Navigates to login page.
    */
   const requestAuthorization = useCallback((): void => {
-    router.push(ROUTE_LOGIN);
-  }, [router]);
+    Router.push(ROUTE_LOGIN);
+  }, []);
 
   /**
-   * Fetches google user profile from Google APIS.
-   * @param accessToken - Token client access token.
+   * Fetches google user profile, and on success, redirects user to the previous route.
    */
   const fetchGoogleProfile = useCallback(
     (endpoint: string, accessToken: string): void => {
@@ -135,21 +142,19 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       fetch(endpoint, options)
         .then((response) => response.json())
         .then((profile) => {
-          setUserProfile(profile);
-          setIsAuthorized(true);
+          setUserProfile({ authorized: true, ...profile });
+          Router.push(routeHistoryRef.current);
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
           setUserProfile(undefined);
-          setIsAuthorized(false);
         });
     },
     []
   );
 
   /**
-   * Fetches terra user profile from Google APIS.
-   * @param accessToken - Token client access token.
+   * Fetches terra user profile.
    */
   const fetchTerraProfile = useCallback(
     (endpoint: string, accessToken: string): void => {
@@ -158,16 +163,15 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       const options = { headers };
       fetch(endpoint, options)
         .then((response) => response.json())
-        .then((profile) => {
-          if (profile?.enabled?.google) {
-            setHasTerraAccount(true);
-          } else {
-            setHasTerraAccount(false);
-          }
+        .then(({ enabled: { google, tosAccepted } }) => {
+          setTerraProfile({
+            authorized: Boolean(google),
+            tosAccepted: Boolean(tosAccepted),
+          });
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
-          setHasTerraAccount(false);
+          setTerraProfile({ authorized: false, tosAccepted: false });
         });
     },
     []
@@ -189,7 +193,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
     }
   }, [clientId, scope]);
 
-  // Fetches user profile and sets userProfile state when token is retrieved.
+  // Fetches profiles and sets userProfile and terraProfile state when token is retrieved.
   useEffect(() => {
     if (googleGISAuthConfig && token) {
       fetchGoogleProfile(googleGISAuthConfig.googleProfileEndpoint, token);
@@ -206,20 +210,13 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
     }
   }, [asPath]);
 
-  // Authorization is successful, and the page redirects back to the previous route.
-  useEffect(() => {
-    if (isAuthorized && asPath !== routeHistoryRef.current) {
-      router.push(routeHistoryRef.current);
-    }
-  }, [asPath, isAuthorized, router]);
-
   return (
     <AuthContext.Provider
       value={{
         authorizeUser,
-        hasTerraAccount,
         isAuthorized,
         requestAuthorization,
+        terraProfile,
         token,
         userProfile,
       }}
@@ -227,4 +224,14 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       {children}
     </AuthContext.Provider>
   );
+}
+
+/**
+ * Initializes route history with the current route path.
+ * Returns base path if current route path is the login route.
+ * @param path - current browser path.
+ * @returns path to be used as the initial route history.
+ */
+function initRouteHistory(path: string): string {
+  return path === ROUTE_LOGIN ? "/" : path;
 }
