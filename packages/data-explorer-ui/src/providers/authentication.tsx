@@ -4,6 +4,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -104,6 +105,10 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const [terraProfile, setTerraProfile] = useState<TerraProfile>();
   const [userProfile, setUserProfile] = useState<UserProfile>();
   const isAuthorized = Boolean(userProfile?.authorized);
+  routeHistoryRef.current = useMemo(
+    () => updateRouteHistory(routeHistoryRef.current, asPath),
+    [asPath]
+  );
 
   /**
    * If sessionTimeout is set and user is authorized, the app will reload and redirect to
@@ -201,15 +206,6 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
     }
   }, [googleGISAuthConfig, fetchGoogleProfile, fetchTerraProfile, token]);
 
-  // Route history ref is updated with the previous route path.
-  useEffect(() => {
-    if (asPath !== ROUTE_LOGIN) {
-      // LoginView route omitted; once authorization is successful, the router redirects back to the
-      // path prior to logging in.
-      routeHistoryRef.current = asPath;
-    }
-  }, [asPath]);
-
   return (
     <AuthContext.Provider
       value={{
@@ -227,11 +223,24 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
 }
 
 /**
- * Initializes route history with the current route path.
- * Returns base path if current route path is the login route.
+ * Initializes route history with the current path.
+ * Returns base path if current path is the login route.
  * @param path - current browser path.
  * @returns path to be used as the initial route history.
  */
 function initRouteHistory(path: string): string {
   return path === ROUTE_LOGIN ? "/" : path;
+}
+
+/**
+ * Updates route history with the current path, unless the current path is the LoginView page.
+ * @param prevPath - route history path.
+ * @param path - current browser path.
+ * @returns updated path to be used as the route history.
+ */
+function updateRouteHistory(prevPath: string, path: string): string {
+  if (path !== ROUTE_LOGIN) {
+    return path;
+  }
+  return prevPath;
 }
