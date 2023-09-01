@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuid4 } from "uuid";
 import { ComponentsConfig } from "../../config/entities";
 import { useAuthentication } from "../../hooks/useAuthentication";
 import { useConfig } from "../../hooks/useConfig";
@@ -31,10 +30,13 @@ export const ComponentCreator = <T,>({
 
   return (
     <>
-      {componentsValue.map((c) => {
+      {componentsValue.map((c, k) => {
+        // Using uuid as the component's key causes the component to re-mount on re-render.
+        // An interim solution is to use the array item's index as its key; however, this may lead to subtle bugs.
+        // See issue https://github.com/clevercanary/data-explorer/issues/363.
         const children = c.children ? (
           <ComponentCreator
-            key={uuid4()}
+            key={k}
             components={c.children}
             response={response}
           />
@@ -48,7 +50,7 @@ export const ComponentCreator = <T,>({
           : {};
         return React.createElement(
           c.component,
-          { ...c.props, ...props, key: uuid4() },
+          { ...c.props, ...props, key: k },
           [children ?? props.children]
         );
       })}
