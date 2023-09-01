@@ -11,9 +11,9 @@ import { CreateTerraAccount } from "./components/FormStep/components/CreateTerra
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
 export const TerraSetUpForm = (): JSX.Element | null => {
-  const { hasTerraAccount, isAuthorized } = useAuthentication();
-  const isSetUpComplete = isAuthorized && hasTerraAccount;
-  return !isAuthorized ? null : isSetUpComplete ? null : (
+  const { isAuthenticated, terraProfile } = useAuthentication();
+  const isSetUpComplete = isAuthenticated && terraProfile?.hasTerraAccount;
+  return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? null : (
     <RoundedPaper>
       <GridPaper>
         <Section>
@@ -25,7 +25,9 @@ export const TerraSetUpForm = (): JSX.Element | null => {
             </Typography>
           </SectionContent>
         </Section>
-        <CreateTerraAccount hasTerraAccount={hasTerraAccount} />
+        <CreateTerraAccount
+          hasTerraAccount={Boolean(terraProfile?.hasTerraAccount)}
+        />
       </GridPaper>
     </RoundedPaper>
   );
