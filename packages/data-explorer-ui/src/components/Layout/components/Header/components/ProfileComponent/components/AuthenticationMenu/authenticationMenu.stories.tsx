@@ -22,7 +22,7 @@ const AuthenticationMenuTemplate: StoryFn<typeof AuthenticationMenu> = (
 export const AuthenticationMenuStory = AuthenticationMenuTemplate.bind({});
 AuthenticationMenuStory.args = {
   userProfile: {
-    authorized: true,
+    authenticated: true,
     email: "john@smith.com",
     email_verified: true,
     family_name: "Smith",

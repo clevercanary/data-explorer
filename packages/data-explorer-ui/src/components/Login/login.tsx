@@ -1,6 +1,6 @@
 import { Checkbox, Typography } from "@mui/material";
-import React, { ChangeEvent, ReactNode, useContext, useState } from "react";
-import { AuthContext } from "../../providers/authentication";
+import React, { ChangeEvent, ReactNode, useState } from "react";
+import { useAuthentication } from "../../hooks/useAuthentication";
 import { LoginButton } from "../common/Button/components/LoginButton/loginButton";
 import { CheckedIcon } from "../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { GoogleIcon } from "../common/CustomIcon/components/GoogleIcon/googleIcon";
@@ -33,18 +33,18 @@ export const Login = ({
   title,
   warning,
 }: LoginProps): JSX.Element => {
-  const authorizeUser = useContext(AuthContext).authorizeUser;
+  const { authenticateUser } = useAuthentication();
   const [isError, setIsError] = useState<boolean>(false);
   const [isInAgreement, setIsInAgreement] = useState<boolean>(!termsOfService);
 
-  // Authorizes the user, if the user has agreed to the terms of service.
+  // Authenticates the user, if the user has agreed to the terms of service.
   // If the terms of service are not accepted, set the terms of service error state to true.
-  const onAuthorizeUser = (): void => {
+  const onAuthenticateUser = (): void => {
     if (!isInAgreement) {
       setIsError(true);
       return;
     }
-    authorizeUser();
+    authenticateUser();
   };
 
   // Callback fired when the checkbox value is changed.
@@ -76,7 +76,7 @@ export const Login = ({
               </LoginAgreement>
             )}
             {isGoogle && (
-              <LoginButton EndIcon={GoogleIcon} onClick={onAuthorizeUser}>
+              <LoginButton EndIcon={GoogleIcon} onClick={onAuthenticateUser}>
                 Google
               </LoginButton>
             )}

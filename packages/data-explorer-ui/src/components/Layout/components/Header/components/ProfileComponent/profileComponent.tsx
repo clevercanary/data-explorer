@@ -11,7 +11,7 @@ import { DESKTOP_SM } from "../../../../../../theme/common/breakpoints";
 import { AuthenticationMenu } from "./components/AuthenticationMenu/authenticationMenu";
 
 export const ProfileComponent = (): JSX.Element => {
-  const { isAuthorized, requestAuthorization, userProfile } =
+  const { isAuthenticated, requestAuthentication, userProfile } =
     useContext(AuthContext);
   const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
   const router = useRouter();
@@ -20,18 +20,18 @@ export const ProfileComponent = (): JSX.Element => {
   }, [router]);
   return (
     <>
-      {isAuthorized && userProfile ? (
+      {isAuthenticated && userProfile ? (
         <AuthenticationMenu onLogout={onLogout} userProfile={userProfile} />
       ) : smDesktop ? (
         <Button
           startIcon={<LoginRoundedIcon />}
           variant="nav"
-          onClick={requestAuthorization}
+          onClick={requestAuthentication}
         >
           Sign in
         </Button>
       ) : (
-        <IconButton color="ink" onClick={requestAuthorization}>
+        <IconButton color="ink" onClick={requestAuthentication}>
           <LoginRoundedIcon />
         </IconButton>
       )}

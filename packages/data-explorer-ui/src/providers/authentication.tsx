@@ -17,14 +17,14 @@ export const ROUTE_LOGIN = "/login";
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
 declare const google: any; // TODO see https://github.com/clevercanary/data-browser/issues/544.
 
-type AuthorizeUserFn = () => void;
-type RequestAuthorizationFn = () => void;
+type AuthenticateUserFn = () => void;
+type RequestAuthenticationFn = () => void;
 
 /**
  * Model of terra profile.
  */
 interface TerraProfile {
-  authorized: boolean;
+  hasTerraAccount: boolean;
   tosAccepted: boolean;
 }
 
@@ -43,7 +43,7 @@ interface TokenResponse {
  * Model of user profile.
  */
 export interface UserProfile {
-  authorized: boolean;
+  authenticated: boolean;
   email: string;
   email_verified: boolean;
   family_name: string;
@@ -59,9 +59,9 @@ export interface UserProfile {
  * Model of authentication context.
  */
 export interface AuthContextProps {
-  authorizeUser: AuthorizeUserFn;
-  isAuthorized: boolean;
-  requestAuthorization: RequestAuthorizationFn;
+  authenticateUser: AuthenticateUserFn;
+  isAuthenticated: boolean;
+  requestAuthentication: RequestAuthenticationFn;
   terraProfile?: TerraProfile;
   token?: string;
   userProfile?: UserProfile;
@@ -72,10 +72,10 @@ export interface AuthContextProps {
  */
 export const AuthContext = createContext<AuthContextProps>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
-  authorizeUser: () => {},
-  isAuthorized: false,
+  authenticateUser: () => {},
+  isAuthenticated: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
-  requestAuthorization: () => {},
+  requestAuthentication: () => {},
   terraProfile: undefined,
   token: undefined,
   userProfile: undefined,
@@ -104,35 +104,35 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const [tokenClient, setTokenClient] = useState<any>(); // TODO see https://github.com/clevercanary/data-browser/issues/544.
   const [terraProfile, setTerraProfile] = useState<TerraProfile>();
   const [userProfile, setUserProfile] = useState<UserProfile>();
-  const isAuthorized = Boolean(userProfile?.authorized);
+  const isAuthenticated = Boolean(userProfile?.authenticated);
   routeHistoryRef.current = useMemo(
     () => updateRouteHistory(routeHistoryRef.current, asPath),
     [asPath]
   );
 
   /**
-   * If sessionTimeout is set and user is authorized, the app will reload and redirect to
+   * If sessionTimeout is set and user is authenticated, the app will reload and redirect to
    * origin (including basePath)
    */
   useIdleTimer({
     onIdle: () =>
-      isAuthorized &&
+      isAuthenticated &&
       sessionTimeout &&
       (window.location.href = window.location.origin + basePath),
     timeout: sessionTimeout,
   });
 
   /**
-   * Requests access token and authorizes user.
+   * Requests access token and authenticates user.
    */
-  const authorizeUser = useCallback((): void => {
+  const authenticateUser = useCallback((): void => {
     tokenClient.requestAccessToken();
   }, [tokenClient]);
 
   /**
    * Navigates to login page.
    */
-  const requestAuthorization = useCallback((): void => {
+  const requestAuthentication = useCallback((): void => {
     Router.push(ROUTE_LOGIN);
   }, []);
 
@@ -147,7 +147,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       fetch(endpoint, options)
         .then((response) => response.json())
         .then((profile) => {
-          setUserProfile({ authorized: true, ...profile });
+          setUserProfile({ authenticated: true, ...profile });
           Router.push(routeHistoryRef.current);
         })
         .catch((err) => {
@@ -168,15 +168,17 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       const options = { headers };
       fetch(endpoint, options)
         .then((response) => response.json())
-        .then(({ enabled: { google, tosAccepted } }) => {
+        .then((response) => {
+          const hasTerraAccount = Boolean(response?.enabled?.google);
+          const tosAccepted = Boolean(response?.enabled?.tosAccepted);
           setTerraProfile({
-            authorized: Boolean(google),
-            tosAccepted: Boolean(tosAccepted),
+            hasTerraAccount,
+            tosAccepted,
           });
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
-          setTerraProfile({ authorized: false, tosAccepted: false });
+          setTerraProfile({ hasTerraAccount: false, tosAccepted: false });
         });
     },
     []
@@ -209,9 +211,9 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   return (
     <AuthContext.Provider
       value={{
-        authorizeUser,
-        isAuthorized,
-        requestAuthorization,
+        authenticateUser,
+        isAuthenticated,
+        requestAuthentication,
         terraProfile,
         token,
         userProfile,
