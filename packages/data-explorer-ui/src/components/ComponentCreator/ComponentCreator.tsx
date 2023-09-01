@@ -31,6 +31,9 @@ export const ComponentCreator = <T,>({
   return (
     <>
       {componentsValue.map((c, k) => {
+        // Using uuid as the component's key causes the component to re-mount on re-render.
+        // An interim solution is to use the array item's index as its key; however, this may lead to subtle bugs.
+        // See issue https://github.com/clevercanary/data-explorer/issues/363.
         const children = c.children ? (
           <ComponentCreator
             key={k}
