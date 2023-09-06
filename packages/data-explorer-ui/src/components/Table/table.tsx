@@ -22,8 +22,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import React, { useCallback, useEffect, useRef } from "react";
-import { useVirtual } from "react-virtual";
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import React, { useCallback, useEffect } from "react";
 import { track } from "../../common/analytics/analytics";
 import {
   EVENT_NAME,
@@ -181,14 +181,14 @@ TableProps<T>): JSX.Element => {
   const isLastPage = currentPage === pages;
   const editColumnOptions = getEditColumnOptions(tableInstance);
   const gridTemplateColumns = getGridTemplateColumns(getVisibleFlatColumns());
-  const tableContainerRef = useRef<HTMLDivElement>(null);
   const estimateSize = useCallback(() => 76, []);
-  const { totalSize: virtualSize, virtualItems } = useVirtual({
+  const virtualizer = useWindowVirtualizer({
+    count: results.length,
     estimateSize,
-    overscan: 10,
-    parentRef: tableContainerRef,
-    size: results.length,
+    overscan: 30,
   });
+  const virtualSize = virtualizer.getTotalSize();
+  const virtualItems = virtualizer.getVirtualItems();
   const paddingTop =
     virtualItems.length > 0 ? virtualItems?.[0]?.start || 0 : 0;
   const paddingBottom =
@@ -348,8 +348,14 @@ TableProps<T>): JSX.Element => {
             </AlertTitle>
           </Alert>
         )}
-        <TableContainer ref={tableContainerRef} sx={{ height: "30em" }}>
-          <GridTable gridTemplateColumns={gridTemplateColumns}>
+        <TableContainer>
+          <GridTable
+            gridTemplateColumns={gridTemplateColumns}
+            style={{
+              paddingBottom: `${paddingBottom}px`,
+              paddingTop: `${paddingTop}px`,
+            }}
+          >
             {getHeaderGroups().map((headerGroup) => (
               <TableHead key={headerGroup.id}>
                 <TableRow>
@@ -369,18 +375,6 @@ TableProps<T>): JSX.Element => {
               </TableHead>
             ))}
             <TableBody>
-              {paddingTop > 0 && (
-                <tr>
-                  <td
-                    style={{
-                      gridColumn: `span ${
-                        tableInstance.getVisibleLeafColumns().length
-                      }`,
-                      height: `${paddingTop}px`,
-                    }}
-                  />
-                </tr>
-              )}
               {virtualItems.map((virtualRow) => {
                 const row = results[virtualRow.index];
                 return (
@@ -398,11 +392,6 @@ TableProps<T>): JSX.Element => {
                   </TableRow>
                 );
               })}
-              {paddingBottom > 0 && (
-                <tr>
-                  <td style={{ height: `${paddingBottom}px` }} />
-                </tr>
-              )}
             </TableBody>
           </GridTable>
         </TableContainer>
