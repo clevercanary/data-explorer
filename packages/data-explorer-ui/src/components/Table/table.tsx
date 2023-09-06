@@ -22,7 +22,8 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import React, { useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
+import { useVirtual } from "react-virtual";
 import { track } from "../../common/analytics/analytics";
 import {
   EVENT_NAME,
@@ -180,6 +181,20 @@ TableProps<T>): JSX.Element => {
   const isLastPage = currentPage === pages;
   const editColumnOptions = getEditColumnOptions(tableInstance);
   const gridTemplateColumns = getGridTemplateColumns(getVisibleFlatColumns());
+  const tableContainerRef = useRef<HTMLDivElement>(null);
+  const estimateSize = useCallback(() => 76, []);
+  const { totalSize: virtualSize, virtualItems } = useVirtual({
+    estimateSize,
+    overscan: 10,
+    parentRef: tableContainerRef,
+    size: results.length,
+  });
+  const paddingTop =
+    virtualItems.length > 0 ? virtualItems?.[0]?.start || 0 : 0;
+  const paddingBottom =
+    virtualItems.length > 0
+      ? virtualSize - (virtualItems?.[virtualItems.length - 1]?.end || 0)
+      : 0;
 
   const handleTableNextPage = (): void => {
     let nextPage = tableNextPage;
@@ -333,7 +348,7 @@ TableProps<T>): JSX.Element => {
             </AlertTitle>
           </Alert>
         )}
-        <TableContainer>
+        <TableContainer ref={tableContainerRef} sx={{ height: "30em" }}>
           <GridTable gridTemplateColumns={gridTemplateColumns}>
             {getHeaderGroups().map((headerGroup) => (
               <TableHead key={headerGroup.id}>
@@ -354,20 +369,40 @@ TableProps<T>): JSX.Element => {
               </TableHead>
             ))}
             <TableBody>
-              {getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => {
-                    return (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              ))}
+              {paddingTop > 0 && (
+                <tr>
+                  <td
+                    style={{
+                      gridColumn: `span ${
+                        tableInstance.getVisibleLeafColumns().length
+                      }`,
+                      height: `${paddingTop}px`,
+                    }}
+                  />
+                </tr>
+              )}
+              {virtualItems.map((virtualRow) => {
+                const row = results[virtualRow.index];
+                return (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      );
+                    })}
+                  </TableRow>
+                );
+              })}
+              {paddingBottom > 0 && (
+                <tr>
+                  <td style={{ height: `${paddingBottom}px` }} />
+                </tr>
+              )}
             </TableBody>
           </GridTable>
         </TableContainer>
