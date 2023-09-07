@@ -181,17 +181,19 @@ TableProps<T>): JSX.Element => {
   const isLastPage = currentPage === pages;
   const editColumnOptions = getEditColumnOptions(tableInstance);
   const gridTemplateColumns = getGridTemplateColumns(getVisibleFlatColumns());
-  const estimateSize = useCallback(() => 76, []);
+  const estimateSize = useCallback(() => 100, []);
   const virtualizer = useWindowVirtualizer({
     count: results.length,
     estimateSize,
-    overscan: 30,
+    measureElement: (element) =>
+      element.children[0]?.getBoundingClientRect().height || 0, // The row doesn't have a box, so measure the first cell instead
+    overscan: 20,
   });
   const virtualSize = virtualizer.getTotalSize();
   const virtualItems = virtualizer.getVirtualItems();
-  const paddingTop =
+  const virtualizerPaddingTop =
     virtualItems.length > 0 ? virtualItems?.[0]?.start || 0 : 0;
-  const paddingBottom =
+  const virtualizerPaddingBottom =
     virtualItems.length > 0
       ? virtualSize - (virtualItems?.[virtualItems.length - 1]?.end || 0)
       : 0;
@@ -352,8 +354,8 @@ TableProps<T>): JSX.Element => {
           <GridTable
             gridTemplateColumns={gridTemplateColumns}
             style={{
-              paddingBottom: `${paddingBottom}px`,
-              paddingTop: `${paddingTop}px`,
+              paddingBottom: `${virtualizerPaddingBottom}px`,
+              paddingTop: `${virtualizerPaddingTop}px`,
             }}
           >
             {getHeaderGroups().map((headerGroup) => (
@@ -378,7 +380,11 @@ TableProps<T>): JSX.Element => {
               {virtualItems.map((virtualRow) => {
                 const row = results[virtualRow.index];
                 return (
-                  <TableRow key={row.id}>
+                  <TableRow
+                    key={row.id}
+                    data-index={virtualRow.index}
+                    ref={virtualizer.measureElement}
+                  >
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <TableCell key={cell.id}>
