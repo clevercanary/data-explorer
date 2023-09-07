@@ -180,7 +180,8 @@ TableProps<T>): JSX.Element => {
   const scrollTop = useScroll();
   const isLastPage = currentPage === pages;
   const editColumnOptions = getEditColumnOptions(tableInstance);
-  const gridTemplateColumns = getGridTemplateColumns(getVisibleFlatColumns());
+  const visibleColumns = getVisibleFlatColumns();
+  const gridTemplateColumns = getGridTemplateColumns(visibleColumns);
   const estimateSize = useCallback(() => 100, []);
   const virtualizer = useWindowVirtualizer({
     count: results.length,
@@ -351,13 +352,7 @@ TableProps<T>): JSX.Element => {
           </Alert>
         )}
         <TableContainer>
-          <GridTable
-            gridTemplateColumns={gridTemplateColumns}
-            style={{
-              paddingBottom: `${virtualizerPaddingBottom}px`,
-              paddingTop: `${virtualizerPaddingTop}px`,
-            }}
-          >
+          <GridTable gridTemplateColumns={gridTemplateColumns}>
             {getHeaderGroups().map((headerGroup) => (
               <TableHead key={headerGroup.id}>
                 <TableRow>
@@ -377,6 +372,16 @@ TableProps<T>): JSX.Element => {
               </TableHead>
             ))}
             <TableBody>
+              {virtualizerPaddingTop > 0 && (
+                <tr>
+                  <td
+                    style={{
+                      gridColumn: `span ${visibleColumns.length}`,
+                      height: `${virtualizerPaddingTop}px`,
+                    }}
+                  ></td>
+                </tr>
+              )}
               {virtualItems.map((virtualRow) => {
                 const row = results[virtualRow.index];
                 return (
@@ -398,6 +403,16 @@ TableProps<T>): JSX.Element => {
                   </TableRow>
                 );
               })}
+              {virtualizerPaddingBottom > 0 && (
+                <tr>
+                  <td
+                    style={{
+                      gridColumn: `span ${visibleColumns.length}`,
+                      height: `${virtualizerPaddingBottom}px`,
+                    }}
+                  ></td>
+                </tr>
+              )}
             </TableBody>
           </GridTable>
         </TableContainer>
