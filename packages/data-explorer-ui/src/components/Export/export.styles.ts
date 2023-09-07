@@ -24,6 +24,10 @@ export const SectionContent = styled(MDXSectionContent)`
   ${sectionMargin}
 `;
 
+export const SectionForm = styled.div`
+  min-height: 40px; // Minimum height prevents section from collapsing while form is loading.
+`;
+
 export const SectionActions = styled(DXSectionActions)`
   ${sectionMargin}
 `;

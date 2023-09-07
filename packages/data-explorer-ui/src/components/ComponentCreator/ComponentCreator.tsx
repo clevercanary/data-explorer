@@ -3,6 +3,7 @@ import { ComponentsConfig } from "../../config/entities";
 import { useAuthentication } from "../../hooks/useAuthentication";
 import { useConfig } from "../../hooks/useConfig";
 import { useExploreState } from "../../hooks/useExploreState";
+import { useFileManifestState } from "../../hooks/useFileManifestState";
 
 export interface ComponentCreatorProps<T> {
   components: ComponentsConfig;
@@ -25,6 +26,7 @@ export const ComponentCreator = <T,>({
   const { isAuthenticated, terraProfile } = useAuthentication();
   const { config, entityConfig } = useConfig();
   const { exploreState } = useExploreState();
+  const { fileManifestState } = useFileManifestState();
   const componentsValue =
     typeof components === "function" ? components(config) : components;
 
@@ -46,6 +48,7 @@ export const ComponentCreator = <T,>({
               authState: { isAuthenticated, terraProfile },
               entityConfig,
               exploreState,
+              fileManifestState,
             })
           : {};
         return React.createElement(

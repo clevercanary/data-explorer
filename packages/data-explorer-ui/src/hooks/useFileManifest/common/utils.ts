@@ -5,6 +5,7 @@ import {
   AzulTermFacets,
   LABEL,
 } from "../../../apis/azul/common/entities";
+import { COLLATOR_CASE_INSENSITIVE } from "../../../common/constants";
 import { Filters } from "../../../common/entities";
 import {
   EntitySearchResults,
@@ -119,6 +120,19 @@ function buildFileFacet(
 }
 
 /**
+ * Returns file facet for the given facet name.
+ * @param filesFacets - Files facets.
+ * @param facetName - Facet name.
+ * @returns file facet.
+ */
+export function findFacet(
+  filesFacets: FileFacet[],
+  facetName: string
+): FileFacet | undefined {
+  return filesFacets.find(({ name }) => name === facetName);
+}
+
+/**
  * Returns file facet that contains a list of terms values from given facet name, total, and terms.
  * @param name - Facet name.
  * @param total - Total number of terms.
@@ -166,6 +180,21 @@ export function getSelectedSearchTermsBySearchKey(
 }
 
 /**
+ * Returns true if the file facet term name is selected.
+ * @param fileFacet - File facet.
+ * @param termName - Term name.
+ * @returns true if the file facet term name is selected.
+ */
+export function isFacetTermSelected(
+  fileFacet: FileFacet,
+  termName: string
+): boolean {
+  return Boolean(
+    fileFacet.terms.find((term) => term.name === termName)?.selected
+  );
+}
+
+/**
  * Returns the selected search terms for the specified facet, if any.
  * @param {string} facetName - Facet name.
  * @param searchTermsBySearchKey - Selected search terms by search key.
@@ -176,4 +205,14 @@ function listFacetSearchTermNames(
   searchTermsBySearchKey: SelectedSearchTermsBySearchKey
 ): string[] {
   return [...(searchTermsBySearchKey.get(facetName) ?? [])];
+}
+
+/**
+ * Sorts terms by term name.
+ * @param c0 - First term to compare.
+ * @param c1 - Second term to compare.
+ * @returns Number indicating sort precedence of c0 vs c1.
+ */
+export function sortTerms(c0: Term, c1: Term): number {
+  return COLLATOR_CASE_INSENSITIVE.compare(c0.name, c1.name);
 }

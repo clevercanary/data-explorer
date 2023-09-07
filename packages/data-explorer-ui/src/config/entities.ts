@@ -7,6 +7,7 @@ import { FooterProps } from "../components/Layout/components/Footer/footer";
 import { HeaderProps } from "../components/Layout/components/Header/header";
 import { AuthContextProps } from "../providers/authentication";
 import { ExploreState } from "../providers/exploreState";
+import { FileManifestState } from "../providers/fileManifestState";
 
 /**
  * Interface to define the analytics configuration for a given site.
@@ -340,4 +341,5 @@ export interface ViewContext {
   authState: Pick<AuthContextProps, "isAuthenticated" | "terraProfile">;
   entityConfig: EntityConfig;
   exploreState: ExploreState;
+  fileManifestState: FileManifestState;
 }

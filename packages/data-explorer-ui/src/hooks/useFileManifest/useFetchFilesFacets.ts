@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import {
   APIEndpoints,
   AzulEntitiesResponse,
@@ -34,7 +34,11 @@ export const useFetchFilesFacets = (
   const requestURL = useFetchRequestURL(APIEndpoints.FILES, requestParams);
   // Fetch and bind facets.
   const { data, isLoading, run } = useAsync<AzulEntitiesResponse>();
-  const { facets } = bindEntitySearchResultsResponse(data, filters);
+  // Bind facets.
+  const { facets } = useMemo(
+    () => bindEntitySearchResultsResponse(data, filters),
+    [data, filters]
+  );
 
   // Fetch facets from files endpoint.
   useEffect(() => {

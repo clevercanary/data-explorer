@@ -1,32 +1,40 @@
 import React, { ElementType } from "react";
-import { MANIFEST_DOWNLOAD_FORMAT } from "../../../../apis/azul/common/entities";
+import { Filters } from "../../../../common/entities";
 import { useExportToTerraResponseURL } from "../../../../hooks/useExportToTerraResponseURL";
 import { FileManifestType } from "../../../../hooks/useFileManifest/common/entities";
 import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
-import { useFileManifestState } from "../../../../hooks/useFileManifestState";
 import { useRequestFileLocation } from "../../../../hooks/useRequestFileLocation";
-import { FormFacet } from "../../common/entities";
+import { FileManifestState } from "../../../../providers/fileManifestState";
+import { FormFacet, ManifestDownloadFormat } from "../../common/entities";
 import { ExportToTerraNotStarted } from "./components/ExportToTerraNotStarted/exportToTerraNotStarted";
 import { ExportToTerraReady } from "./components/ExportToTerraReady/exportToTerraReady";
 
 export interface ExportToTerraProps {
-  entity?: [string, string]; // [entityIdKey, entityId] (initializes entity export to terra filters).
   ExportForm: ElementType;
   ExportToTerraStart: ElementType;
   ExportToTerraSuccess: ElementType;
+  fileManifestState: FileManifestState;
   fileManifestType: FileManifestType;
-  formFacets: FormFacet[];
+  fileSummaryFacetName: string;
+  filters: Filters; // Initializes export to terra filters.
+  formFacet: FormFacet;
+  manifestDownloadFormat: ManifestDownloadFormat;
+  manifestDownloadFormats: ManifestDownloadFormat[];
 }
 
 export const ExportToTerra = ({
-  entity,
   ExportForm,
   ExportToTerraStart,
   ExportToTerraSuccess,
-  formFacets,
+  fileManifestState,
+  fileSummaryFacetName,
+  filters,
+  formFacet,
+  manifestDownloadFormat,
+  manifestDownloadFormats,
 }: ExportToTerraProps): JSX.Element => {
-  useRequestFileManifest(MANIFEST_DOWNLOAD_FORMAT.TERRA_PFB, entity);
-  const { requestParams, requestURL } = useFileManifestState();
+  useRequestFileManifest(manifestDownloadFormat, filters, fileSummaryFacetName);
+  const { requestParams, requestURL } = fileManifestState;
   const { data, isLoading, run } = useRequestFileLocation(requestURL);
   const exportURL = useExportToTerraResponseURL(requestParams, data);
   return exportURL ? (
@@ -38,8 +46,10 @@ export const ExportToTerra = ({
     <ExportToTerraNotStarted
       ExportTerraForm={ExportForm}
       ExportToTerraStart={ExportToTerraStart}
-      formFacets={formFacets}
+      fileManifestState={fileManifestState}
+      formFacet={formFacet}
       isLoading={isLoading}
+      manifestDownloadFormats={manifestDownloadFormats}
       onRequestManifest={run}
     />
   );

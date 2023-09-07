@@ -1,19 +1,33 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { ExecutionEnvironment, FormFacet } from "../../../../common/entities";
-
-export type OnUpdateExecutionEnvironmentFn = (
-  executionEnvironment: ExecutionEnvironment
-) => void;
+import { ExportExecutionEnvironmentForm } from "../../../ExportForm/components/ExportExecutionEnvironmentForm/exportExecutionEnvironmentForm";
+import { ExportForm } from "../../../ExportForm/exportForm";
 
 export interface DownloadCurlCommandFormProps {
   executionEnvironment: ExecutionEnvironment;
-  formFacets: FormFacet[]; // Facets to display in the form.
-  onUpdateExecutionEnvironment: OnUpdateExecutionEnvironmentFn;
+  formFacet: FormFacet;
+  isLoading: boolean;
+  setExecutionEnvironment: Dispatch<SetStateAction<ExecutionEnvironment>>;
+  setIsRequestFormValid: Dispatch<SetStateAction<boolean>>;
 }
 
 export const DownloadCurlCommandForm = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO.
-  formFacets,
+  executionEnvironment,
+  formFacet,
+  isLoading,
+  setExecutionEnvironment,
+  setIsRequestFormValid,
 }: DownloadCurlCommandFormProps): JSX.Element => {
-  return <>{/* Download curl command form */}</>;
+  return (
+    <ExportForm
+      formFacet={formFacet}
+      isLoading={isLoading}
+      setIsRequestFormValid={setIsRequestFormValid}
+    >
+      <ExportExecutionEnvironmentForm
+        executionEnvironment={executionEnvironment}
+        setExecutionEnvironment={setExecutionEnvironment}
+      />
+    </ExportForm>
+  );
 };
