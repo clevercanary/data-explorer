@@ -1,13 +1,33 @@
-import React from "react";
-import { FormFacet } from "../../../../common/entities";
+import React, { Dispatch, SetStateAction } from "react";
+import { FormFacet, ManifestDownloadFormat } from "../../../../common/entities";
+import { ExportManifestDownloadFormatForm } from "../../../ExportForm/components/ExportManifestDownloadFormatForm/exportManifestDownloadFormatForm";
+import { ExportForm } from "../../../ExportForm/exportForm";
 
 export interface ExportToTerraFormProps {
-  formFacets: FormFacet[]; // Facets to display in the form.
+  formFacet: FormFacet;
+  isLoading: boolean;
+  manifestDownloadFormat?: ManifestDownloadFormat;
+  manifestDownloadFormats: ManifestDownloadFormat[];
+  setIsRequestFormValid: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ExportToTerraForm = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TODO.
-  formFacets,
+  formFacet,
+  isLoading,
+  manifestDownloadFormat,
+  manifestDownloadFormats,
+  setIsRequestFormValid,
 }: ExportToTerraFormProps): JSX.Element => {
-  return <>{/* Export to Terra form */}</>;
+  return (
+    <ExportForm
+      formFacet={formFacet}
+      isLoading={isLoading}
+      setIsRequestFormValid={setIsRequestFormValid}
+    >
+      <ExportManifestDownloadFormatForm
+        manifestDownloadFormat={manifestDownloadFormat}
+        manifestDownloadFormats={manifestDownloadFormats}
+      />
+    </ExportForm>
+  );
 };

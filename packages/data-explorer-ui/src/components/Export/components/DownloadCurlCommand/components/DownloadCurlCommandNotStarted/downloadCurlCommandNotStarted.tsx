@@ -1,4 +1,5 @@
-import React, { ElementType } from "react";
+import React, { Dispatch, ElementType, SetStateAction, useState } from "react";
+import { FileManifestState } from "../../../../../../providers/fileManifestState";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
@@ -9,28 +10,30 @@ import {
   SectionContent,
   SectionFootnote,
 } from "../../../../export.styles";
-import { OnUpdateExecutionEnvironmentFn } from "../DownloadCurlCommandForm/downloadCurlCommandForm";
 import { Button } from "./downloadCurlCommandNotStarted.styles";
 
 export interface DownloadCurlCommandNotStartedProps {
   DownloadCurlForm: ElementType;
   DownloadCurlStart: ElementType;
   executionEnvironment: ExecutionEnvironment;
-  formFacets: FormFacet[];
+  fileManifestState: FileManifestState;
+  formFacet: FormFacet;
   isLoading: boolean;
   onRequestManifest: () => void;
-  onUpdateExecutionEnvironment: OnUpdateExecutionEnvironmentFn;
+  setExecutionEnvironment: Dispatch<SetStateAction<ExecutionEnvironment>>;
 }
 
 export const DownloadCurlCommandNotStarted = ({
   DownloadCurlForm,
   DownloadCurlStart,
   executionEnvironment,
-  formFacets,
+  fileManifestState,
+  formFacet,
   isLoading,
   onRequestManifest,
-  onUpdateExecutionEnvironment,
+  setExecutionEnvironment,
 }: DownloadCurlCommandNotStartedProps): JSX.Element => {
+  const [isRequestFormValid, setIsRequestFormValid] = useState<boolean>(false);
   return (
     <div>
       <Loading
@@ -45,11 +48,16 @@ export const DownloadCurlCommandNotStarted = ({
           </SectionContent>
           <DownloadCurlForm
             executionEnvironment={executionEnvironment}
-            formFacets={formFacets}
-            onUpdateExecutionEnvironment={onUpdateExecutionEnvironment}
+            formFacet={formFacet}
+            isLoading={fileManifestState.isLoading}
+            setExecutionEnvironment={setExecutionEnvironment}
+            setIsRequestFormValid={setIsRequestFormValid}
           />
           <SectionActions>
-            <Button onClick={onRequestManifest}>
+            <Button
+              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              onClick={onRequestManifest}
+            >
               <span>Request curl Command</span>
             </Button>
           </SectionActions>

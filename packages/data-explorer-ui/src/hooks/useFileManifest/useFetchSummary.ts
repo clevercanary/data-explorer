@@ -29,7 +29,7 @@ export const useFetchSummary = (
   const requestParams = fetchQueryParams(filters, catalog, undefined);
   // Build request URL.
   const requestURL = useFetchRequestURL(APIEndpoints.SUMMARY, requestParams);
-  // Fetch and bind summary.
+  // Fetch summary.
   const { data, isLoading, run } = useAsync<AzulSummaryResponse>();
 
   // Fetch summary from summary endpoint.

@@ -1,7 +1,4 @@
 import React, { Fragment } from "react";
-import { Filters } from "../../../../../../common/entities";
-import { FileFacet } from "../../../../../../hooks/useFileManifest/common/entities";
-import { useFileManifestState } from "../../../../../../hooks/useFileManifestState";
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
 import { GridPaperSection } from "../../../../../common/Section/section.styles";
 import { Loading, LOADING_PANEL_STYLE } from "../../../../../Loading/loading";
@@ -9,20 +6,15 @@ import { Label, Values } from "../../exportSummary.styles";
 
 export type CurrentQuery = [string, string[]];
 
-export type GetExportCurrentQueriesFn = (
-  filters: Filters,
-  filesFacets: FileFacet[]
-) => CurrentQuery[];
-
 export interface ExportCurrentQueryProps {
-  getExportCurrentQueries: GetExportCurrentQueriesFn;
+  isLoading: boolean;
+  queries: CurrentQuery[];
 }
 
 export const ExportCurrentQuery = ({
-  getExportCurrentQueries,
+  isLoading,
+  queries,
 }: ExportCurrentQueryProps): JSX.Element => {
-  const { filesFacets, filters, isLoading } = useFileManifestState();
-  const queries = getExportCurrentQueries(filters, filesFacets);
   return (
     <GridPaperSection>
       <Loading loading={isLoading} panelStyle={LOADING_PANEL_STYLE.INHERIT} />

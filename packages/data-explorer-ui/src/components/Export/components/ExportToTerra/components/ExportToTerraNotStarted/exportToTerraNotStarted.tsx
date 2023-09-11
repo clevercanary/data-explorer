@@ -1,9 +1,10 @@
-import React, { ElementType } from "react";
+import React, { ElementType, useState } from "react";
+import { FileManifestState } from "../../../../../../providers/fileManifestState";
 import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
-import { FormFacet } from "../../../../common/entities";
+import { FormFacet, ManifestDownloadFormat } from "../../../../common/entities";
 import {
   Section,
   SectionActions,
@@ -13,18 +14,23 @@ import {
 export interface ExportToTerraNotStartedProps {
   ExportTerraForm: ElementType;
   ExportToTerraStart: ElementType;
-  formFacets: FormFacet[];
+  fileManifestState: FileManifestState;
+  formFacet: FormFacet;
   isLoading: boolean;
+  manifestDownloadFormats: ManifestDownloadFormat[];
   onRequestManifest: () => void;
 }
 
 export const ExportToTerraNotStarted = ({
   ExportTerraForm,
   ExportToTerraStart,
-  formFacets,
+  fileManifestState,
+  formFacet,
   isLoading,
+  manifestDownloadFormats,
   onRequestManifest,
 }: ExportToTerraNotStartedProps): JSX.Element => {
+  const [isRequestFormValid, setIsRequestFormValid] = useState<boolean>(false);
   return (
     <div>
       <Loading
@@ -37,9 +43,18 @@ export const ExportToTerraNotStarted = ({
           <SectionContent>
             <ExportToTerraStart />
           </SectionContent>
-          <ExportTerraForm formFacets={formFacets} />
+          <ExportTerraForm
+            formFacet={formFacet}
+            isLoading={fileManifestState.isLoading}
+            manifestDownloadFormat={fileManifestState.fileManifestFormat}
+            manifestDownloadFormats={manifestDownloadFormats}
+            setIsRequestFormValid={setIsRequestFormValid}
+          />
           <SectionActions>
-            <ButtonPrimary onClick={onRequestManifest}>
+            <ButtonPrimary
+              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              onClick={onRequestManifest}
+            >
               Request Link
             </ButtonPrimary>
           </SectionActions>
