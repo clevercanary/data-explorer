@@ -1,6 +1,5 @@
-import { ButtonBase } from "@mui/material";
-import React, { ElementType, useRef } from "react";
-import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
+import { Button } from "@mui/material";
+import React, { ElementType } from "react";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import {
   Section,
@@ -18,13 +17,6 @@ export const ManifestDownloadReady = ({
   ManifestDownloadSuccess,
   manifestURL,
 }: ManifestDownloadReadyProps): JSX.Element => {
-  const downloadRef = useRef<HTMLAnchorElement>(null);
-
-  // Download file manifest.
-  const onDownloadManifest = (): void => {
-    downloadRef?.current?.click();
-  };
-
   return (
     <FluidPaper>
       <Section>
@@ -33,15 +25,14 @@ export const ManifestDownloadReady = ({
           <Code code={manifestURL} />
         </SectionContent>
         <SectionActions>
-          <ButtonPrimary onClick={onDownloadManifest}>
-            Download Manifest
-          </ButtonPrimary>
-          <ButtonBase
+          <Button
+            color="primary"
             download
             href={manifestURL}
-            ref={downloadRef}
-            sx={{ display: "none" }}
-          />
+            variant="contained"
+          >
+            Download Manifest
+          </Button>
         </SectionActions>
       </Section>
     </FluidPaper>
