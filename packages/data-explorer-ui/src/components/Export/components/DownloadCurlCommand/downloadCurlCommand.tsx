@@ -28,7 +28,7 @@ interface DownloadCurlCommandProps {
   fileManifestState: FileManifestState;
   fileManifestType: FileManifestType;
   fileSummaryFacetName: string;
-  filters: Filters; // Initializes export to terra filters.
+  filters: Filters; // Initializes bulk download filters.
   formFacet: FormFacet;
 }
 
