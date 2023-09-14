@@ -3,7 +3,6 @@ import { ManifestDownloadFormat } from "../../apis/azul/common/entities";
 import { Filters } from "../../common/entities";
 import { FileManifestActionKind } from "../../providers/fileManifestState";
 import { useFileManifestState } from "../useFileManifestState";
-import { FILE_MANIFEST_STATE_STATUS } from "./common/entities";
 
 /**
  * Initializes and fetches file manifest comprising file facets and summary for the given file manifest format.
@@ -22,28 +21,20 @@ export const useRequestFileManifest = (
   // File manifest state.
   const { fileManifestDispatch } = useFileManifestState();
 
-  // Initialize file manifest format and filters, and file summary facet name.
+  // Fetches file manifest with the given file manifest filters, format.
   useEffect(() => {
     fileManifestDispatch({
-      payload: fileSummaryFacetName,
-      type: FileManifestActionKind.UpdateFileSummaryFacetName,
-    });
-    fileManifestDispatch({
-      payload: fileManifestFormat,
-      type: FileManifestActionKind.UpdateFileManifestFormat,
-    });
-    fileManifestDispatch({
-      payload: initFilters,
-      type: FileManifestActionKind.UpdateFilters,
-    });
-    fileManifestDispatch({
-      payload: FILE_MANIFEST_STATE_STATUS.ACTIVE,
-      type: FileManifestActionKind.UpdateStatus,
+      payload: {
+        fileManifestFormat,
+        fileSummaryFacetName,
+        filters: initFilters,
+      },
+      type: FileManifestActionKind.FetchFileManifest,
     });
     return () => {
       fileManifestDispatch({
-        payload: FILE_MANIFEST_STATE_STATUS.INACTIVE,
-        type: FileManifestActionKind.UpdateStatus,
+        payload: undefined,
+        type: FileManifestActionKind.ClearFileManifest,
       });
     };
   }, [
