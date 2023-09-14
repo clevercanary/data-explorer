@@ -15,13 +15,13 @@ import { FetchFileSummary } from "./common/entities";
  * Fetch file summary from summary endpoint, to populate summary in download flows.
  * @param filters - Selected filters.
  * @param catalog - Configured catalog.
- * @param isDisabled - Disable fetch.
+ * @param isEnabled - Enable fetch.
  * @returns file summaries.
  */
 export const useFetchSummary = (
   filters: Filters,
   catalog: string,
-  isDisabled: boolean
+  isEnabled: boolean
 ): FetchFileSummary => {
   // Grab token from authentication.
   const { token } = useAuthentication();
@@ -34,10 +34,10 @@ export const useFetchSummary = (
 
   // Fetch summary from summary endpoint.
   useEffect(() => {
-    if (!isDisabled) {
+    if (isEnabled) {
       run(fetchSummaryFromURL(requestURL, token));
     }
-  }, [isDisabled, requestURL, run, token]);
+  }, [isEnabled, requestURL, run, token]);
 
   return {
     isLoading,

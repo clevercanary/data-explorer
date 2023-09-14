@@ -1,11 +1,9 @@
 import React, {
   createContext,
   Dispatch,
-  MutableRefObject,
   ReactNode,
   useEffect,
   useReducer,
-  useRef,
 } from "react";
 import {
   AzulSummaryResponse,
@@ -21,11 +19,7 @@ import {
 import { useCatalog } from "../hooks/useCatalog";
 import { buildNextFilterState } from "../hooks/useCategoryFilter";
 import { buildFileManifestRequestURL } from "../hooks/useFileManifest/common/buildFileManifestRequestURL";
-import {
-  FileFacet,
-  FileManifestStateStatus,
-  FILE_MANIFEST_STATE_STATUS,
-} from "../hooks/useFileManifest/common/entities";
+import { FileFacet } from "../hooks/useFileManifest/common/entities";
 import { useFetchFilesFacets } from "../hooks/useFileManifest/useFetchFilesFacets";
 import { useFetchSummary } from "../hooks/useFileManifest/useFetchSummary";
 import { useFileManifestURL } from "../hooks/useFileManifest/useFileManifestURL";
@@ -38,6 +32,7 @@ export const DEFAULT_FILE_MANIFEST_STATE = {
   fileSummaryFilters: [],
   filesFacets: [],
   filters: [],
+  isEnabled: false,
   isFacetsLoading: false,
   isFileSummaryLoading: false,
   isLoading: false,
@@ -57,6 +52,7 @@ export type FileManifestState = {
   fileSummaryFacetName?: string;
   fileSummaryFilters: Filters;
   filters: Filters;
+  isEnabled: boolean;
   isFacetsLoading: boolean;
   isFileSummaryLoading: boolean;
   isLoading: boolean;
@@ -88,10 +84,6 @@ export interface FileManifestStateProps {
 export function FileManifestStateProvider({
   children,
 }: FileManifestStateProps): JSX.Element {
-  // File manifest state status.
-  const isDisabledRef = useRef<boolean>(true);
-  const { current: isDisabled } = isDisabledRef;
-
   // Determine catalog.
   const [catalog] = useCatalog();
 
@@ -101,11 +93,11 @@ export function FileManifestStateProvider({
   // File manifest state.
   const [fileManifestState, fileManifestDispatch] = useReducer(
     (s: FileManifestState, a: FileManifestAction) =>
-      fileManifestReducer(s, a, { URL, catalog, isDisabledRef }),
+      fileManifestReducer(s, a, { URL, catalog }),
     DEFAULT_FILE_MANIFEST_STATE
   );
 
-  const { fileSummaryFacetName, fileSummaryFilters, filters } =
+  const { fileSummaryFacetName, fileSummaryFilters, filters, isEnabled } =
     fileManifestState;
 
   // Fetch files facets.
@@ -113,19 +105,19 @@ export function FileManifestStateProvider({
     filters,
     catalog,
     { size: "25" },
-    isDisabled
+    isEnabled
   );
 
   // Fetch summary.
   const { isLoading: isSummaryLoading, summary } = useFetchSummary(
     filters,
     catalog,
-    isDisabled
+    isEnabled
   );
 
   // Fetch file summary.
   const { isLoading: isFileSummaryLoading, summary: fileSummary } =
-    useFetchSummary(fileSummaryFilters, catalog, !fileSummaryFacetName);
+    useFetchSummary(fileSummaryFilters, catalog, Boolean(fileSummaryFacetName));
 
   // Update file manifest state.
   useEffect(() => {
@@ -166,26 +158,40 @@ export function FileManifestStateProvider({
  * File manifest action kind.
  */
 export enum FileManifestActionKind {
+  ClearFileManifest = "CLEAR_FILE_MANIFEST",
+  FetchFileManifest = "FETCH_FILE_MANIFEST",
   UpdateFileManifest = "UPDATE_FILE_MANIFEST",
   UpdateFileManifestFormat = "UPDATE_FILE_MANIFEST_FORMAT",
-  UpdateFileSummaryFacetName = "UPDATE_FILE_SUMMARY_FACET_NAME",
   UpdateFilter = "UPDATE_FILTER",
-  UpdateFilters = "UPDATE_FILTERS",
   UpdateFiltersCategory = "UPDATE_FILTERS_CATEGORY",
-  UpdateStatus = "UPDATE_STATUS",
 }
 
 /**
  * File manifest action.
  */
 export type FileManifestAction =
+  | ClearFileManifestAction
+  | FetchFileManifestAction
   | UpdateFileManifestAction
   | UpdateFileManifestFormatAction
-  | UpdateFileSummaryFacetNameAction
   | UpdateFilterAction
-  | UpdateFiltersAction
-  | UpdateFiltersCategoryAction
-  | UpdateStatusAction;
+  | UpdateFiltersCategoryAction;
+
+/**
+ * Resets file manifest state.
+ */
+type ClearFileManifestAction = {
+  payload: undefined;
+  type: FileManifestActionKind.ClearFileManifest;
+};
+
+/**
+ * Fetch file manifest action.
+ */
+type FetchFileManifestAction = {
+  payload: FetchFileManifestPayload;
+  type: FileManifestActionKind.FetchFileManifest;
+};
 
 /**
  * Update file manifest action.
@@ -204,27 +210,11 @@ type UpdateFileManifestFormatAction = {
 };
 
 /**
- * Update file summary facet name action.
- */
-type UpdateFileSummaryFacetNameAction = {
-  payload: string | undefined;
-  type: FileManifestActionKind.UpdateFileSummaryFacetName;
-};
-
-/**
  * Update filter action.
  */
 type UpdateFilterAction = {
   payload: UpdateFilterPayload;
   type: FileManifestActionKind.UpdateFilter;
-};
-
-/**
- * Update filters action.
- */
-type UpdateFiltersAction = {
-  payload: Filters;
-  type: FileManifestActionKind.UpdateFilters;
 };
 
 /**
@@ -236,11 +226,12 @@ type UpdateFiltersCategoryAction = {
 };
 
 /**
- * Update status action.
+ * Initialize file manifest payload.
  */
-type UpdateStatusAction = {
-  payload: FileManifestStateStatus;
-  type: FileManifestActionKind.UpdateStatus;
+type FetchFileManifestPayload = {
+  fileManifestFormat?: ManifestDownloadFormat;
+  fileSummaryFacetName?: string;
+  filters: Filters;
 };
 
 /**
@@ -270,7 +261,6 @@ export type UpdateFilterPayload = {
  */
 export interface FileManifestContext {
   catalog: string;
-  isDisabledRef: MutableRefObject<boolean>;
   URL: string;
 }
 
@@ -287,8 +277,42 @@ function fileManifestReducer(
   fileManifestContext: FileManifestContext
 ): FileManifestState {
   const { payload, type } = action;
-  const { catalog, isDisabledRef, URL } = fileManifestContext;
+  const { catalog, URL } = fileManifestContext;
   switch (type) {
+    // Resets file manifest.
+    case FileManifestActionKind.ClearFileManifest: {
+      return {
+        ...state,
+        fileManifestFormat: undefined,
+        isEnabled: false,
+        requestParams: undefined,
+        requestURL: undefined,
+      };
+    }
+    // Fetches file manifest.
+    case FileManifestActionKind.FetchFileManifest: {
+      // Get file summary filters.
+      const fileSummaryFilters = buildNextFileSummaryFilterState(
+        payload.filters,
+        payload.fileSummaryFacetName
+      );
+      // Build request params and request URL.
+      const { requestParams, requestURL } =
+        buildFileManifestRequestURL(
+          URL,
+          payload.filters,
+          catalog,
+          payload.fileManifestFormat
+        ) || {};
+      return {
+        ...state,
+        ...payload,
+        fileSummaryFilters,
+        isEnabled: true,
+        requestParams,
+        requestURL,
+      };
+    }
     // Updates file manifest.
     case FileManifestActionKind.UpdateFileManifest: {
       return {
@@ -298,16 +322,14 @@ function fileManifestReducer(
     }
     // Updates file manifest format.
     case FileManifestActionKind.UpdateFileManifestFormat: {
+      // Build request params and request URL.
+      const { requestParams, requestURL } =
+        buildFileManifestRequestURL(URL, state.filters, catalog, payload) || {};
       return {
         ...state,
         fileManifestFormat: payload,
-      };
-    }
-    // Updates file summary facet name.
-    case FileManifestActionKind.UpdateFileSummaryFacetName: {
-      return {
-        ...state,
-        fileSummaryFacetName: payload ? payload : state.fileSummaryFacetName,
+        requestParams,
+        requestURL,
       };
     }
     // Updates selected file manifest filters with given selected category value.
@@ -340,29 +362,6 @@ function fileManifestReducer(
         requestURL,
       };
     }
-    // Updates selected file manifest filters.
-    case FileManifestActionKind.UpdateFilters: {
-      // Get file summary filters.
-      const fileSummaryFilters = buildNextFileSummaryFilterState(
-        payload,
-        state.fileSummaryFacetName
-      );
-      // Build request params and request URL.
-      const { requestParams, requestURL } =
-        buildFileManifestRequestURL(
-          URL,
-          payload,
-          catalog,
-          state.fileManifestFormat
-        ) || {};
-      return {
-        ...state,
-        fileSummaryFilters,
-        filters: payload,
-        requestParams,
-        requestURL,
-      };
-    }
     // Updates selected file manifest filters by category.
     case FileManifestActionKind.UpdateFiltersCategory: {
       // Build next filter state.
@@ -391,11 +390,6 @@ function fileManifestReducer(
         requestParams,
         requestURL,
       };
-    }
-    // Updates file manifest status.
-    case FileManifestActionKind.UpdateStatus: {
-      isDisabledRef.current = payload === FILE_MANIFEST_STATE_STATUS.INACTIVE;
-      return state;
     }
     default:
       return state;

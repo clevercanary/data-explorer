@@ -17,14 +17,14 @@ import { bindEntitySearchResultsResponse } from "./common/utils";
  * @param filters - Selected filters.
  * @param catalog - Configured catalog.
  * @param searchParams - Custom search parameters i.e. "size" and sorting behaviour.
- * @param isDisabled - Disable fetch.
+ * @param isEnabled - Enable fetch.
  * @returns files facets.
  */
 export const useFetchFilesFacets = (
   filters: Filters,
   catalog: string,
   searchParams: SearchParams | undefined,
-  isDisabled: boolean
+  isEnabled: boolean
 ): FetchFilesFacets => {
   // Grab token from authentication.
   const { token } = useAuthentication();
@@ -42,10 +42,10 @@ export const useFetchFilesFacets = (
 
   // Fetch facets from files endpoint.
   useEffect(() => {
-    if (!isDisabled) {
+    if (isEnabled) {
       run(fetchEntitiesFromURL(requestURL, token));
     }
-  }, [isDisabled, requestURL, run, token]);
+  }, [isEnabled, requestURL, run, token]);
 
   return {
     filesFacets: facets,
