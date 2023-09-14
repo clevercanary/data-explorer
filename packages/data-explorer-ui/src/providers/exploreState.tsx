@@ -222,11 +222,13 @@ export function ExploreStateProvider({
     {
       categoryViews: [],
       entityPageState: config.entities.reduce(
-        (acc, { list: { columns }, route }) => ({
+        (acc, entity) => ({
           ...acc,
-          [route]: {
-            columnsVisibility: getInitialTableColumnVisibility(columns),
-            sorting: getDefaultSorting(entityConfig),
+          [entity.route]: {
+            columnsVisibility: getInitialTableColumnVisibility(
+              entity.list.columns
+            ),
+            sorting: getDefaultSorting(entity),
           },
         }),
         {}
