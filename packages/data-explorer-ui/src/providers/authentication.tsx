@@ -280,12 +280,21 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
 }
 
 /**
+ * Calculates the remaining time in seconds until the given expiration time.
+ * @param expireTime - Expire time in seconds.
+ * @returns remaining time in seconds.
+ */
+export function expireTimeInSeconds(expireTime: number): number {
+  return expireTime - Date.now() / 1000;
+}
+
+/**
  * Returns true if the linked NIH account has expired.
  * @param expireTime - Expire time in seconds.
  * @returns true if the linked NIH account has expired.
  */
 function hasLinkedNIHAccountExpired(expireTime: number): boolean {
-  return Date.now() / 1000 - expireTime > 0;
+  return expireTimeInSeconds(expireTime) < 0;
 }
 
 /**
@@ -304,7 +313,7 @@ function initRouteHistory(path: string): string {
  * @returns true if the linked NIH account will expire in less than a week.
  */
 function isLinkedNIHAccountWillExpire(expireTime: number): boolean {
-  return Date.now() / 1000 - expireTime < SECONDS_PER_WEEK;
+  return expireTimeInSeconds(expireTime) < SECONDS_PER_WEEK;
 }
 
 /**

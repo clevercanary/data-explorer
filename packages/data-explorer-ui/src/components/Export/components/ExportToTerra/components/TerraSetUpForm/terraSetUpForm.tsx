@@ -9,15 +9,22 @@ import {
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
 import { ConnectTerraToNIHAccount } from "./components/FormStep/components/ConnectTerraToNIHAccount/connectTerraToNIHAccount";
 import { CreateTerraAccount } from "./components/FormStep/components/CreateTerraAccount/createTerraAccount";
+import { NIHAccountExpiryWarning } from "./components/NIHAccountExpiryWarning/nihAccountExpiryWarning";
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
 export const TerraSetUpForm = (): JSX.Element | null => {
   const { isAuthenticated, NIHProfile, terraProfile } = useAuthentication();
+  const { linkExpireTime, linkWillExpire } = NIHProfile || {};
   const isSetUpComplete =
     isAuthenticated &&
     terraProfile?.hasTerraAccount &&
     NIHProfile?.linkedNIHUsername;
-  return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? null : (
+  return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? (
+    <NIHAccountExpiryWarning
+      linkExpireTime={linkExpireTime}
+      linkWillExpire={linkWillExpire}
+    />
+  ) : (
     <RoundedPaper>
       <GridPaper>
         <Section>
