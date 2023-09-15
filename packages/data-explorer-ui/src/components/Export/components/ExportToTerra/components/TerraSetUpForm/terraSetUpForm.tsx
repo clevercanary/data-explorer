@@ -14,8 +14,7 @@ import { Section, SectionContent } from "./terraSetUpForm.styles";
 export const TerraSetUpForm = (): JSX.Element | null => {
   const { isAuthenticated, terraProfile } = useAuthentication();
   const hasNIHAccount = false;
-  const isSetUpComplete =
-    isAuthenticated && terraProfile?.hasTerraAccount && hasNIHAccount;
+  const isSetUpComplete = isAuthenticated && terraProfile?.hasTerraAccount;
   return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? null : (
     <RoundedPaper>
       <GridPaper>
