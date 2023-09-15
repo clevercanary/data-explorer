@@ -21,6 +21,14 @@ type AuthenticateUserFn = () => void;
 type RequestAuthenticationFn = () => void;
 
 /**
+ * Model of NIH profile.
+ */
+interface NIHProfile {
+  linkedNIHUsername: string;
+  linkExpireTime: number;
+}
+
+/**
  * Model of terra profile.
  */
 interface TerraProfile {
@@ -61,6 +69,7 @@ export interface UserProfile {
 export interface AuthContextProps {
   authenticateUser: AuthenticateUserFn;
   isAuthenticated: boolean;
+  NIHProfile?: NIHProfile;
   requestAuthentication: RequestAuthenticationFn;
   terraProfile?: TerraProfile;
   token?: string;
@@ -71,6 +80,7 @@ export interface AuthContextProps {
  * Auth context for storing and using auth-related state.
  */
 export const AuthContext = createContext<AuthContextProps>({
+  NIHProfile: undefined,
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   authenticateUser: () => {},
   isAuthenticated: false,
@@ -95,13 +105,14 @@ interface Props {
  */
 export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const { authentication: authConfig } = useConfig().config;
-  const { googleGISAuthConfig } = authConfig || {};
+  const { googleGISAuthConfig, terraAuthConfig } = authConfig || {};
   const { clientId, scope } = googleGISAuthConfig || {};
   const { asPath, basePath } = useRouter();
   const routeHistoryRef = useRef<string>(initRouteHistory(asPath));
   const [token, setToken] = useState<string>();
   // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
   const [tokenClient, setTokenClient] = useState<any>(); // TODO see https://github.com/clevercanary/data-browser/issues/544.
+  const [NIHProfile, setNIHProfile] = useState<NIHProfile>();
   const [terraProfile, setTerraProfile] = useState<TerraProfile>();
   const [userProfile, setUserProfile] = useState<UserProfile>();
   const isAuthenticated = Boolean(userProfile?.authenticated);
@@ -184,6 +195,30 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
     []
   );
 
+  /**
+   * Fetches Terra NIH user profile.
+   */
+  const fetchTerraNIHProfile = useCallback(
+    (endpoint: string, accessToken: string): void => {
+      const headers = new Headers();
+      headers.append("authorization", "Bearer " + accessToken);
+      const options = { headers };
+      fetch(endpoint, options)
+        .then((response) => response.json())
+        .then((profile) => {
+          setNIHProfile({
+            linkExpireTime: profile.linkExpireTime,
+            linkedNIHUsername: profile.linkedNihUsername,
+          });
+        })
+        .catch((err) => {
+          console.log(err); // TODO handle error.
+          setNIHProfile(undefined);
+        });
+    },
+    []
+  );
+
   // Initializes token client - (authorization client id must be configured).
   useEffect(() => {
     if (clientId) {
@@ -202,15 +237,28 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
 
   // Fetches profiles and sets userProfile and terraProfile state when token is retrieved.
   useEffect(() => {
-    if (googleGISAuthConfig && token) {
-      fetchGoogleProfile(googleGISAuthConfig.googleProfileEndpoint, token);
-      fetchTerraProfile(googleGISAuthConfig.terraProfileEndpoint, token);
+    if (token) {
+      if (googleGISAuthConfig) {
+        fetchGoogleProfile(googleGISAuthConfig.googleProfileEndpoint, token);
+      }
+      if (terraAuthConfig) {
+        fetchTerraProfile(terraAuthConfig.terraProfileEndpoint, token);
+        fetchTerraNIHProfile(terraAuthConfig.terraNIHProfileEndpoint, token);
+      }
     }
-  }, [googleGISAuthConfig, fetchGoogleProfile, fetchTerraProfile, token]);
+  }, [
+    googleGISAuthConfig,
+    fetchGoogleProfile,
+    fetchTerraNIHProfile,
+    fetchTerraProfile,
+    terraAuthConfig,
+    token,
+  ]);
 
   return (
     <AuthContext.Provider
       value={{
+        NIHProfile,
         authenticateUser,
         isAuthenticated,
         requestAuthentication,

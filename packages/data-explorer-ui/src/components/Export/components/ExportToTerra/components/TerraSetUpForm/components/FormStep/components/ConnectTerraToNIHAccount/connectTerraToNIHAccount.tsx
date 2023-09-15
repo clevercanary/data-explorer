@@ -4,22 +4,28 @@ import { ANCHOR_TARGET } from "../../../../../../../../../Links/common/entities"
 import { FormStep } from "../../formStep";
 
 export interface ConnectTerraToNIHAccountProps {
-  hasNIHAccount: boolean;
+  disabled: boolean;
+  linkedNIHAccount: boolean;
 }
 
 export const ConnectTerraToNIHAccount = ({
-  hasNIHAccount,
+  disabled,
+  linkedNIHAccount,
 }: ConnectTerraToNIHAccountProps): JSX.Element | null => {
   const onGotoTutorial = (): void => {
-    window.open("/", ANCHOR_TARGET.BLANK, "noopener noreferrer");
+    window.open(
+      "https://support.terra.bio/hc/en-us/articles/360038086332-Linking-authorization-accessing-controlled-data-on-external-servers",
+      ANCHOR_TARGET.BLANK,
+      "noopener noreferrer"
+    );
   };
   return (
     <FormStep
       action={
         <ButtonPrimary onClick={onGotoTutorial}>Go to Tutorial</ButtonPrimary>
       }
-      completed={hasNIHAccount}
-      disabled
+      completed={linkedNIHAccount}
+      disabled={disabled}
       text={
         <p>
           Next, connect your Terra account to your NIH account by following the

@@ -12,9 +12,11 @@ import { CreateTerraAccount } from "./components/FormStep/components/CreateTerra
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
 export const TerraSetUpForm = (): JSX.Element | null => {
-  const { isAuthenticated, terraProfile } = useAuthentication();
-  const hasNIHAccount = false;
-  const isSetUpComplete = isAuthenticated && terraProfile?.hasTerraAccount;
+  const { isAuthenticated, NIHProfile, terraProfile } = useAuthentication();
+  const isSetUpComplete =
+    isAuthenticated &&
+    terraProfile?.hasTerraAccount &&
+    NIHProfile?.linkedNIHUsername;
   return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? null : (
     <RoundedPaper>
       <GridPaper>
@@ -22,15 +24,18 @@ export const TerraSetUpForm = (): JSX.Element | null => {
           <SectionContent>
             <SectionTitle title="Complete your setup" />
             <Typography color="ink.light" variant={TEXT_BODY_400_2_LINES}>
-              Follow these steps to unlock the full potential of the dataset
-              browser.
+              Follow these steps to unlock the full potential of the data
+              explorer.
             </Typography>
           </SectionContent>
         </Section>
         <CreateTerraAccount
           hasTerraAccount={Boolean(terraProfile?.hasTerraAccount)}
         />
-        <ConnectTerraToNIHAccount hasNIHAccount={hasNIHAccount} />
+        <ConnectTerraToNIHAccount
+          disabled={!terraProfile?.hasTerraAccount}
+          linkedNIHAccount={Boolean(NIHProfile?.linkedNIHUsername)}
+        />
       </GridPaper>
     </RoundedPaper>
   );
