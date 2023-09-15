@@ -7,12 +7,15 @@ import {
   RoundedPaper,
 } from "../../../../../common/Paper/paper.styles";
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
+import { ConnectTerraToNIHAccount } from "./components/FormStep/components/ConnectTerraToNIHAccount/connectTerraToNIHAccount";
 import { CreateTerraAccount } from "./components/FormStep/components/CreateTerraAccount/createTerraAccount";
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
 export const TerraSetUpForm = (): JSX.Element | null => {
   const { isAuthenticated, terraProfile } = useAuthentication();
-  const isSetUpComplete = isAuthenticated && terraProfile?.hasTerraAccount;
+  const hasNIHAccount = false;
+  const isSetUpComplete =
+    isAuthenticated && terraProfile?.hasTerraAccount && hasNIHAccount;
   return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? null : (
     <RoundedPaper>
       <GridPaper>
@@ -28,6 +31,7 @@ export const TerraSetUpForm = (): JSX.Element | null => {
         <CreateTerraAccount
           hasTerraAccount={Boolean(terraProfile?.hasTerraAccount)}
         />
+        <ConnectTerraToNIHAccount hasNIHAccount={hasNIHAccount} />
       </GridPaper>
     </RoundedPaper>
   );
