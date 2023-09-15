@@ -13,6 +13,7 @@ import { useConfig } from "../hooks/useConfig";
 
 // Template constants
 export const ROUTE_LOGIN = "/login";
+const SECONDS_PER_WEEK = 60 * 60 * 24 * 7; // 7 days.
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
 declare const google: any; // TODO see https://github.com/clevercanary/data-browser/issues/544.
@@ -25,7 +26,9 @@ type RequestAuthenticationFn = () => void;
  */
 interface NIHProfile {
   linkedNIHUsername: string;
+  linkExpired: boolean;
   linkExpireTime: number;
+  linkWillExpire: boolean;
 }
 
 /**
@@ -208,6 +211,10 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
         .then((profile) => {
           setNIHProfile({
             linkExpireTime: profile.linkExpireTime,
+            linkExpired: hasLinkedNIHAccountExpired(profile.linkExpireTime),
+            linkWillExpire: isLinkedNIHAccountWillExpire(
+              profile.linkExpireTime
+            ),
             linkedNIHUsername: profile.linkedNihUsername,
           });
         })
@@ -273,6 +280,15 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
 }
 
 /**
+ * Returns true if the linked NIH account has expired.
+ * @param expireTime - Expire time in seconds.
+ * @returns true if the linked NIH account has expired.
+ */
+function hasLinkedNIHAccountExpired(expireTime: number): boolean {
+  return Date.now() / 1000 - expireTime > 0;
+}
+
+/**
  * Initializes route history with the current path.
  * Returns base path if current path is the login route.
  * @param path - current browser path.
@@ -280,6 +296,15 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
  */
 function initRouteHistory(path: string): string {
   return path === ROUTE_LOGIN ? "/" : path;
+}
+
+/**
+ * Returns true if the linked NIH account will expire in less than a week.
+ * @param expireTime - Expire time in seconds.
+ * @returns true if the linked NIH account will expire in less than a week.
+ */
+function isLinkedNIHAccountWillExpire(expireTime: number): boolean {
+  return Date.now() / 1000 - expireTime < SECONDS_PER_WEEK;
 }
 
 /**
