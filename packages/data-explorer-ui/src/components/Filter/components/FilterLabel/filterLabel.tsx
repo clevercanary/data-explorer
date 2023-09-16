@@ -14,7 +14,7 @@ export const FilterLabel = ({
   label,
   ...props /* Spread props to allow for Button specific props ButtonProps e.g. "onClick". */
 }: FilterLabelProps): JSX.Element => {
-  const filterLabel = count ? `${label} (${count})` : label;
+  const filterLabel = count ? `${label}\xa0(${count})` : label; // When the count is present, a non-breaking space is used to prevent it from being on its own line
   return (
     <Label
       color="inherit"

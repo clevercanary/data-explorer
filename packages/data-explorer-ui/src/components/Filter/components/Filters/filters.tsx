@@ -80,7 +80,14 @@ function renderFilterTarget(
   props: ButtonProps
 ): JSX.Element {
   const { isDisabled = false, label } = categoryView;
-  return <FilterLabel disabled={isDisabled} label={label} {...props} />;
+  return (
+    <FilterLabel
+      disabled={isDisabled}
+      label={label}
+      count={categoryView.values.length}
+      {...props}
+    />
+  );
 }
 
 export const Filters = ({
