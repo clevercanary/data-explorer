@@ -1,4 +1,4 @@
-import { ThemeOptions } from "@mui/material";
+import { TabProps as MTabProps, ThemeOptions } from "@mui/material";
 import { ColumnSort } from "@tanstack/react-table";
 import { JSXElementConstructor, ReactNode } from "react";
 import { CategoryKey, SelectedFilterValue } from "../common/entities";
@@ -330,8 +330,10 @@ export interface SummaryConfig {
  * Interface used to define the tab label and route.
  */
 interface TabConfig {
-  label: string;
+  label: ReactNode;
   route: string;
+  tabIcon?: MTabProps["icon"];
+  tabIconPosition?: MTabProps["iconPosition"];
 }
 
 export interface TerraAuthConfig {

@@ -1,11 +1,10 @@
 import {
-  Tab as MTab,
   TabProps as MTabProps,
   Tabs as MTabs,
   TabsProps as MTabsProps,
 } from "@mui/material";
-import React from "react";
-import { TabScrollFuzz } from "./tabs.styles";
+import React, { ReactNode } from "react";
+import { Tab, TabScrollFuzz } from "./tabs.styles";
 
 export type TabsValue = MTabsProps["value"]; // any
 export type TabValue = MTabProps["value"]; // any
@@ -15,7 +14,7 @@ export interface Tab {
   count?: string;
   icon?: MTabProps["icon"]; // element or string
   iconPosition?: MTabProps["iconPosition"]; // "bottom" or "end" or "start" or "top
-  label: string;
+  label: ReactNode;
   value: TabValue;
 }
 
@@ -44,7 +43,7 @@ export const Tabs = ({
           { count, icon, iconPosition = "start", label, value: tabValue },
           t
         ) => (
-          <MTab
+          <Tab
             icon={icon}
             iconPosition={icon ? iconPosition : undefined}
             key={`${label}${t}`}

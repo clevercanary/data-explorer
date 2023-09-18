@@ -21,10 +21,14 @@ export interface EntityDetailViewProps<T = any> {
  * @returns tabs list.
  */
 function getTabs(entity: EntityConfig): Tab[] {
-  return entity.detail.tabs.map(({ label, route }) => ({
-    label,
-    value: route,
-  }));
+  return entity.detail.tabs.map(
+    ({ label, route, tabIcon: icon, tabIconPosition: iconPosition }) => ({
+      icon,
+      iconPosition,
+      label,
+      value: route,
+    })
+  );
 }
 
 export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
