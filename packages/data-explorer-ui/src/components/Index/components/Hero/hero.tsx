@@ -19,19 +19,23 @@ export interface HeroProps {
 
 export const Hero = ({ Summaries, title }: HeroProps): JSX.Element => {
   return (
-    <HeroLayout>
-      <Title title={title} />
-      {Summaries && (
-        <Widgets>
-          <SummaryWidget buttonWidget={true}>
-            {/* TODO +n link widget, and accompanying Dot separator */}
-            {Summaries}
-          </SummaryWidget>
-          <Link href="/export" passHref>
-            <ExportButton href="passHref">Export</ExportButton>
-          </Link>
-        </Widgets>
+    <>
+      {(title || Summaries) && (
+        <HeroLayout>
+          <Title title={title} />
+          {Summaries && (
+            <Widgets>
+              <SummaryWidget buttonWidget={true}>
+                {/* TODO +n link widget, and accompanying Dot separator */}
+                {Summaries}
+              </SummaryWidget>
+              <Link href="/export" passHref>
+                <ExportButton href="passHref">Export</ExportButton>
+              </Link>
+            </Widgets>
+          )}
+        </HeroLayout>
       )}
-    </HeroLayout>
+    </>
   );
 };

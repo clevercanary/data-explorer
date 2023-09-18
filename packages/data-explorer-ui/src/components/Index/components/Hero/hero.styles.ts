@@ -16,7 +16,9 @@ export const HeroLayout = styled.div`
 export const Widgets = styled.div`
   align-items: center;
   display: flex;
+  flex: 1;
   height: 40px;
+  justify-content: flex-end;
 `;
 
 export const SummaryWidget = styled.div<Props>`
