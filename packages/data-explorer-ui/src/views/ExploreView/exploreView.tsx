@@ -45,10 +45,14 @@ export type ExploreViewProps = AzulEntitiesStaticResponse;
  * @returns tabs list.
  */
 function getTabs(entities: EntityConfig[]): Tab[] {
-  return entities.map(({ label, route }) => ({
-    label,
-    value: route,
-  }));
+  return entities.map(
+    ({ label, route, tabIcon: icon, tabIconPosition: iconPosition }) => ({
+      icon,
+      iconPosition,
+      label,
+      value: route,
+    })
+  );
 }
 
 // TODO(Dave) create an interface for props and maybe not drill the static load through here

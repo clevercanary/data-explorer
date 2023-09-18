@@ -9,7 +9,7 @@ import React, { ReactNode } from "react";
 
 export interface Breadcrumb {
   path: string;
-  text: string;
+  text: ReactNode;
 }
 
 export interface BreadcrumbsProps {

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { TabScrollButtonProps } from "@mui/material";
+import { Tab as MTab, TabScrollButtonProps } from "@mui/material";
 
 interface Props {
   direction: TabScrollButtonProps["direction"];
@@ -38,4 +38,10 @@ export const TabScrollFuzz = styled.span<Props>`
       `
     );
   }};
+`;
+
+export const Tab = styled(MTab)`
+  .MuiSvgIcon-fontSizeXsmall {
+    align-self: flex-start;
+  }
 `;
