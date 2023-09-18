@@ -20,7 +20,7 @@ export interface HeroProps {
 export const Hero = ({ Summaries, title }: HeroProps): JSX.Element => {
   return (
     <>
-      {title && Summaries && (
+      {(title || Summaries) && (
         <HeroLayout>
           <Title title={title} />
           {Summaries && (
