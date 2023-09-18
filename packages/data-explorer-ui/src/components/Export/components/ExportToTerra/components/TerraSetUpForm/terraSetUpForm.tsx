@@ -9,28 +9,40 @@ import {
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
 import { ConnectTerraToNIHAccount } from "./components/FormStep/components/ConnectTerraToNIHAccount/connectTerraToNIHAccount";
 import { CreateTerraAccount } from "./components/FormStep/components/CreateTerraAccount/createTerraAccount";
+import { NIHAccountExpiryWarning } from "./components/NIHAccountExpiryWarning/nihAccountExpiryWarning";
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
 export const TerraSetUpForm = (): JSX.Element | null => {
-  const { isAuthenticated, terraProfile } = useAuthentication();
-  const hasNIHAccount = false;
-  const isSetUpComplete = isAuthenticated && terraProfile?.hasTerraAccount;
-  return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? null : (
+  const { isAuthenticated, NIHProfile, terraProfile } = useAuthentication();
+  const { linkExpireTime, linkWillExpire } = NIHProfile || {};
+  const isSetUpComplete =
+    isAuthenticated &&
+    terraProfile?.hasTerraAccount &&
+    NIHProfile?.linkedNIHUsername;
+  return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? (
+    <NIHAccountExpiryWarning
+      linkExpireTime={linkExpireTime}
+      linkWillExpire={linkWillExpire}
+    />
+  ) : (
     <RoundedPaper>
       <GridPaper>
         <Section>
           <SectionContent>
             <SectionTitle title="Complete your setup" />
             <Typography color="ink.light" variant={TEXT_BODY_400_2_LINES}>
-              Follow these steps to unlock the full potential of the dataset
-              browser.
+              Follow these steps to unlock the full potential of the data
+              explorer.
             </Typography>
           </SectionContent>
         </Section>
         <CreateTerraAccount
           hasTerraAccount={Boolean(terraProfile?.hasTerraAccount)}
         />
-        <ConnectTerraToNIHAccount hasNIHAccount={hasNIHAccount} />
+        <ConnectTerraToNIHAccount
+          disabled={!terraProfile?.hasTerraAccount}
+          linkedNIHAccount={Boolean(NIHProfile?.linkedNIHUsername)}
+        />
       </GridPaper>
     </RoundedPaper>
   );

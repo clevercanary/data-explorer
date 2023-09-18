@@ -24,6 +24,7 @@ export interface AnalyticsConfig {
 export interface AuthenticationConfig {
   googleGISAuthConfig?: GoogleGISAuthConfig;
   termsOfService?: ReactNode;
+  terraAuthConfig?: TerraAuthConfig;
   text?: ReactNode;
   title: string;
   warning?: ReactNode;
@@ -178,7 +179,6 @@ export interface GoogleGISAuthConfig {
   clientId: string;
   googleProfileEndpoint: string;
   scope: string;
-  terraProfileEndpoint: string; // TODO move this to its own interface
 }
 
 /**
@@ -332,6 +332,11 @@ export interface SummaryConfig {
 interface TabConfig {
   label: string;
   route: string;
+}
+
+export interface TerraAuthConfig {
+  terraNIHProfileEndpoint: string;
+  terraProfileEndpoint: string;
 }
 
 /**
