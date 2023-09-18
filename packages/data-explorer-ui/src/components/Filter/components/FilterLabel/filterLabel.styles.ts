@@ -7,6 +7,7 @@ export const FilterLabel = styled(Button)`
   justify-content: space-between;
   padding: 6px 0;
   text-transform: none;
+  text-align: left;
 
   :hover {
     background-color: transparent;
