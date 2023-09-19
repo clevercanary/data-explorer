@@ -270,7 +270,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
         isAuthenticated,
         requestAuthentication,
         terraProfile,
-        token,
+        token: terraProfile?.tosAccepted ? token : undefined,
         userProfile,
       }}
     >

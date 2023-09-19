@@ -4,13 +4,15 @@ import { ButtonPrimary } from "../../../../../../../../../common/Button/componen
 import { ANCHOR_TARGET } from "../../../../../../../../../Links/common/entities";
 import { FormStep } from "../../formStep";
 
-export interface CreateTerraAccountProps {
-  hasTerraAccount: boolean;
+export interface AcceptTerraTOSProps {
+  disabled: boolean;
+  tosAccepted: boolean;
 }
 
-export const CreateTerraAccount = ({
-  hasTerraAccount,
-}: CreateTerraAccountProps): JSX.Element | null => {
+export const AcceptTerraTOS = ({
+  disabled,
+  tosAccepted,
+}: AcceptTerraTOSProps): JSX.Element | null => {
   const { config } = useConfig();
   const { exportToTerraUrl } = config;
 
@@ -23,14 +25,15 @@ export const CreateTerraAccount = ({
   return (
     <FormStep
       action={<ButtonPrimary onClick={onOpenTerra}>Go to Terra</ButtonPrimary>}
-      completed={hasTerraAccount}
+      completed={tosAccepted}
+      disabled={disabled}
       text={
         <p>
-          Create a Terra account using the same email that you used to log in to
-          data explorer.
+          For full access to the Data Explorer, please sign in to Terra and
+          review and accept the Terra terms of service when prompted.
         </p>
       }
-      title="Create a Terra account"
+      title="Accept the Terra Terms of Service"
     />
   );
 };

@@ -7,6 +7,7 @@ import {
   RoundedPaper,
 } from "../../../../../common/Paper/paper.styles";
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
+import { AcceptTerraTOS } from "./components/FormStep/components/AcceptTerraTOS/acceptTerraTOS";
 import { ConnectTerraToNIHAccount } from "./components/FormStep/components/ConnectTerraToNIHAccount/connectTerraToNIHAccount";
 import { CreateTerraAccount } from "./components/FormStep/components/CreateTerraAccount/createTerraAccount";
 import { NIHAccountExpiryWarning } from "./components/NIHAccountExpiryWarning/nihAccountExpiryWarning";
@@ -18,6 +19,7 @@ export const TerraSetUpForm = (): JSX.Element | null => {
   const isSetUpComplete =
     isAuthenticated &&
     terraProfile?.hasTerraAccount &&
+    terraProfile?.tosAccepted &&
     NIHProfile?.linkedNIHUsername;
   return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? (
     <NIHAccountExpiryWarning
@@ -39,8 +41,14 @@ export const TerraSetUpForm = (): JSX.Element | null => {
         <CreateTerraAccount
           hasTerraAccount={Boolean(terraProfile?.hasTerraAccount)}
         />
-        <ConnectTerraToNIHAccount
+        <AcceptTerraTOS
           disabled={!terraProfile?.hasTerraAccount}
+          tosAccepted={Boolean(terraProfile?.tosAccepted)}
+        />
+        <ConnectTerraToNIHAccount
+          disabled={
+            !(terraProfile?.hasTerraAccount && terraProfile?.tosAccepted)
+          }
           linkedNIHAccount={Boolean(NIHProfile?.linkedNIHUsername)}
         />
       </GridPaper>
