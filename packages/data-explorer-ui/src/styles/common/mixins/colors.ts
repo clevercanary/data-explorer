@@ -11,6 +11,10 @@ export const inkMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
 export const smokeMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
   theme.palette.smoke.main;
 
+// Success
+export const successMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
+  theme.palette.success.main;
+
 // White
 export const white = ({ theme }: ThemeProps): CommonColors["white"] =>
   theme.palette.common.white;

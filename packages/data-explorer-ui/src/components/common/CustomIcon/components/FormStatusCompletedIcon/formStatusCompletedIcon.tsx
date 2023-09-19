@@ -21,4 +21,3 @@ export const FormStatusCompletedIcon = ({
     </SvgIcon>
   );
 };
-// #287555

@@ -1,6 +1,10 @@
 import { Typography } from "@mui/material";
 import React from "react";
 import { useAuthentication } from "../../../../../../hooks/useAuthentication";
+import {
+  NIHProfile,
+  TerraProfile,
+} from "../../../../../../providers/authentication";
 import { TEXT_BODY_400_2_LINES } from "../../../../../../theme/common/typography";
 import {
   GridPaper,
@@ -13,14 +17,18 @@ import { CreateTerraAccount } from "./components/FormStep/components/CreateTerra
 import { NIHAccountExpiryWarning } from "./components/NIHAccountExpiryWarning/nihAccountExpiryWarning";
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
+enum ONBOARDING_STEP {
+  COMPLETE = 0,
+  NIH_ACCOUNT = 3,
+  TERRA_ACCOUNT = 1,
+  TERRA_TOS = 2,
+}
+
 export const TerraSetUpForm = (): JSX.Element | null => {
   const { isAuthenticated, NIHProfile, terraProfile } = useAuthentication();
   const { linkExpireTime, linkWillExpire } = NIHProfile || {};
-  const isSetUpComplete =
-    isAuthenticated &&
-    terraProfile?.hasTerraAccount &&
-    terraProfile?.tosAccepted &&
-    NIHProfile?.linkedNIHUsername;
+  const step = getCurrentStep(terraProfile, NIHProfile);
+  const isSetUpComplete = isAuthenticated && step === ONBOARDING_STEP.COMPLETE;
   return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? (
     <NIHAccountExpiryWarning
       linkExpireTime={linkExpireTime}
@@ -39,19 +47,43 @@ export const TerraSetUpForm = (): JSX.Element | null => {
           </SectionContent>
         </Section>
         <CreateTerraAccount
-          hasTerraAccount={Boolean(terraProfile?.hasTerraAccount)}
+          active={step === ONBOARDING_STEP.TERRA_ACCOUNT}
+          completed={step > ONBOARDING_STEP.TERRA_ACCOUNT}
+          step={ONBOARDING_STEP.TERRA_ACCOUNT}
         />
         <AcceptTerraTOS
-          disabled={!terraProfile?.hasTerraAccount}
-          tosAccepted={Boolean(terraProfile?.tosAccepted)}
+          active={step === ONBOARDING_STEP.TERRA_TOS}
+          completed={step > ONBOARDING_STEP.TERRA_TOS}
+          step={ONBOARDING_STEP.TERRA_TOS}
         />
         <ConnectTerraToNIHAccount
-          disabled={
-            !(terraProfile?.hasTerraAccount && terraProfile?.tosAccepted)
-          }
-          linkedNIHAccount={Boolean(NIHProfile?.linkedNIHUsername)}
+          active={step === ONBOARDING_STEP.NIH_ACCOUNT}
+          completed={step > ONBOARDING_STEP.NIH_ACCOUNT}
+          step={ONBOARDING_STEP.NIH_ACCOUNT}
         />
       </GridPaper>
     </RoundedPaper>
   );
 };
+
+/**
+ * Returns the current step in the onboarding process.
+ * @param terraProfile - Terra profile.
+ * @param NIHProfile - NIH profile.
+ * @returns current step in the onboarding process.
+ */
+function getCurrentStep(
+  terraProfile?: TerraProfile,
+  NIHProfile?: NIHProfile
+): ONBOARDING_STEP {
+  if (!terraProfile?.hasTerraAccount) {
+    return ONBOARDING_STEP.TERRA_ACCOUNT;
+  }
+  if (!terraProfile?.tosAccepted) {
+    return ONBOARDING_STEP.TERRA_TOS;
+  }
+  if (!NIHProfile?.linkedNIHUsername) {
+    return ONBOARDING_STEP.NIH_ACCOUNT;
+  }
+  return ONBOARDING_STEP.COMPLETE;
+}
