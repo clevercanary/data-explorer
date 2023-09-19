@@ -12,6 +12,7 @@ export interface EntitySearchResults {
 export interface FetchFilesFacets {
   filesFacets: FileFacet[];
   isLoading: boolean;
+  isSuccess: boolean;
 }
 
 export interface FetchFileSummary {

@@ -33,7 +33,8 @@ export const useFetchFilesFacets = (
   // Build request URL.
   const requestURL = useFetchRequestURL(APIEndpoints.FILES, requestParams);
   // Fetch and bind facets.
-  const { data, isLoading, run } = useAsync<AzulEntitiesResponse>();
+  const { data, isLoading, isSuccess, reset, run } =
+    useAsync<AzulEntitiesResponse>();
   // Bind facets.
   const { facets } = useMemo(
     () => bindEntitySearchResultsResponse(data, filters),
@@ -44,11 +45,14 @@ export const useFetchFilesFacets = (
   useEffect(() => {
     if (isEnabled) {
       run(fetchEntitiesFromURL(requestURL, token));
+    } else {
+      reset();
     }
-  }, [isEnabled, requestURL, run, token]);
+  }, [isEnabled, requestURL, reset, run, token]);
 
   return {
     filesFacets: facets,
     isLoading,
+    isSuccess,
   };
 };
