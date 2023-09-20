@@ -24,7 +24,7 @@ type RequestAuthenticationFn = () => void;
 /**
  * Model of NIH profile.
  */
-interface NIHProfile {
+export interface NIHProfile {
   linkedNIHUsername: string;
   linkExpired: boolean;
   linkExpireTime: number;
@@ -34,7 +34,7 @@ interface NIHProfile {
 /**
  * Model of terra profile.
  */
-interface TerraProfile {
+export interface TerraProfile {
   hasTerraAccount: boolean;
   tosAccepted: boolean;
 }

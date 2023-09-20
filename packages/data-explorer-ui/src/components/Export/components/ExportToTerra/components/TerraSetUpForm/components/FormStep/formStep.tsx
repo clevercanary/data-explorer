@@ -1,54 +1,54 @@
-import { Radio as MRadio, Typography } from "@mui/material";
+import { StepIcon, Typography } from "@mui/material";
 import React, { ReactNode } from "react";
 import {
   TEXT_BODY_400_2_LINES,
   TEXT_BODY_500,
 } from "../../../../../../../../theme/common/typography";
 import { FormStatusCompletedIcon } from "../../../../../../../common/CustomIcon/components/FormStatusCompletedIcon/formStatusCompletedIcon";
-import { FormStatusIncompleteIcon } from "../../../../../../../common/CustomIcon/components/FormStatusIncompleteIcon/formStatusIncompleteIcon";
 import {
   Section,
   SectionActions,
-  SectionContent,
   SectionStatus,
 } from "../../terraSetUpForm.styles";
+import { SectionContent } from "./formStep.styles";
 
 export interface FormStepProps {
   action: ReactNode;
+  active: boolean;
   completed: boolean;
-  disabled?: boolean;
+  step: ReactNode;
   text: ReactNode;
   title: string;
 }
 
 export const FormStep = ({
   action,
+  active,
   completed,
-  disabled = false,
+  step,
   text,
   title,
 }: FormStepProps): JSX.Element => {
   return (
     <Section>
       <SectionStatus>
-        <MRadio
-          checked={completed}
-          checkedIcon={<FormStatusCompletedIcon />}
-          color={completed ? "success" : "default"}
-          disabled={disabled}
-          icon={<FormStatusIncompleteIcon />}
-          size="small"
+        <StepIcon
+          active={active}
+          completed={completed}
+          icon={
+            completed ? <FormStatusCompletedIcon fontSize="medium" /> : step
+          }
         />
       </SectionStatus>
       <SectionContent>
         <Typography
-          color={completed || disabled ? "ink.light" : "ink.main"}
+          color={active ? "ink.main" : "ink.light"}
           component="h4"
           variant={TEXT_BODY_500}
         >
           {title}
         </Typography>
-        {completed || disabled ? null : (
+        {active && (
           <Typography
             color="ink.light"
             component="div"
@@ -58,7 +58,7 @@ export const FormStep = ({
           </Typography>
         )}
       </SectionContent>
-      {completed || disabled ? null : <SectionActions>{action}</SectionActions>}
+      {active && <SectionActions>{action}</SectionActions>}
     </Section>
   );
 };

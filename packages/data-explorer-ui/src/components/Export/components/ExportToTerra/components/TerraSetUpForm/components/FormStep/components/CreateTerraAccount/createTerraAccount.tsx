@@ -1,15 +1,19 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { useConfig } from "../../../../../../../../../../hooks/useConfig";
 import { ButtonPrimary } from "../../../../../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { ANCHOR_TARGET } from "../../../../../../../../../Links/common/entities";
 import { FormStep } from "../../formStep";
 
 export interface CreateTerraAccountProps {
-  hasTerraAccount: boolean;
+  active: boolean;
+  completed: boolean;
+  step: ReactNode;
 }
 
 export const CreateTerraAccount = ({
-  hasTerraAccount,
+  active,
+  completed,
+  step,
 }: CreateTerraAccountProps): JSX.Element | null => {
   const { config } = useConfig();
   const { exportToTerraUrl } = config;
@@ -23,7 +27,9 @@ export const CreateTerraAccount = ({
   return (
     <FormStep
       action={<ButtonPrimary onClick={onOpenTerra}>Go to Terra</ButtonPrimary>}
-      completed={hasTerraAccount}
+      active={active}
+      completed={completed}
+      step={step}
       text={
         <p>
           Create a Terra account using the same email that you used to log in to
