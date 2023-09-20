@@ -104,6 +104,8 @@ export const MuiAlert = (theme: Theme): Components["MuiAlert"] => {
         padding: "2px 0",
       },
       message: {
+        display: "grid",
+        gap: 4,
         padding: 0,
       },
       root: {

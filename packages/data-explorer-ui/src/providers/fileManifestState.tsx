@@ -34,6 +34,7 @@ export const DEFAULT_FILE_MANIFEST_STATE = {
   filters: [],
   isEnabled: false,
   isFacetsLoading: false,
+  isFacetsSuccess: false,
   isFileSummaryLoading: false,
   isLoading: false,
   isSummaryLoading: false,
@@ -54,6 +55,7 @@ export type FileManifestState = {
   filters: Filters;
   isEnabled: boolean;
   isFacetsLoading: boolean;
+  isFacetsSuccess: boolean;
   isFileSummaryLoading: boolean;
   isLoading: boolean;
   isSummaryLoading: boolean;
@@ -101,12 +103,11 @@ export function FileManifestStateProvider({
     fileManifestState;
 
   // Fetch files facets.
-  const { filesFacets, isLoading: isFacetsLoading } = useFetchFilesFacets(
-    filters,
-    catalog,
-    { size: "25" },
-    isEnabled
-  );
+  const {
+    filesFacets,
+    isLoading: isFacetsLoading,
+    isSuccess: isFacetsSuccess,
+  } = useFetchFilesFacets(filters, catalog, { size: "25" }, isEnabled);
 
   // Fetch summary.
   const { isLoading: isSummaryLoading, summary } = useFetchSummary(
@@ -126,6 +127,7 @@ export function FileManifestStateProvider({
         fileSummary,
         filesFacets,
         isFacetsLoading,
+        isFacetsSuccess,
         isFileSummaryLoading,
         isLoading: isFacetsLoading || isFileSummaryLoading || isSummaryLoading,
         isSummaryLoading,
@@ -137,6 +139,7 @@ export function FileManifestStateProvider({
     filesFacets,
     fileSummary,
     isFacetsLoading,
+    isFacetsSuccess,
     isFileSummaryLoading,
     isSummaryLoading,
     summary,
@@ -241,6 +244,7 @@ type UpdateFileManifestPayload = {
   filesFacets: FileFacet[];
   fileSummary?: AzulSummaryResponse;
   isFacetsLoading: boolean;
+  isFacetsSuccess: boolean;
   isFileSummaryLoading: boolean;
   isLoading: boolean;
   isSummaryLoading: boolean;
