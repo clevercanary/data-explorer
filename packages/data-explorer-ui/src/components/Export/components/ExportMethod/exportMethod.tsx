@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import React, { ReactNode } from "react";
 import { FluidPaper } from "../../../common/Paper/paper.styles";
 import { SectionTitle } from "../../../common/Section/components/SectionTitle/sectionTitle";
 import {
@@ -8,12 +8,13 @@ import {
   SectionActions,
   SectionContent,
 } from "../../../common/Section/section.styles";
-import { ExportButton } from "./exportMethod.styles";
+import { ExportButton, SectionFootnote } from "./exportMethod.styles";
 
 export interface ExportMethodProps {
   buttonLabel: string;
-  description: string;
+  description: ReactNode;
   disabled: boolean;
+  disabledByLine?: ReactNode;
   route: string;
   title: string;
 }
@@ -22,6 +23,7 @@ export const ExportMethod = ({
   buttonLabel,
   description,
   disabled,
+  disabledByLine,
   route,
   title,
 }: ExportMethodProps): JSX.Element => {
@@ -37,6 +39,9 @@ export const ExportMethod = ({
             <ExportButton disabled={disabled}>{buttonLabel}</ExportButton>
           </Link>
         </SectionActions>
+        {disabled && disabledByLine && (
+          <SectionFootnote>{disabledByLine}</SectionFootnote>
+        )}
       </Section>
     </FluidPaper>
   );
