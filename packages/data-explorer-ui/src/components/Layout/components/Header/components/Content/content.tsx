@@ -1,43 +1,20 @@
-import { Box, Drawer } from "@mui/material";
-import React, { Fragment, ReactNode } from "react";
-import { HEADER_HEIGHT } from "../../header.styles";
+import React, { ReactNode } from "react";
+import {
+  BREAKPOINT_FN_NAME,
+  useBreakpointHelper,
+} from "../../../../../../hooks/useBreakpointHelper";
+import { DESKTOP_SM } from "../../../../../../theme/common/breakpoints";
+import { HeaderContent } from "./content.styles";
 
 export interface ContentProps {
   children: ReactNode | ReactNode[];
-  desktopSm: boolean;
-  drawerOpen: boolean;
-  onDrawerClose: () => void;
 }
 
-export const Content = ({
-  children,
-  desktopSm,
-  drawerOpen,
-  onDrawerClose,
-}: ContentProps): JSX.Element => {
-  const HeaderContent = desktopSm ? Fragment : Drawer;
-  const HeaderContentContainer = desktopSm ? Fragment : Box;
-  const contentProps = desktopSm
-    ? {}
-    : {
-        ModalProps: { sx: { top: `${HEADER_HEIGHT}px` } },
-        PaperProps: {
-          elevation: 0,
-          sx: { marginTop: HEADER_HEIGHT / 4, width: "100%" },
-        },
-        hideBackdrop: true,
-        onClose: onDrawerClose,
-        open: drawerOpen,
-      };
-  const contentContainerProps = desktopSm
-    ? {}
-    : { sx: { display: "grid", gap: 2, py: 4 } };
-
-  return (
-    <HeaderContent {...contentProps}>
-      <HeaderContentContainer {...contentContainerProps}>
-        {children}
-      </HeaderContentContainer>
-    </HeaderContent>
+export const Content = ({ children }: ContentProps): JSX.Element => {
+  const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
+  return smDesktop ? (
+    <>{children}</>
+  ) : (
+    <HeaderContent>{children}</HeaderContent>
   );
 };
