@@ -44,6 +44,7 @@ export const NavigationDrawer = ({
         {menuLabel}
       </Button>
       <MDialog
+        disableScrollLock
         fullScreen
         hideBackdrop
         keepMounted={false}

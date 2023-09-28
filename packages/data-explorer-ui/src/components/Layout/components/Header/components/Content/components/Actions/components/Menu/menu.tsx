@@ -47,6 +47,7 @@ export const Menu = forwardRef<HTMLButtonElement, MenuProps>(
           </IconButton>
         </Fade>
         <MDialog
+          disableScrollLock
           fullScreen
           hideBackdrop
           keepMounted={false}
