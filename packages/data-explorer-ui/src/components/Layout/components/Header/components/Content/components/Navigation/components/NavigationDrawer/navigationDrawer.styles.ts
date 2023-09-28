@@ -4,6 +4,8 @@ import { Button as DXButton } from "../../../../../../../../../common/Button/but
 
 export const Content = styled.div`
   padding: 16px 0;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 export const Button = styled(DXButton)`

@@ -9,10 +9,10 @@ import { DESKTOP_SM } from "../../../../../../../../../../theme/common/breakpoin
 import { SWITCH_TRANSITION_PROPS } from "../../../../../../common/constants";
 import { flattenMoreLink } from "../../../../../../common/utils";
 import { HeaderProps } from "../../../../../../header";
+import { Content } from "../../../../content.styles";
 import { Navigation } from "./components/Content/components/Navigation/navigation.styles";
 import { Slogan } from "./components/Content/components/Slogan/slogan.styles";
 import { Socials } from "./components/Content/components/Socials/socials.styles";
-import { Content } from "./components/Content/content.styles";
 import { Toolbar } from "./components/Toolbar/toolbar";
 
 export interface MenuProps {
