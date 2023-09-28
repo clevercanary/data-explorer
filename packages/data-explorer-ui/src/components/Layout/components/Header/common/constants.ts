@@ -6,6 +6,11 @@ export const FADE_TRANSITION_PROPS = {
   unmountOnExit: true,
 };
 
+export const HEADER_NAVIGATION_LABEL = {
+  MORE: "More",
+  SOCIALS: "Follow Us",
+};
+
 export const SWITCH_TRANSITION_PROPS = {
   timeout: 0,
   unmountOnExit: true,

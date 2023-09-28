@@ -7,6 +7,7 @@ import {
 } from "../../../../../../../../../../hooks/useBreakpointHelper";
 import { DESKTOP_SM } from "../../../../../../../../../../theme/common/breakpoints";
 import { SWITCH_TRANSITION_PROPS } from "../../../../../../common/constants";
+import { flattenMoreLink } from "../../../../../../common/utils";
 import { HeaderProps } from "../../../../../../header";
 import { Navigation } from "./components/Content/components/Navigation/navigation.styles";
 import { Slogan } from "./components/Content/components/Slogan/slogan.styles";
@@ -62,7 +63,7 @@ export const Menu = forwardRef<HTMLButtonElement, MenuProps>(
             <Navigation
               closeAncestor={closeMenu}
               headerProps={headerProps}
-              links={navLinks}
+              links={flattenMoreLink(navLinks)}
             />
             <Socials buttonSize="xlarge" socials={socials} />
           </Content>

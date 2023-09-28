@@ -49,6 +49,10 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
     socials,
   } = headerProps;
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
+  const onlySmDesktop = useBreakpointHelper(
+    BREAKPOINT_FN_NAME.ONLY,
+    DESKTOP_SM
+  );
   const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
   const desktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP);
   const showActions = searchEnabled || authenticationEnabled || !smDesktop;
@@ -85,7 +89,7 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
           <Navigation
             center={navAlignment === ELEMENT_ALIGNMENT.CENTER}
             headerProps={headerProps}
-            links={getHeaderNavigationLinks(navLinks, socials)}
+            links={getHeaderNavigationLinks(navLinks, socials, onlySmDesktop)}
           />
         </Fade>
         {/* Socials */}
