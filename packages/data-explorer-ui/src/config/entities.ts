@@ -1,8 +1,9 @@
-import { TabProps as MTabProps, ThemeOptions } from "@mui/material";
+import { TabProps as MTabProps, Theme, ThemeOptions } from "@mui/material";
 import { ColumnSort } from "@tanstack/react-table";
 import { JSXElementConstructor, ReactNode } from "react";
 import { CategoryKey, SelectedFilterValue } from "../common/entities";
 import { HeroTitle } from "../components/common/Title/title";
+import { LayoutStyle } from "../components/Layout/components/ContentLayout/contentLayout";
 import { FooterProps } from "../components/Layout/components/Footer/footer";
 import { HeaderProps } from "../components/Layout/components/Header/header";
 import { AuthContextProps } from "../providers/authentication";
@@ -240,6 +241,17 @@ export interface LoginNotice {
 }
 
 /**
+ * MDX pages configuration.
+ */
+export interface MDXPagesConfig {
+  content: ComponentsConfig;
+  layoutStyle?: LayoutStyle;
+  navigation?: ComponentsConfig;
+  outline?: ComponentsConfig;
+  route: string;
+}
+
+/**
  * Option Method.
  */
 export type OptionMethod = "GET" | "POST";
@@ -296,6 +308,8 @@ export interface SiteConfig {
     header: HeaderProps;
     support?: SupportConfig;
   };
+  mdxPages?: MDXPagesConfig[];
+  mdxThemeOptionsFn?: ThemeOptionsFn;
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   themeOptions?: ThemeOptions;
@@ -340,6 +354,12 @@ export interface TerraAuthConfig {
   terraNIHProfileEndpoint: string;
   terraProfileEndpoint: string;
 }
+
+/**
+ * Theme options function.
+ * Defines theme options, and provides a reference to the specified theme.
+ */
+export type ThemeOptionsFn = (theme: Theme) => ThemeOptions;
 
 /**
  * View context.
