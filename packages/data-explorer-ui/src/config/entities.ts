@@ -3,7 +3,6 @@ import { ColumnSort } from "@tanstack/react-table";
 import { JSXElementConstructor, ReactNode } from "react";
 import { CategoryKey, SelectedFilterValue } from "../common/entities";
 import { HeroTitle } from "../components/common/Title/title";
-import { LayoutStyle } from "../components/Layout/components/ContentLayout/contentLayout";
 import { FooterProps } from "../components/Layout/components/Footer/footer";
 import { HeaderProps } from "../components/Layout/components/Header/header";
 import { AuthContextProps } from "../providers/authentication";
@@ -241,17 +240,6 @@ export interface LoginNotice {
 }
 
 /**
- * MDX pages configuration.
- */
-export interface MDXPagesConfig {
-  content: ComponentsConfig;
-  layoutStyle?: LayoutStyle;
-  navigation?: ComponentsConfig;
-  outline?: ComponentsConfig;
-  route: string;
-}
-
-/**
  * Option Method.
  */
 export type OptionMethod = "GET" | "POST";
@@ -298,6 +286,8 @@ export interface SiteConfig {
   authentication?: AuthenticationConfig;
   browserURL: string;
   categoryGroupConfigs?: CategoryGroupConfig[];
+  contentDir?: string;
+  contentThemeOptionsFn?: ThemeOptionsFn;
   dataSource: DataSourceConfig;
   entities: EntityConfig[];
   explorerTitle: HeroTitle;
@@ -308,8 +298,6 @@ export interface SiteConfig {
     header: HeaderProps;
     support?: SupportConfig;
   };
-  mdxPages?: MDXPagesConfig[];
-  mdxThemeOptionsFn?: ThemeOptionsFn;
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   themeOptions?: ThemeOptions;
