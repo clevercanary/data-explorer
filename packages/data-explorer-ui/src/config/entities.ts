@@ -1,4 +1,4 @@
-import { TabProps as MTabProps, ThemeOptions } from "@mui/material";
+import { TabProps as MTabProps, Theme, ThemeOptions } from "@mui/material";
 import { ColumnSort } from "@tanstack/react-table";
 import { JSXElementConstructor, ReactNode } from "react";
 import { CategoryKey, SelectedFilterValue } from "../common/entities";
@@ -286,6 +286,8 @@ export interface SiteConfig {
   authentication?: AuthenticationConfig;
   browserURL: string;
   categoryGroupConfigs?: CategoryGroupConfig[];
+  contentDir?: string;
+  contentThemeOptionsFn?: ThemeOptionsFn;
   dataSource: DataSourceConfig;
   entities: EntityConfig[];
   explorerTitle: HeroTitle;
@@ -340,6 +342,12 @@ export interface TerraAuthConfig {
   terraNIHProfileEndpoint: string;
   terraProfileEndpoint: string;
 }
+
+/**
+ * Theme options function.
+ * Defines theme options, and provides a reference to the specified theme.
+ */
+export type ThemeOptionsFn = (theme: Theme) => ThemeOptions;
 
 /**
  * View context.
