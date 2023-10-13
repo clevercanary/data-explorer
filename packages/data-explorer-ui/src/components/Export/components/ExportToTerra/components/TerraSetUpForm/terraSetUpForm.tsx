@@ -26,11 +26,12 @@ enum ONBOARDING_STEP {
 
 export const TerraSetUpForm = (): JSX.Element | null => {
   const { isAuthenticated, NIHProfile, terraProfile } = useAuthentication();
-  const { linkExpireTime, linkWillExpire } = NIHProfile || {};
+  const { linkExpired, linkExpireTime, linkWillExpire } = NIHProfile || {};
   const step = getCurrentStep(terraProfile, NIHProfile);
   const isSetUpComplete = isAuthenticated && step === ONBOARDING_STEP.COMPLETE;
   return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? (
     <NIHAccountExpiryWarning
+      linkExpired={linkExpired}
       linkExpireTime={linkExpireTime}
       linkWillExpire={linkWillExpire}
     />
