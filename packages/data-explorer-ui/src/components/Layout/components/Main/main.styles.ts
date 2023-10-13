@@ -1,5 +1,5 @@
 import styled from "@emotion/styled";
-import { HEADER_HEIGHT } from "../Header/header.styles";
+import { HEADER_HEIGHT } from "../Header/common/constants";
 
 export const Main = styled.main`
   align-items: flex-start;

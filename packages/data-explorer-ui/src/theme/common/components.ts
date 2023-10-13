@@ -3,7 +3,7 @@ import { ErrorIcon } from "../../components/common/CustomIcon/components/ErrorIc
 import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon/infoIcon";
 import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
 import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
-import { desktopSmUp, desktopUp, mobileUp, tabletUp } from "./breakpoints";
+import { desktopUp, mobileUp, tabletUp } from "./breakpoints";
 import {
   alpha32,
   alpha60,
@@ -411,15 +411,11 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
           ...theme.typography[TEXT_BODY_500],
           color: theme.palette.ink.main,
           minWidth: 0,
-          padding: "12px 24px",
           textTransform: "capitalize",
           whiteSpace: "nowrap",
           // eslint-disable-next-line sort-keys -- disabling key order for readability
           "&:hover": {
             backgroundColor: theme.palette.smoke.light,
-          },
-          [desktopSmUp]: {
-            padding: "6px 12px",
           },
         },
       },
@@ -1089,6 +1085,7 @@ export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
           "&.MuiDialog-paper": {
             marginLeft: 0,
             marginRight: 0,
+            maxWidth: "100%",
             width: "100%",
           },
         },

@@ -1,11 +1,26 @@
 import { CustomIcon } from "../../../../common/CustomIcon/customIcon";
 import { Social } from "../../../../common/Socials/socials";
 import { ANCHOR_TARGET } from "../../../../Links/common/entities";
-import { MenuItem } from "../components/NavLinkMenu/navLinkMenu";
-import { NavLinkItem } from "../components/NavLinks/navLinks";
+import { MenuItem } from "../components/Content/components/Navigation/components/NavigationMenuItems/navigationMenuItems";
+import { NavLinkItem } from "../components/Content/components/Navigation/navigation";
+import { HEADER_NAVIGATION_LABEL } from "./constants";
 
 /**
- * Returns header navigation links for the specified media breakpoint query.
+ * Returns the navigation links as configured, where the "More" menu is flattened.
+ * @param links - Header navigation links.
+ * @returns header navigation links, without links grouped under the "More" menu.
+ */
+export function flattenMoreLink(links: NavLinkItem[]): NavLinkItem[] {
+  return links.flatMap((link: NavLinkItem) => {
+    if (link.label === HEADER_NAVIGATION_LABEL.MORE) {
+      return link.menuItems as NavLinkItem[];
+    }
+    return link;
+  });
+}
+
+/**
+ * Returns header navigation links with socials appended with the corresponding label "Follow Us".
  * @param links - Header navigation links.
  * @param socials - Header socials.
  * @param onlySmDesktop - Media breakpoint query is "true" for small desktop only.
@@ -20,7 +35,7 @@ export function getHeaderNavigationLinks(
     const navLinks = [...links];
     if (socials) {
       navLinks.push({
-        label: "Follow Us",
+        label: HEADER_NAVIGATION_LABEL.SOCIALS,
         menuItems: getFollowUsMenuItems(socials),
         url: "",
       });
@@ -28,7 +43,7 @@ export function getHeaderNavigationLinks(
     return navLinks;
   }
   // Return the links without the "More" or "Follow Us" menu.
-  return links.flatMap((link) => link.menuItems || link);
+  return flattenMoreLink(links);
 }
 
 /**
