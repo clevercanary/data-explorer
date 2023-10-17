@@ -1,5 +1,5 @@
 import { Fade } from "@mui/material";
-import React, { useCallback, useState } from "react";
+import React, { ReactNode, useCallback, useState } from "react";
 import { ELEMENT_ALIGNMENT } from "../../../../common/entities";
 import {
   BREAKPOINT_FN_NAME,
@@ -19,10 +19,8 @@ import {
   Navigation,
   NavLinkItem,
 } from "./components/Content/components/Navigation/navigation";
-import {
-  Divider,
-  Slogan,
-} from "./components/Content/components/Slogan/slogan.styles";
+import { Slogan } from "./components/Content/components/Slogan/slogan";
+import { Divider } from "./components/Content/components/Slogan/slogan.styles";
 import { Socials } from "./components/Content/components/Socials/socials.styles";
 import { AppBar, Toolbar } from "./header.styles";
 
@@ -33,7 +31,7 @@ export interface HeaderProps {
   navLinks: NavLinkItem[];
   searchEnabled?: boolean;
   searchURL?: string;
-  slogan?: string;
+  slogan?: ReactNode;
   socials: Social[];
 }
 
@@ -77,12 +75,20 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
         {/* Logo */}
         <Logo {...logo} />
         {/* Divider */}
-        <Fade in={isSloganIn} {...fadeProps}>
+        <Fade
+          in={isSloganIn}
+          style={{ transitionDelay: isSloganIn ? "50ms" : "0ms" }}
+          {...fadeProps}
+        >
           <Divider orientation="vertical" />
         </Fade>
         {/* Slogan */}
-        <Fade in={isSloganIn} {...fadeProps}>
-          <Slogan>{slogan}</Slogan>
+        <Fade
+          in={isSloganIn}
+          style={{ transitionDelay: isSloganIn ? "50ms" : "0ms" }}
+          {...fadeProps}
+        >
+          <Slogan slogan={slogan} />
         </Fade>
         {/* Navigation */}
         <Fade in={isNavigationIn} {...fadeProps}>

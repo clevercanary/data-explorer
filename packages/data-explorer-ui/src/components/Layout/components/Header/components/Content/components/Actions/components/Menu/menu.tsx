@@ -9,9 +9,10 @@ import { DESKTOP_SM } from "../../../../../../../../../../theme/common/breakpoin
 import { SWITCH_TRANSITION_PROPS } from "../../../../../../common/constants";
 import { flattenMoreLink } from "../../../../../../common/utils";
 import { HeaderProps } from "../../../../../../header";
+import { AppBar } from "../../../../../../header.styles";
 import { Content } from "../../../../content.styles";
+import { Slogan } from "../../../Slogan/slogan";
 import { Navigation } from "./components/Content/components/Navigation/navigation.styles";
-import { Slogan } from "./components/Content/components/Slogan/slogan.styles";
 import { Socials } from "./components/Content/components/Socials/socials.styles";
 import { Toolbar } from "./components/Toolbar/toolbar";
 
@@ -58,9 +59,11 @@ export const Menu = forwardRef<HTMLButtonElement, MenuProps>(
           transitionDuration={smDesktop ? 0 : 600}
           TransitionProps={{ easing: "ease-out" }}
         >
-          <Toolbar onClose={closeMenu} {...headerProps} />
+          <AppBar component="div" elevation={0}>
+            <Toolbar onClose={closeMenu} {...headerProps} />
+          </AppBar>
           <Content>
-            {slogan && <Slogan>{slogan}</Slogan>}
+            {slogan && <Slogan slogan={slogan} />}
             <Navigation
               closeAncestor={closeMenu}
               headerProps={headerProps}
