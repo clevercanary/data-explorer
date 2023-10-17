@@ -133,6 +133,7 @@ declare module "@mui/material/Paper" {
 declare module "@mui/material/SvgIcon" {
   interface SvgIconPropsColorOverrides {
     inkLight: true;
+    inkMain: true;
   }
 
   interface SvgIconPropsSizeOverrides {

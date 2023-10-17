@@ -308,8 +308,17 @@ export interface SiteConfig {
  * Facilitates configuration for support button and corresponding form or navigation to a configured url.
  */
 export interface SupportConfig {
-  supportForm?: ComponentsConfig;
+  supportRequest?: SupportRequest;
   url?: string;
+}
+
+/**
+ * Support request configuration.
+ */
+export interface SupportRequest {
+  components: ComponentsConfig;
+  requestURL: string;
+  uploadURL: string;
 }
 
 /**
