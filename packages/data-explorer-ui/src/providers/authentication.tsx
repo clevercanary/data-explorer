@@ -31,6 +31,14 @@ export interface NIHProfile {
   linkWillExpire: boolean;
 }
 
+export interface TermsOfServiceDetails {
+  currentVersion: string;
+  isCurrent: boolean;
+  isEnabled: boolean;
+  isGracePeriodEnabled: boolean;
+  userAcceptedVersion: string;
+}
+
 /**
  * Model of terra profile.
  */
@@ -74,6 +82,7 @@ export interface AuthContextProps {
   isAuthenticated: boolean;
   NIHProfile?: NIHProfile;
   requestAuthentication: RequestAuthenticationFn;
+  termsOfServiceDetails?: TermsOfServiceDetails;
   terraProfile?: TerraProfile;
   token?: string;
   userProfile?: UserProfile;
@@ -89,6 +98,7 @@ export const AuthContext = createContext<AuthContextProps>({
   isAuthenticated: false,
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   requestAuthentication: () => {},
+  termsOfServiceDetails: undefined,
   terraProfile: undefined,
   token: undefined,
   userProfile: undefined,
@@ -117,12 +127,16 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const [tokenClient, setTokenClient] = useState<any>(); // TODO see https://github.com/clevercanary/data-browser/issues/544.
   const [NIHProfile, setNIHProfile] = useState<NIHProfile>();
   const [terraProfile, setTerraProfile] = useState<TerraProfile>();
+  const [termsOfServiceDetails, setTermsOfServiceDetails] =
+    useState<TermsOfServiceDetails>();
   const [userProfile, setUserProfile] = useState<UserProfile>();
   const isAuthenticated = Boolean(userProfile?.authenticated);
   routeHistoryRef.current = useMemo(
     () => updateRouteHistory(routeHistoryRef.current, asPath),
     [asPath]
   );
+  const releaseToken =
+    terraProfile?.tosAccepted && termsOfServiceDetails?.isCurrent;
 
   /**
    * If sessionTimeout is set and user is authenticated, the app will reload and redirect to
@@ -209,18 +223,45 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       fetch(endpoint, options)
         .then((response) => response.json())
         .then((profile) => {
-          setNIHProfile({
-            linkExpireTime: profile.linkExpireTime,
-            linkExpired: hasLinkedNIHAccountExpired(profile.linkExpireTime),
-            linkWillExpire: isLinkedNIHAccountWillExpire(
-              profile.linkExpireTime
-            ),
-            linkedNIHUsername: profile.linkedNihUsername,
-          });
+          if (profile.linkedNihUsername) {
+            setNIHProfile({
+              linkExpireTime: profile.linkExpireTime,
+              linkExpired: hasLinkedNIHAccountExpired(profile.linkExpireTime),
+              linkWillExpire: isLinkedNIHAccountWillExpire(
+                profile.linkExpireTime
+              ),
+              linkedNIHUsername: profile.linkedNihUsername,
+            });
+          }
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
           setNIHProfile(undefined);
+        });
+    },
+    []
+  );
+
+  /**
+   * Fetches terra profile terms of service.
+   */
+  const fetchTerraTermsOfService = useCallback(
+    (endpoint: string, accessToken: string): void => {
+      const headers = new Headers();
+      headers.append("authorization", "Bearer " + accessToken);
+      const options = { headers };
+      fetch(endpoint, options)
+        .then((response) => response.json())
+        .then((response) => {
+          if (response.userAcceptedVersion) {
+            setTermsOfServiceDetails({
+              ...response,
+              isCurrent: isTermsOfServiceCurrent(response),
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err); // TODO handle error.
         });
     },
     []
@@ -251,6 +292,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       if (terraAuthConfig) {
         fetchTerraProfile(terraAuthConfig.terraProfileEndpoint, token);
         fetchTerraNIHProfile(terraAuthConfig.terraNIHProfileEndpoint, token);
+        fetchTerraTermsOfService(terraAuthConfig.termsOfServiceEndpoint, token);
       }
     }
   }, [
@@ -258,6 +300,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
     fetchGoogleProfile,
     fetchTerraNIHProfile,
     fetchTerraProfile,
+    fetchTerraTermsOfService,
     terraAuthConfig,
     token,
   ]);
@@ -269,8 +312,9 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
         authenticateUser,
         isAuthenticated,
         requestAuthentication,
+        termsOfServiceDetails,
         terraProfile,
-        token: terraProfile?.tosAccepted ? token : undefined,
+        token: releaseToken ? token : undefined,
         userProfile,
       }}
     >
@@ -314,6 +358,20 @@ function initRouteHistory(path: string): string {
  */
 function isLinkedNIHAccountWillExpire(expireTime: number): boolean {
   return expireTimeInSeconds(expireTime) < SECONDS_PER_WEEK;
+}
+
+/**
+ * Returns true if the user accepted terms of service version is current.
+ * @param termsOfServiceDetails - Terms of service details.
+ * @returns true if the accepted terms of service version is current.
+ */
+function isTermsOfServiceCurrent(
+  termsOfServiceDetails: TermsOfServiceDetails
+): boolean {
+  return Boolean(
+    termsOfServiceDetails.currentVersion ===
+      termsOfServiceDetails.userAcceptedVersion
+  );
 }
 
 /**

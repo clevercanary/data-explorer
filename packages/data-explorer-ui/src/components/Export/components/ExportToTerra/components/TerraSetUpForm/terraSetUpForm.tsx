@@ -1,10 +1,7 @@
 import { Typography } from "@mui/material";
 import React from "react";
 import { useAuthentication } from "../../../../../../hooks/useAuthentication";
-import {
-  NIHProfile,
-  TerraProfile,
-} from "../../../../../../providers/authentication";
+import { AuthContextProps } from "../../../../../../providers/authentication";
 import { TEXT_BODY_400_2_LINES } from "../../../../../../theme/common/typography";
 import {
   GridPaper,
@@ -25,16 +22,14 @@ enum ONBOARDING_STEP {
 }
 
 export const TerraSetUpForm = (): JSX.Element | null => {
-  const { isAuthenticated, NIHProfile, terraProfile } = useAuthentication();
-  const { linkExpired, linkExpireTime, linkWillExpire } = NIHProfile || {};
-  const step = getCurrentStep(terraProfile, NIHProfile);
-  const isSetUpComplete = isAuthenticated && step === ONBOARDING_STEP.COMPLETE;
-  return !isAuthenticated || !terraProfile ? null : isSetUpComplete ? (
-    <NIHAccountExpiryWarning
-      linkExpired={linkExpired}
-      linkExpireTime={linkExpireTime}
-      linkWillExpire={linkWillExpire}
-    />
+  const authentication = useAuthentication();
+  const completedByOnboardingStep =
+    getCompletedByOnboardingStep(authentication);
+  const currentStep = getCurrentStep(completedByOnboardingStep);
+  const isIdleOrPending = isAuthenticationIdleOrPending(authentication);
+  const isSuccess = isOnboardingComplete(authentication, currentStep);
+  return isIdleOrPending ? null : isSuccess ? (
+    <NIHAccountExpiryWarning {...authentication.NIHProfile} />
   ) : (
     <RoundedPaper>
       <GridPaper>
@@ -48,18 +43,28 @@ export const TerraSetUpForm = (): JSX.Element | null => {
           </SectionContent>
         </Section>
         <CreateTerraAccount
-          active={step === ONBOARDING_STEP.TERRA_ACCOUNT}
-          completed={step > ONBOARDING_STEP.TERRA_ACCOUNT}
+          active={currentStep === ONBOARDING_STEP.TERRA_ACCOUNT}
+          completed={isStepCompleted(
+            completedByOnboardingStep,
+            ONBOARDING_STEP.TERRA_ACCOUNT
+          )}
           step={ONBOARDING_STEP.TERRA_ACCOUNT}
         />
         <AcceptTerraTOS
-          active={step === ONBOARDING_STEP.TERRA_TOS}
-          completed={step > ONBOARDING_STEP.TERRA_TOS}
+          active={currentStep === ONBOARDING_STEP.TERRA_TOS}
+          completed={isStepCompleted(
+            completedByOnboardingStep,
+            ONBOARDING_STEP.TERRA_TOS
+          )}
+          isCurrent={authentication.termsOfServiceDetails?.isCurrent}
           step={ONBOARDING_STEP.TERRA_TOS}
         />
         <ConnectTerraToNIHAccount
-          active={step === ONBOARDING_STEP.NIH_ACCOUNT}
-          completed={step > ONBOARDING_STEP.NIH_ACCOUNT}
+          active={currentStep === ONBOARDING_STEP.NIH_ACCOUNT}
+          completed={isStepCompleted(
+            completedByOnboardingStep,
+            ONBOARDING_STEP.NIH_ACCOUNT
+          )}
           step={ONBOARDING_STEP.NIH_ACCOUNT}
         />
       </GridPaper>
@@ -68,23 +73,93 @@ export const TerraSetUpForm = (): JSX.Element | null => {
 };
 
 /**
+ * Returns a map of onboarding steps and their completed status.
+ * @param authentication - Authentication values.
+ * @returns map of onboarding steps and their completed status.
+ */
+function getCompletedByOnboardingStep(
+  authentication: AuthContextProps
+): Map<ONBOARDING_STEP, boolean> {
+  const { NIHProfile, termsOfServiceDetails, terraProfile } = authentication;
+  const completedByStep = new Map<ONBOARDING_STEP, boolean>();
+  completedByStep.set(
+    ONBOARDING_STEP.TERRA_ACCOUNT,
+    Boolean(terraProfile?.hasTerraAccount)
+  );
+  completedByStep.set(
+    ONBOARDING_STEP.TERRA_TOS,
+    Boolean(terraProfile?.tosAccepted && termsOfServiceDetails?.isCurrent)
+  );
+  completedByStep.set(
+    ONBOARDING_STEP.NIH_ACCOUNT,
+    Boolean(NIHProfile?.linkedNIHUsername)
+  );
+  return completedByStep;
+}
+
+/**
  * Returns the current step in the onboarding process.
- * @param terraProfile - Terra profile.
- * @param NIHProfile - NIH profile.
+ * @param completedByStep - Map of onboarding steps and their completed status.
  * @returns current step in the onboarding process.
  */
 function getCurrentStep(
-  terraProfile?: TerraProfile,
-  NIHProfile?: NIHProfile
+  completedByStep: Map<ONBOARDING_STEP, boolean>
 ): ONBOARDING_STEP {
-  if (!terraProfile?.hasTerraAccount) {
-    return ONBOARDING_STEP.TERRA_ACCOUNT;
+  let currentStep = ONBOARDING_STEP.COMPLETE;
+  for (const key of Object.keys(ONBOARDING_STEP).sort()) {
+    // The ONBOARDING_STEP (numeric) enum is compiled into an object that stores both forward and reverse mappings.
+    // Continue if the value is not numeric.
+    if (Number.isNaN(key)) {
+      continue;
+    }
+    const step = Number(key);
+    // Explicitly check for false; the map must have a value for the key.
+    if (completedByStep.get(step) === false) {
+      currentStep = step;
+      break;
+    }
   }
-  if (!terraProfile?.tosAccepted) {
-    return ONBOARDING_STEP.TERRA_TOS;
-  }
-  if (!NIHProfile?.linkedNIHUsername) {
-    return ONBOARDING_STEP.NIH_ACCOUNT;
-  }
-  return ONBOARDING_STEP.COMPLETE;
+  return currentStep;
+}
+
+/**
+ * Returns true if authentication is idle, or pending.
+ * Idle state is when a user has not logged in (not authenticated).
+ * Pending state is when a user is logged in, but the Terra profile is undefined.
+ * @param authentication - Authentication values.
+ * @returns true if authentication is idle or pending.
+ */
+function isAuthenticationIdleOrPending(
+  authentication: AuthContextProps
+): boolean {
+  const { isAuthenticated, terraProfile } = authentication;
+  return !isAuthenticated || !terraProfile;
+}
+
+/**
+ * Returns true if onboarding is complete.
+ * @param authentication - Authentication values.
+ * @param currentStep - Current step.
+ * @returns true if onboarding is complete.
+ */
+function isOnboardingComplete(
+  authentication: AuthContextProps,
+  currentStep: ONBOARDING_STEP
+): boolean {
+  return (
+    authentication.isAuthenticated && currentStep === ONBOARDING_STEP.COMPLETE
+  );
+}
+
+/**
+ * Returns true if the step is completed.
+ * @param completedByStep - Map of onboarding steps and their completed status.
+ * @param onboardingStep - Onboarding step.
+ * @returns true if the step is completed.
+ */
+function isStepCompleted(
+  completedByStep: Map<ONBOARDING_STEP, boolean>,
+  onboardingStep: ONBOARDING_STEP
+): boolean {
+  return completedByStep.get(onboardingStep) || false;
 }
