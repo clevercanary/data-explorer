@@ -7,14 +7,14 @@ import { FormStep } from "../../formStep";
 export interface AcceptTerraTOSProps {
   active: boolean;
   completed: boolean;
-  isCurrent?: boolean;
+  isTOSCurrent?: boolean;
   step: ReactNode;
 }
 
 export const AcceptTerraTOS = ({
   active,
   completed,
-  isCurrent,
+  isTOSCurrent,
   step,
 }: AcceptTerraTOSProps): JSX.Element | null => {
   const { config } = useConfig();
@@ -33,7 +33,7 @@ export const AcceptTerraTOS = ({
       completed={completed}
       step={step}
       text={
-        isCurrent === false ? (
+        isTOSCurrent === false ? (
           <p>
             {/* Only show reminder to re-accept TOS if the accepted terms of service version is not current.
             An undefined value could imply the TOS is not accepted. */}
