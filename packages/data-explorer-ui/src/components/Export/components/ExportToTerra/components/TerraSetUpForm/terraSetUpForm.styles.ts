@@ -44,7 +44,7 @@ export const SectionStatus = styled("div")`
 
     .MuiStepIcon-text {
       fill: ${smokeMain};
-      font-size: 12px;
+      font-size: 14px;
       font-weight: 700;
       line-height: 20px;
     }
