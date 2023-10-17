@@ -4,6 +4,7 @@ import React, { ReactNode, useState } from "react";
 import { Button } from "../../../../../../../../../common/Button/button";
 import { BackArrowIcon } from "../../../../../../../../../common/CustomIcon/components/BackArrowIcon/backArrowIcon";
 import { HeaderProps } from "../../../../../../header";
+import { AppBar } from "../../../../../../header.styles";
 import { DrawerNavigation as Navigation } from "../../../Actions/components/Menu/components/Content/components/Navigation/navigation.styles";
 import { Toolbar } from "../../../Actions/components/Menu/components/Toolbar/toolbar";
 import { MenuItem } from "../NavigationMenuItems/navigationMenuItems";
@@ -54,7 +55,9 @@ export const NavigationDrawer = ({
         TransitionComponent={Slide}
         transitionDuration={300}
       >
-        <Toolbar onClose={closeDrawers} {...headerProps} />
+        <AppBar component="div" elevation={1}>
+          <Toolbar onClose={closeDrawers} {...headerProps} />
+        </AppBar>
         <Content>
           <BackButton
             fullWidth
