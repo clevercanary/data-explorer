@@ -7,6 +7,7 @@ import { ANCHOR_TARGET } from "../../common/entities";
 import { isClientSideNavigation } from "../../common/utils";
 
 export interface LinkProps {
+  className?: string;
   copyable?: boolean;
   label: ReactNode /* link label may be an element */;
   noWrap?: MLinkProps["noWrap"];
@@ -15,6 +16,7 @@ export interface LinkProps {
 }
 
 export const Link = ({
+  className,
   copyable = false,
   label,
   noWrap = false,
@@ -27,6 +29,7 @@ export const Link = ({
         <>
           <NLink href={url} passHref>
             <MLink
+              className={className}
               rel="noopener"
               noWrap={noWrap}
               target={target || ANCHOR_TARGET.SELF}
@@ -39,6 +42,7 @@ export const Link = ({
       ) : isValidUrl(url) ? (
         <>
           <MLink
+            className={className}
             href={url}
             rel="noopener"
             noWrap={noWrap}

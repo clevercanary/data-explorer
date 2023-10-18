@@ -1,36 +1,37 @@
-import { AppBar, Link, Toolbar } from "@mui/material";
-import NLink from "next/link";
+import { Toolbar } from "@mui/material";
 import React from "react";
 import { IconButtonSocialsFooter } from "../../../common/IconButton/iconButton.styles";
 import { Social } from "../../../common/Socials/socials";
-import { Stack } from "../../../common/Stack/stack";
+import { ANCHOR_TARGET } from "../../../Links/common/entities";
 import {
   Logo,
   LogoProps,
 } from "../Header/components/Content/components/Logo/logo";
 import { NavLinkItem } from "../Header/components/Content/components/Navigation/navigation";
-import { Socials } from "./footer.styles";
+import { AppBar, Link, Links, Logos, Socials } from "./footer.styles";
 
 export interface FooterProps {
-  feedbackForm?: boolean;
+  className?: string;
   logos: LogoProps[];
   navLinks: NavLinkItem[];
   socials: Social[];
 }
 
 export const Footer = ({
-  feedbackForm,
+  className,
   logos,
   navLinks,
   socials,
 }: FooterProps): JSX.Element => {
   return (
-    <AppBar component="footer" color="inherit" variant="footer">
-      <Toolbar
-        sx={{ gap: 4, justifyContent: "space-between", minHeight: 56 }}
-        variant="dense"
-      >
-        <Stack alignItems="center" direction="row" gap={6}>
+    <AppBar
+      className={className}
+      color="inherit"
+      component="footer"
+      variant="footer"
+    >
+      <Toolbar variant="dense">
+        <Logos>
           {logos.map(({ alt, height, link, src, width }, l) => (
             <Logo
               key={`${link}${l}`}
@@ -41,27 +42,22 @@ export const Footer = ({
               width={width}
             />
           ))}
-        </Stack>
-        <Stack alignItems="stretch" direction="row" gap={6}>
+        </Logos>
+        <Links>
           {navLinks.map(({ label, url }, i) => (
-            <NLink key={`${url}${i}`} href={url} passHref>
-              <Link
-                alignItems="center"
-                color="ink.main"
-                display="flex"
-                variant="text-body-small-400"
-              >
-                {label}
-              </Link>
-            </NLink>
+            <Link
+              key={`${url}${i}`}
+              label={label}
+              target={ANCHOR_TARGET.SELF}
+              url={url}
+            />
           ))}
-          {feedbackForm && <>{/* TODO feedback form */}</>}
           <Socials
             buttonSize="small"
             IconButtonElType={IconButtonSocialsFooter}
             socials={socials}
           />
-        </Stack>
+        </Links>
       </Toolbar>
     </AppBar>
   );
