@@ -3,6 +3,7 @@ import { ErrorIcon } from "../../components/common/CustomIcon/components/ErrorIc
 import { InfoIcon } from "../../components/common/CustomIcon/components/InfoIcon/infoIcon";
 import { SuccessIcon } from "../../components/common/CustomIcon/components/SuccessIcon/successIcon";
 import { WarningIcon } from "../../components/common/CustomIcon/components/WarningIcon/warningIcon";
+import { DropDownIcon } from "../../components/common/Form/components/Select/components/DropDownIcon/dropDownIcon";
 import { desktopUp, mobileUp, tabletUp } from "./breakpoints";
 import {
   alpha32,
@@ -789,6 +790,27 @@ export const MuiFormGroup: Components["MuiFormGroup"] = {
 };
 
 /**
+ * MuiFormHelperText Component
+ * @param theme - Theme.
+ * @returns MuiFormHelperText component theme styles.
+ */
+export const MuiFormHelperText = (
+  theme: Theme
+): Components["MuiFormHelperText"] => {
+  return {
+    styleOverrides: {
+      root: {
+        ...theme.typography[TEXT_BODY_SMALL_400],
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-error": {
+          color: theme.palette.alert.main,
+        },
+      },
+    },
+  };
+};
+
+/**
  * MuiIconButton Component
  * @param theme - Theme.
  * @returns MuiIconButton component theme styles.
@@ -890,6 +912,9 @@ export const MuiInputBase = (theme: Theme): Components["MuiInputBase"] => {
     styleOverrides: {
       adornedStart: {
         gap: 8,
+      },
+      multiline: {
+        height: "unset",
       },
       root: {
         ...theme.typography[TEXT_BODY_400],
@@ -1033,6 +1058,24 @@ export const MuiOutlinedInput = (
             color: theme.palette.ink.main, // Adornment e.g. "SearchIcon".
           },
         },
+        // eslint-disable-next-line sort-keys -- disabling key order for specificity
+        "&.Mui-disabled": {
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.smoke.dark,
+            borderWidth: 1,
+          },
+          "& .MuiSvgIcon-root": {
+            color: theme.palette.ink.light,
+          },
+        },
+        "&.Mui-error": {
+          backgroundColor: theme.palette.alert.lightest,
+          // eslint-disable-next-line sort-keys -- disabling key order for specificity
+          "& .MuiOutlinedInput-notchedOutline": {
+            borderColor: theme.palette.alert.main,
+            borderWidth: 1,
+          },
+        },
       },
     },
   };
@@ -1138,6 +1181,21 @@ export const MuiRadio = (theme: Theme): Components["MuiRadio"] => {
 };
 
 /**
+ * MuiSelect Component
+ */
+export const MuiSelect: Components["MuiSelect"] = {
+  defaultProps: {
+    IconComponent: DropDownIcon,
+  },
+  styleOverrides: {
+    select: {
+      minHeight: "unset",
+      paddingRight: "36px !important", // Overrides MuiSelect css selector specificity.
+    },
+  },
+};
+
+/**
  * MuiSvgIcon Component
  * @param theme - Theme.
  * @returns MuiSvgIcon component theme styles.
@@ -1151,6 +1209,12 @@ export const MuiSvgIcon = (theme: Theme): Components["MuiSvgIcon"] => {
       fontSizeSmall: {
         fontSize: "20px",
       },
+      root: {
+        "&.MuiSelect-icon": {
+          color: theme.palette.ink.main,
+          right: 8,
+        },
+      },
     },
     variants: [
       {
@@ -1159,6 +1223,14 @@ export const MuiSvgIcon = (theme: Theme): Components["MuiSvgIcon"] => {
         },
         style: {
           color: theme.palette.ink.light,
+        },
+      },
+      {
+        props: {
+          color: "inkMain",
+        },
+        style: {
+          color: theme.palette.ink.main,
         },
       },
       {

@@ -1,4 +1,4 @@
-import { Fade, Typography } from "@mui/material";
+import { Fade, SvgIconProps, Typography } from "@mui/material";
 import React from "react";
 import { LoadingIcon } from "../common/CustomIcon/components/LoadingIcon/loadingIcon";
 import { PaperPanelStyle, PAPER_PANEL_STYLE } from "../common/Paper/paper";
@@ -21,12 +21,14 @@ export enum LOADING_PANEL_STYLE {
 }
 
 export interface LoadingProps {
+  iconSize?: SvgIconProps["fontSize"];
   loading: boolean;
   panelStyle?: LoadingPanelStyle; // Enables loading to mirror parent container styles.
   text?: string;
 }
 
 export const Loading = ({
+  iconSize = "large",
   loading,
   panelStyle = PAPER_PANEL_STYLE.ROUNDED,
   text,
@@ -42,7 +44,7 @@ export const Loading = ({
     >
       <LoadingPositioner panelStyle={panelStyle}>
         <LoadingPaper panelStyle={panelStyle}>
-          <LoadingIcon color="primary" fontSize="large" />
+          <LoadingIcon color="primary" fontSize={iconSize} />
           {text && <Typography variant="text-body-400">{text}</Typography>}
         </LoadingPaper>
       </LoadingPositioner>
