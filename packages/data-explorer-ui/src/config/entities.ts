@@ -348,6 +348,7 @@ interface TabConfig {
 }
 
 export interface TerraAuthConfig {
+  termsOfServiceEndpoint: string;
   terraNIHProfileEndpoint: string;
   terraProfileEndpoint: string;
 }
