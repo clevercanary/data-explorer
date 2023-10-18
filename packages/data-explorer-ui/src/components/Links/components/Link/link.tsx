@@ -11,6 +11,7 @@ export interface LinkProps {
   copyable?: boolean;
   label: ReactNode /* link label may be an element */;
   noWrap?: MLinkProps["noWrap"];
+  onClick?: () => void;
   target?: ANCHOR_TARGET;
   url: string;
 }
@@ -20,6 +21,7 @@ export const Link = ({
   copyable = false,
   label,
   noWrap = false,
+  onClick,
   target,
   url,
 }: LinkProps): JSX.Element => {
@@ -33,6 +35,7 @@ export const Link = ({
               rel="noopener"
               noWrap={noWrap}
               target={target || ANCHOR_TARGET.SELF}
+              onClick={onClick}
             >
               {label}
             </MLink>
@@ -47,6 +50,7 @@ export const Link = ({
             rel="noopener"
             noWrap={noWrap}
             target={target || ANCHOR_TARGET.BLANK}
+            onClick={onClick}
           >
             {label}
           </MLink>
