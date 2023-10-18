@@ -13,7 +13,7 @@ import { useConfig } from "../hooks/useConfig";
 
 // Template constants
 export const ROUTE_LOGIN = "/login";
-const SECONDS_PER_WEEK = 60 * 60 * 24 * 7; // 7 days.
+const WARNING_WINDOW_SECONDS = 60 * 60 * 24 * 5; // 5 days.
 
 // eslint-disable-next-line  @typescript-eslint/no-explicit-any -- see todo
 declare const google: any; // TODO see https://github.com/clevercanary/data-browser/issues/544.
@@ -357,7 +357,7 @@ function initRouteHistory(path: string): string {
  * @returns true if the linked NIH account will expire in less than a week.
  */
 function isLinkedNIHAccountWillExpire(expireTime: number): boolean {
-  return expireTimeInSeconds(expireTime) < SECONDS_PER_WEEK;
+  return expireTimeInSeconds(expireTime) < WARNING_WINDOW_SECONDS;
 }
 
 /**
