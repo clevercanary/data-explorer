@@ -7,7 +7,7 @@ import {
 } from "../../../../../../../../../../hooks/useBreakpointHelper";
 import { DESKTOP_SM } from "../../../../../../../../../../theme/common/breakpoints";
 import { SWITCH_TRANSITION_PROPS } from "../../../../../../common/constants";
-import { flattenMoreLink } from "../../../../../../common/utils";
+import { flattenNavigationLinks } from "../../../../../../common/utils";
 import { HeaderProps } from "../../../../../../header";
 import { AppBar } from "../../../../../../header.styles";
 import { Content } from "../../../../content.styles";
@@ -67,9 +67,9 @@ export const Menu = forwardRef<HTMLButtonElement, MenuProps>(
             <Navigation
               closeAncestor={closeMenu}
               headerProps={headerProps}
-              links={flattenMoreLink(navLinks)}
+              links={flattenNavigationLinks(navLinks)}
             />
-            <Socials buttonSize="xlarge" socials={socials} />
+            {socials && <Socials buttonSize="xlarge" socials={socials} />}
           </Content>
         </MDialog>
       </>

@@ -1,6 +1,9 @@
-import { Fade } from "@mui/material";
+import { Fade, Toolbar } from "@mui/material";
 import React, { ReactNode, useCallback, useState } from "react";
-import { ELEMENT_ALIGNMENT } from "../../../../common/entities";
+import {
+  ElementAlignment,
+  ELEMENT_ALIGNMENT,
+} from "../../../../common/entities";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
@@ -13,32 +16,32 @@ import { Actions } from "./components/Content/components/Actions/actions";
 import { Authentication } from "./components/Content/components/Actions/components/Authentication/authentication";
 import { Menu } from "./components/Content/components/Actions/components/Menu/menu";
 import { Search } from "./components/Content/components/Actions/components/Search/search";
-import { Logo, LogoProps } from "./components/Content/components/Logo/logo";
 import {
-  NavAlignment,
   Navigation,
   NavLinkItem,
 } from "./components/Content/components/Navigation/navigation";
 import { Slogan } from "./components/Content/components/Slogan/slogan";
 import { Divider } from "./components/Content/components/Slogan/slogan.styles";
 import { Socials } from "./components/Content/components/Socials/socials.styles";
-import { AppBar, Toolbar } from "./header.styles";
+import { AppBar as HeaderAppBar, HeaderSmAppBar } from "./header.styles";
 
 export interface HeaderProps {
   authenticationEnabled?: boolean;
-  logo: LogoProps;
-  navAlignment?: NavAlignment;
+  className?: string;
+  Logo: ReactNode;
+  navAlignment?: ElementAlignment;
   navLinks: NavLinkItem[];
   searchEnabled?: boolean;
   searchURL?: string;
   slogan?: ReactNode;
-  socials: Social[];
+  socials?: Social[];
 }
 
 export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   const {
     authenticationEnabled,
-    logo,
+    className,
+    Logo,
     navAlignment = ELEMENT_ALIGNMENT.LEFT,
     navLinks,
     searchEnabled,
@@ -53,10 +56,12 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   );
   const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
   const desktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP);
+  const AppBar =
+    navAlignment === ELEMENT_ALIGNMENT.RIGHT ? HeaderSmAppBar : HeaderAppBar;
   const showActions = searchEnabled || authenticationEnabled || !smDesktop;
   const isNavigationIn = smDesktop;
   const isSloganIn = Boolean(slogan) && smDesktop;
-  const isSocialsIn = desktop;
+  const isSocialsIn = Boolean(socials) && desktop;
   const fadeProps = FADE_TRANSITION_PROPS;
 
   // Closes header menu.
@@ -70,10 +75,10 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   }, []);
 
   return (
-    <AppBar elevation={1} position="fixed">
+    <AppBar className={className} elevation={1} position="fixed">
       <Toolbar variant="dense">
         {/* Logo */}
-        <Logo {...logo} />
+        {Logo}
         {/* Divider */}
         <Fade
           in={isSloganIn}
@@ -93,15 +98,17 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
         {/* Navigation */}
         <Fade in={isNavigationIn} {...fadeProps}>
           <Navigation
-            center={navAlignment === ELEMENT_ALIGNMENT.CENTER}
+            alignment={navAlignment}
             headerProps={headerProps}
             links={getHeaderNavigationLinks(navLinks, socials, onlySmDesktop)}
           />
         </Fade>
         {/* Socials */}
-        <Fade in={isSocialsIn} {...fadeProps}>
-          <Socials buttonSize="small" socials={socials} />
-        </Fade>
+        {socials && (
+          <Fade in={isSocialsIn} {...fadeProps}>
+            <Socials buttonSize="small" socials={socials} />
+          </Fade>
+        )}
         {/* Actions */}
         <Actions showActions={showActions}>
           {/* Search */}

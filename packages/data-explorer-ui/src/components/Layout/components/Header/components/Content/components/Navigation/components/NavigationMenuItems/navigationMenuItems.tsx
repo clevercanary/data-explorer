@@ -1,10 +1,11 @@
 import {
+  Divider,
   ListItemIcon,
   ListItemText,
   MenuItem as MMenuItem,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { ReactNode } from "react";
+import React, { Fragment, ReactNode } from "react";
 import {
   TEXT_BODY_400,
   TEXT_BODY_500,
@@ -36,6 +37,7 @@ export const NavigationMenuItems = ({
         (
           {
             description,
+            divider,
             icon,
             label,
             menuItems: nestedMenuItems,
@@ -53,27 +55,29 @@ export const NavigationMenuItems = ({
               menuLabel={label}
             />
           ) : (
-            <MMenuItem
-              key={i}
-              onClick={(): void => {
-                closeMenu();
-                isClientSideNavigation(url)
-                  ? router.push(url)
-                  : window.open(url, target);
-              }}
-            >
-              {icon && <ListItemIcon>{icon}</ListItemIcon>}
-              <ListItemText
-                primary={label}
-                primaryTypographyProps={{
-                  variant: description ? TEXT_BODY_500 : TEXT_BODY_400,
+            <Fragment key={i}>
+              <MMenuItem
+                onClick={(): void => {
+                  closeMenu();
+                  isClientSideNavigation(url)
+                    ? router.push(url)
+                    : window.open(url, target);
                 }}
-                secondary={description}
-                secondaryTypographyProps={{
-                  variant: TEXT_BODY_SMALL_400_2_LINES,
-                }}
-              />
-            </MMenuItem>
+              >
+                {icon && <ListItemIcon>{icon}</ListItemIcon>}
+                <ListItemText
+                  primary={label}
+                  primaryTypographyProps={{
+                    variant: description ? TEXT_BODY_500 : TEXT_BODY_400,
+                  }}
+                  secondary={description}
+                  secondaryTypographyProps={{
+                    variant: TEXT_BODY_SMALL_400_2_LINES,
+                  }}
+                />
+              </MMenuItem>
+              {divider && <Divider />}
+            </Fragment>
           )
       )}
     </>

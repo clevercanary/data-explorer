@@ -283,6 +283,7 @@ export interface RelatedViewConfig {
  */
 export interface SiteConfig {
   analytics?: AnalyticsConfig;
+  appTitle: string;
   authentication?: AuthenticationConfig;
   browserURL: string;
   categoryGroupConfigs?: CategoryGroupConfig[];

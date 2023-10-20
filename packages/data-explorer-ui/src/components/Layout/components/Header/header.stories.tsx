@@ -3,13 +3,14 @@ import React from "react";
 import { ELEMENT_ALIGNMENT } from "../../../../common/entities";
 import logo from "../../../../images/logo.svg";
 import { SOCIAL } from "../../../common/Socials/socials";
+import { Logo } from "./components/Content/components/Logo/logo";
 import { Header } from "./header";
 
 export default {
   argTypes: {
     header: {
+      Logo: { control: { disable: true } },
       authenticationEnabled: { control: "boolean" },
-      logo: { control: "object" },
       navAlignment: {
         control: "select",
         options: [ELEMENT_ALIGNMENT.LEFT, ELEMENT_ALIGNMENT.CENTER],
@@ -35,13 +36,8 @@ const url = "https://www.google.com/";
 
 export const HeaderStory = HeaderTemplate.bind({});
 HeaderStory.args = {
+  Logo: <Logo alt="Logo" height={40} link="/" src={logo} />,
   authenticationEnabled: false,
-  logo: {
-    alt: "Logo",
-    height: 40,
-    link: "/",
-    src: logo,
-  },
   navAlignment: ELEMENT_ALIGNMENT.CENTER,
   navLinks: [
     {

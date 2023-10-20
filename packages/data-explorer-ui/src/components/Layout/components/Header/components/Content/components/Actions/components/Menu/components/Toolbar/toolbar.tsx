@@ -1,15 +1,13 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { IconButton } from "@mui/material";
-import React from "react";
-import { Toolbar as DXToolbar } from "../../../../../../../../header.styles";
-import { Logo, LogoProps } from "../../../../../Logo/logo";
+import { IconButton, Toolbar as MToolbar } from "@mui/material";
+import React, { ReactNode } from "react";
 import { Actions } from "../../../../actions";
 import { Authentication } from "../../../Authentication/authentication";
 import { Search } from "../../../Search/search";
 
 export interface DialogTitleProps {
   authenticationEnabled?: boolean;
-  logo?: LogoProps;
+  Logo?: ReactNode;
   onClose: () => void;
   searchEnabled?: boolean;
   searchURL?: string;
@@ -17,14 +15,14 @@ export interface DialogTitleProps {
 
 export const Toolbar = ({
   authenticationEnabled,
-  logo,
+  Logo,
   onClose,
   searchEnabled,
   searchURL,
 }: DialogTitleProps): JSX.Element => {
   return (
-    <DXToolbar>
-      {logo && <Logo {...logo} />}
+    <MToolbar>
+      {Logo}
       <Actions>
         {/* Search */}
         <Search
@@ -42,6 +40,6 @@ export const Toolbar = ({
           <CloseRoundedIcon />
         </IconButton>
       </Actions>
-    </DXToolbar>
+    </MToolbar>
   );
 };

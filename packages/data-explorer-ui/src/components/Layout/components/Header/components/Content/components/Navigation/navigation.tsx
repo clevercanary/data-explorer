@@ -1,7 +1,10 @@
-import { Button } from "@mui/material";
+import { Button, Divider } from "@mui/material";
 import { useRouter } from "next/router";
-import React, { CSSProperties, forwardRef, ReactNode } from "react";
-import { ELEMENT_ALIGNMENT } from "../../../../../../../../common/entities";
+import React, { CSSProperties, forwardRef, Fragment, ReactNode } from "react";
+import {
+  ElementAlignment,
+  ELEMENT_ALIGNMENT,
+} from "../../../../../../../../common/entities";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
@@ -15,9 +18,9 @@ import { NavigationMenu } from "./components/NavigationMenu/navigationMenu";
 import { MenuItem } from "./components/NavigationMenuItems/navigationMenuItems";
 import { Navigation as Links } from "./navigation.styles";
 
-export type NavAlignment = Exclude<ELEMENT_ALIGNMENT, ELEMENT_ALIGNMENT.RIGHT>;
-
 export interface NavLinkItem {
+  divider?: boolean;
+  flatten?: boolean;
   label: ReactNode;
   menuItems?: MenuItem[];
   target?: ANCHOR_TARGET;
@@ -25,7 +28,7 @@ export interface NavLinkItem {
 }
 
 export interface NavigationProps {
-  center?: boolean;
+  alignment?: ElementAlignment;
   className?: string;
   closeAncestor?: () => void;
   headerProps?: HeaderProps;
@@ -36,7 +39,7 @@ export interface NavigationProps {
 export const Navigation = forwardRef<HTMLDivElement, NavigationProps>(
   function Navigation(
     {
-      center = false,
+      alignment = ELEMENT_ALIGNMENT.LEFT,
       className,
       closeAncestor,
       headerProps,
@@ -48,39 +51,50 @@ export const Navigation = forwardRef<HTMLDivElement, NavigationProps>(
     const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
     const router = useRouter();
     return (
-      <Links ref={ref} center={center} className={className} style={style}>
+      <Links
+        ref={ref}
+        alignment={alignment}
+        className={className}
+        style={style}
+      >
         {links.map(
-          ({ label, menuItems, target = ANCHOR_TARGET.SELF, url }, i) =>
+          (
+            { divider, label, menuItems, target = ANCHOR_TARGET.SELF, url },
+            i
+          ) =>
             menuItems ? (
-              smDesktop ? (
-                <NavigationMenu
-                  key={i}
-                  closeAncestor={closeAncestor}
-                  menuItems={menuItems}
-                  menuLabel={label}
-                />
-              ) : (
-                <NavigationDrawer
-                  key={i}
-                  closeAncestor={closeAncestor}
-                  headerProps={headerProps}
-                  menuItems={menuItems}
-                  menuLabel={label}
-                />
-              )
+              <Fragment key={i}>
+                {smDesktop ? (
+                  <NavigationMenu
+                    closeAncestor={closeAncestor}
+                    menuItems={menuItems}
+                    menuLabel={label}
+                  />
+                ) : (
+                  <NavigationDrawer
+                    closeAncestor={closeAncestor}
+                    headerProps={headerProps}
+                    menuItems={menuItems}
+                    menuLabel={label}
+                  />
+                )}
+                {divider && <Divider />}
+              </Fragment>
             ) : (
-              <Button
-                key={i}
-                onClick={(): void => {
-                  isClientSideNavigation(url)
-                    ? router.push(url)
-                    : window.open(url, target);
-                  closeAncestor?.();
-                }}
-                variant="nav"
-              >
-                {label}
-              </Button>
+              <Fragment key={i}>
+                <Button
+                  onClick={(): void => {
+                    isClientSideNavigation(url)
+                      ? router.push(url)
+                      : window.open(url, target);
+                    closeAncestor?.();
+                  }}
+                  variant="nav"
+                >
+                  {label}
+                </Button>
+                {divider && <Divider />}
+              </Fragment>
             )
         )}
       </Links>

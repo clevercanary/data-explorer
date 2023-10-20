@@ -14,7 +14,7 @@ export interface FooterProps {
   className?: string;
   logos: LogoProps[];
   navLinks: NavLinkItem[];
-  socials: Social[];
+  socials?: Social[];
 }
 
 export const Footer = ({
@@ -52,11 +52,13 @@ export const Footer = ({
               url={url}
             />
           ))}
-          <Socials
-            buttonSize="small"
-            IconButtonElType={IconButtonSocialsFooter}
-            socials={socials}
-          />
+          {socials && (
+            <Socials
+              buttonSize="small"
+              IconButtonElType={IconButtonSocialsFooter}
+              socials={socials}
+            />
+          )}
         </Links>
       </Toolbar>
     </AppBar>
