@@ -15,7 +15,6 @@ const FAV_ICONS = {
 export const Head = (): JSX.Element => {
   const { config } = useConfig();
   const router = useRouter();
-  const layout = config.layout;
 
   const renderIcons = (): JSX.Element => {
     return (
@@ -57,7 +56,7 @@ export const Head = (): JSX.Element => {
 
   return (
     <NextHead key="page-head">
-      <title>{layout.header.logo.alt}</title>
+      <title>{config.appTitle}</title>
       {renderIcons()}
     </NextHead>
   );

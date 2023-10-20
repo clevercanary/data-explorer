@@ -20,6 +20,20 @@ export function flattenMoreLink(links: NavLinkItem[]): NavLinkItem[] {
 }
 
 /**
+ * Returns the navigation links as configured, all menu links specified as "flatten" are flattened, including the "More" menu.
+ * @param links - Header navigation links.
+ * @returns header navigation links.
+ */
+export function flattenNavigationLinks(links: NavLinkItem[]): NavLinkItem[] {
+  return links.flatMap((link: NavLinkItem) => {
+    if (link.flatten || link.label === HEADER_NAVIGATION_LABEL.MORE) {
+      return link.menuItems as NavLinkItem[];
+    }
+    return link;
+  });
+}
+
+/**
  * Returns header navigation links with socials appended with the corresponding label "Follow Us".
  * @param links - Header navigation links.
  * @param socials - Header socials.
@@ -28,7 +42,7 @@ export function flattenMoreLink(links: NavLinkItem[]): NavLinkItem[] {
  */
 export function getHeaderNavigationLinks(
   links: NavLinkItem[],
-  socials: Social[],
+  socials: Social[] | undefined,
   onlySmDesktop: boolean
 ): NavLinkItem[] {
   if (onlySmDesktop) {

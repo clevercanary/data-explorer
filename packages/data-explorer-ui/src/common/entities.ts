@@ -26,6 +26,8 @@ export enum ELEMENT_ALIGNMENT {
   RIGHT = "RIGHT",
 }
 
+export type ElementAlignment = ELEMENT_ALIGNMENT;
+
 /**
  * Set of selected category values.
  */

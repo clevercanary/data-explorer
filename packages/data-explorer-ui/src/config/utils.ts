@@ -8,6 +8,7 @@ import { EntityConfig, SiteConfig } from "./entities";
  */
 export function getDefaultConfig(): SiteConfig {
   return {
+    appTitle: "",
     browserURL: "",
     dataSource: {
       url: "",
@@ -21,11 +22,7 @@ export function getDefaultConfig(): SiteConfig {
         socials: [],
       },
       header: {
-        logo: {
-          alt: "",
-          link: "",
-          src: undefined,
-        },
+        Logo: null,
         navLinks: [],
         socials: [],
       },

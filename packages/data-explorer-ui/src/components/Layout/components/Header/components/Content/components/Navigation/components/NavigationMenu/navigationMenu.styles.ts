@@ -12,15 +12,17 @@ export const Menu = styled(MMenu)`
     border-color: ${({ theme }) => theme.palette.smoke.main};
     margin: 4px 0;
     max-width: 324px;
-    min-width: 144px;
+    min-width: 204px;
   }
 
   .MuiList-root {
     .MuiMenuItem-root {
+      gap: 8px;
       margin: 0;
 
       .MuiListItemIcon-root {
-        min-width: 24px;
+        align-self: flex-start;
+        min-width: unset;
       }
 
       .MuiListItemText-root {
@@ -49,6 +51,10 @@ export const Menu = styled(MMenu)`
         margin-left: -6px;
         margin-right: -6px;
       }
+    }
+
+    .MuiDivider-root {
+      margin: 8px 0;
     }
   }
 `;
