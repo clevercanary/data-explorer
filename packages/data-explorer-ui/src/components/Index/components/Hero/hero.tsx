@@ -13,16 +13,22 @@ import {
  */
 
 export interface HeroProps {
+  SideBarButton?: ReactNode;
   Summaries?: ReactNode;
   title: HeroTitle;
 }
 
-export const Hero = ({ Summaries, title }: HeroProps): JSX.Element => {
+export const Hero = ({
+  SideBarButton,
+  Summaries,
+  title,
+}: HeroProps): JSX.Element => {
   return (
     <>
       {(title || Summaries) && (
         <HeroLayout>
           <Title title={title} />
+          {SideBarButton}
           {Summaries && (
             <Widgets>
               <SummaryWidget buttonWidget={true}>

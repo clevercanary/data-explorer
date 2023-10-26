@@ -17,7 +17,7 @@ export const InputField = styled(OutlinedInput, {
   shouldForwardProp: (prop) => prop !== "isFilled",
 })<Props>`
   && ::placeholder {
-    opacity: 1;
+    opacity: 0.8;
   }
 
   &&.Mui-focused ::placeholder {

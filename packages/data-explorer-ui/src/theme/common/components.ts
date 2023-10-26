@@ -342,6 +342,11 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
         boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,
         color: theme.palette.ink.main,
         // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-focusVisible": {
+          backgroundColor: theme.palette.common.white,
+          boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
         "&:hover": {
           backgroundColor: theme.palette.smoke.lightest,
           boxShadow: `inset 0 0 0 1px ${theme.palette.smoke.dark}, 0 1px 0 0 ${black08}`,
@@ -1131,14 +1136,6 @@ export const MuiPaper = (theme: Theme): Components["MuiPaper"] => {
             maxWidth: "100%",
             width: "100%",
           },
-        },
-      },
-      {
-        props: { variant: "sidebar" },
-        style: {
-          backgroundColor: theme.palette.smoke.light,
-          padding: "24px 0",
-          width: 312,
         },
       },
     ],

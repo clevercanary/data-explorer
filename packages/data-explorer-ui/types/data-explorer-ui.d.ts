@@ -123,7 +123,6 @@ declare module "@mui/material/Paper" {
     menu: true;
     panel: true;
     searchbar: true;
-    sidebar: true;
   }
 }
 

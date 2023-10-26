@@ -6,6 +6,7 @@ import { Index as IndexLayout } from "./index.styles";
 export interface IndexProps {
   List?: ReactNode;
   ListHero?: ReactNode | ReactNode[];
+  SideBarButton?: ReactNode;
   SubTitleHero?: ReactNode | ReactNode[];
   Summaries?: ReactNode;
   Tabs?: ReactNode;
@@ -15,6 +16,7 @@ export interface IndexProps {
 export const Index = ({
   List,
   ListHero,
+  SideBarButton,
   SubTitleHero,
   Summaries,
   Tabs,
@@ -22,7 +24,7 @@ export const Index = ({
 }: IndexProps): JSX.Element => {
   return (
     <IndexLayout>
-      <Hero Summaries={Summaries} title={title} />
+      <Hero SideBarButton={SideBarButton} Summaries={Summaries} title={title} />
       {SubTitleHero}
       {Tabs}
       {ListHero}

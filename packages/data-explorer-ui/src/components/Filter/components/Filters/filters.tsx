@@ -1,10 +1,13 @@
-import { ButtonProps, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 import React, { Fragment } from "react";
 import { CategoryTag, SelectCategoryView } from "../../../../common/entities";
+import {
+  BREAKPOINT_FN_NAME,
+  useBreakpointHelper,
+} from "../../../../hooks/useBreakpointHelper";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { Filter } from "../Filter/filter";
-import { FilterLabel } from "../FilterLabel/filterLabel";
-import { FilterMenu } from "../FilterMenu/filterMenu";
 import { FilterTags } from "../FilterTags/filterTags";
 import { Filters as FilterList } from "./filters.styles";
 
@@ -15,6 +18,7 @@ export interface CategoryFilter {
 
 export interface FiltersProps {
   categoryFilters: CategoryFilter[];
+  closeAncestor?: () => void;
   disabled: boolean; // Global disabling of filters; typically in "related" entity view.
   onFilter: OnFilterFn;
 }
@@ -42,20 +46,6 @@ function buildSelectCategoryTags(
 }
 
 /**
- * Build filter menu element for the given category type.
- * @param categoryView - View model of category to display.
- * @param onFilter - Function to execute on select of category value or remove of selected category value.
- * @returns Filter menu element displaying category values and their corresponding selected state.
- */
-function renderFilterMenu(
-  categoryView: SelectCategoryView,
-  onFilter: OnFilterFn
-): JSX.Element {
-  const { key, values } = categoryView;
-  return <FilterMenu categoryKey={key} onFilter={onFilter} values={values} />;
-}
-
-/**
  * Build selected filter tags element for the given category type.
  * @param categoryView - View model of category to display.
  * @param onFilter - Function to execute on select of category value or remove of selected category value.
@@ -69,32 +59,16 @@ function renderFilterTags(
   return <FilterTags tags={tags} />;
 }
 
-/**
- * Build the filter target for the given category type.
- * @param categoryView - View model of category to display.
- * @param props - Button props e.g. "onClick" used to set filter popover state to "open".
- * @returns Filter target element displaying filter label and count.
- */
-function renderFilterTarget(
-  categoryView: SelectCategoryView,
-  props: ButtonProps
-): JSX.Element {
-  const { isDisabled = false, label } = categoryView;
-  return (
-    <FilterLabel
-      disabled={isDisabled}
-      label={label}
-      count={categoryView.values.length}
-      {...props}
-    />
-  );
-}
-
 export const Filters = ({
   categoryFilters,
+  closeAncestor,
   disabled = false,
   onFilter,
 }: FiltersProps): JSX.Element => {
+  const isFilterDrawer = useBreakpointHelper(
+    BREAKPOINT_FN_NAME.DOWN,
+    DESKTOP_SM
+  );
   return (
     <FilterList disabled={disabled}>
       {categoryFilters.map(({ categoryViews }, i) => (
@@ -102,12 +76,12 @@ export const Filters = ({
           {i !== 0 && <Divider />}
           {categoryViews.map((categoryView) => (
             <Filter
-              content={renderFilterMenu(categoryView, onFilter)}
               key={categoryView.key}
+              categoryView={categoryView}
+              closeAncestor={closeAncestor}
+              isFilterDrawer={isFilterDrawer}
+              onFilter={onFilter}
               tags={renderFilterTags(categoryView, onFilter)}
-              Target={(props): JSX.Element =>
-                renderFilterTarget(categoryView, props)
-              }
             />
           ))}
         </Fragment>

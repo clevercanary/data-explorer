@@ -9,6 +9,7 @@ import {
   SelectCategoryValueView,
 } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { useWindowResize } from "../../../../hooks/useWindowResize";
 import {
   LIST_ITEM_HEIGHT,
   LIST_MARGIN,
@@ -23,6 +24,7 @@ export type ItemSizeByItemKey = Map<string, number>;
 export interface VariableSizeListProps {
   categoryKey: CategoryKey;
   height?: number; // Height of list; vertical list must be a number.
+  isFilterDrawer: boolean;
   itemSize?: number; // Default item size.
   onFilter: OnFilterFn;
   overscanCount?: ListProps["overscanCount"];
@@ -52,15 +54,18 @@ function renderListItem(props: ListChildComponentProps): JSX.Element {
 export const VariableSizeList = ({
   categoryKey,
   height: initHeight = MAX_LIST_HEIGHT_PX,
+  isFilterDrawer,
   itemSize = LIST_ITEM_HEIGHT,
   onFilter,
   overscanCount = MAX_DISPLAYABLE_LIST_ITEMS * 2,
   values,
   width = "100%",
 }: VariableSizeListProps): JSX.Element => {
+  const { height: windowHeight } = useWindowResize();
   const [height, setHeight] = useState<number>(initHeight);
   const itemSizeByItemKeyRef = useRef<ItemSizeByItemKey>(new Map());
   const listRef = useRef<List>(null);
+  const outerRef = useRef<HTMLDivElement>(null);
   const { current: itemSizeByItemKey } = itemSizeByItemKeyRef;
   const onUpdateItemSizeByItemKey = useCallback(
     (key: string, size: number): void =>
@@ -71,9 +76,16 @@ export const VariableSizeList = ({
   // Sets height of list.
   useEffect(() => {
     setHeight(
-      calculateListHeight(initHeight, values, itemSizeByItemKeyRef.current)
+      calculateListHeight(
+        initHeight,
+        values,
+        itemSizeByItemKeyRef.current,
+        isFilterDrawer,
+        windowHeight,
+        outerRef.current
+      )
     );
-  }, [initHeight, values]);
+  }, [initHeight, isFilterDrawer, values, windowHeight]);
 
   // Clears VariableSizeList cache (offsets and measurements) when values are updated (filtered).
   // Facilitates correct positioning of list items when list is updated.
@@ -84,6 +96,7 @@ export const VariableSizeList = ({
   return (
     <List
       height={height}
+      outerRef={outerRef}
       innerElementType={FilterList}
       itemCount={values.length}
       itemData={{
@@ -111,13 +124,22 @@ export const VariableSizeList = ({
  * @param height - Specified height of list.
  * @param values - Set of category value view models for the given category.
  * @param itemSizeByItemKey - Map of item size by item key.
+ * @param isFilterDrawer - True if filter is displayed in filter drawer.
+ * @param windowHeight - Window height.
+ * @param outerListElem - Outer list element to reference list position from.
  * @returns calculated height.
  */
 function calculateListHeight(
   height: number,
   values: SelectCategoryValueView[],
-  itemSizeByItemKey: ItemSizeByItemKey
+  itemSizeByItemKey: ItemSizeByItemKey,
+  isFilterDrawer: boolean,
+  windowHeight: number,
+  outerListElem: HTMLDivElement | null
 ): number {
+  if (isFilterDrawer && outerListElem) {
+    return windowHeight - outerListElem.getBoundingClientRect().top;
+  }
   if (values.length > MAX_DISPLAYABLE_LIST_ITEMS) {
     return height;
   }
