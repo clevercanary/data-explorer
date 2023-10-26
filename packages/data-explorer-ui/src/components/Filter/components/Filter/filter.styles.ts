@@ -13,7 +13,7 @@ export const FilterPopover = styled(Popover)`
       background-color: ${smokeLight};
       height: 100%;
       max-height: 100%;
-      overflow: visible; // Required; allows backdrop button to render outside of drawer container.
+      overflow: auto; // Required; allows backdrop button to render outside of drawer container.
     }
   }
 `;

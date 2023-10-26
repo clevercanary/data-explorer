@@ -31,7 +31,7 @@ export const FormDialog = ({
 
   return (
     <>
-      <Fab color="primary" size="medium" onClick={toggleOpen}>
+      <Fab color="primary" onClick={toggleOpen} open={open} size="medium">
         {open ? <CloseRoundedIcon /> : <FeedbackIcon fontSize="medium" />}
       </Fab>
       <Popover

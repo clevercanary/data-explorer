@@ -1,7 +1,9 @@
+import { CloseRounded } from "@mui/icons-material";
 import { Grow, PopoverPosition, PopoverProps } from "@mui/material";
 import React, { MouseEvent, ReactNode, useState } from "react";
 import { SelectCategoryView } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { CloseDrawerIconButton } from "../../../common/IconButton/iconButton.styles";
 import { FilterLabel } from "../FilterLabel/filterLabel";
 import { FilterMenu } from "../FilterMenu/filterMenu";
 import { DrawerTransition } from "./components/DrawerTransition/drawerTransition";
@@ -85,6 +87,13 @@ export const Filter = ({
         TransitionComponent={TransitionComponent}
         transitionDuration={TransitionDuration}
       >
+        {isOpen && isFilterDrawer && (
+          <CloseDrawerIconButton
+            Icon={CloseRounded}
+            onClick={onCloseFilters}
+            size="medium"
+          />
+        )}
         <FilterMenu
           categoryKey={categoryView.key}
           categoryLabel={categoryView.label}
