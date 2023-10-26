@@ -14,6 +14,7 @@ export const TableCell = styled(MTableCell, {
   && {
     display: block;
     padding: 0;
+    transition: background-color 300ms ease-in;
   }
 
   // Expanded.
