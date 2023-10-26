@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   AzulEntitiesStaticResponse,
   AzulSummaryResponse,
@@ -20,6 +20,7 @@ import {
 } from "../../components/Filter/components/Filters/filters";
 import { SearchAllFilters } from "../../components/Filter/components/SearchAllFilters/searchAllFilters";
 import { Index as IndexView } from "../../components/Index/index";
+import { SidebarButton } from "../../components/Layout/components/Sidebar/components/SidebarButton/sidebarButton";
 import { SidebarLabel } from "../../components/Layout/components/Sidebar/components/SidebarLabel/sidebarLabel";
 import { SidebarTools } from "../../components/Layout/components/Sidebar/components/SidebarTools/sidebarTools.styles";
 import { Sidebar } from "../../components/Layout/components/Sidebar/sidebar";
@@ -57,6 +58,7 @@ function getTabs(entities: EntityConfig[]): Tab[] {
 
 // TODO(Dave) create an interface for props and maybe not drill the static load through here
 export const ExploreView = (props: ExploreViewProps): JSX.Element => {
+  const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const { config, entityConfig } = useConfig(); // Get app level config.
   const { exploreDispatch, exploreState } = useExploreState(); // Get the useReducer state and dispatch for "Explore".
   const { categoryGroupConfigs, entities, explorerTitle, summaryConfig } =
@@ -74,6 +76,13 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
     () => buildCategoryFilters(categoryViews, categoryGroupConfigs),
     [categoryViews, categoryGroupConfigs]
   );
+
+  /**
+   * Closes filter drawer.
+   */
+  const onCloseDrawer = (): void => {
+    setIsDrawerOpen(false);
+  };
 
   /**
    * Callback fired when selected state of a category value is toggled.
@@ -104,6 +113,13 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   };
 
   /**
+   * Opens filter drawer.
+   */
+  const onOpenDrawer = (): void => {
+    setIsDrawerOpen(true);
+  };
+
+  /**
    * Callback fired when selected tab value changes.
    * - Sets state tabsValue to selected tab value.
    * - Executes a pushState and resets pagination.
@@ -131,7 +147,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   return (
     <>
       {categoryViews && !!categoryViews.length && (
-        <Sidebar>
+        <Sidebar drawerOpen={isDrawerOpen} onDrawerClose={onCloseDrawer}>
           <SidebarTools>
             <SidebarLabel label={"Filters"} />
             <ClearAllFilters />
@@ -142,6 +158,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
           </SidebarTools>
           <Filters
             categoryFilters={categoryFilters}
+            closeAncestor={onCloseDrawer}
             disabled={isRelatedView}
             onFilter={onFilterChange}
           />
@@ -150,6 +167,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
       <IndexView
         List={renderList(exploreState, entityConfig, entityListType)}
         ListHero={renderComponent(listHero)}
+        SideBarButton={<SidebarButton label="Filter" onClick={onOpenDrawer} />}
         SubTitleHero={renderComponent(subTitleHero)}
         Summaries={renderSummary(summaryConfig, summaryResponse)}
         Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabValue} />}

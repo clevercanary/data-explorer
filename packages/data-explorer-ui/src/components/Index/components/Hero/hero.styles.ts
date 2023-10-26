@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { mediaDesktopSmallUp } from "../../../../styles/common/mixins/breakpoints";
 import { ButtonPrimary } from "../../../common/Button/components/ButtonPrimary/buttonPrimary";
 
 interface Props {
@@ -7,18 +8,20 @@ interface Props {
 
 export const HeroLayout = styled.div`
   align-items: center;
-  display: flex;
-  gap: 16px 0;
-  flex-wrap: wrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 16px;
 `;
 
 export const Widgets = styled.div`
   align-items: center;
   display: flex;
-  flex: 1;
   height: 40px;
-  justify-content: flex-end;
+  justify-self: flex-start;
+
+  ${mediaDesktopSmallUp} {
+    justify-self: flex-end;
+  }
 `;
 
 export const SummaryWidget = styled.div<Props>`

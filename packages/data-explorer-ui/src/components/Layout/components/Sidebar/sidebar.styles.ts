@@ -1,4 +1,7 @@
 import styled from "@emotion/styled";
+import { Drawer as MDrawer } from "@mui/material";
+import { mediaDesktopSmallUp } from "../../../../styles/common/mixins/breakpoints";
+import { smokeLight } from "../../../../styles/common/mixins/colors";
 import { HEADER_HEIGHT } from "../Header/common/constants";
 
 export const Sidebar = styled.div`
@@ -8,9 +11,21 @@ export const Sidebar = styled.div`
   width: 264px;
 `;
 
+export const Drawer = styled(MDrawer)`
+  .MuiPaper-root {
+    background-color: ${smokeLight};
+    width: 312px;
+  }
+`;
+
 export const SidebarPositioner = styled.div`
-  height: calc(100vh - ${HEADER_HEIGHT}px);
   overflow-y: scroll;
-  position: sticky;
-  top: ${HEADER_HEIGHT}px;
+  padding: 16px 0;
+
+  ${mediaDesktopSmallUp} {
+    height: calc(100vh - ${HEADER_HEIGHT}px);
+    padding: 0;
+    position: sticky;
+    top: ${HEADER_HEIGHT}px;
+  }
 `;

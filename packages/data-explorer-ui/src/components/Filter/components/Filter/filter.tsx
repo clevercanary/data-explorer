@@ -1,25 +1,56 @@
-import { PopoverPosition } from "@mui/material";
-import React, { ElementType, MouseEvent, ReactNode, useState } from "react";
+import { Grow, PopoverPosition, PopoverProps } from "@mui/material";
+import React, { MouseEvent, ReactNode, useState } from "react";
+import { SelectCategoryView } from "../../../../common/entities";
+import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { FilterLabel } from "../FilterLabel/filterLabel";
+import { FilterMenu } from "../FilterMenu/filterMenu";
+import { DrawerTransition } from "./components/DrawerTransition/drawerTransition";
 import { FilterPopover } from "./filter.styles";
 
+const DEFAULT_POSITION: PopoverPosition = { left: 0, top: 0 };
+const DEFAULT_SLOT_PROPS: PopoverProps["slotProps"] = {
+  paper: { variant: "menu" },
+};
+const DRAWER_SLOT_PROPS: PopoverProps["slotProps"] = {
+  paper: { elevation: 0 },
+};
+
 export interface FilterProps {
-  content: ReactNode; // e.g. basic filter menu
+  categoryView: SelectCategoryView;
+  closeAncestor?: () => void;
+  isFilterDrawer: boolean;
+  onFilter: OnFilterFn;
   tags?: ReactNode; // e.g. filter tags
-  Target: ElementType; // e.g. filter label
 }
 
-export const Filter = ({ content, tags, Target }: FilterProps): JSX.Element => {
-  const [openPopover, setOpenPopover] = useState<boolean>(false);
-  const [popoverPosition, setPopoverPosition] = useState<PopoverPosition>({
-    left: 0,
-    top: 0,
-  });
+export const Filter = ({
+  categoryView,
+  closeAncestor,
+  isFilterDrawer,
+  onFilter,
+  tags,
+}: FilterProps): JSX.Element => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [position, setPosition] = useState<PopoverPosition>(DEFAULT_POSITION);
+  const anchorPosition = isFilterDrawer ? DEFAULT_POSITION : position;
+  const slotProps = isFilterDrawer ? DRAWER_SLOT_PROPS : DEFAULT_SLOT_PROPS;
+  const TransitionComponent = isFilterDrawer ? DrawerTransition : Grow;
+  const transitionDuration = isOpen ? 250 : 300;
+  const TransitionDuration = isFilterDrawer ? transitionDuration : undefined;
 
   /**
    * Closes filter popover.
    */
   const onCloseFilter = (): void => {
-    setOpenPopover(false);
+    setIsOpen(false);
+  };
+
+  /**
+   * Closes filter and all open ancestors e.g. filter drawer.
+   */
+  const onCloseFilters = (): void => {
+    closeAncestor?.();
+    onCloseFilter();
   };
 
   /**
@@ -32,21 +63,36 @@ export const Filter = ({ content, tags, Target }: FilterProps): JSX.Element => {
     const popoverLeftPos = targetDOMRect.x;
     const popoverTopPos = targetDOMRect.y + targetDOMRect.height - 1;
     // Set popover position and open state.
-    setPopoverPosition({ left: popoverLeftPos, top: popoverTopPos });
-    setOpenPopover(true);
+    setPosition({ left: popoverLeftPos, top: popoverTopPos });
+    setIsOpen(true);
   };
 
   return (
     <>
-      <Target onClick={onOpenFilter} />
+      <FilterLabel
+        count={categoryView.values.length}
+        disabled={categoryView.isDisabled}
+        label={categoryView.label}
+        onClick={onOpenFilter}
+      />
       <FilterPopover
-        anchorPosition={{ ...popoverPosition }}
+        anchorPosition={anchorPosition}
         anchorReference="anchorPosition"
-        onClose={onCloseFilter}
-        open={openPopover}
-        slotProps={{ paper: { variant: "menu" } }}
+        marginThreshold={0}
+        onClose={onCloseFilters}
+        open={isOpen}
+        slotProps={slotProps}
+        TransitionComponent={TransitionComponent}
+        transitionDuration={TransitionDuration}
       >
-        {content}
+        <FilterMenu
+          categoryKey={categoryView.key}
+          categoryLabel={categoryView.label}
+          isFilterDrawer={isFilterDrawer}
+          onFilter={onFilter}
+          onCloseFilter={onCloseFilter}
+          values={categoryView.values}
+        />
       </FilterPopover>
       {tags}
     </>

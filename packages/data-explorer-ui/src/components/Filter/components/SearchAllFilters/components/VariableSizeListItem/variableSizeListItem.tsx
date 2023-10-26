@@ -69,7 +69,7 @@ export default function VariableSizeListItem({
             </span>
           }
           secondary={
-            <Typography color="inkLight" variant={TEXT_BODY_SMALL_400}>
+            <Typography color="ink.light" variant={TEXT_BODY_SMALL_400}>
               {count}
             </Typography>
           }

@@ -1,13 +1,9 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
-import { FilterLabelStory } from "../FilterLabel/filterLabel.stories";
-import { FilterMenuStory } from "../FilterMenu/filterMenu.stories";
 import { Filter } from "./filter";
 
 export default {
   argTypes: {
-    Target: { control: { disable: true } },
-    content: { control: { disable: true } },
     tags: { control: { disable: true } },
   },
   component: Filter,
@@ -31,30 +27,25 @@ const onFilter = (): void => {
 
 export const FilterStory = FilterTemplate.bind({});
 FilterStory.args = {
-  Target: (props): JSX.Element => {
-    return (
-      <FilterLabelStory
-        count={FilterLabelStory.args?.count}
-        disabled={FilterLabelStory.args?.disabled || false}
-        label={FilterLabelStory.args?.label || "Label"}
-        {...props}
-      />
-    );
+  categoryView: {
+    isDisabled: false,
+    key: "genusSpecies",
+    label: "Genus Species",
+    values: [
+      {
+        count: 12,
+        key: "homoSapiens",
+        label: "Homo sapiens",
+        selected: false,
+      },
+      {
+        count: 6,
+        key: "musMusculus",
+        label: "Mus musculus",
+        selected: false,
+      },
+    ],
   },
-  content: (
-    <FilterMenuStory
-      categoryKey={FilterMenuStory.args?.categoryKey || "defaultKey"}
-      onFilter={FilterMenuStory.args?.onFilter || onFilter}
-      values={
-        FilterMenuStory.args?.values || [
-          {
-            count: 1,
-            key: "item1",
-            label: "Item 1",
-            selected: true,
-          },
-        ]
-      }
-    />
-  ),
+  isFilterDrawer: false,
+  onFilter,
 };
