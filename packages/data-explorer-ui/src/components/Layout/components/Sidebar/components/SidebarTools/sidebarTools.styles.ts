@@ -13,6 +13,6 @@ export const SidebarTools = styled.div`
   }
 
   ${mediaDesktopSmallUp} {
-    padding: 8px 6px;
+    padding: 8px 16px;
   }
 `;
