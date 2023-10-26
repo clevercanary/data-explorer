@@ -1,11 +1,14 @@
 import { Typography } from "@mui/material";
-import React, { Fragment } from "react";
-import { Dot } from "../../../../../common/Dot/dot";
-import { Stack } from "../../../../../common/Stack/stack";
+import React, { Fragment, ReactNode } from "react";
+import {
+  TEXT_BODY_SMALL_400,
+  TEXT_BODY_SMALL_500,
+} from "../../../../../../theme/common/typography";
+import { Dot, Summary } from "./summaries.styles";
 
 export interface Summary {
   count: string;
-  label: string;
+  label: ReactNode;
 }
 
 export interface SummariesProps {
@@ -19,12 +22,12 @@ export const Summaries = ({ summaries }: SummariesProps): JSX.Element => {
         summaries.map(({ count, label }, c) => (
           <Fragment key={`${label}${c}`}>
             {c !== 0 && <Dot />}
-            <Stack direction="row" gap={1}>
-              <Typography variant="text-body-small-500">{count}</Typography>
-              <Typography color="ink.light" variant="text-body-small-400">
+            <Summary>
+              <Typography variant={TEXT_BODY_SMALL_500}>{count}</Typography>
+              <Typography color="ink.light" variant={TEXT_BODY_SMALL_400}>
                 {label}
               </Typography>
-            </Stack>
+            </Summary>
           </Fragment>
         ))}
     </>

@@ -36,7 +36,7 @@ import { ListViewConfig } from "../../config/entities";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
 import { EntityView, ExploreActionKind } from "../../providers/exploreState";
-import { GridPaper, RoundedPaper } from "../common/Paper/paper.styles";
+import { FluidPaper, GridPaper } from "../common/Paper/paper.styles";
 import { NoResults } from "../NoResults/noResults";
 import {
   buildCategoryViews,
@@ -315,7 +315,7 @@ TableProps<T>): JSX.Element => {
   return noResults ? (
     <NoResults title={"No Results found"} />
   ) : (
-    <RoundedPaper>
+    <FluidPaper>
       <GridPaper>
         {editColumnOptions && (
           <TableToolbar>
@@ -427,10 +427,9 @@ TableProps<T>): JSX.Element => {
           />
         )}
       </GridPaper>
-    </RoundedPaper>
+    </FluidPaper>
   );
 };
 
 // TODO(Dave) review whether memo is necessary - flash between tabs / loading state.
 export const Table = React.memo(TableComponent) as typeof TableComponent;
-//export const Table = TableComponent as typeof TableComponent;
