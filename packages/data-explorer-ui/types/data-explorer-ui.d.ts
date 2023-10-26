@@ -219,6 +219,8 @@ declare module "@emotion/react" {
 declare module "@tanstack/table-core" {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- TData and TValue are unused variables.
   interface ColumnMeta<TData extends RowData, TValue> {
+    columnPinned?: boolean;
+    header: string;
     width: GridTrackSize;
   }
 }

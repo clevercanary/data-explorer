@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { Table as MTable } from "@mui/material";
+import { mediaTabletUp } from "../../styles/common/mixins/breakpoints";
 import { FlatAlert } from "../common/Alert/alert.styles";
 import { Grid } from "../common/Grid/grid";
 
@@ -13,7 +14,7 @@ export const Table = styled(MTable, {
   align-items: stretch;
   display: grid;
   gap: 1px 0;
-  grid-template-columns: ${(props) => props.gridTemplateColumns};
+  grid-template-columns: 1fr;
 
   tbody,
   thead,
@@ -36,6 +37,10 @@ export const Table = styled(MTable, {
     > * {
       min-width: 0; /* required; flexbox child min-width property is "auto" by default making overflow-wrap ineffectual */
     }
+  }
+
+  ${mediaTabletUp} {
+    grid-template-columns: ${(props) => props.gridTemplateColumns};
   }
 `;
 
