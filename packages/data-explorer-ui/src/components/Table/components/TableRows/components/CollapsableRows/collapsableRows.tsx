@@ -1,8 +1,8 @@
+import { TableRow as MTableRow } from "@mui/material";
 import { Row, Table } from "@tanstack/react-table";
 import { Virtualizer } from "@tanstack/react-virtual";
-import React from "react";
-import { TableRow } from "./collapsableRows.styles";
-import { CollapsableCell } from "./components/CollapsableCell/collapsableCell";
+import React, { Fragment } from "react";
+import { CollapsableCell } from "../../../TableCell/components/CollapsableCell/collapsableCell";
 
 export interface CollapsableRowsProps<T> {
   tableInstance: Table<T>;
@@ -17,18 +17,19 @@ export const CollapsableRows = <T extends object>({
   const { rows } = getRowModel();
   const virtualItems = virtualizer.getVirtualItems();
   return (
-    <TableRow>
+    <Fragment>
       {virtualItems.map((virtualRow) => {
         const row = rows[virtualRow.index] as Row<T>;
         return (
-          <CollapsableCell
+          <MTableRow
             key={row.id}
             data-index={virtualRow.index}
-            forwardRef={virtualizer.measureElement}
-            row={row}
-          />
+            ref={virtualizer.measureElement}
+          >
+            <CollapsableCell row={row} />
+          </MTableRow>
         );
       })}
-    </TableRow>
+    </Fragment>
   );
 };

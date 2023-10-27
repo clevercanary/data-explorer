@@ -2,6 +2,7 @@ import { TableBody as MTableBody } from "@mui/material";
 import { Table } from "@tanstack/react-table";
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import React, { useCallback } from "react";
+import { ROW_DIRECTION } from "../../common/entities";
 import { CollapsableRows } from "../TableRows/components/CollapsableRows/collapsableRows";
 import { VirtualizedRow } from "../TableRows/components/VirtualizedRow/virtualizedRow";
 import { TableRows } from "../TableRows/tableRows";
@@ -9,13 +10,13 @@ import { TableRows } from "../TableRows/tableRows";
 const OVERSCAN = 20;
 
 export interface TableBodyProps<T> {
+  rowDirection: ROW_DIRECTION;
   tableInstance: Table<T>;
-  tabletUp: boolean;
 }
 
 export const TableBody = <T extends object>({
+  rowDirection,
   tableInstance,
-  tabletUp,
 }: TableBodyProps<T>): JSX.Element => {
   const { getRowModel } = tableInstance;
   const { rows } = getRowModel();
@@ -24,13 +25,13 @@ export const TableBody = <T extends object>({
   const virtualizer = useWindowVirtualizer({
     count,
     estimateSize,
-    measureElement: (el) => measureElement(el, tabletUp),
+    measureElement,
     overscan: OVERSCAN,
   });
   return (
     <MTableBody>
       <VirtualizedRow isUpperRow={true} virtualizer={virtualizer} />
-      {tabletUp ? (
+      {rowDirection === ROW_DIRECTION.DEFAULT ? (
         <TableRows tableInstance={tableInstance} virtualizer={virtualizer} />
       ) : (
         <CollapsableRows
@@ -46,13 +47,11 @@ export const TableBody = <T extends object>({
 /**
  * Measures the height of the element.
  * @param element - Element to measure.
- * @param tabletUp - True if the device is tablet or larger.
  * @returns height of the element.
  */
-function measureElement(element: Element, tabletUp: boolean): number {
-  // When the viewport is tablet-sized or larger, this code measures the specified element, which is the row.
+function measureElement(element: Element): number {
   // We select the first child element because the row is not a box element due to the "display: contents" style attribute.
-  const box = tabletUp ? element.children[0] : element;
+  const box = element.children[0];
   if (!box) {
     return 0;
   }

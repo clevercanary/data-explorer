@@ -4,8 +4,8 @@ import { useAuthentication } from "../../../../../../hooks/useAuthentication";
 import { AuthContextProps } from "../../../../../../providers/authentication";
 import { TEXT_BODY_400_2_LINES } from "../../../../../../theme/common/typography";
 import {
+  FluidPaper,
   GridPaper,
-  RoundedPaper,
 } from "../../../../../common/Paper/paper.styles";
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
 import { AcceptTerraTOS } from "./components/FormStep/components/AcceptTerraTOS/acceptTerraTOS";
@@ -37,7 +37,7 @@ export const TerraSetUpForm = (): JSX.Element | null => {
   return isIdleOrPending ? null : isSuccess ? (
     <NIHAccountExpiryWarning {...authentication.NIHProfile} />
   ) : (
-    <RoundedPaper>
+    <FluidPaper>
       <GridPaper>
         <Section>
           <SectionContent>
@@ -83,7 +83,7 @@ export const TerraSetUpForm = (): JSX.Element | null => {
           step={ONBOARDING_STEP.NIH_ACCOUNT}
         />
       </GridPaper>
-    </RoundedPaper>
+    </FluidPaper>
   );
 };
 

@@ -1,4 +1,4 @@
-import { AlertTitle, TableContainer } from "@mui/material";
+import { TableContainer } from "@mui/material";
 import {
   ColumnDef,
   ColumnSort,
@@ -33,25 +33,17 @@ import { EntityView, ExploreActionKind } from "../../providers/exploreState";
 import { TABLET } from "../../theme/common/breakpoints";
 import { FluidPaper, GridPaper } from "../common/Paper/paper.styles";
 import { NoResults } from "../NoResults/noResults";
+import { ROW_DIRECTION } from "./common/entities";
 import {
   buildCategoryViews,
-  getEditColumnOptions,
   getFacetedUniqueValuesWithArrayValues,
   getGridTemplateColumns,
 } from "./common/utils";
-import { CheckboxMenu } from "./components/CheckboxMenu/checkboxMenu";
-import { DownloadEntityResults } from "./components/DownloadEntityResults/downloadEntityResults";
-import { EntityViewToggle } from "./components/EntityViewToggle/entityViewToggle";
 import { Pagination as DXPagination } from "./components/Pagination/pagination";
-import { PaginationSummary } from "./components/PaginationSummary/paginationSummary";
 import { TableBody } from "./components/TableBody/tableBody";
 import { TableHead } from "./components/TableHead/tableHead";
-import {
-  Alert,
-  Table as GridTable,
-  TableToolbar,
-  ToolbarActions,
-} from "./table.styles";
+import { TableToolbar } from "./components/TableToolbar/tableToolbar";
+import { GridTable } from "./table.styles";
 
 export interface TableProps<T extends object> {
   columns: ColumnDef<T>[];
@@ -87,8 +79,8 @@ export const TableComponent = <T extends object>({
   total,
 }: // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO fix component length / complexity
 TableProps<T>): JSX.Element => {
+  const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, TABLET);
   const { exploreDispatch, exploreState } = useExploreState();
-  const tabletUp = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, TABLET);
   const {
     entityPageState,
     filterState,
@@ -97,12 +89,15 @@ TableProps<T>): JSX.Element => {
     listStaticLoad,
     loading,
     paginationState,
-    relatedListItems,
     tabValue,
   } = exploreState;
   const { columnsVisibility, sorting } = entityPageState[tabValue];
-  const { currentPage, pages, pageSize, rows } = paginationState;
-  const { disablePagination = false, enableDownload } = listView || {};
+  const { currentPage, pages, pageSize } = paginationState;
+  const { disablePagination = false } = listView || {};
+  const rowDirection = tabletDown
+    ? ROW_DIRECTION.VERTICAL
+    : ROW_DIRECTION.DEFAULT;
+
   const onSortingChange = (updater: Updater<ColumnSort[]>): void => {
     exploreDispatch({
       payload: typeof updater === "function" ? updater(sorting) : updater,
@@ -167,15 +162,12 @@ TableProps<T>): JSX.Element => {
     getVisibleFlatColumns,
     nextPage: tableNextPage,
     previousPage: tablePreviousPage,
-    resetColumnVisibility,
   } = tableInstance;
   const allColumns = getAllColumns();
   const { columnFilters } = getState();
   const { rows: results } = getRowModel();
   const noResults = !loading && (!results || results.length === 0);
   const scrollTop = useScroll();
-  const isLastPage = currentPage === pages;
-  const editColumnOptions = getEditColumnOptions(tableInstance);
   const visibleColumns = getVisibleFlatColumns();
   const gridTemplateColumns = getGridTemplateColumns(visibleColumns);
 
@@ -285,56 +277,29 @@ TableProps<T>): JSX.Element => {
     return currentPage > 1;
   }
 
-  /**
-   * Resets column visibility to default state.
-   */
-  const onResetColumnVisibility = (): void => {
-    resetColumnVisibility(false);
-  };
-
   return noResults ? (
     <NoResults Paper={FluidPaper} title={"No Results found"} />
   ) : (
     <FluidPaper>
       <GridPaper>
-        {tabletUp && editColumnOptions && (
-          <TableToolbar>
-            {relatedListItems ? (
-              <EntityViewToggle />
-            ) : (
-              <PaginationSummary
-                firstResult={(currentPage - 1) * pageSize + 1}
-                lastResult={isLastPage ? rows : pageSize * currentPage}
-                totalResult={rows}
-              />
-            )}
-            <ToolbarActions>
-              {enableDownload && (
-                <DownloadEntityResults
-                  entityName={exploreState.tabValue}
-                  rows={tableInstance.getFilteredRowModel().rows}
-                />
-              )}
-              <CheckboxMenu
-                label="Edit Columns"
-                onReset={onResetColumnVisibility}
-                options={editColumnOptions}
-              />
-            </ToolbarActions>
-          </TableToolbar>
-        )}
-        {isRelatedView && (
-          <Alert severity="info" variant="banner">
-            <AlertTitle>
-              Dug has identified the following studies as mentioning the
-              selected focus/disease or related term in the study description.
-            </AlertTitle>
-          </Alert>
-        )}
+        <TableToolbar
+          listView={listView}
+          rowDirection={rowDirection}
+          tableInstance={tableInstance}
+        />
         <TableContainer>
-          <GridTable gridTemplateColumns={gridTemplateColumns}>
-            <TableHead tableInstance={tableInstance} tabletUp={tabletUp} />
-            <TableBody tableInstance={tableInstance} tabletUp={tabletUp} />
+          <GridTable
+            collapsable={true}
+            gridTemplateColumns={gridTemplateColumns}
+          >
+            <TableHead
+              rowDirection={rowDirection}
+              tableInstance={tableInstance}
+            />
+            <TableBody
+              rowDirection={rowDirection}
+              tableInstance={tableInstance}
+            />
           </GridTable>
         </TableContainer>
         {!disablePagination && (

@@ -1,15 +1,9 @@
-import {
-  TableCell,
-  TableHead as MTableHead,
-  TableRow,
-  TableSortLabel,
-} from "@mui/material";
+import { TableCell, TableHead as MTableHead, TableRow } from "@mui/material";
 import { flexRender, Table } from "@tanstack/react-table";
 import React, { Fragment } from "react";
-import { ROW_DIRECTION } from "../../common/entities";
-import { getTableSortLabelProps } from "../../common/utils";
+import { ROW_DIRECTION } from "../../../../../Table/common/entities";
 
-export interface TableHeadProps<T> {
+export interface TableBodyProps<T> {
   rowDirection: ROW_DIRECTION;
   tableInstance: Table<T>;
 }
@@ -17,7 +11,7 @@ export interface TableHeadProps<T> {
 export const TableHead = <T extends object>({
   rowDirection,
   tableInstance,
-}: TableHeadProps<T>): JSX.Element => {
+}: TableBodyProps<T>): JSX.Element => {
   return (
     <Fragment>
       {rowDirection === ROW_DIRECTION.DEFAULT &&
@@ -26,12 +20,10 @@ export const TableHead = <T extends object>({
             <TableRow>
               {headerGroup.headers.map((header) => (
                 <TableCell key={header.id}>
-                  <TableSortLabel {...getTableSortLabelProps(header.column)}>
-                    {flexRender(
-                      header.column.columnDef.header,
-                      header.getContext()
-                    )}
-                  </TableSortLabel>
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext()
+                  )}
                 </TableCell>
               ))}
             </TableRow>

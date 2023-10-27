@@ -1,6 +1,7 @@
 import SouthRoundedIcon from "@mui/icons-material/SouthRounded";
 import { TableSortLabelProps } from "@mui/material/TableSortLabel/TableSortLabel";
 import {
+  Cell,
   ColumnFiltersState,
   ColumnSort,
   InitialTableState,
@@ -26,6 +27,11 @@ import { CheckboxMenuListItem } from "../components/CheckboxMenu/checkboxMenu";
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This type matches react table getFacetedUniqueValues return type see https://github.com/TanStack/table/blob/6d4a91e74676da0b28fe07fcc1b7d26f535db0f4/packages/table-core/src/utils/getFacetedUniqueValues.ts.
 type CountByTerms = Map<any, number>;
+
+/**
+ * Pinned cell and pinned cell index tuple.
+ */
+type PinnedCell<T> = [Cell<T, unknown>, number];
 
 /**
  * Model of possible table data values.
@@ -268,6 +274,23 @@ export function getInitialTableStateSorting(
     return [];
   }
   return [defaultSort];
+}
+
+/**
+ * Returns the pinned cell and its index tuple.
+ * @param row - Row.
+ * @returns pinned cell and index tuple.
+ */
+export function getPinnedCellIndex<T>(row: Row<T>): PinnedCell<T> {
+  const visibleCells = row.getVisibleCells();
+  let pinnedIndex = 0;
+  for (let i = 0; i < visibleCells.length; i++) {
+    if (visibleCells[i].column.columnDef.meta?.columnPinned) {
+      pinnedIndex = i;
+      break;
+    }
+  }
+  return [visibleCells[pinnedIndex], pinnedIndex];
 }
 
 /**

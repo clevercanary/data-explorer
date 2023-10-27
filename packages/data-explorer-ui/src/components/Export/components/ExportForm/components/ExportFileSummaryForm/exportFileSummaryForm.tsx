@@ -12,7 +12,7 @@ import { formatCountSize } from "../../../../../../utils/formatCountSize";
 import { formatFileSize } from "../../../../../../utils/formatFileSize";
 import { CheckedIcon } from "../../../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
-import { Table } from "../../../../../Table/table.styles";
+import { GridTable } from "../../../../../Table/common/gridTable.styles";
 import { FileSummaryFacet } from "../../../../common/entities";
 import { OnFilterFn, OnUpdateFilterFacet } from "../../common/entities";
 import {
@@ -46,7 +46,7 @@ export const ExportFileSummaryForm = ({
     <FormControl>
       <FormLabel>{fileSummaryFacet.formLabel || "File Type"}</FormLabel>
       <GridPaper>
-        <Table gridTemplateColumns={gridTemplateColumns}>
+        <GridTable gridTemplateColumns={gridTemplateColumns}>
           <TableHead>
             <TableRow>
               <TableCell>
@@ -101,7 +101,7 @@ export const ExportFileSummaryForm = ({
               )}
             </TableRow>
           </TableBody>
-        </Table>
+        </GridTable>
       </GridPaper>
     </FormControl>
   );

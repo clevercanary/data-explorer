@@ -1,21 +1,25 @@
 import {
-  TableBody,
-  TableCell,
   TableCellProps as MTableCellProps,
   TableContainer,
   TableContainerProps as MTableContainerProps,
-  TableHead,
   TableProps as MTableProps,
-  TableRow,
 } from "@mui/material";
 import {
   ColumnDef,
-  flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import React from "react";
-import { Table as GridTable } from "../../../Table/table.styles";
+import {
+  BREAKPOINT_FN_NAME,
+  useBreakpointHelper,
+} from "../../../../hooks/useBreakpointHelper";
+import { TABLET } from "../../../../theme/common/breakpoints";
+import { ROW_DIRECTION } from "../../../Table/common/entities";
+import { GridTable } from "../../../Table/table.styles";
+import { generateColumnDefinitions } from "./common/utils";
+import { TableBody } from "./components/TableBody/tableBody";
+import { TableHead } from "./components/TableHead/tableHead";
 
 export interface TableView {
   table?: Partial<MTableProps>;
@@ -25,6 +29,7 @@ export interface TableView {
 
 export interface TableProps<T extends object> {
   className?: string;
+  collapsable?: boolean;
   columns: ColumnDef<T>[];
   gridTemplateColumns: string;
   items: T[];
@@ -33,54 +38,36 @@ export interface TableProps<T extends object> {
 
 export const Table = <T extends object>({
   className,
+  collapsable = true,
   columns,
   gridTemplateColumns,
   items,
   tableView,
 }: TableProps<T>): JSX.Element => {
-  const { table, tableCell, tableContainer } = tableView || {};
+  const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, TABLET);
+  const rowDirection =
+    collapsable && tabletDown ? ROW_DIRECTION.VERTICAL : ROW_DIRECTION.DEFAULT;
+  const { table, tableContainer } = tableView || {};
   const { stickyHeader = false } = table || {};
-  const { size: tableCellSize = "medium" } = tableCell || {};
   const { sx: tableContainerSx } = tableContainer || {};
   const tableInstance = useReactTable({
-    columns,
+    columns: generateColumnDefinitions(columns),
     data: items,
     getCoreRowModel: getCoreRowModel(),
   });
-  const { getHeaderGroups, getRowModel } = tableInstance;
   return (
     <TableContainer className={className} sx={tableContainerSx}>
       <GridTable
+        collapsable={collapsable}
         gridTemplateColumns={gridTemplateColumns}
-        stickyHeader={stickyHeader}
+        stickyHeader={rowDirection === ROW_DIRECTION.DEFAULT && stickyHeader}
       >
-        {getHeaderGroups().map((headerGroup) => (
-          <TableHead key={headerGroup.id}>
-            <TableRow>
-              {headerGroup.headers.map((header) => (
-                <TableCell key={header.id}>
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext()
-                  )}
-                </TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-        ))}
-        <TableBody>
-          {getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => {
-                return (
-                  <TableCell key={cell.id} size={tableCellSize}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </TableCell>
-                );
-              })}
-            </TableRow>
-          ))}
-        </TableBody>
+        <TableHead rowDirection={rowDirection} tableInstance={tableInstance} />
+        <TableBody
+          rowDirection={rowDirection}
+          tableInstance={tableInstance}
+          tableView={tableView}
+        />
       </GridTable>
     </TableContainer>
   );
