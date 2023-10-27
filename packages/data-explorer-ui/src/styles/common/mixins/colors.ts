@@ -13,14 +13,22 @@ export const errorMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
   theme.palette.error.main;
 
 // Info
+export const infoDark = ({ theme }: ThemeProps): PaletteColor["dark"] =>
+  theme.palette.info.dark;
+export const infoLight = ({ theme }: ThemeProps): PaletteColor["light"] =>
+  theme.palette.info.light;
 export const infoLightest = ({ theme }: ThemeProps): PaletteColor["lightest"] =>
   theme.palette.info.lightest;
 export const infoMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
   theme.palette.info.main;
 
 // Ink
+export const inkDark = ({ theme }: ThemeProps): PaletteColor["dark"] =>
+  theme.palette.ink.dark;
 export const inkLight = ({ theme }: ThemeProps): PaletteColor["light"] =>
   theme.palette.ink.light;
+export const inkLightest = ({ theme }: ThemeProps): PaletteColor["lightest"] =>
+  theme.palette.ink.lightest;
 export const inkMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
   theme.palette.ink.main;
 
@@ -29,6 +37,9 @@ export const smokeDark = ({ theme }: ThemeProps): PaletteColor["dark"] =>
   theme.palette.smoke.dark;
 export const smokeLight = ({ theme }: ThemeProps): PaletteColor["light"] =>
   theme.palette.smoke.light;
+export const smokeLightest = ({
+  theme,
+}: ThemeProps): PaletteColor["lightest"] => theme.palette.smoke.lightest;
 export const smokeMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
   theme.palette.smoke.main;
 

@@ -1,0 +1,4 @@
+export enum ROW_DIRECTION {
+  DEFAULT = "DEFAULT",
+  VERTICAL = "VERTICAL",
+}

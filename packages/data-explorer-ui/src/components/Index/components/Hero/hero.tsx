@@ -25,7 +25,7 @@ export const Hero = ({
 }: HeroProps): JSX.Element => {
   return (
     <>
-      {(title || Summaries) && (
+      {(title || SideBarButton || Summaries) && (
         <HeroLayout>
           <Title title={title} />
           {SideBarButton}

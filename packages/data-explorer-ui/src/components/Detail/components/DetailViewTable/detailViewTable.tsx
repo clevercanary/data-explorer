@@ -7,7 +7,7 @@ import {
   RoundedPaper,
 } from "../../../common/Paper/paper.styles";
 import { NoResults } from "../../../NoResults/noResults";
-import { TableToolbar } from "../../../Table/table.styles";
+import { TableToolbar } from "../../../Table/components/TableToolbar/tableToolbar.styles";
 import { Table } from "../Table/table";
 
 interface DetailViewTableProps<T extends object> {

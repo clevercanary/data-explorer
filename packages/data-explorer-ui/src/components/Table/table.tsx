@@ -1,16 +1,7 @@
-import {
-  AlertTitle,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-} from "@mui/material";
+import { TableContainer } from "@mui/material";
 import {
   ColumnDef,
   ColumnSort,
-  flexRender,
   getCoreRowModel,
   getFacetedRowModel,
   getFilteredRowModel,
@@ -22,8 +13,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
-import React, { useCallback, useEffect } from "react";
+import React, { useEffect } from "react";
 import { track } from "../../common/analytics/analytics";
 import {
   EVENT_NAME,
@@ -33,29 +23,27 @@ import {
 } from "../../common/analytics/entities";
 import { Pagination } from "../../common/entities";
 import { ListViewConfig } from "../../config/entities";
+import {
+  BREAKPOINT_FN_NAME,
+  useBreakpointHelper,
+} from "../../hooks/useBreakpointHelper";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
 import { EntityView, ExploreActionKind } from "../../providers/exploreState";
+import { TABLET } from "../../theme/common/breakpoints";
 import { FluidPaper, GridPaper } from "../common/Paper/paper.styles";
 import { NoResults } from "../NoResults/noResults";
+import { ROW_DIRECTION } from "./common/entities";
 import {
   buildCategoryViews,
-  getEditColumnOptions,
   getFacetedUniqueValuesWithArrayValues,
   getGridTemplateColumns,
-  getTableSortLabelProps,
 } from "./common/utils";
-import { CheckboxMenu } from "./components/CheckboxMenu/checkboxMenu";
-import { DownloadEntityResults } from "./components/DownloadEntityResults/downloadEntityResults";
-import { EntityViewToggle } from "./components/EntityViewToggle/entityViewToggle";
 import { Pagination as DXPagination } from "./components/Pagination/pagination";
-import { PaginationSummary } from "./components/PaginationSummary/paginationSummary";
-import {
-  Alert,
-  Table as GridTable,
-  TableToolbar,
-  ToolbarActions,
-} from "./table.styles";
+import { TableBody } from "./components/TableBody/tableBody";
+import { TableHead } from "./components/TableHead/tableHead";
+import { TableToolbar } from "./components/TableToolbar/tableToolbar";
+import { GridTable } from "./table.styles";
 
 export interface TableProps<T extends object> {
   columns: ColumnDef<T>[];
@@ -91,6 +79,7 @@ export const TableComponent = <T extends object>({
   total,
 }: // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO fix component length / complexity
 TableProps<T>): JSX.Element => {
+  const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, TABLET);
   const { exploreDispatch, exploreState } = useExploreState();
   const {
     entityPageState,
@@ -100,12 +89,15 @@ TableProps<T>): JSX.Element => {
     listStaticLoad,
     loading,
     paginationState,
-    relatedListItems,
     tabValue,
   } = exploreState;
   const { columnsVisibility, sorting } = entityPageState[tabValue];
-  const { currentPage, pages, pageSize, rows } = paginationState;
-  const { disablePagination = false, enableDownload } = listView || {};
+  const { currentPage, pages, pageSize } = paginationState;
+  const { disablePagination = false } = listView || {};
+  const rowDirection = tabletDown
+    ? ROW_DIRECTION.VERTICAL
+    : ROW_DIRECTION.DEFAULT;
+
   const onSortingChange = (updater: Updater<ColumnSort[]>): void => {
     exploreDispatch({
       payload: typeof updater === "function" ? updater(sorting) : updater,
@@ -165,39 +157,19 @@ TableProps<T>): JSX.Element => {
   });
   const {
     getAllColumns,
-    getHeaderGroups,
     getRowModel,
     getState,
     getVisibleFlatColumns,
     nextPage: tableNextPage,
     previousPage: tablePreviousPage,
-    resetColumnVisibility,
   } = tableInstance;
   const allColumns = getAllColumns();
   const { columnFilters } = getState();
   const { rows: results } = getRowModel();
   const noResults = !loading && (!results || results.length === 0);
   const scrollTop = useScroll();
-  const isLastPage = currentPage === pages;
-  const editColumnOptions = getEditColumnOptions(tableInstance);
   const visibleColumns = getVisibleFlatColumns();
   const gridTemplateColumns = getGridTemplateColumns(visibleColumns);
-  const estimateSize = useCallback(() => 100, []);
-  const virtualizer = useWindowVirtualizer({
-    count: results.length,
-    estimateSize,
-    measureElement: (element) =>
-      element.children[0]?.getBoundingClientRect().height || 0, // The row doesn't have a box, so measure the first cell instead
-    overscan: 20,
-  });
-  const virtualSize = virtualizer.getTotalSize();
-  const virtualItems = virtualizer.getVirtualItems();
-  const virtualizerPaddingTop =
-    virtualItems.length > 0 ? virtualItems?.[0]?.start || 0 : 0;
-  const virtualizerPaddingBottom =
-    virtualItems.length > 0
-      ? virtualSize - (virtualItems?.[virtualItems.length - 1]?.end || 0)
-      : 0;
 
   const handleTableNextPage = (): void => {
     let nextPage = tableNextPage;
@@ -305,115 +277,29 @@ TableProps<T>): JSX.Element => {
     return currentPage > 1;
   }
 
-  /**
-   * Resets column visibility to default state.
-   */
-  const onResetColumnVisibility = (): void => {
-    resetColumnVisibility(false);
-  };
-
   return noResults ? (
-    <NoResults title={"No Results found"} />
+    <NoResults Paper={FluidPaper} title={"No Results found"} />
   ) : (
     <FluidPaper>
       <GridPaper>
-        {editColumnOptions && (
-          <TableToolbar>
-            {relatedListItems ? (
-              <EntityViewToggle />
-            ) : (
-              <PaginationSummary
-                firstResult={(currentPage - 1) * pageSize + 1}
-                lastResult={isLastPage ? rows : pageSize * currentPage}
-                totalResult={rows}
-              />
-            )}
-            <ToolbarActions>
-              {enableDownload && (
-                <DownloadEntityResults
-                  entityName={exploreState.tabValue}
-                  rows={tableInstance.getFilteredRowModel().rows}
-                />
-              )}
-              <CheckboxMenu
-                label="Edit Columns"
-                onReset={onResetColumnVisibility}
-                options={editColumnOptions}
-              />
-            </ToolbarActions>
-          </TableToolbar>
-        )}
-        {isRelatedView && (
-          <Alert severity="info" variant="banner">
-            <AlertTitle>
-              Dug has identified the following studies as mentioning the
-              selected focus/disease or related term in the study description.
-            </AlertTitle>
-          </Alert>
-        )}
+        <TableToolbar
+          listView={listView}
+          rowDirection={rowDirection}
+          tableInstance={tableInstance}
+        />
         <TableContainer>
-          <GridTable gridTemplateColumns={gridTemplateColumns}>
-            {getHeaderGroups().map((headerGroup) => (
-              <TableHead key={headerGroup.id}>
-                <TableRow>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id}>
-                      <TableSortLabel
-                        {...getTableSortLabelProps(header.column)}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                      </TableSortLabel>
-                    </TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-            ))}
-            <TableBody>
-              {virtualizerPaddingTop > 0 && (
-                <tr>
-                  <td
-                    style={{
-                      gridColumn: `span ${visibleColumns.length}`,
-                      height: `${virtualizerPaddingTop}px`,
-                    }}
-                  ></td>
-                </tr>
-              )}
-              {virtualItems.map((virtualRow) => {
-                const row = results[virtualRow.index];
-                return (
-                  <TableRow
-                    key={row.id}
-                    data-index={virtualRow.index}
-                    ref={virtualizer.measureElement}
-                  >
-                    {row.getVisibleCells().map((cell) => {
-                      return (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                );
-              })}
-              {virtualizerPaddingBottom > 0 && (
-                <tr>
-                  <td
-                    style={{
-                      gridColumn: `span ${visibleColumns.length}`,
-                      height: `${virtualizerPaddingBottom}px`,
-                    }}
-                  ></td>
-                </tr>
-              )}
-            </TableBody>
+          <GridTable
+            collapsable={true}
+            gridTemplateColumns={gridTemplateColumns}
+          >
+            <TableHead
+              rowDirection={rowDirection}
+              tableInstance={tableInstance}
+            />
+            <TableBody
+              rowDirection={rowDirection}
+              tableInstance={tableInstance}
+            />
           </GridTable>
         </TableContainer>
         {!disablePagination && (

@@ -2,6 +2,7 @@ import { CellContext, ColumnDef, ColumnSort } from "@tanstack/react-table";
 import React, { useMemo } from "react";
 import { Pagination } from "../../common/entities";
 import { ColumnConfig, ListViewConfig } from "../../config/entities";
+import { PAPER_PANEL_STYLE } from "../common/Paper/paper";
 import { ComponentCreator } from "../ComponentCreator/ComponentCreator";
 import { Loading } from "../Loading/loading";
 import {
@@ -60,6 +61,8 @@ export const TableCreator = <T extends object>({
         header: columnConfig.header,
         id: columnConfig.id,
         meta: {
+          columnPinned: columnConfig.columnPinned,
+          header: columnConfig.header,
           width: columnConfig.width,
         },
         sortingFn: sortingFn,
@@ -69,7 +72,10 @@ export const TableCreator = <T extends object>({
   const initialState = getInitialState(columns, defaultSort);
   return (
     <div>
-      <Loading loading={loading || false} />
+      <Loading
+        loading={loading || false}
+        panelStyle={PAPER_PANEL_STYLE.FLUID}
+      />
       <Table<T>
         columns={columnDefs}
         count={pageCount}

@@ -17,7 +17,7 @@ import {
   Loading,
   LOADING_PANEL_STYLE,
 } from "../../../../../../../Loading/loading";
-import { Table as GridTable } from "../../../../../../../Table/table.styles";
+import { GridTable } from "../../../../../../../Table/common/gridTable.styles";
 import {
   SectionTitle,
   TableContainer,

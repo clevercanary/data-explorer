@@ -1,6 +1,6 @@
 import React from "react";
 import { expireTimeInSeconds } from "../../../../../../../../providers/authentication";
-import { Alert } from "../../../../../../../common/Alert/alert";
+import { FluidAlert } from "../../../../../../../common/Alert/alert.styles";
 import { Link } from "../../../../../../../Links/components/Link/link";
 
 export interface NIHAccountExpiryWarningProps {
@@ -15,7 +15,7 @@ export const NIHAccountExpiryWarning = ({
   linkWillExpire = false,
 }: NIHAccountExpiryWarningProps): JSX.Element | null => {
   return linkWillExpire || linkExpired ? (
-    <Alert
+    <FluidAlert
       severity="warning"
       title={
         <>

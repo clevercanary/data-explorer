@@ -31,12 +31,17 @@ import {
   EntityConfig,
   SummaryConfig,
 } from "../../config/entities";
+import {
+  BREAKPOINT_FN_NAME,
+  useBreakpointHelper,
+} from "../../hooks/useBreakpointHelper";
 import { useConfig } from "../../hooks/useConfig";
 import { useEntityList } from "../../hooks/useEntityList";
 import { useEntityListRelatedView } from "../../hooks/useEntityListRelatedView";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useSummary } from "../../hooks/useSummary";
 import { ExploreActionKind, ExploreState } from "../../providers/exploreState";
+import { DESKTOP_SM } from "../../theme/common/breakpoints";
 
 export type ExploreViewProps = AzulEntitiesStaticResponse;
 
@@ -59,6 +64,7 @@ function getTabs(entities: EntityConfig[]): Tab[] {
 // TODO(Dave) create an interface for props and maybe not drill the static load through here
 export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
+  const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, DESKTOP_SM);
   const { config, entityConfig } = useConfig(); // Get app level config.
   const { exploreDispatch, exploreState } = useExploreState(); // Get the useReducer state and dispatch for "Explore".
   const { categoryGroupConfigs, entities, explorerTitle, summaryConfig } =
@@ -167,7 +173,11 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
       <IndexView
         List={renderList(exploreState, entityConfig, entityListType)}
         ListHero={renderComponent(listHero)}
-        SideBarButton={<SidebarButton label="Filter" onClick={onOpenDrawer} />}
+        SideBarButton={
+          tabletDown ? (
+            <SidebarButton label="Filter" onClick={onOpenDrawer} />
+          ) : undefined
+        }
         SubTitleHero={renderComponent(subTitleHero)}
         Summaries={renderSummary(summaryConfig, summaryResponse)}
         Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabValue} />}
