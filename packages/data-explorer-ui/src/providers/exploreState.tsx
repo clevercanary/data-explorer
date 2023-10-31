@@ -15,7 +15,12 @@ import {
   SelectedFilter,
 } from "../common/entities";
 import { getInitialTableColumnVisibility } from "../components/Table/common/utils";
-import { CategoryConfig, EntityConfig, EntityPath } from "../config/entities";
+import {
+  CategoryConfig,
+  EntityConfig,
+  EntityPath,
+  SiteConfig,
+} from "../config/entities";
 import { getDefaultSorting } from "../config/utils";
 import { useCategoryConfigs } from "../hooks/useCategoryConfigs";
 import {
@@ -24,17 +29,7 @@ import {
 } from "../hooks/useCategoryFilter";
 import { useConfig } from "../hooks/useConfig";
 import { useURLFilterParams } from "../hooks/useURLFilterParams";
-
-// Template constants
-const defaultPaginationState = {
-  currentPage: 1,
-  index: null,
-  nextIndex: null,
-  pageSize: 25,
-  pages: 1,
-  previousIndex: null,
-  rows: 0,
-};
+import { DEFAULT_PAGINATION_STATE, INITIAL_STATE } from "./initial";
 
 /**
  * Entity view.
@@ -49,7 +44,9 @@ export enum EntityView {
  */
 export interface ExploreContext {
   categoryConfigs?: CategoryConfig[];
+  config: SiteConfig;
   entityConfig: EntityConfig;
+  entityList: string;
 }
 
 /**
@@ -164,6 +161,57 @@ export interface RelatedResponse {
 }
 
 /**
+ * function used to create the explore's initial state
+ *
+ * @param config - current site config
+ * @param entityConfig - current entity config
+ * @param entityListType - path of the current entity
+ * @param decodedFilterParam - decoded filters from url params
+ * @returns a object of type #ExploreState
+ */
+const createInitialState = (
+  config: SiteConfig,
+  entityConfig: EntityConfig,
+  entityListType: string,
+  decodedFilterParam: string
+): ExploreState => {
+  // Define filter state, from URL "filter" parameter, if present and valid.
+  let filterState: SelectedFilter[] = [];
+  try {
+    filterState = JSON.parse(decodedFilterParam);
+  } catch {
+    // do nothing
+  }
+
+  return {
+    ...INITIAL_STATE,
+    categoryViews: [],
+    entityPageState: config.entities.reduce(
+      (acc, entity) => ({
+        ...acc,
+        [entity.route]: {
+          columnsVisibility: getInitialTableColumnVisibility(
+            entity.list.columns
+          ),
+          sorting: getDefaultSorting(entity),
+        },
+      }),
+      {}
+    ),
+    filterState,
+    isRelatedView: false,
+    listItems: [],
+    listStaticLoad: entityConfig.staticLoad ?? false,
+    listView: EntityView.EXACT,
+    loading: true,
+    paginationState: DEFAULT_PAGINATION_STATE,
+    relatedListItems: undefined,
+    staticLoaded: false,
+    tabValue: entityListType,
+  };
+};
+
+/**
  * Explore state context for storing and using filter-related and explore state.
  */
 export const ExploreStateContext = createContext<ExploreStateContextProps>({
@@ -176,20 +224,7 @@ export const ExploreStateContext = createContext<ExploreStateContextProps>({
    */
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- default note used
   exploreDispatch: () => {},
-  exploreState: {
-    categoryViews: [],
-    entityPageState: {},
-    filterState: [],
-    isRelatedView: false,
-    listItems: [],
-    listStaticLoad: false,
-    listView: undefined,
-    loading: false,
-    paginationState: defaultPaginationState,
-    relatedListItems: undefined,
-    staticLoaded: false,
-    tabValue: "",
-  },
+  exploreState: INITIAL_STATE,
 });
 
 /**
@@ -209,41 +244,17 @@ export function ExploreStateProvider({
   const { config, defaultEntityListType, entityConfig } = useConfig();
   const categoryConfigs = useCategoryConfigs();
   const { decodedFilterParam } = useURLFilterParams();
-  // Define filter state, from URL "filter" parameter, if present and valid.
-  let filterState: SelectedFilter[] = [];
-  try {
-    filterState = JSON.parse(decodedFilterParam);
-  } catch {
-    // do nothing
-  }
+  const entityList = entityListType || defaultEntityListType;
+
   const [exploreState, exploreDispatch] = useReducer(
     (s: ExploreState, a: ExploreAction) =>
-      exploreReducer(s, a, { categoryConfigs, entityConfig }),
-    {
-      categoryViews: [],
-      entityPageState: config.entities.reduce(
-        (acc, entity) => ({
-          ...acc,
-          [entity.route]: {
-            columnsVisibility: getInitialTableColumnVisibility(
-              entity.list.columns
-            ),
-            sorting: getDefaultSorting(entity),
-          },
-        }),
-        {}
-      ),
-      filterState,
-      isRelatedView: false,
-      listItems: [],
-      listStaticLoad: entityConfig.staticLoad ?? false,
-      listView: EntityView.EXACT,
-      loading: true,
-      paginationState: defaultPaginationState,
-      relatedListItems: undefined,
-      staticLoaded: false,
-      tabValue: entityListType || defaultEntityListType,
-    }
+      exploreReducer(s, a, {
+        categoryConfigs,
+        config,
+        entityConfig,
+        entityList,
+      }),
+    createInitialState(config, entityConfig, entityList, decodedFilterParam)
   );
 
   // does this help? https://hswolff.com/blog/how-to-usecontext-with-usereducer/
@@ -267,6 +278,7 @@ export enum ExploreActionKind {
   ProcessExploreResponse = "PROCESS_EXPLORE_RESPONSE",
   ProcessExploreStaticResponse = "PROCESS_EXPLORE_STATIC_RESPONSE",
   ProcessRelatedResponse = "PROCESS_RELATED_RESPONSE",
+  ResetState = "RESET_STATE",
   SelectEntityType = "SELECT_ENTITY_TYPE",
   ToggleEntityView = "TOGGLE_ENTITY_VIEW",
   UpdateColumnVisibility = "UPDATE_COLUMN_VISIBILITY",
@@ -283,6 +295,7 @@ type ExploreAction =
   | ProcessExploreResponseAction
   | ProcessExploreStaticResponseAction
   | ProcessRelatedResponseAction
+  | ResetStateAction
   | SelectEntityTypeAction
   | ToggleEntityView
   | UpdateColumnVisibilityAction
@@ -327,6 +340,14 @@ type ProcessExploreStaticResponseAction = {
 type ProcessRelatedResponseAction = {
   payload: RelatedResponse;
   type: ExploreActionKind.ProcessRelatedResponse;
+};
+
+/**
+ * Reset state type action.
+ */
+type ResetStateAction = {
+  payload: "";
+  type: ExploreActionKind.ResetState;
 };
 
 /**
@@ -391,7 +412,7 @@ function exploreReducer(
   exploreContext: ExploreContext
 ): ExploreState {
   const { payload, type } = action;
-  const { categoryConfigs, entityConfig } = exploreContext;
+  const { categoryConfigs, config, entityConfig, entityList } = exploreContext;
 
   switch (type) {
     /**
@@ -481,6 +502,12 @@ function exploreReducer(
         ...state,
         relatedListItems: payload.relatedListItems,
       };
+    }
+    /**
+     * Reset the current state to the initial
+     */
+    case ExploreActionKind.ResetState: {
+      return createInitialState(config, entityConfig, entityList, "");
     }
     /**
      * Select entity type
