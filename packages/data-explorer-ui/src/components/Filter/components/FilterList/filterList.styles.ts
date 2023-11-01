@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
 import { List as MList } from "@mui/material";
-import { mediaDesktopSmallUp } from "../../../../styles/common/mixins/breakpoints";
 import { LIST_MARGIN } from "../../common/constants";
 
 export const List = styled(MList)`
@@ -23,7 +22,7 @@ export const List = styled(MList)`
   // List item
   .MuiListItemButton-root {
     gap: 8px;
-    padding: 14px 16px;
+    padding: 10px 16px;
   }
 
   // List item text
@@ -35,12 +34,6 @@ export const List = styled(MList)`
 
     > span {
       min-width: 0; /* required; flexbox child min-width property is "auto" by default making overflow-wrap ineffectual */
-    }
-  }
-
-  ${mediaDesktopSmallUp} {
-    .MuiListItemButton-root {
-      padding: 10px 16px;
     }
   }
 `;

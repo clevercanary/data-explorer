@@ -11,7 +11,6 @@ export const SearchAllFiltersSearch = ({
   return (
     <InputField
       {...props}
-      variant="outlined"
       fullWidth
       InputProps={{
         ...(InputProps || {}),
@@ -20,6 +19,7 @@ export const SearchAllFiltersSearch = ({
       inputProps={{ ...(inputProps || {}), spellCheck: false }}
       placeholder="Search all filters..."
       size="small"
+      variant="outlined"
     />
   );
 };
