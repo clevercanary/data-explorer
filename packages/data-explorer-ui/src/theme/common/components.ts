@@ -923,8 +923,13 @@ export const MuiInputBase = (theme: Theme): Components["MuiInputBase"] => {
       },
       root: {
         ...theme.typography[TEXT_BODY_400],
+        fontSize: 16, // overrides default 14px to prevent IOS zoom on focus.
         height: 40,
         letterSpacing: "normal",
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        [tabletUp]: {
+          fontSize: theme.typography[TEXT_BODY_400].fontSize,
+        },
       },
     },
   };

@@ -6,7 +6,7 @@ export const FilterLabel = styled(Button)`
   color: ${({ theme }) => theme.palette.ink.main};
   gap: 0;
   justify-content: space-between;
-  padding: 14px 16px;
+  padding: 10px 16px;
   text-transform: none;
   text-align: left;
 
