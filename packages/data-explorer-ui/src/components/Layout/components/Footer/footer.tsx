@@ -32,25 +32,26 @@ export const Footer = ({
     >
       <Toolbar variant="dense">
         <Logos>
-          {logos.map(({ alt, height, link, src, width }, l) => (
-            <Logo
-              key={`${link}${l}`}
-              alt={alt}
-              height={height}
-              link={link}
-              src={src}
-              width={width}
-            />
-          ))}
+          {logos.map(
+            (
+              { alt, height, link, src, target = ANCHOR_TARGET.SELF, width },
+              l
+            ) => (
+              <Logo
+                key={`${link}${l}`}
+                alt={alt}
+                height={height}
+                link={link}
+                src={src}
+                target={target}
+                width={width}
+              />
+            )
+          )}
         </Logos>
         <Links>
-          {navLinks.map(({ label, url }, i) => (
-            <Link
-              key={`${url}${i}`}
-              label={label}
-              target={ANCHOR_TARGET.SELF}
-              url={url}
-            />
+          {navLinks.map(({ label, target = ANCHOR_TARGET.SELF, url }, i) => (
+            <Link key={`${url}${i}`} label={label} target={target} url={url} />
           ))}
           {socials && (
             <Socials
