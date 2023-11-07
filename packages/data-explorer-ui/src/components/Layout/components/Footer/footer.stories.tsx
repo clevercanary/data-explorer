@@ -2,6 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React from "react";
 import logo from "../../../../images/logo.svg";
 import { SOCIAL } from "../../../common/Socials/socials";
+import { Logo } from "../Header/components/Content/components/Logo/logo";
 import { Footer } from "./footer";
 
 export default {
@@ -26,14 +27,7 @@ const FooterTemplate: ComponentStory<typeof Footer> = (args) => (
 
 export const FooterStory = FooterTemplate.bind({});
 FooterStory.args = {
-  logos: [
-    {
-      alt: "Logo",
-      height: 24,
-      link: "https://www.google.com/",
-      src: logo,
-    },
-  ],
+  Branding: <Logo alt="logo" height={24} link={"/"} src={logo} />,
   navLinks: [
     {
       label: "Help",

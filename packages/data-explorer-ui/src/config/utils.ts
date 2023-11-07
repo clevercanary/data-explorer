@@ -17,7 +17,7 @@ export function getDefaultConfig(): SiteConfig {
     explorerTitle: "",
     layout: {
       footer: {
-        logos: [],
+        Branding: null,
         navLinks: [],
         socials: [],
       },
