@@ -29,12 +29,6 @@ export const AppBar = styled(MAppBar)`
   }
 ` as typeof MAppBar;
 
-export const Logos = styled.div`
-  align-items: center;
-  display: flex;
-  gap: 24px;
-`;
-
 export const Links = styled.div`
   align-items: stretch;
   display: flex;

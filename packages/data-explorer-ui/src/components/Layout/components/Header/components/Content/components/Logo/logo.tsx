@@ -9,6 +9,7 @@ import { isClientSideNavigation } from "../../../../../../../Links/common/utils"
 
 export interface LogoProps {
   alt: string;
+  className?: string;
   height?: number;
   link: string;
   src: ImageSrc;
@@ -18,6 +19,7 @@ export interface LogoProps {
 
 export const Logo = ({
   alt,
+  className,
   height,
   link,
   src,
@@ -29,12 +31,12 @@ export const Logo = ({
   );
   return isClientSideNavigation(link) ? (
     <Link href={link} passHref>
-      <a href="passHref" rel="noopener" target={target}>
+      <a className={className} href="passHref" rel="noopener" target={target}>
         {logo}
       </a>
     </Link>
   ) : (
-    <a href={link} rel="noopener" target={target}>
+    <a className={className} href={link} rel="noopener" target={target}>
       {logo}
     </a>
   );
