@@ -122,6 +122,9 @@ export interface DataSourceConfig {
   defaultListParams?: {
     [key: string]: string;
   };
+  defaultParams?: {
+    catalog: string;
+  };
   url: string;
 }
 

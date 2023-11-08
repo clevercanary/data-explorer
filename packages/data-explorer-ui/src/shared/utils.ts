@@ -5,16 +5,24 @@ import { DataSourceConfig } from "../config/entities";
  * Returns application DEFAULT_DETAIL_PARAMS.
  * @returns application DEFAULT_DETAIL_PARAMS.
  */
-export function getDefaultDetailParams(): DataSourceConfig["defaultDetailParams"] {
-  return getConfig().dataSource.defaultDetailParams ?? {};
+export function getDefaultDetailParams():
+  | DataSourceConfig["defaultDetailParams"]
+  | DataSourceConfig["defaultParams"] {
+  const { dataSource } = getConfig();
+  const { defaultDetailParams, defaultParams } = dataSource || {};
+  return { ...defaultDetailParams, ...defaultParams };
 }
 
 /**
  * Returns application DEFAULT_LIST_PARAMS.
  * @returns application DEFAULT_LIST_PARAMS.
  */
-export function getDefaultListParams(): DataSourceConfig["defaultListParams"] {
-  return getConfig().dataSource.defaultListParams ?? {};
+export function getDefaultListParams():
+  | DataSourceConfig["defaultListParams"]
+  | DataSourceConfig["defaultParams"] {
+  const { dataSource } = getConfig();
+  const { defaultListParams, defaultParams } = dataSource;
+  return { ...defaultListParams, ...defaultParams };
 }
 
 /**

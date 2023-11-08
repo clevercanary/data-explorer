@@ -26,7 +26,7 @@ export const useFileManifestSpreadsheet = (
   filters: Filters
 ): ManifestSpreadsheet | undefined => {
   // Determine catalog.
-  const [catalog] = useCatalog();
+  const catalog = useCatalog() as string; // catalog should be defined.
   // Build request params.
   const requestParams = fetchQueryParams(filters, catalog, { size: "25" });
   // Build request URL.

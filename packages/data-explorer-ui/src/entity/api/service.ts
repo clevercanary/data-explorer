@@ -125,7 +125,7 @@ export const fetchSummary = async (
   }
 
   const apiPath = summaryConfig.apiPath;
-  const catalog = dataSource.defaultListParams?.catalog;
+  const catalog = dataSource.defaultParams?.catalog as string; // catalog should be defined.
 
   // Build filter query params, if any
   let summaryParams;

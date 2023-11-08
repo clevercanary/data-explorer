@@ -87,7 +87,7 @@ export function FileManifestStateProvider({
   children,
 }: FileManifestStateProps): JSX.Element {
   // Determine catalog.
-  const [catalog] = useCatalog();
+  const catalog = useCatalog() as string; // catalog should be defined.
 
   // Determine file manifest request data URL.
   const URL = useFileManifestURL();

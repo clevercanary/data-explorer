@@ -26,7 +26,7 @@ export const useFileManifestDownload = (filters: Filters): ManifestDownload => {
   // Determine file manifest request data URL.
   const URL = useFileManifestURL();
   // Determine catalog.
-  const [catalog] = useCatalog();
+  const catalog = useCatalog() as string; // catalog should be defined.
   // Build request URL.
   const { requestURL } =
     buildFileManifestRequestURL(
