@@ -1,11 +1,10 @@
 import {
-  Autocomplete,
   AutocompleteRenderInputParams,
   ListProps as MListProps,
 } from "@mui/material";
 import React, {
+  ChangeEvent,
   createContext,
-  ReactNode,
   useContext,
   useEffect,
   useRef,
@@ -23,15 +22,20 @@ import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFilte
 import { DEFAULT_SLOT_PROPS, DRAWER_SLOT_PROPS } from "./common/constants";
 import { AutocompletePopper } from "./components/AutocompletePopper/autocompletePopper";
 import { VariableSizeList } from "./components/VariableSizeList/VariableSizeList";
+import { Autocomplete } from "./searchAllFilters.styles";
 
 export interface SearchAllFiltersProps {
   categoryViews: SelectCategoryView[];
+  drawerOpen?: boolean;
   onFilter: OnFilterFn;
 }
 
 interface ListboxContextValue {
   categoryViews: SelectCategoryView[];
+  onClearSearch: () => void;
+  onCloseSearch: () => void;
   onFilter: OnFilterFn;
+  open: boolean;
   searchTerm: string;
 }
 
@@ -39,9 +43,12 @@ const renderInput = (params: AutocompleteRenderInputParams): JSX.Element => (
   <SearchAllFiltersSearch {...params} />
 );
 
-const ListboxContext = createContext<ListboxContextValue>({
+export const ListboxContext = createContext<ListboxContextValue>({
   categoryViews: [],
+  onClearSearch: (): void => undefined,
+  onCloseSearch: (): void => undefined,
   onFilter: (): void => undefined,
+  open: false,
   searchTerm: "",
 });
 
@@ -66,6 +73,7 @@ const Listbox = React.forwardRef<HTMLUListElement, MListProps>(function Listbox(
 
 export const SearchAllFilters = ({
   categoryViews,
+  drawerOpen = false,
   onFilter,
 }: SearchAllFiltersProps): JSX.Element => {
   const desktopSmDown = useBreakpointHelper(
@@ -76,22 +84,28 @@ export const SearchAllFilters = ({
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Callback fired when the value is changed.
+  const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
+    setSearchTerm(event.target.value);
+  };
+
+  // Clear search
+  const onClearSearch = (): void => {
+    setSearchTerm("");
+  };
+
   // Close search.
-  const closeSearch = (): void => {
+  const onCloseSearch = (): void => {
+    setSearchTerm("");
     setOpen(false);
   };
 
   // Open search.
-  const openSearch = (): void => {
-    setOpen(true);
-  };
-
-  // End adornment for search input.
-  const renderEndAdornment = (endAdornment: ReactNode): ReactNode => {
-    if (desktopSmDown) {
-      return <SearchCloseButton closeSearch={closeSearch} />;
+  const onOpenSearch = (): void => {
+    if (open) {
+      return;
     }
-    return endAdornment;
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -100,17 +114,33 @@ export const SearchAllFilters = ({
     }
   }, [open]);
 
+  // Close search when filter drawer is closed.
+  useEffect(() => {
+    if (!drawerOpen) {
+      setSearchTerm("");
+      setOpen(false);
+    }
+  }, [drawerOpen]);
+
   return (
-    <ListboxContext.Provider value={{ categoryViews, onFilter, searchTerm }}>
+    <ListboxContext.Provider
+      value={{
+        categoryViews,
+        onClearSearch,
+        onCloseSearch,
+        onFilter,
+        open,
+        searchTerm,
+      }}
+    >
       <Autocomplete
-        clearOnBlur
+        clearOnBlur={!desktopSmDown}
         filterOptions={(options): string[] => options}
         freeSolo
         ListboxComponent={Listbox}
-        onBlur={closeSearch}
-        onClose={closeSearch}
-        onFocus={openSearch}
-        onInputChange={(event, value): void => setSearchTerm(value)}
+        onBlur={desktopSmDown ? undefined : onCloseSearch}
+        onClose={desktopSmDown ? undefined : onCloseSearch}
+        onFocus={onOpenSearch}
         open={open}
         options={[""]} // Placeholder options, since item rendering is fully controlled by VariableSizeList
         PopperComponent={AutocompletePopper}
@@ -120,7 +150,11 @@ export const SearchAllFilters = ({
             ...props,
             InputProps: {
               ...props.InputProps,
-              endAdornment: renderEndAdornment(props.InputProps.endAdornment),
+              endAdornment: <SearchCloseButton />,
+            },
+            inputProps: {
+              ...props.inputProps,
+              onChange,
             },
           })
         }

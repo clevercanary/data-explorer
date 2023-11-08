@@ -4,11 +4,16 @@ import { mediaDesktopSmallUp } from "../../../../styles/common/mixins/breakpoint
 
 interface Props {
   disabled: boolean;
+  height: number;
 }
 
-export const Filters = styled.div<Props>`
+export const Filters = styled("div", {
+  shouldForwardProp: (prop) => prop !== "height",
+})<Props>`
+  height: ${({ height }) => height}px;
   margin: 8px 0;
-  padding: 0;
+  overflow: auto;
+  padding: 0 0 8px;
 
   // Filters are globally "disabled".
   ${({ disabled }) =>
@@ -22,6 +27,8 @@ export const Filters = styled.div<Props>`
   }
 
   ${mediaDesktopSmallUp} {
+    height: unset;
+    overflow: unset;
     padding: 0 12px 0 16px;
   }
 `;

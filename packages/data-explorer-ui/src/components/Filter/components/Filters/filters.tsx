@@ -1,11 +1,12 @@
 import { Divider } from "@mui/material";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useRef, useState } from "react";
 import { CategoryTag, SelectCategoryView } from "../../../../common/entities";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
 } from "../../../../hooks/useBreakpointHelper";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import { useWindowResize } from "../../../../hooks/useWindowResize";
 import { DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { Filter } from "../Filter/filter";
 import { FilterTags } from "../FilterTags/filterTags";
@@ -69,8 +70,16 @@ export const Filters = ({
     BREAKPOINT_FN_NAME.DOWN,
     DESKTOP_SM
   );
+  const { height: windowHeight } = useWindowResize();
+  const filterListRef = useRef<HTMLDivElement>(null);
+  const [height, setHeight] = useState<number>(0);
+
+  useEffect(() => {
+    setHeight(calculateListHeight(windowHeight, filterListRef.current));
+  }, [windowHeight]);
+
   return (
-    <FilterList disabled={disabled}>
+    <FilterList disabled={disabled} height={height} ref={filterListRef}>
       {categoryFilters.map(({ categoryViews }, i) => (
         <Fragment key={i}>
           {i !== 0 && <Divider />}
@@ -89,3 +98,16 @@ export const Filters = ({
     </FilterList>
   );
 };
+
+/**
+ * Returns given height of filter list.
+ * @param windowHeight - Window height.
+ * @param filterListEl - Filter list element.
+ * @returns calculated height.
+ */
+function calculateListHeight(
+  windowHeight: number,
+  filterListEl: HTMLDivElement | null
+): number {
+  return windowHeight - (filterListEl?.getBoundingClientRect()?.top ?? 0);
+}

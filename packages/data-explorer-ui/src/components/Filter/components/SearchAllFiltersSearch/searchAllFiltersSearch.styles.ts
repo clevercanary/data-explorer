@@ -31,12 +31,6 @@ export const InputField = styled(TextField)`
           padding: 10px 14px 10px 0;
         }
       }
-
-      &.Mui-focused {
-        .MuiIconButton-root {
-          cursor: pointer;
-        }
-      }
     }
   }
 `;

@@ -10,11 +10,13 @@ export const Sidebar = styled.div`
 `;
 
 export const SidebarPositioner = styled.div`
-  overflow-y: scroll;
+  height: 100%;
+  overflow: visible;
   padding: 16px 0;
 
   ${mediaDesktopSmallUp} {
     height: calc(100vh - ${HEADER_HEIGHT}px);
+    overflow: auto;
     padding: 0;
     position: sticky;
     top: ${HEADER_HEIGHT}px;
