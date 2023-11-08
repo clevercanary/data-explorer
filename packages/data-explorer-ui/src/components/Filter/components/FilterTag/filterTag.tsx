@@ -1,6 +1,6 @@
 import { CloseRounded } from "@mui/icons-material";
 import { Chip, Tooltip } from "@mui/material";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useWindowResize } from "../../../../hooks/useWindowResize";
 import { SupersededTag } from "./filterTag.styles";
 
@@ -16,10 +16,10 @@ export const FilterTag = ({
   superseded,
 }: FilterTagProps): JSX.Element => {
   const Tag = superseded ? SupersededTag : Chip;
-  const tagRef = React.useRef<HTMLDivElement>(null);
+  const tagRef = useRef<HTMLDivElement>(null);
   const windowSize = useWindowResize();
-  const [isOverflowed, setIsOverflowed] = React.useState(false);
-  React.useEffect(() => {
+  const [isOverflowed, setIsOverflowed] = useState(false);
+  useEffect(() => {
     const tagLabelElement =
       tagRef.current?.querySelector<HTMLElement>(".MuiChip-label");
     if (!tagLabelElement) return;
