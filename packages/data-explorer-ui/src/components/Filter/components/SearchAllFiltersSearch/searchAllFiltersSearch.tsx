@@ -1,6 +1,7 @@
 import { TextFieldProps } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import { SearchIcon } from "../../../common/CustomIcon/components/SearchIcon/searchIcon";
+import { ListboxContext } from "../SearchAllFilters/searchAllFilters";
 import { InputField } from "./searchAllFiltersSearch.styles";
 
 export const SearchAllFiltersSearch = ({
@@ -8,6 +9,8 @@ export const SearchAllFiltersSearch = ({
   InputProps,
   ...props
 }: TextFieldProps): JSX.Element => {
+  const { searchTerm } = useContext(ListboxContext);
+  delete inputProps?.value; // Control input value from the search term.
   return (
     <InputField
       {...props}
@@ -19,6 +22,7 @@ export const SearchAllFiltersSearch = ({
       inputProps={{ ...(inputProps || {}), spellCheck: false }}
       placeholder="Search all filters..."
       size="small"
+      value={searchTerm}
       variant="outlined"
     />
   );

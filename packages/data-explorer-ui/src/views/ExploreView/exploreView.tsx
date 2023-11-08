@@ -159,6 +159,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
             <ClearAllFilters />
             <SearchAllFilters
               categoryViews={categoryViews}
+              drawerOpen={isDrawerOpen}
               onFilter={onFilterChange}
             />
           </SidebarTools>

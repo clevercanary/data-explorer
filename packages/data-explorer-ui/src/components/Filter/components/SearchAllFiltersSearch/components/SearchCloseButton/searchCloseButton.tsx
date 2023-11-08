@@ -1,17 +1,29 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import React from "react";
-import { IconButton } from "./searchCloseButton.styles";
+import { IconButton } from "@mui/material";
+import React, { Fragment, useContext } from "react";
+import {
+  BREAKPOINT_FN_NAME,
+  useBreakpointHelper,
+} from "../../../../../../hooks/useBreakpointHelper";
+import { DESKTOP_SM } from "../../../../../../theme/common/breakpoints";
+import { ListboxContext } from "../../../SearchAllFilters/searchAllFilters";
 
-export interface SearchCloseButtonProps {
-  closeSearch: () => void;
-}
-
-export const SearchCloseButton = ({
-  closeSearch,
-}: SearchCloseButtonProps): JSX.Element => {
+export const SearchCloseButton = (): JSX.Element => {
+  const desktopSmDown = useBreakpointHelper(
+    BREAKPOINT_FN_NAME.DOWN,
+    DESKTOP_SM
+  );
+  const { onClearSearch, onCloseSearch, open, searchTerm } =
+    useContext(ListboxContext);
+  const showButton = open && (desktopSmDown || searchTerm);
+  const onClickFn = desktopSmDown ? onCloseSearch : onClearSearch;
   return (
-    <IconButton onClick={closeSearch} size="large">
-      <CloseRoundedIcon fontSize="small" />
-    </IconButton>
+    <Fragment>
+      {showButton && (
+        <IconButton onClick={onClickFn} size="large">
+          <CloseRoundedIcon fontSize="small" />
+        </IconButton>
+      )}
+    </Fragment>
   );
 };

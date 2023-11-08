@@ -10,6 +10,7 @@ export const Sidebar = styled.div`
 `;
 
 export const SidebarPositioner = styled.div`
+  height: 100%;
   overflow-y: scroll;
   padding: 16px 0;
 
