@@ -1,6 +1,7 @@
 import { CloseRounded } from "@mui/icons-material";
-import { Chip } from "@mui/material";
+import { Chip, Tooltip } from "@mui/material";
 import React from "react";
+import { useWindowResize } from "../../../../hooks/useWindowResize";
 import { SupersededTag } from "./filterTag.styles";
 
 export interface FilterTagProps {
@@ -15,15 +16,27 @@ export const FilterTag = ({
   superseded,
 }: FilterTagProps): JSX.Element => {
   const Tag = superseded ? SupersededTag : Chip;
+  const tagRef = React.useRef<HTMLDivElement>(null);
+  const windowSize = useWindowResize();
+  const [isOverflowed, setIsOverflowed] = React.useState(false);
+  React.useEffect(() => {
+    const tagLabelElement =
+      tagRef.current?.querySelector<HTMLElement>(".MuiChip-label");
+    if (!tagLabelElement) return;
+    setIsOverflowed(tagLabelElement.offsetWidth < tagLabelElement.scrollWidth);
+  }, [windowSize]);
   return (
-    <Tag
-      clickable={false} // removes unwanted active and hover ui; "pointer" cursor added to "filterTag" variant in theme.
-      color="primary"
-      deleteIcon={<CloseRounded color="inherit" />}
-      label={label}
-      onClick={onRemove}
-      onDelete={onRemove}
-      variant="filterTag"
-    />
+    <Tooltip arrow placement="top" title={isOverflowed ? label : null}>
+      <Tag
+        clickable={false} // removes unwanted active and hover ui; "pointer" cursor added to "filterTag" variant in theme.
+        color="primary"
+        deleteIcon={<CloseRounded color="inherit" />}
+        label={label}
+        onClick={onRemove}
+        onDelete={onRemove}
+        ref={tagRef}
+        variant="filterTag"
+      />
+    </Tooltip>
   );
 };
