@@ -1296,11 +1296,12 @@ export const MuiTab = (theme: Theme): Components["MuiTab"] => {
         padding: 12,
         textTransform: "capitalize",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "& > .MuiTab-iconWrapper": {
-          marginRight: 0,
-        },
         "&.Mui-selected": {
           color: theme.palette.ink.main,
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& > .MuiTab-iconWrapper": {
+          marginRight: 0,
         },
       },
     },
@@ -1377,6 +1378,39 @@ export const MuiTabs = (theme: Theme): Components["MuiTabs"] => {
     styleOverrides: {
       flexContainer: {
         gap: 8,
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&:not(.MuiTabs-flexContainerVertical)": {
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          ".MuiTab-root": {
+            // eslint-disable-next-line sort-keys -- disabling key order for readability
+            "&:hover": {
+              color: theme.palette.ink.main,
+              overflow: "visible",
+              // eslint-disable-next-line sort-keys -- disabling key order for readability
+              "&:after": {
+                backgroundColor: theme.palette.smoke.dark,
+                borderRadius: "12px 12px 0 0",
+                bottom: -3,
+                content: '""',
+                height: 3,
+                left: 0,
+                position: "absolute",
+                width: "100%",
+              },
+            },
+            // eslint-disable-next-line sort-keys -- disabling key order for readability
+            "&.Mui-selected": {
+              // eslint-disable-next-line sort-keys -- disabling key order for readability
+              "&:hover": {
+                overflow: "unset",
+                // eslint-disable-next-line sort-keys -- disabling key order for readability
+                "&:after": {
+                  content: "none",
+                },
+              },
+            },
+          },
+        },
       },
       indicator: {
         borderTopLeftRadius: 12,
@@ -1389,10 +1423,11 @@ export const MuiTabs = (theme: Theme): Components["MuiTabs"] => {
         position: "relative", // Positions scroll fuzz.
       },
       scroller: {
-        margin: "0 16px",
+        margin: 0,
+        padding: "0 8px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         [tabletUp]: {
-          margin: 0,
+          padding: 0,
         },
       },
     },
