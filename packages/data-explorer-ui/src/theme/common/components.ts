@@ -1296,11 +1296,36 @@ export const MuiTab = (theme: Theme): Components["MuiTab"] => {
         padding: 12,
         textTransform: "capitalize",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
-        "& > .MuiTab-iconWrapper": {
-          marginRight: 0,
+        "&:hover": {
+          color: theme.palette.ink.main,
+          overflow: "visible",
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:after": {
+            backgroundColor: theme.palette.smoke.dark,
+            borderRadius: "12px 12px 0 0",
+            bottom: -3,
+            content: '""',
+            height: 3,
+            left: 0,
+            position: "absolute",
+            width: "100%",
+          },
         },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
         "&.Mui-selected": {
           color: theme.palette.ink.main,
+          // eslint-disable-next-line sort-keys -- disabling key order for readability
+          "&:hover": {
+            overflow: "unset",
+            // eslint-disable-next-line sort-keys -- disabling key order for readability
+            "&:after": {
+              content: "none",
+            },
+          },
+        },
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "& > .MuiTab-iconWrapper": {
+          marginRight: 0,
         },
       },
     },
