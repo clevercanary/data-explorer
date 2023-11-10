@@ -145,6 +145,7 @@ export interface EntityConfig<D = any, I = any> extends TabConfig {
   list: ListConfig;
   listView?: ListViewConfig;
   options?: Options;
+  overrideFile?: string;
   staticEntityImportMapper?: EntityImportMapper<I, D>;
   staticLoad: boolean;
   staticLoadFile?: string;
