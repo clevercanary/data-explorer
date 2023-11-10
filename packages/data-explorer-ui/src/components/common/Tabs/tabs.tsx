@@ -33,6 +33,7 @@ export const Tabs = ({
 }: TabsProps): JSX.Element => {
   return (
     <MTabs
+      allowScrollButtonsMobile
       className={className}
       onChange={(_, tabValue): void => onTabChange(tabValue)}
       ScrollButtonComponent={TabScrollFuzz} // Utilizing MuiTabScrollButton to show/hide scroll fuzz.

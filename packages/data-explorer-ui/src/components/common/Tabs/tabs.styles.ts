@@ -12,6 +12,7 @@ export const TabScrollFuzz = styled.span<Props>`
   opacity: 1;
   position: absolute;
   top: 0;
+  transition: opacity 300ms ease-in;
   width: 56px;
   z-index: 1;
 

@@ -1414,10 +1414,11 @@ export const MuiTabs = (theme: Theme): Components["MuiTabs"] => {
         position: "relative", // Positions scroll fuzz.
       },
       scroller: {
-        margin: "0 16px",
+        margin: 0,
+        padding: "0 8px",
         // eslint-disable-next-line sort-keys -- disabling key order for readability
         [tabletUp]: {
-          margin: 0,
+          padding: 0,
         },
       },
     },
