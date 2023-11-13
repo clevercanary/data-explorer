@@ -40,14 +40,15 @@ export const getEntityService = (
 /**
  * Hook to determine how the data should be loaded.
  * From API or from a tsv file.
+ * @param entityListType - Entity list type (optional).
  * @returns @see FetcherResponse
  */
-export const useEntityService = (): FetcherResponse => {
+export const useEntityService = (entityListType?: string): FetcherResponse => {
   const { config } = useConfig();
   const { exploreState } = useExploreState();
   const entityConfig = getEntityConfig(
     config.entities,
-    exploreState.tabValue // always use the current state's tab value.
+    entityListType || exploreState.tabValue // if entity list type is undefined, use the current state's tab value.
   );
   return getEntityService(entityConfig);
 };
