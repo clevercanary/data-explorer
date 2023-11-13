@@ -15,6 +15,7 @@ export interface EntityService {
   fetchEntitiesFromQuery: (
     apiPath: string,
     listParams: AzulListParams,
+    catalog: string | undefined,
     accessToken: string | undefined
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This type can't be known before hand
   ) => Promise<AzulEntitiesResponse>;
@@ -27,12 +28,14 @@ export interface EntityService {
   fetchEntityDetail: (
     id: string,
     apiPath: string,
+    catalog: string | undefined,
     accessToken: string | undefined
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This type can't be known before hand
   ) => Promise<any>;
 
   fetchSummary: (
     filterState: FilterState,
+    catalog: string | undefined,
     accessToken: string | undefined
   ) => Promise<AzulSummaryResponse>;
 }

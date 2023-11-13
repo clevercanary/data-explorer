@@ -8,12 +8,12 @@ import { useURLFilterParams } from "./useURLFilterParams";
 export const useUpdateURLSearchParams = (): void => {
   const { exploreState } = useExploreState();
   const { updateFilterQueryString } = useURLFilterParams();
-  const { filterState } = exploreState;
+  const { catalogState, filterState } = exploreState;
 
   /**
    * Update the URL search params when the filter state changes.
    */
   useEffect(() => {
-    updateFilterQueryString(filterState);
-  }, [filterState, updateFilterQueryString]);
+    updateFilterQueryString(catalogState, filterState);
+  }, [catalogState, filterState, updateFilterQueryString]);
 };

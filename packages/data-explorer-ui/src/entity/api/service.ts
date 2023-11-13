@@ -32,15 +32,18 @@ function createFetchOptions(
  * Make a GET or POST request for a list of entities
  * @param apiPath - Path that will be used to compose the API url
  * @param listParams - Params to be used on the request. If none passed, it will default to page's size 25 and the current catalog version
+ * @param catalog - Catalog.
  * @param accessToken - string - auth token
  * @returns @see ListResponseType
  */
 export const fetchEntitiesFromQuery = async (
   apiPath: string,
   listParams: AzulListParams,
+  catalog: string | undefined,
   accessToken: string | undefined
 ): Promise<AzulEntitiesResponse> => {
-  const params = { ...getDefaultListParams(), ...listParams };
+  const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
+  const params = { ...getDefaultListParams(), ...catalogParam, ...listParams };
   const response = await fetchEntitiesFromURL(
     `${apiPath}?${convertUrlParams(params)}`,
     accessToken
@@ -74,7 +77,12 @@ export const fetchAllEntities = async (
   apiPath: string
 ): Promise<AzulEntitiesResponse> => {
   const listParams = {};
-  const result = await fetchEntitiesFromQuery(apiPath, listParams, undefined);
+  const result = await fetchEntitiesFromQuery(
+    apiPath,
+    listParams,
+    undefined,
+    undefined
+  );
   let hits = result.hits;
   let nextPage = result.pagination.next;
   while (nextPage) {
@@ -91,6 +99,7 @@ export const fetchAllEntities = async (
  *  Request to get a single project.
  * @param id - entity's uuid.
  * @param apiPath - API endpoint URL.
+ * @param catalog - Catalog.
  * @param accessToken - Access token.
  * @param param - Catalog's version, if none passed it will default to the current one.
  * @returns @see ProjectResponse
@@ -98,13 +107,15 @@ export const fetchAllEntities = async (
 export const fetchEntityDetail = async (
   id: string,
   apiPath: string,
+  catalog: string | undefined,
   accessToken: string | undefined,
   param = getDefaultDetailParams()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
+  const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
   const options = createFetchOptions(accessToken);
   const res = await api().get(
-    `${apiPath}/${id}?${convertUrlParams({ ...param })}`,
+    `${apiPath}/${id}?${convertUrlParams({ ...param, ...catalogParam })}`,
     options
   );
   return res.data;
@@ -112,29 +123,31 @@ export const fetchEntityDetail = async (
 
 /**
  * Request to a single summary object that doesn't need id
- * @param filterState - selected filters
- * @param accessToken - auth token
+ * @param filterState - Selected filters.
+ * @param catalog - Catalog.
+ * @param accessToken - Auth token.
  * @returns @see SummaryResponse
  */
 export const fetchSummary = async (
   filterState: FilterState,
+  catalog: string | undefined,
   accessToken: string | undefined
 ): Promise<AzulSummaryResponse> => {
-  const { dataSource, summaryConfig } = getConfig();
+  const { summaryConfig } = getConfig();
 
   if (!summaryConfig) {
     throw new Error("Summary not configured!");
   }
 
   const apiPath = summaryConfig.apiPath;
-  const catalog = dataSource.defaultParams?.catalog as string; // catalog should be defined.
 
   // Build filter query params, if any
   let summaryParams;
   const filtersParam = transformFilters(filterState);
+  const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
   if (filtersParam) {
     summaryParams = {
-      [AZUL_PARAM.CATALOG]: catalog,
+      ...catalogParam,
       [AZUL_PARAM.FILTERS]: filtersParam,
     };
   }
