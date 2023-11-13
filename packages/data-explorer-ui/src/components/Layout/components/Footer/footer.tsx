@@ -9,7 +9,7 @@ import { AppBar, Link, Links, Socials } from "./footer.styles";
 export interface FooterProps {
   Branding: ReactNode;
   className?: string;
-  navLinks: NavLinkItem[];
+  navLinks?: NavLinkItem[];
   socials?: Social[];
 }
 
@@ -28,18 +28,26 @@ export const Footer = ({
     >
       <Toolbar variant="dense">
         {Branding}
-        <Links>
-          {navLinks.map(({ label, target = ANCHOR_TARGET.SELF, url }, i) => (
-            <Link key={`${url}${i}`} label={label} target={target} url={url} />
-          ))}
-          {socials && (
-            <Socials
-              buttonSize="small"
-              IconButtonElType={IconButtonSocialsFooter}
-              socials={socials}
-            />
-          )}
-        </Links>
+        {(navLinks || socials) && (
+          <Links>
+            {navLinks &&
+              navLinks.map(({ label, target = ANCHOR_TARGET.SELF, url }, i) => (
+                <Link
+                  key={`${url}${i}`}
+                  label={label}
+                  target={target}
+                  url={url}
+                />
+              ))}
+            {socials && (
+              <Socials
+                buttonSize="small"
+                IconButtonElType={IconButtonSocialsFooter}
+                socials={socials}
+              />
+            )}
+          </Links>
+        )}
       </Toolbar>
     </AppBar>
   );

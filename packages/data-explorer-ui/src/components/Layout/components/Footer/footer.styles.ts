@@ -14,7 +14,7 @@ export const AppBar = styled(MAppBar)`
     flex-direction: column;
     gap: 24px;
     justify-content: space-between;
-    min-height: 56px;
+    min-height: unset;
     padding: 0 16px;
   }
 
@@ -25,6 +25,7 @@ export const AppBar = styled(MAppBar)`
       align-items: center;
       flex-direction: row;
       gap: unset;
+      min-height: 56px;
     }
   }
 ` as typeof MAppBar;
