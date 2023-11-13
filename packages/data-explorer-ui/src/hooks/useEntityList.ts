@@ -9,9 +9,11 @@ import {
   transformFilters,
   transformTermFacets,
 } from "../apis/azul/common/filterTransformer";
+import { getEntityConfig } from "../config/utils";
 import { ExploreActionKind } from "../providers/exploreState";
 import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
+import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
 import { useExploreState } from "./useExploreState";
 import { useURLFilterParams } from "./useURLFilterParams";
@@ -27,6 +29,11 @@ export const useEntityList = (
 ): void => {
   // Load up the relevant contexts
   const { token } = useAuthentication();
+  const { config } = useConfig();
+  const { apiPath } = getEntityConfig(
+    config.entities,
+    staticResponse.entityListType
+  );
   const { fetchEntitiesFromQuery, listStaticLoad, path } = useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
   const { exploreDispatch, exploreState } = useExploreState();
   const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
@@ -34,6 +41,7 @@ export const useEntityList = (
   const { termFacets } = data || {};
   const { updateFilterQueryString } = useURLFilterParams();
   const { sorting } = entityPageState[tabValue];
+  const shouldDispatchResponse = data?.apiPath === apiPath;
 
   /**
    * Update the filter query string when the filter state changes.
@@ -84,11 +92,11 @@ export const useEntityList = (
 
   /**
    * Process Explore Response when data changes.
-   * TODO filre this directly when the API respnse returns
+   * TODO filter this directly when the API response returns
    * Server-side filtering
    */
   useEffect(() => {
-    if (!listStaticLoad && termFacets) {
+    if (!listStaticLoad && termFacets && shouldDispatchResponse) {
       exploreDispatch({
         payload: {
           listItems: data?.hits,
@@ -107,6 +115,7 @@ export const useEntityList = (
     isIdle,
     isLoading,
     listStaticLoad,
+    shouldDispatchResponse,
     termFacets,
   ]);
 

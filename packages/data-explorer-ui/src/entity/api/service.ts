@@ -41,10 +41,12 @@ export const fetchEntitiesFromQuery = async (
   accessToken: string | undefined
 ): Promise<AzulEntitiesResponse> => {
   const params = { ...getDefaultListParams(), ...listParams };
-  return await fetchEntitiesFromURL(
+  const response = await fetchEntitiesFromURL(
     `${apiPath}?${convertUrlParams(params)}`,
     accessToken
   );
+  response.apiPath = apiPath;
+  return response;
 };
 
 /**
