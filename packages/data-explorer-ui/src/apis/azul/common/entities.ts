@@ -13,6 +13,7 @@ export enum APIEndpoints {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this type can't be determined beforehand
 export interface AzulEntitiesResponse<T = any> {
+  apiPath?: string;
   hits: T[];
   pagination: AzulPaginationResponse;
   termFacets: AzulTermFacets;
