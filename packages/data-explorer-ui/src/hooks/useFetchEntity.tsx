@@ -7,6 +7,7 @@ import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
 import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
+import { useExploreState } from "./useExploreState";
 
 interface UseEntityDetailResponse<T> {
   isLoading: boolean;
@@ -25,7 +26,10 @@ export const useFetchEntity = <T,>(
   const { data: entityList, entityListType } = detailViewProps || {}; // Data is statically loaded if entity list is defined.
   const { authentication } = useConfig().config;
   const { token } = useAuthentication();
-  const { fetchEntityDetail, listStaticLoad, path } =
+  const {
+    exploreState: { catalogState },
+  } = useExploreState();
+  const { catalog, fetchEntityDetail, listStaticLoad, path } =
     useEntityService(entityListType);
   const {
     query: { params },
@@ -39,17 +43,18 @@ export const useFetchEntity = <T,>(
         listStaticLoad,
         Boolean(authentication && token),
         Boolean(entityList),
-        Boolean(response)
+        Boolean(response),
+        Boolean(catalogState)
       ),
-    [authentication, entityList, listStaticLoad, response, token]
+    [authentication, catalogState, entityList, listStaticLoad, response, token]
   );
 
   useEffect(() => {
     // Fetch entity if entity data originates from a request, and has not yet been requested.
     if (shouldFetchEntity && uuid) {
-      run(fetchEntityDetail(uuid, path, token));
+      run(fetchEntityDetail(uuid, path, catalog, token));
     }
-  }, [fetchEntityDetail, path, run, shouldFetchEntity, token, uuid]);
+  }, [catalog, fetchEntityDetail, path, run, shouldFetchEntity, token, uuid]);
 
   if (token) {
     return {
@@ -75,19 +80,21 @@ export const useFetchEntity = <T,>(
  * @param isAuthenticated - Flag indicating if authentication is enabled.
  * @param hasStaticResponse - Flag indicating if a statically loaded response exists.
  * @param hasFetchResponse - Flag indicating if a response exists.
+ * @param isCatalogState - Flag indicating if the catalog state is defined.
  * @returns true if a fetch is necessary.
  */
 function isFetchRequired(
   listStaticLoad: boolean,
   isAuthenticated: boolean,
   hasStaticResponse: boolean,
-  hasFetchResponse: boolean
+  hasFetchResponse: boolean,
+  isCatalogState: boolean
 ): boolean {
   if (listStaticLoad) {
     return false;
   }
   if (hasStaticResponse) {
-    if (isAuthenticated) {
+    if (isAuthenticated || isCatalogState) {
       return !hasFetchResponse;
     }
     return false;

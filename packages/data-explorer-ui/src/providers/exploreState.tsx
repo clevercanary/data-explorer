@@ -36,6 +36,8 @@ const defaultPaginationState = {
   rows: 0,
 };
 
+export type CatalogState = string | undefined;
+
 /**
  * Entity view.
  */
@@ -90,6 +92,7 @@ export interface EntityPageStateMapper {
  * Explore state.
  */
 export type ExploreState = {
+  catalogState: CatalogState;
   categoryViews: SelectCategory[];
   entityPageState: EntityPageStateMapper;
   filterState: SelectedFilter[];
@@ -177,6 +180,7 @@ export const ExploreStateContext = createContext<ExploreStateContextProps>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- default note used
   exploreDispatch: () => {},
   exploreState: {
+    catalogState: undefined,
     categoryViews: [],
     entityPageState: {},
     filterState: [],
@@ -208,7 +212,7 @@ export function ExploreStateProvider({
 }): JSX.Element {
   const { config, defaultEntityListType, entityConfig } = useConfig();
   const categoryConfigs = useCategoryConfigs();
-  const { decodedFilterParam } = useURLFilterParams();
+  const { decodedCatalogParam, decodedFilterParam } = useURLFilterParams();
   // Define filter state, from URL "filter" parameter, if present and valid.
   let filterState: SelectedFilter[] = [];
   try {
@@ -220,6 +224,7 @@ export function ExploreStateProvider({
     (s: ExploreState, a: ExploreAction) =>
       exploreReducer(s, a, { categoryConfigs, entityConfig }),
     {
+      catalogState: decodedCatalogParam,
       categoryViews: [],
       entityPageState: config.entities.reduce(
         (acc, entity) => ({

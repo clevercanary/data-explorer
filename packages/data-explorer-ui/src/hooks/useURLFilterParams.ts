@@ -1,11 +1,16 @@
 import { useRouter } from "next/router";
 import { useCallback } from "react";
 import { SelectedFilter } from "../common/entities";
+import { CatalogState } from "../providers/exploreState";
 import { useLocation } from "./useLocation";
 
 interface UseURLFilterParamsResult {
+  decodedCatalogParam: string | undefined;
   decodedFilterParam: string;
-  updateFilterQueryString: (filterState: SelectedFilter[]) => void;
+  updateFilterQueryString: (
+    catalogState: CatalogState,
+    filterState: SelectedFilter[]
+  ) => void;
 }
 
 /**
@@ -17,16 +22,21 @@ export const useURLFilterParams = (): UseURLFilterParamsResult => {
   const { basePath, push } = useRouter();
   const { href, pathname, search } = useLocation() || {};
   const filterParam = search?.get("filter") ?? "[]";
+  const catalogParam = search?.get("catalog") ?? undefined;
 
   const updateFilterQueryString = useCallback(
-    (filterState: SelectedFilter[]) => {
-      if (filterParam !== JSON.stringify(filterState)) {
+    (catalogState: CatalogState, filterState: SelectedFilter[]) => {
+      if (
+        catalogParam !== catalogState ||
+        filterParam !== JSON.stringify(filterState)
+      ) {
         const filter =
           filterState.length > 0 ? { filter: JSON.stringify(filterState) } : {};
+        const catalog = catalogState ? { catalog: catalogState } : {};
         push(
           {
             pathname: pathname?.replace(basePath, ""),
-            query: { ...filter },
+            query: { ...catalog, ...filter },
           },
           undefined,
           {
@@ -36,10 +46,11 @@ export const useURLFilterParams = (): UseURLFilterParamsResult => {
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps -- push method isn't memoized and shouldn't be added as deps https://github.com/vercel/next.js/issues/18127
-    [filterParam, href]
+    [catalogParam, filterParam, href]
   );
 
   return {
+    decodedCatalogParam: catalogParam,
     decodedFilterParam: filterParam,
     updateFilterQueryString,
   };

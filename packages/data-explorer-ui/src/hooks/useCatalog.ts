@@ -1,4 +1,5 @@
 import { useConfig } from "./useConfig";
+import { useExploreState } from "./useExploreState";
 
 /**
  * Returns configured catalog value.
@@ -6,8 +7,11 @@ import { useConfig } from "./useConfig";
  */
 export const useCatalog = (): string | undefined => {
   const { config } = useConfig();
+  const {
+    exploreState: { catalogState },
+  } = useExploreState();
   const { dataSource } = config;
   const { defaultParams } = dataSource || {};
   const { catalog } = defaultParams || {};
-  return catalog;
+  return catalogState || catalog;
 };

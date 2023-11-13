@@ -34,10 +34,11 @@ export const useEntityList = (
     config.entities,
     staticResponse.entityListType
   );
-  const { fetchEntitiesFromQuery, listStaticLoad, path } = useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
+  const { catalog, fetchEntitiesFromQuery, listStaticLoad, path } =
+    useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
   const { exploreDispatch, exploreState } = useExploreState();
   const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
-  const { entityPageState, filterState, tabValue } = exploreState;
+  const { catalogState, entityPageState, filterState, tabValue } = exploreState;
   const { termFacets } = data || {};
   const { updateFilterQueryString } = useURLFilterParams();
   const { sorting } = entityPageState[tabValue];
@@ -47,8 +48,8 @@ export const useEntityList = (
    * Update the filter query string when the filter state changes.
    */
   useEffect(() => {
-    updateFilterQueryString(filterState);
-  }, [filterState, updateFilterQueryString]);
+    updateFilterQueryString(catalogState, filterState);
+  }, [catalogState, filterState, updateFilterQueryString]);
 
   /**
    * Fetch Entities from the API when the filter state changes.
@@ -77,9 +78,10 @@ export const useEntityList = (
       }
 
       // Execute the fetch.
-      run(fetchEntitiesFromQuery(path, listParams, token));
+      run(fetchEntitiesFromQuery(path, listParams, catalog, token));
     }
   }, [
+    catalog,
     exploreState.paginationState.index,
     fetchEntitiesFromQuery,
     filterState,

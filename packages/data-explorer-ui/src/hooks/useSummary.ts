@@ -19,19 +19,20 @@ export const useSummary = (): UseSummaryResponse => {
   const { token } = useAuthentication();
   const { config } = useConfig();
   const { exploreState } = useExploreState();
+  const { filterState } = exploreState;
   const { summaryConfig } = config;
   const {
     data: response,
     isLoading: apiIsLoading,
     run,
   } = useAsync<AzulSummaryResponse>();
-  const { fetchSummary } = useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
+  const { catalog, fetchSummary } = useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
 
   useEffect(() => {
     if (summaryConfig) {
-      run(fetchSummary(exploreState.filterState, token));
+      run(fetchSummary(filterState, catalog, token));
     }
-  }, [fetchSummary, exploreState.filterState, run, summaryConfig, token]);
+  }, [catalog, fetchSummary, filterState, run, summaryConfig, token]);
 
   // Return if there's no summary config for this site.
   if (!summaryConfig) {
