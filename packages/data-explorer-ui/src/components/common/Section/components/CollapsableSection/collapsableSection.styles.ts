@@ -6,6 +6,7 @@ export const CollapsableSection = styled.div`
   background-color: ${({ theme }) => theme.palette.common.white};
   display: flex;
   flex-direction: column;
+  min-width: 0; /* required to ellipsis any flex child */
   padding: 4px 0;
 
   ${({ theme }) => theme.breakpoints.up(TABLET)} {
