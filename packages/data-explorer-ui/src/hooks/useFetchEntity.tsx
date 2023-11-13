@@ -70,7 +70,7 @@ export const useFetchEntity = <T,>(
 };
 
 /**
- * Returns true if a fetch is necessary.
+ * Returns true if fetching the entity is necessary.
  * @param listStaticLoad - Flag indicating if the entity list is statically loaded.
  * @param isAuthenticated - Flag indicating if authentication is enabled.
  * @param hasStaticResponse - Flag indicating if a statically loaded response exists.
