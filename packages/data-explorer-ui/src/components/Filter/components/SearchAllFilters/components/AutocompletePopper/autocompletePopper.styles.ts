@@ -3,7 +3,7 @@ import { Popper as MPopper } from "@mui/material";
 import { mediaDesktopSmallDown } from "../../../../../../styles/common/mixins/breakpoints";
 import { smokeLight } from "../../../../../../styles/common/mixins/colors";
 
-export const Popper = styled(MPopper)`
+export const AutocompletePopper = styled(MPopper)`
   ${mediaDesktopSmallDown} {
     .MuiPaper-root {
       background-color: ${smokeLight};

@@ -11,6 +11,7 @@ import React, {
   useState,
 } from "react";
 import { SelectCategoryView } from "../../../../common/entities";
+import { BODY } from "../../../../common/selectors";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
@@ -20,7 +21,9 @@ import { DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { SearchCloseButton } from "../SearchAllFiltersSearch/components/SearchCloseButton/searchCloseButton";
 import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFiltersSearch";
 import { DEFAULT_SLOT_PROPS, DRAWER_SLOT_PROPS } from "./common/constants";
-import { AutocompletePopper } from "./components/AutocompletePopper/autocompletePopper";
+import { OVERFLOW_STYLE } from "./common/entites";
+import { setBodyOverflowStyle } from "./common/utils";
+import { AutocompletePopper } from "./components/AutocompletePopper/autocompletePopper.styles";
 import { VariableSizeList } from "./components/VariableSizeList/VariableSizeList";
 import { Autocomplete } from "./searchAllFilters.styles";
 
@@ -76,13 +79,17 @@ export const SearchAllFilters = ({
   drawerOpen = false,
   onFilter,
 }: SearchAllFiltersProps): JSX.Element => {
-  const desktopSmDown = useBreakpointHelper(
-    BREAKPOINT_FN_NAME.DOWN,
-    DESKTOP_SM
-  );
+  const desktopSmUp = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
   const autocompleteRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+
+  // Handle body scroll (desktop only).
+  const handleBodyScroll = (overflowStyle: OVERFLOW_STYLE): void => {
+    if (desktopSmUp) {
+      setBodyOverflowStyle(document.querySelector(BODY), overflowStyle);
+    }
+  };
 
   // Callback fired when the value is changed.
   const onChange = (event: ChangeEvent<HTMLInputElement>): void => {
@@ -98,6 +105,12 @@ export const SearchAllFilters = ({
   const onCloseSearch = (): void => {
     setSearchTerm("");
     setOpen(false);
+    handleBodyScroll(OVERFLOW_STYLE.NONE);
+  };
+
+  // Callback fired when the popup requests to be opened.
+  const onOpen = (): void => {
+    handleBodyScroll(OVERFLOW_STYLE.HIDDEN);
   };
 
   // Open search.
@@ -134,13 +147,14 @@ export const SearchAllFilters = ({
       }}
     >
       <Autocomplete
-        clearOnBlur={!desktopSmDown}
+        clearOnBlur={desktopSmUp}
         filterOptions={(options): string[] => options}
         freeSolo
         ListboxComponent={Listbox}
-        onBlur={desktopSmDown ? undefined : onCloseSearch}
-        onClose={desktopSmDown ? undefined : onCloseSearch}
+        onBlur={desktopSmUp ? onCloseSearch : undefined}
+        onClose={desktopSmUp ? onCloseSearch : undefined}
         onFocus={onOpenSearch}
+        onOpen={onOpen}
         open={open}
         options={[""]} // Placeholder options, since item rendering is fully controlled by VariableSizeList
         PopperComponent={AutocompletePopper}
@@ -158,7 +172,7 @@ export const SearchAllFilters = ({
             },
           })
         }
-        slotProps={desktopSmDown ? DRAWER_SLOT_PROPS : DEFAULT_SLOT_PROPS}
+        slotProps={desktopSmUp ? DEFAULT_SLOT_PROPS : DRAWER_SLOT_PROPS}
       />
     </ListboxContext.Provider>
   );
