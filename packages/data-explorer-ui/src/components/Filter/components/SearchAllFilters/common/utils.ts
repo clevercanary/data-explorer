@@ -1,11 +1,15 @@
 /**
- * Sets body element overflow style.
- * @param bodyEl - Body element.
+ * Sets overflow style for the given list of elements.
+ * @param elements - Elements.
  * @param overflowStyle - Overflow style value.
  */
-export function setBodyOverflowStyle(
-  bodyEl: HTMLBodyElement | null,
+export function setElementsOverflowStyle(
+  elements: (HTMLElement | null)[],
   overflowStyle: string
 ): void {
-  if (bodyEl) bodyEl.style.overflow = overflowStyle;
+  for (const element of elements) {
+    if (element) {
+      element.style.overflow = overflowStyle;
+    }
+  }
 }

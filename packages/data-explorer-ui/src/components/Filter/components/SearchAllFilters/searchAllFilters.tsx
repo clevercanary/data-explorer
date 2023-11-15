@@ -11,7 +11,7 @@ import React, {
   useState,
 } from "react";
 import { SelectCategoryView } from "../../../../common/entities";
-import { BODY } from "../../../../common/selectors";
+import { BODY, SIDEBAR_POSITIONER } from "../../../../common/selectors";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
@@ -22,7 +22,7 @@ import { SearchCloseButton } from "../SearchAllFiltersSearch/components/SearchCl
 import { SearchAllFiltersSearch } from "../SearchAllFiltersSearch/searchAllFiltersSearch";
 import { DEFAULT_SLOT_PROPS, DRAWER_SLOT_PROPS } from "./common/constants";
 import { OVERFLOW_STYLE } from "./common/entites";
-import { setBodyOverflowStyle } from "./common/utils";
+import { setElementsOverflowStyle } from "./common/utils";
 import { AutocompletePopper } from "./components/AutocompletePopper/autocompletePopper.styles";
 import { VariableSizeList } from "./components/VariableSizeList/VariableSizeList";
 import { Autocomplete } from "./searchAllFilters.styles";
@@ -84,10 +84,16 @@ export const SearchAllFilters = ({
   const [open, setOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Handle body scroll (desktop only).
-  const handleBodyScroll = (overflowStyle: OVERFLOW_STYLE): void => {
+  // Handles background scroll action (desktop only).
+  const handleBackgroundScroll = (overflowStyle: OVERFLOW_STYLE): void => {
     if (desktopSmUp) {
-      setBodyOverflowStyle(document.querySelector(BODY), overflowStyle);
+      setElementsOverflowStyle(
+        [
+          document.querySelector(BODY),
+          document.getElementById(SIDEBAR_POSITIONER),
+        ],
+        overflowStyle
+      );
     }
   };
 
@@ -105,12 +111,12 @@ export const SearchAllFilters = ({
   const onCloseSearch = (): void => {
     setSearchTerm("");
     setOpen(false);
-    handleBodyScroll(OVERFLOW_STYLE.NONE);
+    handleBackgroundScroll(OVERFLOW_STYLE.NONE);
   };
 
   // Callback fired when the popup requests to be opened.
   const onOpen = (): void => {
-    handleBodyScroll(OVERFLOW_STYLE.HIDDEN);
+    handleBackgroundScroll(OVERFLOW_STYLE.HIDDEN);
   };
 
   // Open search.

@@ -9,7 +9,7 @@ export const Sidebar = styled.div`
   width: 264px;
 `;
 
-export const SidebarPositioner = styled.div`
+export const SidebarPositioner = styled("div")`
   height: 100%;
   overflow: visible;
   padding: 16px 0;
