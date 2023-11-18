@@ -22,17 +22,24 @@ export interface UseRequestFileLocationResult {
   run: () => void;
 }
 
+type Method = "GET" | "PUT";
+
 type ResolveFn = (file: FileLocation | PromiseLike<FileLocation>) => void;
 type RejectFn = (reason: FileLocation) => void;
 
 /**
  * Returns fetch request options.
  * @param accessToken - Access token.
+ * @param method - Method to be used by the request
  * @returns fetch request options.
  */
-function createFetchOptions(accessToken: string | undefined): RequestInit {
+function createFetchOptions(
+  accessToken: string | undefined,
+  method: Method
+): RequestInit {
   return {
     headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
+    method,
   };
 }
 
@@ -40,13 +47,15 @@ function createFetchOptions(accessToken: string | undefined): RequestInit {
  * Function to make a get request and map the result to camelCase
  * @param url - url for the get request
  * @param accessToken - Access token.
+ * @param method - Method to be used by the request
  * @returns @see FileLocation
  */
 export const getFileLocation = async (
   url: string,
-  accessToken: string | undefined
+  accessToken: string | undefined,
+  method: Method
 ): Promise<FileLocation> => {
-  const options = createFetchOptions(accessToken);
+  const options = createFetchOptions(accessToken, method);
   const res = await fetch(url, options);
   const jsonRes: FileLocationResponse = await res.json();
   return {
@@ -65,6 +74,7 @@ export const getFileLocation = async (
  * @param reject - function to reject the running promise
  * @param active - Mutable object used to check if the page is still mounted and the requests should keep executing
  * @param retryAfter - timeout value
+ * @param method - Method to be used by the request
  */
 const scheduleFileLocation = (
   url: string,
@@ -72,10 +82,11 @@ const scheduleFileLocation = (
   resolve: ResolveFn,
   reject: RejectFn,
   active: MutableRefObject<boolean>,
-  retryAfter = 0
+  retryAfter = 0,
+  method: Method = "GET"
 ): void => {
   setTimeout(() => {
-    getFileLocation(url, accessToken).then((result: FileLocation) => {
+    getFileLocation(url, accessToken, method).then((result: FileLocation) => {
       if (result.status === FILE_LOCATION_PENDING) {
         if (!active.current) {
           reject({
@@ -104,10 +115,12 @@ const scheduleFileLocation = (
 /**
  * Hook to get a file location using a retry-after approach
  * @param url - to be used on the get request
+ * @param method - Method to be used by the request
  * @returns data object with the file location
  */
 export const useRequestFileLocation = (
-  url?: string
+  url?: string,
+  method?: Method
 ): UseRequestFileLocationResult => {
   // Grab token from authentication.
   const { token } = useAuthentication();
@@ -131,11 +144,11 @@ export const useRequestFileLocation = (
     if (url) {
       runAsync(
         new Promise<FileLocation>((resolve, reject) => {
-          scheduleFileLocation(url, token, resolve, reject, active);
+          scheduleFileLocation(url, token, resolve, reject, active, 0, method);
         })
       );
     }
-  }, [runAsync, token, url]);
+  }, [runAsync, token, url, method]);
 
   return { data, isIdle, isLoading, isSuccess, run };
 };

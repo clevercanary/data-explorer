@@ -35,7 +35,10 @@ export const useFileManifestDownload = (filters: Filters): ManifestDownload => {
       catalog,
       MANIFEST_DOWNLOAD_FORMAT.COMPACT
     ) || {};
-  const { data, isIdle, isLoading, run } = useRequestFileLocation(requestURL);
+  const { data, isIdle, isLoading, run } = useRequestFileLocation(
+    requestURL,
+    "PUT"
+  );
   const manifestURL = getManifestDownloadURL(data);
   const fileName = getManifestDownloadFileName(data);
 
