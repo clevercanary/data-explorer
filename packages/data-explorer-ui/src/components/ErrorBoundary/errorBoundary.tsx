@@ -4,8 +4,13 @@ interface ErrorBoundaryState {
   error?: Error;
 }
 
+interface FallbackRenderProps {
+  error: Error;
+  reset: () => void;
+}
+
 interface ErrorBoundaryProps {
-  fallbackRender: (error: Error) => React.ReactNode;
+  fallbackRender: (props: FallbackRenderProps) => React.ReactNode;
 }
 
 type ErrorBoundaryPropsType = PropsWithRef<
@@ -18,6 +23,7 @@ export class ErrorBoundary extends React.Component<
 > {
   constructor(props: ErrorBoundaryPropsType) {
     super(props);
+    this.reset = this.reset.bind(this);
     this.state = {};
   }
 
@@ -25,9 +31,14 @@ export class ErrorBoundary extends React.Component<
     return { error };
   }
 
+  reset(): void {
+    this.setState({});
+  }
+
   render(): React.ReactNode {
     if (this.state.error) {
-      return this.props.fallbackRender(this.state.error);
+      const fallbackProps = { error: this.state.error, reset: this.render };
+      return this.props.fallbackRender(fallbackProps);
     }
 
     return this.props.children;

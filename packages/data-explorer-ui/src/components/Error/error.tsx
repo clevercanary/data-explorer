@@ -40,18 +40,21 @@ const ErrorMessage = ({
 
 export interface ErrorProps {
   errorMessage?: string;
+  onReset?: () => void;
   requestUrlMessage?: string;
   rootPath?: string;
 }
 
 export const Error = ({
   errorMessage,
+  onReset,
   requestUrlMessage,
   rootPath,
 }: ErrorProps): JSX.Element => {
   const { exploreDispatch } = useExploreState();
 
   const handleToHomePageClicked = (): void => {
+    onReset?.();
     exploreDispatch({
       payload: "",
       type: ExploreActionKind.ResetState,
