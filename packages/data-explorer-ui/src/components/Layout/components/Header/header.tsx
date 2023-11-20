@@ -9,8 +9,8 @@ import {
   useBreakpointHelper,
 } from "../../../../hooks/useBreakpointHelper";
 import { DESKTOP, DESKTOP_SM } from "../../../../theme/common/breakpoints";
-import { Social } from "../../../common/Socials/socials";
 import { FADE_TRANSITION_PROPS } from "./common/constants";
+import { SocialMedia } from "./common/entities";
 import { getHeaderNavigationLinks } from "./common/utils";
 import { Actions } from "./components/Content/components/Actions/actions";
 import { Authentication } from "./components/Content/components/Actions/components/Authentication/authentication";
@@ -34,7 +34,7 @@ export interface HeaderProps {
   searchEnabled?: boolean;
   searchURL?: string;
   slogan?: ReactNode;
-  socials?: Social[];
+  socialMedia?: SocialMedia;
 }
 
 export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
@@ -47,7 +47,7 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
     searchEnabled,
     searchURL,
     slogan,
-    socials,
+    socialMedia,
   } = headerProps;
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const onlySmDesktop = useBreakpointHelper(
@@ -61,7 +61,7 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   const showActions = searchEnabled || authenticationEnabled || !smDesktop;
   const isNavigationIn = smDesktop;
   const isSloganIn = Boolean(slogan) && smDesktop;
-  const isSocialsIn = Boolean(socials) && desktop;
+  const isSocialsIn = Boolean(socialMedia) && desktop;
   const fadeProps = FADE_TRANSITION_PROPS;
 
   // Closes header menu.
@@ -100,13 +100,17 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
           <Navigation
             alignment={navAlignment}
             headerProps={headerProps}
-            links={getHeaderNavigationLinks(navLinks, socials, onlySmDesktop)}
+            links={getHeaderNavigationLinks(
+              navLinks,
+              socialMedia,
+              onlySmDesktop
+            )}
           />
         </Fade>
         {/* Socials */}
-        {socials && (
+        {socialMedia && (
           <Fade in={isSocialsIn} {...fadeProps}>
-            <Socials buttonSize="small" socials={socials} />
+            <Socials buttonSize="small" socials={socialMedia.socials} />
           </Fade>
         )}
         {/* Actions */}

@@ -11,6 +11,7 @@ export interface RenderComponentProps {
 
 export const RenderComponent = ({
   Component,
+  ...props
 }: RenderComponentProps): JSX.Element => {
-  return <Component key={uuid4} />;
+  return <Component key={uuid4} {...props} />;
 };

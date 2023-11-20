@@ -29,7 +29,7 @@ export const Menu = forwardRef<HTMLButtonElement, MenuProps>(
     { closeMenu, headerProps, open, openMenu, style }: MenuProps,
     ref
   ): JSX.Element {
-    const { navLinks, slogan, socials } = headerProps;
+    const { navLinks, slogan, socialMedia } = headerProps;
     const smDesktop = useBreakpointHelper(BREAKPOINT_FN_NAME.UP, DESKTOP_SM);
     const switchProps = SWITCH_TRANSITION_PROPS;
 
@@ -69,7 +69,9 @@ export const Menu = forwardRef<HTMLButtonElement, MenuProps>(
               headerProps={headerProps}
               links={flattenNavigationLinks(navLinks)}
             />
-            {socials && <Socials buttonSize="xlarge" socials={socials} />}
+            {socialMedia && (
+              <Socials buttonSize="xlarge" socials={socialMedia.socials} />
+            )}
           </Content>
         </MDialog>
       </>

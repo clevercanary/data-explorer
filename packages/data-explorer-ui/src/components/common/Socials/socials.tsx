@@ -1,22 +1,17 @@
 import { IconButtonProps as MIconButtonProps } from "@mui/material";
-import React, { CSSProperties, ElementType, forwardRef } from "react";
+import React, {
+  CSSProperties,
+  ElementType,
+  forwardRef,
+  ReactNode,
+} from "react";
 import { ANCHOR_TARGET } from "../../Links/common/entities";
-import { IconName } from "../CustomIcon/common/iconSvgPathShapes";
-import { CustomIcon } from "../CustomIcon/customIcon";
 import { IconButtonSocials } from "../IconButton/iconButton.styles";
 import { Socials as IconButtons } from "./socials.styles";
 
-export const SOCIAL: Record<string, Omit<Social, "url">> = {
-  DISCOURSE: { label: "Discourse", type: "discourse" },
-  GITHUB: { label: "GitHub", type: "github" },
-  SLACK: { label: "Slack", type: "slack" },
-  TWITTER: { label: "Twitter", type: "twitter" },
-  YOUTUBE: { label: "YouTube", type: "youtube" },
-};
-
 export interface Social {
-  label: string;
-  type: IconName;
+  Icon: ElementType;
+  label: ReactNode;
   url: string;
 }
 
@@ -41,15 +36,15 @@ export const Socials = forwardRef<HTMLDivElement, SocialsProps>(
   ): JSX.Element {
     return (
       <IconButtons className={className} ref={ref} style={style}>
-        {socials.map(({ type, url }) => (
+        {socials.map(({ Icon, url }, i) => (
           <IconButtonElType
-            key={type}
+            key={i}
             href={url}
             rel="noopener"
             size={buttonSize}
             target={ANCHOR_TARGET.BLANK}
           >
-            <CustomIcon fontSize="small" iconName={type} />
+            <Icon fontSize="small" />
           </IconButtonElType>
         ))}
       </IconButtons>
