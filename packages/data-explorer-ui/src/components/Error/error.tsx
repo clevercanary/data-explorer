@@ -1,6 +1,8 @@
 import { Divider, Typography } from "@mui/material";
 import Link from "next/link";
 import React from "react";
+import { useExploreState } from "../../hooks/useExploreState";
+import { ExploreActionKind } from "../../providers/exploreState";
 import { ButtonPrimary } from "../common/Button/components/ButtonPrimary/buttonPrimary";
 import { AlertIcon } from "../common/CustomIcon/components/AlertIcon/alertIcon";
 import { Grid } from "../common/Grid/grid";
@@ -38,15 +40,27 @@ const ErrorMessage = ({
 
 export interface ErrorProps {
   errorMessage?: string;
+  onReset?: () => void;
   requestUrlMessage?: string;
   rootPath?: string;
 }
 
 export const Error = ({
   errorMessage,
+  onReset,
   requestUrlMessage,
   rootPath,
 }: ErrorProps): JSX.Element => {
+  const { exploreDispatch } = useExploreState();
+
+  const handleToHomePageClicked = (): void => {
+    onReset?.();
+    exploreDispatch({
+      payload: "",
+      type: ExploreActionKind.ResetState,
+    });
+  };
+
   return (
     <CustomError>
       <ErrorSection>
@@ -62,7 +76,9 @@ export const Error = ({
         {rootPath && (
           <SectionActions>
             <Link href={rootPath} passHref>
-              <ButtonPrimary href="passHref">To Homepage</ButtonPrimary>
+              <ButtonPrimary onClick={handleToHomePageClicked} href="passHref">
+                To Homepage
+              </ButtonPrimary>
             </Link>
           </SectionActions>
         )}
