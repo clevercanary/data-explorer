@@ -28,6 +28,8 @@ export const useWindowResize = (): WindowSize => {
     return () => {
       // Remove resize event listener.
       window.removeEventListener("resize", onResize);
+      // Clear timeout.
+      clearTimeout(timeoutRef.current);
     };
   }, []);
 

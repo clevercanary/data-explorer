@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect } from "react";
+import { SIDEBAR_POSITIONER } from "../../../../common/selectors";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
@@ -39,7 +40,7 @@ export const Sidebar = ({
 
   return (
     <Bar {...barProps}>
-      <SidebarPositioner>{children}</SidebarPositioner>
+      <SidebarPositioner id={SIDEBAR_POSITIONER}>{children}</SidebarPositioner>
     </Bar>
   );
 };

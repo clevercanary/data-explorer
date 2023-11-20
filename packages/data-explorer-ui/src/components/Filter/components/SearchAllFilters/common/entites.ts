@@ -22,6 +22,11 @@ export interface NoResultsItem {
   type: ITEM_TYPE.NO_RESULTS;
 }
 
+export enum OVERFLOW_STYLE {
+  HIDDEN = "hidden",
+  NONE = "",
+}
+
 export interface ValueItem {
   categoryKey: string;
   key: string;
