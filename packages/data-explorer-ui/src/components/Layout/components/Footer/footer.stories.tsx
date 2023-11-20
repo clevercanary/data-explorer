@@ -1,59 +1,68 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react";
 import React from "react";
 import logo from "../../../../images/logo.svg";
-import { SOCIAL } from "../../../common/Socials/socials";
+import { DiscourseIcon } from "../../../common/CustomIcon/components/DiscourseIcon/discourseIcon";
+import { FacebookIcon } from "../../../common/CustomIcon/components/FacebookIcon/facebookIcon";
+import { GitHubIcon } from "../../../common/CustomIcon/components/GitHubIcon/gitHubIcon";
+import { XIcon } from "../../../common/CustomIcon/components/XIcon/xIcon";
+import { YouTubeIcon } from "../../../common/CustomIcon/components/YouTubeIcon/youTubeIcon";
 import { Logo } from "../Header/components/Content/components/Logo/logo";
 import { Footer } from "./footer";
 
 export default {
   argTypes: {
-    footer: {
-      feedbackForm: { control: "boolean" },
-      logos: { control: "array" },
-      navLinks: { control: "array" },
-      socials: { control: "array" },
-    },
+    Branding: { control: { disabled: true } },
+    navLinks: { control: "array" },
+    socials: { control: { disabled: true } },
   },
   component: Footer,
   parameters: {
     layout: "fullscreen",
   },
   title: "Components/Layout/Footer",
-} as ComponentMeta<typeof Footer>;
+} satisfies Meta<typeof Footer>;
 
-const FooterTemplate: ComponentStory<typeof Footer> = (args) => (
-  <Footer {...args} />
-);
+type Story = StoryObj<typeof Footer>;
 
-export const FooterStory = FooterTemplate.bind({});
-FooterStory.args = {
-  Branding: <Logo alt="logo" height={24} link={"/"} src={logo} />,
-  navLinks: [
-    {
-      label: "Help",
-      url: "https://support.google.com/",
-    },
-    {
-      label: "Privacy",
-      url: "https://policies.google.com/privacy?hl=en-US",
-    },
-  ],
-  socials: [
-    {
-      ...SOCIAL.DISCOURSE,
-      url: "https://www.discourse.org/",
-    },
-    {
-      ...SOCIAL.TWITTER,
-      url: "https://twitter.com",
-    },
-    {
-      ...SOCIAL.YOUTUBE,
-      url: "https://www.youtube.com",
-    },
-    {
-      ...SOCIAL.GITHUB,
-      url: "https://github.com",
-    },
-  ],
+export const FooterStory: Story = {
+  args: {
+    Branding: <Logo alt="logo" height={24} link={"/"} src={logo} />,
+    navLinks: [
+      {
+        label: "Help",
+        url: "https://support.google.com/",
+      },
+      {
+        label: "Privacy",
+        url: "https://policies.google.com/privacy?hl=en-US",
+      },
+    ],
+    socials: [
+      {
+        Icon: DiscourseIcon,
+        label: null,
+        url: "https://www.discourse.org/",
+      },
+      {
+        Icon: XIcon,
+        label: null,
+        url: "https://twitter.com",
+      },
+      {
+        Icon: FacebookIcon,
+        label: null,
+        url: "https://facebook.com",
+      },
+      {
+        Icon: YouTubeIcon,
+        label: null,
+        url: "https://www.youtube.com",
+      },
+      {
+        Icon: GitHubIcon,
+        label: null,
+        url: "https://github.com",
+      },
+    ],
+  },
 };

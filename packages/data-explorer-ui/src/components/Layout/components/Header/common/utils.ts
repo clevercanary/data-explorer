@@ -1,9 +1,10 @@
-import { CustomIcon } from "../../../../common/CustomIcon/customIcon";
 import { Social } from "../../../../common/Socials/socials";
+import { RenderComponent } from "../../../../ComponentCreator/components/RenderComponent/renderComponent";
 import { ANCHOR_TARGET } from "../../../../Links/common/entities";
 import { MenuItem } from "../components/Content/components/Navigation/components/NavigationMenuItems/navigationMenuItems";
 import { NavLinkItem } from "../components/Content/components/Navigation/navigation";
 import { HEADER_NAVIGATION_LABEL } from "./constants";
+import { SocialMedia } from "./entities";
 
 /**
  * Returns the navigation links as configured, where the "More" menu is flattened.
@@ -36,21 +37,21 @@ export function flattenNavigationLinks(links: NavLinkItem[]): NavLinkItem[] {
 /**
  * Returns header navigation links with socials appended with the corresponding label "Follow Us".
  * @param links - Header navigation links.
- * @param socials - Header socials.
+ * @param socialMedia - Header social media.
  * @param onlySmDesktop - Media breakpoint query is "true" for small desktop only.
  * @returns header navigation links.
  */
 export function getHeaderNavigationLinks(
   links: NavLinkItem[],
-  socials: Social[] | undefined,
+  socialMedia: SocialMedia | undefined,
   onlySmDesktop: boolean
 ): NavLinkItem[] {
   if (onlySmDesktop) {
     const navLinks = [...links];
-    if (socials) {
+    if (socialMedia) {
       navLinks.push({
-        label: HEADER_NAVIGATION_LABEL.SOCIALS,
-        menuItems: getFollowUsMenuItems(socials),
+        label: socialMedia.label,
+        menuItems: getFollowUsMenuItems(socialMedia.socials),
         url: "",
       });
     }
@@ -66,9 +67,12 @@ export function getHeaderNavigationLinks(
  * @returns a list of social menu items for the "Follow Us" menu.
  */
 function getFollowUsMenuItems(socials: Social[]): MenuItem[] {
-  return socials.map(({ label, type, url }) => {
+  return socials.map(({ Icon, label, url }) => {
     return {
-      icon: CustomIcon({ fontSize: "small", iconName: type }),
+      icon: RenderComponent({
+        Component: Icon,
+        ...{ fontSize: "small" },
+      }),
       label,
       target: ANCHOR_TARGET.BLANK,
       url,

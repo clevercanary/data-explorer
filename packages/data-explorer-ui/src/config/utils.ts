@@ -24,7 +24,6 @@ export function getDefaultConfig(): SiteConfig {
       header: {
         Logo: null,
         navLinks: [],
-        socials: [],
       },
     },
     redirectRootToPath: "",

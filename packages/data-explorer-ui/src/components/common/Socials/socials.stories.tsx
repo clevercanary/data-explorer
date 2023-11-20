@@ -1,6 +1,12 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import React from "react";
-import { SOCIAL, Socials } from "./socials";
+import { Meta, StoryObj } from "@storybook/react";
+import { DiscourseIcon } from "../CustomIcon/components/DiscourseIcon/discourseIcon";
+import { FacebookIcon } from "../CustomIcon/components/FacebookIcon/facebookIcon";
+import { GitHubIcon } from "../CustomIcon/components/GitHubIcon/gitHubIcon";
+import { LinkedInIcon } from "../CustomIcon/components/LinkedInIcon/linkedInIcon";
+import { SlackIcon } from "../CustomIcon/components/SlackIcon/slackIcon";
+import { XIcon } from "../CustomIcon/components/XIcon/xIcon";
+import { YouTubeIcon } from "../CustomIcon/components/YouTubeIcon/youTubeIcon";
+import { Socials } from "./socials";
 
 export default {
   argTypes: {
@@ -8,36 +14,48 @@ export default {
   },
   component: Socials,
   title: "Components/Navigation/SocialLinks",
-} as ComponentMeta<typeof Socials>;
+} satisfies Meta<typeof Socials>;
 
-const GITHUB_URL = "https://github.com";
+type Story = StoryObj<typeof Socials>;
 
-const SocialsTemplate: ComponentStory<typeof Socials> = (args) => (
-  <Socials {...args} />
-);
-
-export const SocialsStory = SocialsTemplate.bind({});
-SocialsStory.args = {
-  socials: [
-    {
-      ...SOCIAL.TWITTER,
-      url: GITHUB_URL,
-    },
-    {
-      ...SOCIAL.GITHUB,
-      url: GITHUB_URL,
-    },
-    {
-      ...SOCIAL.YOUTUBE,
-      url: GITHUB_URL,
-    },
-    {
-      ...SOCIAL.DISCOURSE,
-      url: GITHUB_URL,
-    },
-    {
-      ...SOCIAL.SLACK,
-      url: GITHUB_URL,
-    },
-  ],
+export const SocialsStory: Story = {
+  args: {
+    socials: [
+      {
+        Icon: XIcon,
+        label: null,
+        url: "https://twitter.com",
+      },
+      {
+        Icon: GitHubIcon,
+        label: null,
+        url: "https://github.com",
+      },
+      {
+        Icon: YouTubeIcon,
+        label: null,
+        url: "https://www.youtube.com",
+      },
+      {
+        Icon: DiscourseIcon,
+        label: null,
+        url: "https://www.discourse.org",
+      },
+      {
+        Icon: SlackIcon,
+        label: null,
+        url: "https://slack.com",
+      },
+      {
+        Icon: FacebookIcon,
+        label: null,
+        url: "https://www.facebook.com",
+      },
+      {
+        Icon: LinkedInIcon,
+        label: null,
+        url: "https://www.linkedin.com",
+      },
+    ],
+  },
 };
