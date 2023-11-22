@@ -22,7 +22,12 @@ export interface UseRequestFileLocationResult {
   run: () => void;
 }
 
-type Method = "GET" | "PUT";
+export type Method = METHOD;
+
+export enum METHOD {
+  GET = "GET",
+  PUT = "PUT",
+}
 
 type ResolveFn = (file: FileLocation | PromiseLike<FileLocation>) => void;
 type RejectFn = (reason: FileLocation) => void;
@@ -83,7 +88,7 @@ const scheduleFileLocation = (
   reject: RejectFn,
   active: MutableRefObject<boolean>,
   retryAfter = 0,
-  method: Method = "GET"
+  method: Method = METHOD.GET
 ): void => {
   setTimeout(() => {
     getFileLocation(url, accessToken, method).then((result: FileLocation) => {

@@ -6,11 +6,9 @@ import {
   FileManifestType,
   FILE_MANIFEST_TYPE,
 } from "../../../../hooks/useFileManifest/common/entities";
+import { useFileManifest } from "../../../../hooks/useFileManifest/useFileManifest";
 import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
-import {
-  FileLocation,
-  useRequestFileLocation,
-} from "../../../../hooks/useRequestFileLocation";
+import { FileLocation } from "../../../../hooks/useRequestFileLocation";
 import { FileManifestState } from "../../../../providers/fileManifestState";
 import {
   BULK_DOWNLOAD_EXECUTION_ENVIRONMENT,
@@ -52,8 +50,8 @@ export const DownloadCurlCommand = ({
   const {
     exploreState: { tabValue: entityList },
   } = useExploreState();
-  const { requestParams, requestURL } = fileManifestState;
-  const { data, isLoading, run } = useRequestFileLocation(requestURL);
+  const { requestParams } = fileManifestState;
+  const { data, isLoading, run } = useFileManifest();
   const curlCommand = getBulkDownloadCurlCommand(data, executionEnvironment);
   return curlCommand ? (
     <DownloadCurlCommandReady
