@@ -3,11 +3,9 @@ import { MANIFEST_DOWNLOAD_FORMAT } from "../../apis/azul/common/entities";
 import { Filters } from "../../common/entities";
 import { BULK_DOWNLOAD_EXECUTION_ENVIRONMENT } from "../../components/Export/common/entities";
 import { useCatalog } from "../useCatalog";
-import {
-  FileLocation,
-  useRequestFileLocation,
-} from "../useRequestFileLocation";
+import { FileLocation } from "../useRequestFileLocation";
 import { buildFileManifestRequestURL } from "./common/buildFileManifestRequestURL";
+import { useFileManifest } from "./useFileManifest";
 import { useFileManifestURL } from "./useFileManifestURL";
 
 export interface ManifestDownload {
@@ -35,7 +33,7 @@ export const useFileManifestDownload = (filters: Filters): ManifestDownload => {
       catalog,
       MANIFEST_DOWNLOAD_FORMAT.COMPACT
     ) || {};
-  const { data, isIdle, isLoading, run } = useRequestFileLocation(requestURL);
+  const { data, isIdle, isLoading, run } = useFileManifest(requestURL);
   const manifestURL = getManifestDownloadURL(data);
   const fileName = getManifestDownloadFileName(data);
 

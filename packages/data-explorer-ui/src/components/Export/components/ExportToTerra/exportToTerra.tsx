@@ -2,8 +2,8 @@ import React, { ElementType } from "react";
 import { Filters } from "../../../../common/entities";
 import { useExportToTerraResponseURL } from "../../../../hooks/useExportToTerraResponseURL";
 import { FileManifestType } from "../../../../hooks/useFileManifest/common/entities";
+import { useFileManifest } from "../../../../hooks/useFileManifest/useFileManifest";
 import { useRequestFileManifest } from "../../../../hooks/useFileManifest/useRequestFileManifest";
-import { useRequestFileLocation } from "../../../../hooks/useRequestFileLocation";
 import { FileManifestState } from "../../../../providers/fileManifestState";
 import { FormFacet, ManifestDownloadFormat } from "../../common/entities";
 import { ExportToTerraNotStarted } from "./components/ExportToTerraNotStarted/exportToTerraNotStarted";
@@ -34,8 +34,8 @@ export const ExportToTerra = ({
   manifestDownloadFormats,
 }: ExportToTerraProps): JSX.Element => {
   useRequestFileManifest(manifestDownloadFormat, filters, fileSummaryFacetName);
-  const { requestParams, requestURL } = fileManifestState;
-  const { data, isLoading, run } = useRequestFileLocation(requestURL);
+  const { requestParams } = fileManifestState;
+  const { data, isLoading, run } = useFileManifest();
   const exportURL = useExportToTerraResponseURL(requestParams, data);
   return exportURL ? (
     <ExportToTerraReady

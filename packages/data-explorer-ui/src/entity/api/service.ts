@@ -22,7 +22,6 @@ import { api } from "./client";
 function createFetchOptions(
   accessToken: string | undefined
 ): AxiosRequestConfig {
-  // TODO https://github.com/clevercanary/data-browser/issues/545
   return {
     headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
   };
