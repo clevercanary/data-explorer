@@ -145,7 +145,7 @@ export interface EntityConfig<D = any, I = any> extends TabConfig {
   list: ListConfig;
   listView?: ListViewConfig;
   options?: Options;
-  overrideFile?: string;
+  overrides?: Override[];
   staticEntityImportMapper?: EntityImportMapper<I, D>;
   staticLoad: boolean;
   staticLoadFile?: string;
@@ -254,6 +254,18 @@ export type OptionMethod = "GET" | "POST";
  */
 export interface Options {
   method: OptionMethod;
+}
+
+/**
+ * Override.
+ */
+export interface Override {
+  deprecated?: boolean;
+  duplicateOf?: string;
+  entryId: string;
+  redirectUrl?: string;
+  supersededBy?: string;
+  withdrawn?: boolean;
 }
 
 /**
