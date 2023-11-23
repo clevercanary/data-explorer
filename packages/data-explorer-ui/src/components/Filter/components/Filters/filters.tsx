@@ -5,7 +5,10 @@ import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
 } from "../../../../hooks/useBreakpointHelper";
-import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import {
+  OnFilterFn,
+  OnFilterOpenedFn,
+} from "../../../../hooks/useCategoryFilter";
 import { useWindowResize } from "../../../../hooks/useWindowResize";
 import { DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { Filter } from "../Filter/filter";
@@ -22,6 +25,7 @@ export interface FiltersProps {
   closeAncestor?: () => void;
   disabled: boolean; // Global disabling of filters; typically in "related" entity view.
   onFilter: OnFilterFn;
+  onFilterOpened?: OnFilterOpenedFn;
 }
 
 /**
@@ -65,6 +69,7 @@ export const Filters = ({
   closeAncestor,
   disabled = false,
   onFilter,
+  onFilterOpened,
 }: FiltersProps): JSX.Element => {
   const isFilterDrawer = useBreakpointHelper(
     BREAKPOINT_FN_NAME.DOWN,
@@ -80,16 +85,18 @@ export const Filters = ({
 
   return (
     <FilterList disabled={disabled} height={height} ref={filterListRef}>
-      {categoryFilters.map(({ categoryViews }, i) => (
+      {categoryFilters.map(({ categoryViews, label }, i) => (
         <Fragment key={i}>
           {i !== 0 && <Divider />}
           {categoryViews.map((categoryView) => (
             <Filter
               key={categoryView.key}
+              categorySection={label}
               categoryView={categoryView}
               closeAncestor={closeAncestor}
               isFilterDrawer={isFilterDrawer}
               onFilter={onFilter}
+              onFilterOpened={onFilterOpened}
               tags={renderFilterTags(categoryView, onFilter)}
             />
           ))}

@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
+import { escapeRegExp } from "../../../../../../common/utils";
 import { OnFilterFn } from "../../../../../../hooks/useCategoryFilter";
 import { TEXT_BODY_SMALL_400 } from "../../../../../../theme/common/typography";
 import { CheckedIcon } from "../../../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
@@ -18,7 +19,7 @@ interface Props {
   item: SearchAllFiltersDynamicItem;
   onFilter: OnFilterFn;
   onUpdateItemSizeByItemKey: (key: string, size: number) => void;
-  searchTermRegExp: RegExp | null;
+  searchTerm?: string;
   style: React.CSSProperties;
 }
 
@@ -26,10 +27,13 @@ export default function VariableSizeListItem({
   item,
   onFilter,
   onUpdateItemSizeByItemKey,
-  searchTermRegExp,
+  searchTerm,
   style,
 }: Props): JSX.Element {
   const { key } = item;
+  const searchTermRegExp = searchTerm
+    ? new RegExp(escapeRegExp(searchTerm), "ig")
+    : null;
   const listItemRef = useRef<HTMLElement>();
 
   const setRef = (e: HTMLElement | null): void => {
@@ -50,7 +54,9 @@ export default function VariableSizeListItem({
       <ListItemButton
         ref={setRef}
         key={key}
-        onClick={(): void => onFilter(categoryKey, valueKey, !selected)}
+        onClick={(): void =>
+          onFilter(categoryKey, valueKey, !selected, undefined, searchTerm)
+        }
         selected={selected}
         style={style}
       >

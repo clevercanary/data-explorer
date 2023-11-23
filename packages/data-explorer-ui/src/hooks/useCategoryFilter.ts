@@ -31,8 +31,15 @@ export interface FilterInstance {
 export type OnFilterFn = (
   categoryKey: CategoryKey,
   selectedCategoryValue: CategoryValueKey,
-  selected: boolean
+  selected: boolean,
+  categorySection?: string,
+  searchTerm?: string
 ) => void;
+
+/**
+ * Callback function invoked when a filter menu is opened
+ */
+export type OnFilterOpenedFn = (key: CategoryKey) => void;
 
 /**
  * Build the view-specific model of the given category value.

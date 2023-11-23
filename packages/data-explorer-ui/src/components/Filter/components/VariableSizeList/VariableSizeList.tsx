@@ -23,6 +23,7 @@ export type ItemSizeByItemKey = Map<string, number>;
 
 export interface VariableSizeListProps {
   categoryKey: CategoryKey;
+  categorySection?: string;
   height?: number; // Height of list; vertical list must be a number.
   isFilterDrawer: boolean;
   itemSize?: number; // Default item size.
@@ -39,9 +40,16 @@ export interface VariableSizeListProps {
  */
 function renderListItem(props: ListChildComponentProps): JSX.Element {
   const { data, index, style } = props;
-  const { categoryKey, onFilter, onUpdateItemSizeByItemKey, values } = data;
+  const {
+    categoryKey,
+    categorySection,
+    onFilter,
+    onUpdateItemSizeByItemKey,
+    values,
+  } = data;
   return (
     <VariableSizeListItem
+      categorySection={categorySection}
       categoryKey={categoryKey}
       listItem={values[index]}
       onFilter={onFilter}
@@ -53,6 +61,7 @@ function renderListItem(props: ListChildComponentProps): JSX.Element {
 
 export const VariableSizeList = ({
   categoryKey,
+  categorySection,
   height: initHeight = MAX_LIST_HEIGHT_PX,
   isFilterDrawer,
   itemSize = LIST_ITEM_HEIGHT,
@@ -101,6 +110,7 @@ export const VariableSizeList = ({
       itemCount={values.length}
       itemData={{
         categoryKey,
+        categorySection,
         onFilter,
         onUpdateItemSizeByItemKey,
         values,

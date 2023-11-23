@@ -2,7 +2,10 @@ import { CloseRounded } from "@mui/icons-material";
 import { Grow, PopoverPosition, PopoverProps } from "@mui/material";
 import React, { MouseEvent, ReactNode, useState } from "react";
 import { SelectCategoryView } from "../../../../common/entities";
-import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
+import {
+  OnFilterFn,
+  OnFilterOpenedFn,
+} from "../../../../hooks/useCategoryFilter";
 import { CloseDrawerIconButton } from "../../../common/IconButton/iconButton.styles";
 import { FilterLabel } from "../FilterLabel/filterLabel";
 import { FilterMenu } from "../FilterMenu/filterMenu";
@@ -18,18 +21,22 @@ const DRAWER_SLOT_PROPS: PopoverProps["slotProps"] = {
 };
 
 export interface FilterProps {
+  categorySection?: string;
   categoryView: SelectCategoryView;
   closeAncestor?: () => void;
   isFilterDrawer: boolean;
   onFilter: OnFilterFn;
+  onFilterOpened?: OnFilterOpenedFn;
   tags?: ReactNode; // e.g. filter tags
 }
 
 export const Filter = ({
+  categorySection,
   categoryView,
   closeAncestor,
   isFilterDrawer,
   onFilter,
+  onFilterOpened,
   tags,
 }: FilterProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -67,6 +74,7 @@ export const Filter = ({
     // Set popover position and open state.
     setPosition({ left: popoverLeftPos, top: popoverTopPos });
     setIsOpen(true);
+    onFilterOpened?.(categoryView.key);
   };
 
   return (
@@ -95,6 +103,7 @@ export const Filter = ({
           />
         )}
         <FilterMenu
+          categorySection={categorySection}
           categoryKey={categoryView.key}
           categoryLabel={categoryView.label}
           isFilterDrawer={isFilterDrawer}

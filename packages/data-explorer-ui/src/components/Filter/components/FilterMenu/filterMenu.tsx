@@ -15,6 +15,7 @@ import { Button, FilterView, FilterViewTools } from "./filterMenu.styles";
 export interface FilterMenuProps {
   categoryKey: CategoryKey;
   categoryLabel: string;
+  categorySection?: string;
   isFilterDrawer: boolean;
   menuWidth?: number;
   onCloseFilter: () => void;
@@ -25,6 +26,7 @@ export interface FilterMenuProps {
 export const FilterMenu = ({
   categoryKey,
   categoryLabel,
+  categorySection,
   isFilterDrawer,
   menuWidth = 312,
   onCloseFilter,
@@ -55,6 +57,7 @@ export const FilterMenu = ({
       </FilterViewTools>
       {filteredValues.length > 0 ? (
         <VariableSizeList
+          categorySection={categorySection}
           categoryKey={categoryKey}
           isFilterDrawer={isFilterDrawer}
           onFilter={onFilter}

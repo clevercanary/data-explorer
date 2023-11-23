@@ -280,6 +280,23 @@ type RelatedSearchFunction = (
 ) => Promise<RelatedSearchResult | undefined>;
 
 /**
+ * Category clicked callback function
+ */
+type CategoryClickedFunction = (
+  key: string,
+  value: string,
+  section: string,
+  selected: boolean,
+  fromSearchAll: boolean,
+  searchTerm: string
+) => void;
+
+/**
+ * Category opened callback function
+ */
+type CategoryOpenedFunction = (key: string) => void;
+
+/**
  * Product of the related search function.
  */
 export interface RelatedSearchResult {
@@ -297,6 +314,12 @@ export interface RelatedViewConfig {
   searchKey: CategoryKey; // The related search function search parameters' category key.
 }
 
+export interface CategorySiteConfig {
+  categoryGroupConfigs?: CategoryGroupConfig[];
+  onCategoryClicked?: CategoryClickedFunction;
+  onCategoryOpened?: CategoryOpenedFunction;
+}
+
 /**
  * Interface that will hold the whole configuration for a given site.
  */
@@ -305,7 +328,7 @@ export interface SiteConfig {
   appTitle: string;
   authentication?: AuthenticationConfig;
   browserURL: string;
-  categoryGroupConfigs?: CategoryGroupConfig[];
+  categorySiteConfig?: CategorySiteConfig;
   contentDir?: string;
   contentThemeOptionsFn?: ThemeOptionsFn;
   dataSource: DataSourceConfig;

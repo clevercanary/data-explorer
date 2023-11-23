@@ -8,10 +8,10 @@ import { useConfig } from "./useConfig";
  */
 export const useCategoryConfigs = (): CategoryConfig[] | undefined => {
   const { config } = useConfig();
-  const { categoryGroupConfigs } = config;
+  const { categorySiteConfig } = config;
   return useMemo(() => {
-    return categoryGroupConfigs?.flatMap(
+    return categorySiteConfig?.categoryGroupConfigs?.flatMap(
       ({ categoryConfigs }) => categoryConfigs
     );
-  }, [categoryGroupConfigs]);
+  }, [categorySiteConfig?.categoryGroupConfigs]);
 };
