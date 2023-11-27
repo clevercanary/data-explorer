@@ -22,7 +22,6 @@ export interface TableCreatorProps<T> {
   pages: number;
   pageSize: number;
   pagination?: Pagination;
-  staticallyLoaded?: boolean;
   total?: number;
 }
 
@@ -47,7 +46,6 @@ export const TableCreator = <T extends object>({
   pages,
   pageSize,
   pagination,
-  staticallyLoaded,
   total,
 }: TableCreatorProps<T>): JSX.Element => {
   const columnDefs: ColumnDef<T>[] = useMemo(
@@ -86,7 +84,6 @@ export const TableCreator = <T extends object>({
         pages={pages}
         pageSize={pageSize}
         pagination={pagination}
-        staticallyLoaded={staticallyLoaded}
         total={total}
       />
     </div>

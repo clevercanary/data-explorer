@@ -20,6 +20,7 @@ import {
   GridTrackMinMax,
   GridTrackSize,
 } from "../../../config/entities";
+import { ExploreMode, EXPLORE_MODE } from "../../../hooks/useExploreMode";
 import { CheckboxMenuListItem } from "../components/CheckboxMenu/checkboxMenu";
 
 /**
@@ -330,6 +331,18 @@ function getVisibleHeadersTableData<T>(rows: Row<T>[]): TableData[] {
 function getVisibleRowsTableData<T>(rows: Row<T>[]): TableData[][] {
   return rows.map((row) =>
     row.getVisibleCells().map((cell) => cell.getValue() as TableData)
+  );
+}
+
+/**
+ * Returns true if client-side filtering is enabled.
+ * @param exploreMode - Explore mode.
+ * @returns true if client-side filtering is enabled.
+ */
+export function isClientFilteringEnabled(exploreMode: ExploreMode): boolean {
+  return (
+    exploreMode === EXPLORE_MODE.CS_FETCH_CS_FILTERING ||
+    exploreMode === EXPLORE_MODE.SS_FETCH_CS_FILTERING
   );
 }
 

@@ -5,23 +5,11 @@ import React, {
   ReactNode,
   useMemo,
   useReducer,
+  useState,
 } from "react";
 import { AzulSearchIndex } from "../apis/azul/common/entities";
-import {
-  CategoryKey,
-  CategoryValueKey,
-  PaginationDirectionType,
-  SelectCategory,
-  SelectedFilter,
-} from "../common/entities";
-import { getInitialTableColumnVisibility } from "../components/Table/common/utils";
-import {
-  CategoryConfig,
-  EntityConfig,
-  EntityPath,
-  SiteConfig,
-} from "../config/entities";
-import { getDefaultSorting } from "../config/utils";
+import { SelectCategory, SelectedFilter } from "../common/entities";
+import { CategoryConfig, EntityPath, SiteConfig } from "../config/entities";
 import { useCategoryConfigs } from "../hooks/useCategoryConfigs";
 import {
   buildCategoryViews,
@@ -29,14 +17,24 @@ import {
 } from "../hooks/useCategoryFilter";
 import { useConfig } from "../hooks/useConfig";
 import { useURLFilterParams } from "../hooks/useURLFilterParams";
-import { DEFAULT_PAGINATION_STATE, INITIAL_STATE } from "./initial";
+import { INITIAL_STATE } from "./exploreState/constants";
+import {
+  PaginateTablePayload,
+  ProcessExploreResponsePayload,
+  ProcessRelatedResponsePayload,
+  ToggleEntityViewPayload,
+  UpdateColumnVisibilityPayload,
+  UpdateFilterPayload,
+  UpdateSortingPayload,
+} from "./exploreState/payloads/entities";
+import { initExploreState, resetPage } from "./exploreState/utils";
 
 export type CatalogState = string | undefined;
 
 /**
  * Entity view.
  */
-export enum EntityView {
+export enum ENTITY_VIEW {
   EXACT = "EXACT",
   RELATED = "RELATED",
 }
@@ -47,31 +45,11 @@ export enum EntityView {
 export interface ExploreContext {
   categoryConfigs?: CategoryConfig[];
   config: SiteConfig;
-  entityConfig: EntityConfig;
   entityList: string;
 }
 
 /**
- * Explore response.
- */
-export interface ExploreResponse {
-  listItems: ListItems;
-  loading: boolean;
-  paginationResponse: PaginationResponse;
-  selectCategories: SelectCategory[];
-}
-
-/**
- * Explore static response.
- */
-export interface ExploreStaticResponse {
-  listItems: ListItems;
-  loading: boolean;
-  paginationResponse: PaginationResponse;
-}
-
-/**
- * State for each entity
+ * State for each entity.
  */
 export interface EntityPageState {
   columnsVisibility: Record<string, boolean>;
@@ -79,7 +57,7 @@ export interface EntityPageState {
 }
 
 /**
- * State for all entities
+ * State for all entities.
  */
 export interface EntityPageStateMapper {
   [key: EntityPath]: EntityPageState;
@@ -95,12 +73,10 @@ export type ExploreState = {
   filterState: SelectedFilter[];
   isRelatedView: boolean;
   listItems: ListItems;
-  listStaticLoad: boolean;
-  listView: EntityView | undefined;
+  listView: ENTITY_VIEW | undefined;
   loading: boolean;
   paginationState: PaginationState;
   relatedListItems: RelatedListItems;
-  staticLoaded: boolean;
   tabValue: string;
 };
 
@@ -157,67 +133,6 @@ export interface PaginationState {
 export type RelatedListItems = any[] | undefined;
 
 /**
- * Related response.
- */
-export interface RelatedResponse {
-  relatedListItems: RelatedListItems;
-}
-
-/**
- * function used to create the explore's initial state
- *
- * @param config - current site config
- * @param entityConfig - current entity config
- * @param entityListType - path of the current entity
- * @param decodedFilterParam - decoded filters from url params
- * @param decodedCatalogParam - decoded catalog form url params
- * @returns a object of type #ExploreState
- */
-const createInitialState = (
-  config: SiteConfig,
-  entityConfig: EntityConfig,
-  entityListType: string,
-  decodedFilterParam: string,
-  decodedCatalogParam?: string
-): ExploreState => {
-  // Define filter state, from URL "filter" parameter, if present and valid.
-  let filterState: SelectedFilter[] = [];
-  try {
-    filterState = JSON.parse(decodedFilterParam);
-  } catch {
-    // do nothing
-  }
-
-  return {
-    ...INITIAL_STATE,
-    catalogState: decodedCatalogParam,
-    categoryViews: [],
-    entityPageState: config.entities.reduce(
-      (acc, entity) => ({
-        ...acc,
-        [entity.route]: {
-          columnsVisibility: getInitialTableColumnVisibility(
-            entity.list.columns
-          ),
-          sorting: getDefaultSorting(entity),
-        },
-      }),
-      {}
-    ),
-    filterState,
-    isRelatedView: false,
-    listItems: [],
-    listStaticLoad: entityConfig.staticLoad ?? false,
-    listView: EntityView.EXACT,
-    loading: true,
-    paginationState: DEFAULT_PAGINATION_STATE,
-    relatedListItems: undefined,
-    staticLoaded: false,
-    tabValue: entityListType,
-  };
-};
-
-/**
  * Explore state context for storing and using filter-related and explore state.
  */
 export const ExploreStateContext = createContext<ExploreStateContextProps>({
@@ -247,26 +162,27 @@ export function ExploreStateProvider({
   children: ReactNode | ReactNode[];
   entityListType: string;
 }): JSX.Element {
-  const { config, defaultEntityListType, entityConfig } = useConfig();
+  const { config, defaultEntityListType } = useConfig();
   const categoryConfigs = useCategoryConfigs();
   const { decodedCatalogParam, decodedFilterParam } = useURLFilterParams();
   const entityList = entityListType || defaultEntityListType;
+  const [initReducerState] = useState(() =>
+    initExploreState(
+      config,
+      entityList,
+      decodedFilterParam,
+      decodedCatalogParam
+    )
+  );
 
   const [exploreState, exploreDispatch] = useReducer(
     (s: ExploreState, a: ExploreAction) =>
       exploreReducer(s, a, {
         categoryConfigs,
         config,
-        entityConfig,
         entityList,
       }),
-    createInitialState(
-      config,
-      entityConfig,
-      entityList,
-      decodedFilterParam,
-      decodedCatalogParam
-    )
+    initReducerState
   );
 
   // does this help? https://hswolff.com/blog/how-to-usecontext-with-usereducer/
@@ -288,7 +204,6 @@ export enum ExploreActionKind {
   ClearFilters = "CLEAR_FILTERS",
   PaginateTable = "PAGINATE_TABLE",
   ProcessExploreResponse = "PROCESS_EXPLORE_RESPONSE",
-  ProcessExploreStaticResponse = "PROCESS_EXPLORE_STATIC_RESPONSE",
   ProcessRelatedResponse = "PROCESS_RELATED_RESPONSE",
   ResetState = "RESET_STATE",
   SelectEntityType = "SELECT_ENTITY_TYPE",
@@ -301,15 +216,14 @@ export enum ExploreActionKind {
 /**
  * Explore action.
  */
-type ExploreAction =
+export type ExploreAction =
   | ClearFiltersAction
   | PaginateTableAction
   | ProcessExploreResponseAction
-  | ProcessExploreStaticResponseAction
   | ProcessRelatedResponseAction
   | ResetStateAction
   | SelectEntityTypeAction
-  | ToggleEntityView
+  | ToggleEntityViewAction
   | UpdateColumnVisibilityAction
   | UpdateFilterAction
   | UpdateSortingAction;
@@ -326,7 +240,7 @@ type ClearFiltersAction = {
  * Paginate table action.
  */
 type PaginateTableAction = {
-  payload: PaginationDirectionType;
+  payload: PaginateTablePayload;
   type: ExploreActionKind.PaginateTable;
 };
 
@@ -334,23 +248,15 @@ type PaginateTableAction = {
  * Process explore response action.
  */
 type ProcessExploreResponseAction = {
-  payload: ExploreResponse;
+  payload: ProcessExploreResponsePayload;
   type: ExploreActionKind.ProcessExploreResponse;
-};
-
-/**
- * Process explore static response action.
- */
-type ProcessExploreStaticResponseAction = {
-  payload: ExploreStaticResponse;
-  type: ExploreActionKind.ProcessExploreStaticResponse;
 };
 
 /**
  * Process related response action.
  */
 type ProcessRelatedResponseAction = {
-  payload: RelatedResponse;
+  payload: ProcessRelatedResponsePayload;
   type: ExploreActionKind.ProcessRelatedResponse;
 };
 
@@ -358,7 +264,7 @@ type ProcessRelatedResponseAction = {
  * Reset state type action.
  */
 type ResetStateAction = {
-  payload: "";
+  payload: string;
   type: ExploreActionKind.ResetState;
 };
 
@@ -373,9 +279,17 @@ type SelectEntityTypeAction = {
 /**
  * Toggle entity view.
  */
-type ToggleEntityView = {
-  payload: EntityView;
+type ToggleEntityViewAction = {
+  payload: ToggleEntityViewPayload;
   type: ExploreActionKind.ToggleEntityView;
+};
+
+/**
+ * Update column visibility action.
+ */
+type UpdateColumnVisibilityAction = {
+  payload: UpdateColumnVisibilityPayload;
+  type: ExploreActionKind.UpdateColumnVisibility;
 };
 
 /**
@@ -387,28 +301,11 @@ type UpdateFilterAction = {
 };
 
 /**
- * Update filter payload.
- */
-type UpdateFilterPayload = {
-  categoryKey: CategoryKey;
-  selected: boolean;
-  selectedValue: CategoryValueKey;
-};
-
-/**
  * Update sorting action.
  */
-type UpdateSortingAction = {
-  payload: ColumnSort[];
+export type UpdateSortingAction = {
+  payload: UpdateSortingPayload;
   type: ExploreActionKind.UpdateSorting;
-};
-
-/**
- * Update column visibility action.
- */
-type UpdateColumnVisibilityAction = {
-  payload: Record<string, boolean>;
-  type: ExploreActionKind.UpdateColumnVisibility;
 };
 
 /**
@@ -424,7 +321,7 @@ function exploreReducer(
   exploreContext: ExploreContext
 ): ExploreState {
   const { payload, type } = action;
-  const { categoryConfigs, config, entityConfig, entityList } = exploreContext;
+  const { categoryConfigs, config, entityList } = exploreContext;
 
   switch (type) {
     /**
@@ -458,52 +355,21 @@ function exploreReducer(
      * Process explore response
      **/
     case ExploreActionKind.ProcessExploreResponse: {
-      let listItems: ListItems = [];
-      if (!payload.loading) {
-        listItems = payload.listItems;
-      }
       return {
         ...state,
-        categoryViews: buildCategoryViews(
-          payload.selectCategories,
-          categoryConfigs,
-          state.filterState
-        ),
-        listItems: listItems,
+        categoryViews: payload.selectCategories
+          ? buildCategoryViews(
+              payload.selectCategories,
+              categoryConfigs,
+              state.filterState
+            )
+          : state.categoryViews,
+        listItems: payload.loading ? [] : payload.listItems,
         loading: payload.loading,
         paginationState: {
-          currentPage: state.paginationState.currentPage,
-          index: state.paginationState.index,
-          nextIndex: payload.paginationResponse.nextIndex,
-          pageSize: payload.paginationResponse.pageSize,
-          pages: payload.paginationResponse.pages,
-          previousIndex: payload.paginationResponse.previousIndex,
-          rows: payload.paginationResponse.rows,
+          ...state.paginationState,
+          ...payload.paginationResponse,
         },
-      };
-    }
-    /**
-     * Process explore response
-     **/
-    case ExploreActionKind.ProcessExploreStaticResponse: {
-      let listItems: ListItems = [];
-      if (!payload.loading) {
-        listItems = payload.listItems;
-      }
-      return {
-        ...state,
-        listItems: listItems,
-        loading: payload.loading,
-        paginationState: {
-          currentPage: state.paginationState.currentPage,
-          index: state.paginationState.index,
-          nextIndex: payload.paginationResponse.nextIndex,
-          pageSize: payload.paginationResponse.pageSize,
-          pages: payload.paginationResponse.pages,
-          previousIndex: payload.paginationResponse.previousIndex,
-          rows: payload.paginationResponse.rows,
-        },
-        staticLoaded: true,
       };
     }
     /**
@@ -519,7 +385,7 @@ function exploreReducer(
      * Reset the current state to the initial
      */
     case ExploreActionKind.ResetState: {
-      return createInitialState(config, entityConfig, entityList, "");
+      return initExploreState(config, entityList, "");
     }
     /**
      * Select entity type
@@ -528,16 +394,11 @@ function exploreReducer(
       if (payload === state.tabValue) {
         return state;
       }
-      const { staticLoad } = entityConfig;
-      const listStaticLoad = staticLoad;
-
       return {
         ...state,
         listItems: [],
-        listStaticLoad,
         loading: true,
         paginationState: resetPage(state.paginationState),
-        staticLoaded: false,
         tabValue: payload,
       };
     }
@@ -547,7 +408,7 @@ function exploreReducer(
     case ExploreActionKind.ToggleEntityView: {
       return {
         ...state,
-        isRelatedView: payload === EntityView.RELATED,
+        isRelatedView: payload === ENTITY_VIEW.RELATED,
         listView: payload,
       };
     }
@@ -605,17 +466,4 @@ function exploreReducer(
     default:
       return state;
   }
-}
-
-/**
- * Resets pagination.
- * @param paginationState - Pagination state.
- * @returns a reset pagination state.
- */
-function resetPage(paginationState: PaginationState): PaginationState {
-  const nextPaginationState = { ...paginationState };
-  nextPaginationState.index = null;
-  nextPaginationState.currentPage = 1;
-
-  return nextPaginationState;
 }

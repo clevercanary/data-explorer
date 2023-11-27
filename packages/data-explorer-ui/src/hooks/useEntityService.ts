@@ -1,42 +1,59 @@
-import { EntityConfig } from "../config/entities";
+import { EntityConfig, EntityMapper, GetIdFunction } from "../config/entities";
 import { getEntityConfig } from "../config/utils";
 import { createEntityService } from "../entity/service/factory";
-import { EntityService } from "../entity/service/model";
+import { EntityService, ENTITY_SERVICE_TYPE } from "../entity/service/model";
 import { useCatalog } from "./useCatalog";
 import { useConfig } from "./useConfig";
+import { EXPLORE_MODE } from "./useExploreMode";
 import { useExploreState } from "./useExploreState";
 
-interface FetcherResponse extends EntityService {
+interface FetcherResponse<T, I> extends EntityService {
   catalog: string | undefined;
   detailStaticLoad: boolean;
-  listStaticLoad: boolean;
+  entityMapper?: EntityMapper<T, I>;
+  getId?: GetIdFunction<T>;
   path: string;
 }
 
-export const getEntityService = (
+export const getEntityService = <T, I>(
   entityConfig: EntityConfig,
   catalog: string | undefined
-): FetcherResponse => {
+): FetcherResponse<T, I> => {
   if (entityConfig.apiPath) {
-    return {
-      ...createEntityService("API"),
-      catalog,
-      detailStaticLoad: !!entityConfig.detail.staticLoad,
-      listStaticLoad: !!entityConfig.staticLoad,
-      path: entityConfig.apiPath,
-    };
+    // Server-side fetch and filtering.
+    if (entityConfig.exploreMode === EXPLORE_MODE.SS_FETCH_SS_FILTERING) {
+      return {
+        ...createEntityService(ENTITY_SERVICE_TYPE.API),
+        catalog,
+        detailStaticLoad: entityConfig.detail.staticLoad,
+        entityMapper: entityConfig.entityMapper,
+        getId: entityConfig.getId,
+        path: entityConfig.apiPath,
+      };
+    }
+    // Server-side fetch, client-side filtering.
+    if (entityConfig.exploreMode === EXPLORE_MODE.SS_FETCH_CS_FILTERING) {
+      return {
+        ...createEntityService(ENTITY_SERVICE_TYPE.API_CF),
+        catalog,
+        detailStaticLoad: entityConfig.detail.staticLoad,
+        entityMapper: entityConfig.entityMapper,
+        getId: entityConfig.getId,
+        path: entityConfig.apiPath,
+      };
+    }
   }
-
-  if (entityConfig.staticLoad) {
+  // Client-side API and filtering.
+  if (entityConfig.exploreMode === EXPLORE_MODE.CS_FETCH_CS_FILTERING) {
     return {
-      ...createEntityService("TSV"),
+      ...createEntityService(ENTITY_SERVICE_TYPE.TSV),
       catalog: undefined,
       detailStaticLoad: true,
-      listStaticLoad: true,
+      entityMapper: entityConfig.entityMapper,
+      getId: entityConfig.getId,
       path: entityConfig.route, //the entity list type
     };
   }
-
   throw Error(
     `There's no data path for the entity ${entityConfig.label}. Define a tsvPath or an apiPath`
   );
@@ -44,11 +61,13 @@ export const getEntityService = (
 
 /**
  * Hook to determine how the data should be loaded.
- * From API or from a tsv file.
+ * From API or from a TSV file.
  * @param entityListType - Entity list type (optional).
  * @returns @see FetcherResponse
  */
-export const useEntityService = (entityListType?: string): FetcherResponse => {
+export const useEntityService = <T, I>(
+  entityListType?: string
+): FetcherResponse<T, I> => {
   const { config } = useConfig();
   const catalog = useCatalog();
   const { exploreState } = useExploreState();

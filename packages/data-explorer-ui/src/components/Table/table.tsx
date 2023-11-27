@@ -27,9 +27,11 @@ import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
 } from "../../hooks/useBreakpointHelper";
+import { useExploreMode } from "../../hooks/useExploreMode";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useScroll } from "../../hooks/useScroll";
-import { EntityView, ExploreActionKind } from "../../providers/exploreState";
+import { ENTITY_VIEW, ExploreActionKind } from "../../providers/exploreState";
+import { DEFAULT_PAGINATION_STATE } from "../../providers/exploreState/constants";
 import { TABLET } from "../../theme/common/breakpoints";
 import { FluidPaper, GridPaper } from "../common/Paper/paper.styles";
 import { NoResults } from "../NoResults/noResults";
@@ -38,6 +40,7 @@ import {
   buildCategoryViews,
   getFacetedUniqueValuesWithArrayValues,
   getGridTemplateColumns,
+  isClientFilteringEnabled,
 } from "./common/utils";
 import { Pagination as DXPagination } from "./components/Pagination/pagination";
 import { TableBody } from "./components/TableBody/tableBody";
@@ -55,7 +58,6 @@ export interface TableProps<T extends object> {
   pages?: number;
   pageSize: number;
   pagination?: Pagination;
-  staticallyLoaded?: boolean;
   total?: number;
 }
 
@@ -80,13 +82,13 @@ export const TableComponent = <T extends object>({
 }: // eslint-disable-next-line sonarjs/cognitive-complexity -- TODO fix component length / complexity
 TableProps<T>): JSX.Element => {
   const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, TABLET);
+  const exploreMode = useExploreMode();
   const { exploreDispatch, exploreState } = useExploreState();
   const {
     entityPageState,
     filterState,
     isRelatedView,
     listItems,
-    listStaticLoad,
     loading,
     paginationState,
     tabValue,
@@ -94,6 +96,7 @@ TableProps<T>): JSX.Element => {
   const { columnsVisibility, sorting } = entityPageState[tabValue];
   const { currentPage, pages, pageSize } = paginationState;
   const { disablePagination = false } = listView || {};
+  const clientFiltering = isClientFilteringEnabled(exploreMode);
   const rowDirection = tabletDown
     ? ROW_DIRECTION.VERTICAL
     : ROW_DIRECTION.DEFAULT;
@@ -134,22 +137,22 @@ TableProps<T>): JSX.Element => {
   const tableInstance = useReactTable({
     columns,
     data: items,
-    enableColumnFilters: true, // listStaticLoad,
-    enableFilters: true, // listStaticLoad,
+    enableColumnFilters: true, // client-side filtering.
+    enableFilters: true, // client-side filtering.
     enableMultiSort: false,
-    enableSorting: true, // listStaticLoad
-    enableSortingRemoval: false, // listStaticLoad
+    enableSorting: true, // client-side filtering.
+    enableSortingRemoval: false, // client-side filtering.
     getCoreRowModel: getCoreRowModel(),
-    getFacetedRowModel: listStaticLoad ? getFacetedRowModel() : undefined,
-    getFacetedUniqueValues: listStaticLoad
+    getFacetedRowModel: clientFiltering ? getFacetedRowModel() : undefined,
+    getFacetedUniqueValues: clientFiltering
       ? getFacetedUniqueValuesWithArrayValues()
       : undefined,
-    getFilteredRowModel: listStaticLoad ? getFilteredRowModel() : undefined,
+    getFilteredRowModel: clientFiltering ? getFilteredRowModel() : undefined,
     getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: listStaticLoad ? getSortedRowModel() : undefined,
+    getSortedRowModel: clientFiltering ? getSortedRowModel() : undefined,
     initialState,
-    manualPagination: listStaticLoad,
-    manualSorting: !listStaticLoad,
+    manualPagination: clientFiltering,
+    manualSorting: !clientFiltering,
     onColumnVisibilityChange,
     onSortingChange,
     pageCount: total,
@@ -173,7 +176,7 @@ TableProps<T>): JSX.Element => {
 
   const handleTableNextPage = (): void => {
     let nextPage = tableNextPage;
-    if (!listStaticLoad) {
+    if (!clientFiltering) {
       nextPage = (): void => {
         exploreDispatch({
           payload: "next",
@@ -192,9 +195,8 @@ TableProps<T>): JSX.Element => {
   };
 
   const handleTablePreviousPage = (): void => {
-    //const previousPage = pagination?.previousPage ?? tablePreviousPage;
     let previousPage = tablePreviousPage;
-    if (!listStaticLoad) {
+    if (!clientFiltering) {
       previousPage = (): void => {
         exploreDispatch({
           payload: "prev",
@@ -210,11 +212,11 @@ TableProps<T>): JSX.Element => {
     scrollTop();
   };
 
-  // Sets or resets react table column filters `columnFilters` state, for statically loaded api only, with update of filterState.
+  // Sets or resets react table column filters `columnFilters` state - for client-side filtering only - with update of filterState.
   // - `columnFilters` state is "cleared" for related view, and
   // - `columnFilters` state is "set" for all other views.
   useEffect(() => {
-    if (listStaticLoad) {
+    if (clientFiltering) {
       if (isRelatedView) {
         tableInstance.resetColumnFilters();
       } else {
@@ -226,22 +228,20 @@ TableProps<T>): JSX.Element => {
         );
       }
     }
-  }, [filterState, isRelatedView, listStaticLoad, tableInstance]);
+  }, [clientFiltering, filterState, isRelatedView, tableInstance]);
 
-  /**
-   * Static List Mode - Process Explore Response
-   */
+  // Process explore response - client-side filtering only.
   useEffect(() => {
-    if (!isRelatedView && listStaticLoad) {
+    if (isRelatedView) return;
+    if (!listItems || listItems.length === 0) return;
+    if (clientFiltering) {
       exploreDispatch({
         payload: {
           listItems,
           loading: false,
           paginationResponse: {
-            nextIndex: null,
+            ...DEFAULT_PAGINATION_STATE,
             pageSize: results.length,
-            pages: 1,
-            previousIndex: null,
             rows: results.length,
           },
           selectCategories: buildCategoryViews(allColumns, columnFilters),
@@ -251,11 +251,11 @@ TableProps<T>): JSX.Element => {
     }
   }, [
     allColumns,
+    clientFiltering,
     columnFilters,
     exploreDispatch,
     isRelatedView,
     listItems,
-    listStaticLoad,
     results,
   ]);
 
@@ -263,7 +263,7 @@ TableProps<T>): JSX.Element => {
   useEffect(() => {
     return () => {
       exploreDispatch({
-        payload: EntityView.EXACT,
+        payload: ENTITY_VIEW.EXACT,
         type: ExploreActionKind.ToggleEntityView,
       });
     };

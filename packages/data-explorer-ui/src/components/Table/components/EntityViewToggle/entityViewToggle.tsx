@@ -1,7 +1,7 @@
 import React from "react";
 import { useExploreState } from "../../../../hooks/useExploreState";
 import {
-  EntityView,
+  ENTITY_VIEW,
   ExploreActionKind,
 } from "../../../../providers/exploreState";
 import { ToggleButtonGroup } from "../../../common/ToggleButtonGroup/toggleButtonGroup";
@@ -11,13 +11,13 @@ export const EntityViewToggle = (): JSX.Element => {
   const toggleButtons = [
     {
       label: "Exact Match",
-      onToggle: () => onChange(EntityView.EXACT),
-      value: EntityView.EXACT,
+      onToggle: () => onChange(ENTITY_VIEW.EXACT),
+      value: ENTITY_VIEW.EXACT,
     },
     {
       label: "Related Match",
-      onToggle: () => onChange(EntityView.RELATED),
-      value: EntityView.RELATED,
+      onToggle: () => onChange(ENTITY_VIEW.RELATED),
+      value: ENTITY_VIEW.RELATED,
     },
   ];
 
@@ -25,7 +25,7 @@ export const EntityViewToggle = (): JSX.Element => {
    * Callback fired when toggle button value changes.
    * @param entityView - Entity list view.
    */
-  const onChange = (entityView: EntityView): void => {
+  const onChange = (entityView: ENTITY_VIEW): void => {
     exploreDispatch({
       payload: entityView,
       type: ExploreActionKind.ToggleEntityView,

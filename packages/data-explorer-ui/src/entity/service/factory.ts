@@ -1,14 +1,7 @@
 import * as apiEntityService from "../api/service";
+import * as apicfEntityService from "../apicf/service";
 import * as tsvEntityService from "../tsv/service";
 import { EntityService, EntityServiceType } from "./model";
-
-const TSV_ENTITY_SERVICE: EntityService = {
-  fetchAllEntities: tsvEntityService.fetchAllEntities,
-  fetchEntitiesFromQuery: tsvEntityService.fetchEntitiesFromQuery,
-  fetchEntitiesFromURL: tsvEntityService.fetchEntitiesFromURL,
-  fetchEntityDetail: tsvEntityService.fetchEntityDetail,
-  fetchSummary: tsvEntityService.fetchSummary,
-};
 
 const API_ENTITY_SERVICE: EntityService = {
   fetchAllEntities: apiEntityService.fetchAllEntities,
@@ -18,8 +11,26 @@ const API_ENTITY_SERVICE: EntityService = {
   fetchSummary: apiEntityService.fetchSummary,
 };
 
+const API_CF_ENTITY_SERVICE: EntityService = {
+  fetchAllEntities: apicfEntityService.fetchAllEntities,
+  fetchEntitiesFromQuery: apicfEntityService.fetchEntitiesFromQuery,
+  fetchEntitiesFromURL: apicfEntityService.fetchEntitiesFromURL,
+  fetchEntity: apicfEntityService.fetchEntity,
+  fetchEntityDetail: apicfEntityService.fetchEntityDetail,
+  fetchSummary: apicfEntityService.fetchSummary,
+};
+
+const TSV_ENTITY_SERVICE: EntityService = {
+  fetchAllEntities: tsvEntityService.fetchAllEntities,
+  fetchEntitiesFromQuery: tsvEntityService.fetchEntitiesFromQuery,
+  fetchEntitiesFromURL: tsvEntityService.fetchEntitiesFromURL,
+  fetchEntityDetail: tsvEntityService.fetchEntityDetail,
+  fetchSummary: tsvEntityService.fetchSummary,
+};
+
 const ENTITY_SERVICES: { [key in EntityServiceType]: EntityService } = {
   API: API_ENTITY_SERVICE,
+  API_CF: API_CF_ENTITY_SERVICE,
   TSV: TSV_ENTITY_SERVICE,
 };
 

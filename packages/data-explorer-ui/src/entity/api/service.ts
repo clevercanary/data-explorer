@@ -100,7 +100,7 @@ export const fetchAllEntities = async (
  * @param apiPath - API endpoint URL.
  * @param catalog - Catalog.
  * @param accessToken - Access token.
- * @param param - Catalog's version, if none passed it will default to the current one.
+ * @param defaultParams - Default parameters.
  * @returns @see ProjectResponse
  */
 export const fetchEntityDetail = async (
@@ -108,13 +108,16 @@ export const fetchEntityDetail = async (
   apiPath: string,
   catalog: string | undefined,
   accessToken: string | undefined,
-  param = getDefaultDetailParams()
+  defaultParams = getDefaultDetailParams()
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
   const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
   const options = createFetchOptions(accessToken);
   const res = await api().get(
-    `${apiPath}/${id}?${convertUrlParams({ ...param, ...catalogParam })}`,
+    `${apiPath}/${id}?${convertUrlParams({
+      ...defaultParams,
+      ...catalogParam,
+    })}`,
     options
   );
   return res.data;

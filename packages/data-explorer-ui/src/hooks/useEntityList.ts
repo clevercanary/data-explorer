@@ -9,12 +9,15 @@ import {
   transformFilters,
   transformTermFacets,
 } from "../apis/azul/common/filterTransformer";
+import { EntityMapper } from "../config/entities";
 import { getEntityConfig } from "../config/utils";
 import { ExploreActionKind } from "../providers/exploreState";
+import { DEFAULT_PAGINATION_STATE } from "../providers/exploreState/constants";
 import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
 import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
+import { ExploreMode, EXPLORE_MODE, useExploreMode } from "./useExploreMode";
 import { useExploreState } from "./useExploreState";
 import { useURLFilterParams } from "./useURLFilterParams";
 
@@ -27,36 +30,40 @@ import { useURLFilterParams } from "./useURLFilterParams";
 export const useEntityList = (
   staticResponse: AzulEntitiesStaticResponse
 ): void => {
-  // Load up the relevant contexts
+  const { data: staticData, entityListType } = staticResponse;
   const { token } = useAuthentication();
   const { config } = useConfig();
-  const { apiPath } = getEntityConfig(
-    config.entities,
-    staticResponse.entityListType
-  );
-  const { catalog, fetchEntitiesFromQuery, listStaticLoad, path } =
-    useEntityService(); // Determine type of fetch to be executed, either API endpoint or TSV.
+  const { apiPath } = getEntityConfig(config.entities, entityListType);
+  const exploreMode = useExploreMode();
+  const {
+    catalog,
+    entityMapper,
+    fetchAllEntities,
+    fetchEntitiesFromQuery,
+    path,
+  } = useEntityService();
   const { exploreDispatch, exploreState } = useExploreState();
-  const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>(); // Init fetch of entities.
+  const { data, isIdle, isLoading, run } = useAsync<AzulEntitiesResponse>();
   const { catalogState, entityPageState, filterState, tabValue } = exploreState;
-  const { termFacets } = data || {};
+  const { pagination, termFacets } = data || {};
   const { updateFilterQueryString } = useURLFilterParams();
   const { sorting } = entityPageState[tabValue];
-  const shouldDispatchResponse = data?.apiPath === apiPath;
+  const entities = getEntities(staticData, data);
+  const shouldDispatchResponse = isDispatchable(
+    exploreMode,
+    data?.apiPath === apiPath,
+    entityListType === tabValue
+  );
+  const isFetching = isIdle || isLoading;
 
-  /**
-   * Update the filter query string when the filter state changes.
-   */
+  // Update the filter query string when the filter state changes.
   useEffect(() => {
     updateFilterQueryString(catalogState, filterState);
   }, [catalogState, filterState, updateFilterQueryString]);
 
-  /**
-   * Fetch Entities from the API when the filter state changes.
-   * Server-side filtering
-   */
+  // Fetch entities - on change of filter state - server-side fetching and server-side filtering.
   useEffect(() => {
-    if (!listStaticLoad) {
+    if (exploreMode === EXPLORE_MODE.SS_FETCH_SS_FILTERING) {
       // Build basic list params
       const [sort] = sorting;
       const listParams: AzulListParams = sort
@@ -82,83 +89,124 @@ export const useEntityList = (
     }
   }, [
     catalog,
+    exploreMode,
     exploreState.paginationState.index,
     fetchEntitiesFromQuery,
     filterState,
     path,
     run,
     sorting,
-    listStaticLoad,
     token,
   ]);
 
-  /**
-   * Process Explore Response when data changes.
-   * TODO filter this directly when the API response returns
-   * Server-side filtering
-   */
+  // Process explore response - on change of filter state - server-side fetching and server-side filtering.
   useEffect(() => {
-    if (!listStaticLoad && termFacets && shouldDispatchResponse) {
+    if (!termFacets) return;
+    if (!shouldDispatchResponse) return;
+    if (exploreMode === EXPLORE_MODE.SS_FETCH_SS_FILTERING) {
       exploreDispatch({
         payload: {
-          listItems: data?.hits,
-          loading: isLoading || isIdle,
-          paginationResponse: transformAzulPagination(data?.pagination),
+          listItems: entities,
+          loading: isFetching,
+          paginationResponse: transformAzulPagination(pagination),
           selectCategories: transformTermFacets(termFacets, filterState),
         },
         type: ExploreActionKind.ProcessExploreResponse,
       });
     }
   }, [
-    data?.hits,
-    data?.pagination,
+    entities,
     exploreDispatch,
+    exploreMode,
     filterState,
-    isIdle,
-    isLoading,
-    listStaticLoad,
+    isFetching,
+    pagination,
     shouldDispatchResponse,
     termFacets,
   ]);
 
-  /**
-   * Process Static Explore Response
-   * For static loaded data (client side filtering) update the listItems with
-   * the static response if it exists when the page loads
-   **/
+  // Fetch entities - server-side fetching and client-side filtering.
   useEffect(() => {
+    if (exploreMode === EXPLORE_MODE.SS_FETCH_CS_FILTERING) {
+      run(fetchAllEntities(path));
+    }
+  }, [exploreMode, fetchAllEntities, path, run]);
+
+  // Process explore response - server-side or client-side fetching and client-side filtering.
+  useEffect(() => {
+    if (!entities) return;
+    if (!shouldDispatchResponse) return;
     if (
-      listStaticLoad &&
-      staticResponse &&
-      staticResponse.data &&
-      staticResponse.data.hits &&
-      staticResponse.data.termFacets &&
-      staticResponse.entityListType === exploreState.tabValue &&
-      !exploreState.staticLoaded
+      exploreMode === EXPLORE_MODE.SS_FETCH_CS_FILTERING ||
+      exploreMode === EXPLORE_MODE.CS_FETCH_CS_FILTERING
     ) {
-      const listItems = staticResponse?.data?.hits ?? [];
       exploreDispatch({
         payload: {
-          listItems: listItems,
+          listItems: mapEntities(entities, entityMapper),
           loading: false,
           paginationResponse: {
-            nextIndex: null,
-            pageSize: listItems.length,
-            pages: 1,
-            previousIndex: null,
-            rows: listItems.length,
+            ...DEFAULT_PAGINATION_STATE,
+            pageSize: entities.length,
+            rows: entities.length,
           },
         },
-        type: ExploreActionKind.ProcessExploreStaticResponse,
+        type: ExploreActionKind.ProcessExploreResponse,
       });
     }
   }, [
-    staticResponse?.data?.hits,
-    staticResponse.entityListType,
-    exploreState.tabValue,
-    exploreState.staticLoaded,
+    entities,
+    entityMapper,
     exploreDispatch,
-    listStaticLoad,
-    staticResponse,
+    exploreMode,
+    shouldDispatchResponse,
   ]);
 };
+
+/**
+ * Returns the entities from the static data if present, otherwise returns the entities from the server data.
+ * @param staticData - Static data.
+ * @param serverData - Server data.
+ * @returns entities.
+ */
+function getEntities<T>(
+  staticData?: AzulEntitiesResponse<T>,
+  serverData?: AzulEntitiesResponse<T>
+): AzulEntitiesResponse<T>["hits"] | undefined {
+  if (staticData && staticData.hits.length > 0) {
+    return staticData.hits;
+  }
+  return serverData?.hits;
+}
+
+/**
+ * Returns true if the response should be dispatched for the given explore mode.
+ * @param exploreMode - Explore mode.
+ * @param shouldDispatchServerResponse - Boolean indicating whether the server response should be dispatched.
+ * @param shouldDispatchStaticResponse - Boolean indicating whether the static response should be dispatched.
+ * @returns true if the response should be dispatched.
+ */
+function isDispatchable(
+  exploreMode: ExploreMode,
+  shouldDispatchServerResponse: boolean,
+  shouldDispatchStaticResponse: boolean
+): boolean {
+  return exploreMode === EXPLORE_MODE.CS_FETCH_CS_FILTERING
+    ? shouldDispatchStaticResponse
+    : shouldDispatchServerResponse;
+}
+
+/**
+ * Maps the entities using the given entity mapper.
+ * @param entities - Entities.
+ * @param entityMapper - Entity mapper.
+ * @returns entities mapped using the given entity mapper.
+ */
+function mapEntities<T, I>(
+  entities: (T | I)[],
+  entityMapper?: EntityMapper<T, I>
+): T[] {
+  if (entityMapper) {
+    return (entities as I[]).map(entityMapper);
+  }
+  return entities as T[];
+}

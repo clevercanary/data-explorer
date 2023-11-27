@@ -3,6 +3,11 @@ import {
   AzulListParams,
   AzulSummaryResponse,
 } from "../../apis/azul/common/entities";
+import {
+  DataSourceConfig,
+  EntityMapper,
+  GetIdFunction,
+} from "../../config/entities";
 import { FilterState } from "../../hooks/useCategoryFilter";
 
 /**
@@ -25,11 +30,21 @@ export interface EntityService {
     accessToken: string | undefined
   ) => Promise<AzulEntitiesResponse>;
 
+  fetchEntity?: <T, I>(
+    id: string,
+    apiPath: string,
+    getId: GetIdFunction<T>,
+    entityMapper?: EntityMapper<T, I>
+  ) => Promise<T>;
+
   fetchEntityDetail: (
     id: string,
     apiPath: string,
     catalog: string | undefined,
-    accessToken: string | undefined
+    accessToken: string | undefined,
+    defaultParams?:
+      | DataSourceConfig["defaultDetailParams"]
+      | DataSourceConfig["defaultParams"]
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This type can't be known before hand
   ) => Promise<any>;
 
@@ -41,6 +56,15 @@ export interface EntityService {
 }
 
 /**
- * Type that list all possible fetchers
+ * Set of possible fetchers.
  */
-export type EntityServiceType = "API" | "TSV";
+export enum ENTITY_SERVICE_TYPE {
+  API = "API",
+  API_CF = "API_CF",
+  TSV = "TSV",
+}
+
+/**
+ * Entity service type.
+ */
+export type EntityServiceType = ENTITY_SERVICE_TYPE;

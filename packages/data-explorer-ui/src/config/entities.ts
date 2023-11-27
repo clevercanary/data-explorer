@@ -5,6 +5,7 @@ import { CategoryKey, SelectedFilterValue } from "../common/entities";
 import { HeroTitle } from "../components/common/Title/title";
 import { FooterProps } from "../components/Layout/components/Footer/footer";
 import { HeaderProps } from "../components/Layout/components/Header/header";
+import { ExploreMode } from "../hooks/useExploreMode";
 import { AuthContextProps } from "../providers/authentication";
 import { ExploreState } from "../providers/exploreState";
 import { FileManifestState } from "../providers/fileManifestState";
@@ -138,23 +139,23 @@ export type EntityPath = string;
  * the detail and the list page configuration.
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This config model is part of a generic array
-export interface EntityConfig<D = any, I = any> extends TabConfig {
+export interface EntityConfig<T = any, I = any> extends TabConfig {
   apiPath?: EntityPath;
   detail: BackPageConfig;
-  getId?: GetIdFunction<D>;
+  entityMapper?: EntityMapper<T, I>;
+  exploreMode: ExploreMode;
+  getId?: GetIdFunction<T>;
   list: ListConfig;
   listView?: ListViewConfig;
   options?: Options;
   overrides?: Override[];
-  staticEntityImportMapper?: EntityImportMapper<I, D>;
-  staticLoad: boolean;
   staticLoadFile?: string;
 }
 
 /**
- * Entity import mapper function.
+ * Entity mapper function.
  */
-type EntityImportMapper<I, D> = (input: I) => D;
+export type EntityMapper<T, I> = (input: I) => T;
 
 /**
  * Interface to define the export configuration for a given site.
@@ -175,7 +176,7 @@ export interface ExportMethodConfig {
 /**
  * Get identifier function.
  */
-type GetIdFunction<T> = (detail: T) => string;
+export type GetIdFunction<T> = (detail: T) => string;
 
 /**
  * Google GIS authentication configuration.
