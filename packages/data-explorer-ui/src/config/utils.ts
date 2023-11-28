@@ -1,4 +1,5 @@
 import { ColumnSort } from "@tanstack/react-table";
+import { EXPLORE_MODE } from "../hooks/useExploreMode";
 import { getConfig } from "./config";
 import { EntityConfig, SiteConfig } from "./entities";
 
@@ -42,12 +43,12 @@ export function getDefaultEntityConfig(): EntityConfig {
       tabs: [],
       top: [],
     },
+    exploreMode: EXPLORE_MODE.CS_FETCH_CS_FILTERING,
     label: "",
     list: {
       columns: [],
     },
     route: "",
-    staticLoad: false,
   };
 }
 

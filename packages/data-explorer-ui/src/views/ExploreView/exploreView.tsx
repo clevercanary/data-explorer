@@ -61,7 +61,6 @@ function getTabs(entities: EntityConfig[]): Tab[] {
   );
 }
 
-// TODO(Dave) create an interface for props and maybe not drill the static load through here
 export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
   const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, DESKTOP_SM);
@@ -256,7 +255,7 @@ function renderList(
     relatedListItems,
     tabValue,
   } = exploreState;
-  const { list, listView, staticLoad } = entityConfig;
+  const { list, listView } = entityConfig;
   const { columns: columnsConfig, defaultSort } = list;
 
   if (!exploreState || !tabValue) {
@@ -264,7 +263,7 @@ function renderList(
   }
 
   if (entityListType !== tabValue) {
-    // required currently for static load site as the pre-rendered page
+    // required currently for client-side fetching as the pre-rendered page
     // loads with the previous tabs data on the first render after switching tabs. (or similar)
     return <></>; // TODO(Fran) review loading and return.
   }
@@ -281,7 +280,6 @@ function renderList(
       pages={paginationState.pages}
       pageSize={paginationState.pageSize}
       pagination={undefined}
-      staticallyLoaded={staticLoad}
       total={paginationState.rows}
     />
   );

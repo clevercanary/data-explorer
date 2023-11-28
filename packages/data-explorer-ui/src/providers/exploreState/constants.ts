@@ -1,4 +1,4 @@
-import { ExploreState, PaginationState } from "./exploreState";
+import { ExploreState, PaginationState } from "../exploreState";
 
 // Template constants
 export const DEFAULT_PAGINATION_STATE: PaginationState = {
@@ -19,11 +19,9 @@ export const INITIAL_STATE: ExploreState = {
   filterState: [],
   isRelatedView: false,
   listItems: [],
-  listStaticLoad: false,
   listView: undefined,
-  loading: false,
+  loading: true,
   paginationState: DEFAULT_PAGINATION_STATE,
   relatedListItems: undefined,
-  staticLoaded: false,
   tabValue: "",
 };

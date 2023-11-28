@@ -7,6 +7,7 @@ import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
 import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
+import { EXPLORE_MODE, useExploreMode } from "./useExploreMode";
 import { useExploreState } from "./useExploreState";
 
 interface UseEntityDetailResponse<T> {
@@ -26,11 +27,11 @@ export const useFetchEntity = <T,>(
   const { data: entityList, entityListType } = detailViewProps || {}; // Data is statically loaded if entity list is defined.
   const { authentication } = useConfig().config;
   const { token } = useAuthentication();
+  const exploreMode = useExploreMode();
   const {
     exploreState: { catalogState },
   } = useExploreState();
-  const { catalog, fetchEntityDetail, listStaticLoad, path } =
-    useEntityService(entityListType);
+  const { catalog, fetchEntityDetail, path } = useEntityService(entityListType);
   const {
     query: { params },
   } = useRouter();
@@ -40,13 +41,13 @@ export const useFetchEntity = <T,>(
   const shouldFetchEntity = useMemo(
     () =>
       isFetchRequired(
-        listStaticLoad,
+        exploreMode === EXPLORE_MODE.CS_FETCH_CS_FILTERING,
         Boolean(authentication && token),
         Boolean(entityList),
         Boolean(response),
         Boolean(catalogState)
       ),
-    [authentication, catalogState, entityList, listStaticLoad, response, token]
+    [authentication, catalogState, entityList, exploreMode, response, token]
   );
 
   useEffect(() => {
@@ -76,6 +77,7 @@ export const useFetchEntity = <T,>(
 
 /**
  * Returns true if fetching the entity is necessary.
+ * TODO see Fix fetch of entity if entity is statically generated and catalog is user defined #476.
  * @param listStaticLoad - Flag indicating if the entity list is statically loaded.
  * @param isAuthenticated - Flag indicating if authentication is enabled.
  * @param hasStaticResponse - Flag indicating if a statically loaded response exists.
