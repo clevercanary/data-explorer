@@ -73,6 +73,7 @@ export const fetchEntity = async <T, I>(
 /**
  * Fetch entity detail.
  */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 export const fetchEntityDetail = async (): Promise<any> => {
   throw new Error(THROW_ERROR); // Not implemented.
 };
