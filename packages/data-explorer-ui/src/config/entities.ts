@@ -9,7 +9,7 @@ import { ExploreMode } from "../hooks/useExploreMode";
 import { AuthContextProps } from "../providers/authentication";
 import { ExploreState } from "../providers/exploreState";
 import { FileManifestState } from "../providers/fileManifestState";
-import { SystemStatusResponse } from "../providers/systemStatus";
+import { SystemStatus, SystemStatusResponse } from "../providers/systemStatus";
 
 /**
  * Interface to define the analytics configuration for a given site.
@@ -443,4 +443,5 @@ export interface ViewContext {
   entityConfig: EntityConfig;
   exploreState: ExploreState;
   fileManifestState: FileManifestState;
+  systemStatus: SystemStatus;
 }
