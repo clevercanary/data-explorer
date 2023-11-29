@@ -20,6 +20,7 @@ import { DownloadCurlCommandNotStarted } from "./components/DownloadCurlCommandN
 import { DownloadCurlCommandReady } from "./components/DownloadCurlCommandReady/downloadCurlCommandReady";
 
 interface DownloadCurlCommandProps {
+  disabled?: boolean;
   DownloadCurlForm: ElementType;
   DownloadCurlStart: ElementType;
   DownloadCurlSuccess: ElementType;
@@ -31,6 +32,7 @@ interface DownloadCurlCommandProps {
 }
 
 export const DownloadCurlCommand = ({
+  disabled = false,
   DownloadCurlForm,
   DownloadCurlStart,
   DownloadCurlSuccess,
@@ -60,6 +62,7 @@ export const DownloadCurlCommand = ({
     />
   ) : (
     <DownloadCurlCommandNotStarted
+      disabled={disabled}
       DownloadCurlForm={DownloadCurlForm}
       DownloadCurlStart={DownloadCurlStart}
       executionEnvironment={executionEnvironment}

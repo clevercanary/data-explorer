@@ -23,20 +23,24 @@ import {
   SectionTitle,
   TableContainer,
 } from "../../manifestDownloadEntity.styles";
+import { FileManifestDisabled } from "../FileManifestDisabled/fileManifestDisabled";
 
 export interface FileManifestSpreadsheetProps {
+  disabled: boolean;
   filters: Filters;
 }
 
 export const FileManifestSpreadsheet = ({
+  disabled,
   filters,
 }: FileManifestSpreadsheetProps): JSX.Element => {
   const downloadRef = useRef<HTMLAnchorElement>(null);
   const { exists, fileName, fileUrl } =
-    useFileManifestSpreadsheet(filters) || {};
+    useFileManifestSpreadsheet(filters, disabled) || {};
   const { data, isLoading, run } = useRequestFileLocation(fileUrl);
   const spreadsheetURL = data?.location;
   const isInProgress = exists === undefined || isLoading;
+  const showLoading = !disabled && isInProgress;
 
   // Copies metadata spreadsheet.
   const copyMetadataURL = (url: string): void => {
@@ -59,13 +63,15 @@ export const FileManifestSpreadsheet = ({
         <SectionTitle>Metadata</SectionTitle>
         <TableContainer>
           <Loading
-            loading={isInProgress}
+            loading={showLoading}
             panelStyle={LOADING_PANEL_STYLE.INHERIT}
           />
           <GridTable gridTemplateColumns={spreadsheetURL ? "auto 1fr" : "1fr"}>
             <TableBody>
               <TableRow>
-                {isInProgress ? (
+                {disabled ? (
+                  <FileManifestDisabled />
+                ) : isInProgress ? (
                   <TableCell />
                 ) : spreadsheetURL ? (
                   <>

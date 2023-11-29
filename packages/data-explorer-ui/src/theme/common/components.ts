@@ -330,7 +330,8 @@ export const MuiButton = (theme: Theme): Components["MuiButton"] => {
           backgroundColor: theme.palette.primary.dark,
           boxShadow: "none",
         },
-        "&:disabled": {
+        // eslint-disable-next-line sort-keys -- disabling key order for readability
+        "&.Mui-disabled": {
           backgroundColor: theme.palette.primary.main,
           boxShadow: `0 1px 0 0 ${theme.palette.primary.dark}`,
           color: theme.palette.common.white,

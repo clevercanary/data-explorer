@@ -20,10 +20,12 @@ export interface ManifestSpreadsheet {
 /**
  * Returns file manifest spreadsheet.
  * @param filters - Filters.
+ * @param disabled - Disabled.
  * @returns file manifest spreadsheet.
  */
 export const useFileManifestSpreadsheet = (
-  filters: Filters
+  filters: Filters,
+  disabled: boolean
 ): ManifestSpreadsheet | undefined => {
   // Determine catalog.
   const catalog = useCatalog() as string; // catalog should be defined.
@@ -41,8 +43,9 @@ export const useFileManifestSpreadsheet = (
 
   // Fetch response from files endpoint.
   useEffect(() => {
+    if (disabled) return;
     run(fetchEntitiesFromURL(requestURL, undefined));
-  }, [requestURL, run]);
+  }, [disabled, requestURL, run]);
 
   return manifestSpreadsheet;
 };

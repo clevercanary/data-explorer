@@ -10,6 +10,7 @@ import { ExportToTerraNotStarted } from "./components/ExportToTerraNotStarted/ex
 import { ExportToTerraReady } from "./components/ExportToTerraReady/exportToTerraReady";
 
 export interface ExportToTerraProps {
+  disabled?: boolean;
   ExportForm: ElementType;
   ExportToTerraStart: ElementType;
   ExportToTerraSuccess: ElementType;
@@ -23,6 +24,7 @@ export interface ExportToTerraProps {
 }
 
 export const ExportToTerra = ({
+  disabled = false,
   ExportForm,
   ExportToTerraStart,
   ExportToTerraSuccess,
@@ -44,6 +46,7 @@ export const ExportToTerra = ({
     />
   ) : (
     <ExportToTerraNotStarted
+      disabled={disabled}
       ExportTerraForm={ExportForm}
       ExportToTerraStart={ExportToTerraStart}
       fileManifestState={fileManifestState}

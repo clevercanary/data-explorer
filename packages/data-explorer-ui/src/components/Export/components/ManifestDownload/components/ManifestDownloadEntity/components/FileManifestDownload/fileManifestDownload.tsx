@@ -22,18 +22,24 @@ import {
   SectionTitle,
   TableContainer,
 } from "../../manifestDownloadEntity.styles";
+import { FileManifestDisabled } from "../FileManifestDisabled/fileManifestDisabled";
 
 export interface FileManifestDownloadProps {
+  disabled: boolean;
   filters: Filters;
 }
 
 export const FileManifestDownload = ({
+  disabled,
   filters,
 }: FileManifestDownloadProps): JSX.Element => {
   const downloadRef = useRef<HTMLAnchorElement>(null);
-  const { fileName, isIdle, isLoading, manifestURL } =
-    useFileManifestDownload(filters);
+  const { fileName, isIdle, isLoading, manifestURL } = useFileManifestDownload(
+    filters,
+    disabled
+  );
   const isInProgress = isIdle || isLoading;
+  const showLoading = !disabled && isInProgress;
 
   // Copies file manifest.
   const copyManifestURL = (url: string): void => {
@@ -51,13 +57,15 @@ export const FileManifestDownload = ({
         <SectionTitle>File Manifest</SectionTitle>
         <TableContainer>
           <Loading
-            loading={isInProgress}
+            loading={showLoading}
             panelStyle={LOADING_PANEL_STYLE.INHERIT}
           />
           <GridTable gridTemplateColumns={manifestURL ? "auto 1fr" : "1fr"}>
             <TableBody>
               <TableRow>
-                {isInProgress ? (
+                {disabled ? (
+                  <FileManifestDisabled />
+                ) : isInProgress ? (
                   <TableCell />
                 ) : manifestURL ? (
                   <>

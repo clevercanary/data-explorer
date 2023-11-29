@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React, { ReactNode } from "react";
+import { useSystemStatus } from "../../../../hooks/useSystemStatus";
 import { HeroTitle, Title } from "../../../common/Title/title";
 import {
   ExportButton,
@@ -23,6 +24,7 @@ export const Hero = ({
   Summaries,
   title,
 }: HeroProps): JSX.Element => {
+  const { indexing } = useSystemStatus();
   return (
     <>
       {(title || SideBarButton || Summaries) && (
@@ -36,7 +38,9 @@ export const Hero = ({
                 {Summaries}
               </SummaryWidget>
               <Link href="/export" passHref>
-                <ExportButton href="passHref">Export</ExportButton>
+                <ExportButton disabled={indexing} href="passHref">
+                  Export
+                </ExportButton>
               </Link>
             </Widgets>
           )}

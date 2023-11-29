@@ -12,6 +12,7 @@ import {
 } from "../../../../export.styles";
 
 export interface ExportToTerraNotStartedProps {
+  disabled: boolean;
   ExportTerraForm: ElementType;
   ExportToTerraStart: ElementType;
   fileManifestState: FileManifestState;
@@ -22,6 +23,7 @@ export interface ExportToTerraNotStartedProps {
 }
 
 export const ExportToTerraNotStarted = ({
+  disabled,
   ExportTerraForm,
   ExportToTerraStart,
   fileManifestState,
@@ -52,7 +54,9 @@ export const ExportToTerraNotStarted = ({
           />
           <SectionActions>
             <ButtonPrimary
-              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              disabled={
+                disabled || fileManifestState.isLoading || !isRequestFormValid
+              }
               onClick={onRequestManifest}
             >
               Request Link

@@ -7,20 +7,22 @@ import { FileManifestDownload } from "./components/FileManifestDownload/fileMani
 import { FileManifestSpreadsheet } from "./components/FileManifestSpreadsheet/fileManifestSpreadsheet";
 
 export interface ManifestDownloadEntityProps {
+  disabled?: boolean;
   fileManifestType: FileManifestType;
   filters: Filters; // Initializes manifest download filters.
   metadataFilters: Filters; // Metadata filters filters.
 }
 
 export const ManifestDownloadEntity = ({
+  disabled = false,
   filters,
   metadataFilters,
 }: ManifestDownloadEntityProps): JSX.Element => {
   useRequestFileManifest(MANIFEST_DOWNLOAD_FORMAT.COMPACT, filters, undefined);
   return (
     <>
-      <FileManifestSpreadsheet filters={metadataFilters} />
-      <FileManifestDownload filters={filters} />
+      <FileManifestSpreadsheet disabled={disabled} filters={metadataFilters} />
+      <FileManifestDownload disabled={disabled} filters={filters} />
     </>
   );
 };

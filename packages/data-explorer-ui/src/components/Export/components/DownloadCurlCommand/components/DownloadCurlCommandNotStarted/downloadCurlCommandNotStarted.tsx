@@ -13,6 +13,7 @@ import {
 import { Button } from "./downloadCurlCommandNotStarted.styles";
 
 export interface DownloadCurlCommandNotStartedProps {
+  disabled: boolean;
   DownloadCurlForm: ElementType;
   DownloadCurlStart: ElementType;
   executionEnvironment: ExecutionEnvironment;
@@ -24,6 +25,7 @@ export interface DownloadCurlCommandNotStartedProps {
 }
 
 export const DownloadCurlCommandNotStarted = ({
+  disabled,
   DownloadCurlForm,
   DownloadCurlStart,
   executionEnvironment,
@@ -55,7 +57,9 @@ export const DownloadCurlCommandNotStarted = ({
           />
           <SectionActions>
             <Button
-              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              disabled={
+                disabled || fileManifestState.isLoading || !isRequestFormValid
+              }
               onClick={onRequestManifest}
             >
               <span>Request curl Command</span>

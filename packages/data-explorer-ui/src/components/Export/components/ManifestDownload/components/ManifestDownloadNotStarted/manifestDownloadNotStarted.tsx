@@ -12,6 +12,7 @@ import {
 } from "../../../../export.styles";
 
 export interface ManifestDownloadNotStartedProps {
+  disabled: boolean;
   fileManifestState: FileManifestState;
   formFacet: FormFacet;
   isLoading: boolean;
@@ -21,6 +22,7 @@ export interface ManifestDownloadNotStartedProps {
 }
 
 export const ManifestDownloadNotStarted = ({
+  disabled,
   fileManifestState,
   formFacet,
   isLoading,
@@ -48,7 +50,9 @@ export const ManifestDownloadNotStarted = ({
           />
           <SectionActions>
             <ButtonPrimary
-              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              disabled={
+                disabled || fileManifestState.isLoading || !isRequestFormValid
+              }
               onClick={onRequestManifest}
             >
               Prepare Manifest
