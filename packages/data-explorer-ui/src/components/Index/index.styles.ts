@@ -6,6 +6,7 @@ export const Index = styled.div`
   flex: 1;
   gap: 16px;
   padding: 24px 0;
+  place-content: flex-start stretch;
 
   ${mediaTabletUp} {
     padding: 24px;

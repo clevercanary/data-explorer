@@ -2,9 +2,10 @@
  * Set of end point paths accepted by Azul.
  */
 export enum APIEndpoints {
-  "FETCH" = "/fetch", // Required in path for entity matrix downloads and direct file downloads
-  "FILES" = "/files",
-  "SUMMARY" = "/summary",
+  FETCH = "/fetch", // Required in path for entity matrix downloads and direct file downloads
+  FILES = "/files",
+  INDEX_STATUS = "/health/progress",
+  SUMMARY = "/summary",
 }
 
 /**

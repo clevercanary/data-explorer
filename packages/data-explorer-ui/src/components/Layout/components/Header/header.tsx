@@ -26,6 +26,7 @@ import { Socials } from "./components/Content/components/Socials/socials.styles"
 import { AppBar as HeaderAppBar, HeaderSmAppBar } from "./header.styles";
 
 export interface HeaderProps {
+  Announcements?: ReactNode;
   authenticationEnabled?: boolean;
   className?: string;
   Logo: ReactNode;
@@ -39,6 +40,7 @@ export interface HeaderProps {
 
 export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   const {
+    Announcements,
     authenticationEnabled,
     className,
     Logo,
@@ -75,7 +77,10 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   }, []);
 
   return (
-    <AppBar className={className} elevation={1} position="fixed">
+    <AppBar className={className} elevation={1} position="sticky">
+      {/* Announcements */}
+      {Announcements}
+      {/* Toolbar */}
       <Toolbar variant="dense">
         {/* Logo */}
         {Logo}

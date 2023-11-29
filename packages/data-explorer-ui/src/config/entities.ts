@@ -9,6 +9,7 @@ import { ExploreMode } from "../hooks/useExploreMode";
 import { AuthContextProps } from "../providers/authentication";
 import { ExploreState } from "../providers/exploreState";
 import { FileManifestState } from "../providers/fileManifestState";
+import { SystemStatusResponse } from "../providers/systemStatus";
 
 /**
  * Interface to define the analytics configuration for a given site.
@@ -358,6 +359,7 @@ export interface SiteConfig {
   };
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
+  systemStatus?: SystemStatusConfig;
   themeOptions?: ThemeOptions;
   trackingConfig?: TrackingConfig;
 }
@@ -394,6 +396,21 @@ export const SORT_DIRECTION = {
 export interface SummaryConfig {
   apiPath: string;
   components: ComponentsConfig;
+}
+
+/**
+ * System status bind response function.
+ */
+export type SystemStatusBindResponseFn = <R>(
+  response?: R
+) => SystemStatusResponse | undefined;
+
+/**
+ * System status endpoint.
+ */
+export interface SystemStatusConfig {
+  apiPath: string;
+  bindResponse: SystemStatusBindResponseFn;
 }
 
 /**

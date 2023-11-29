@@ -1,11 +1,12 @@
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { IconButton, Toolbar as MToolbar } from "@mui/material";
-import React, { ReactNode } from "react";
+import React, { Fragment, ReactNode } from "react";
 import { Actions } from "../../../../actions";
 import { Authentication } from "../../../Authentication/authentication";
 import { Search } from "../../../Search/search";
 
 export interface DialogTitleProps {
+  Announcements?: ReactNode;
   authenticationEnabled?: boolean;
   Logo?: ReactNode;
   onClose: () => void;
@@ -14,6 +15,7 @@ export interface DialogTitleProps {
 }
 
 export const Toolbar = ({
+  Announcements,
   authenticationEnabled,
   Logo,
   onClose,
@@ -21,25 +23,28 @@ export const Toolbar = ({
   searchURL,
 }: DialogTitleProps): JSX.Element => {
   return (
-    <MToolbar>
-      {Logo}
-      <Actions>
-        {/* Search */}
-        <Search
-          closeMenu={onClose}
-          searchEnabled={searchEnabled}
-          searchURL={searchURL}
-        />
-        {/* Authentication */}
-        <Authentication
-          authenticationEnabled={authenticationEnabled}
-          closeMenu={onClose}
-        />
-        {/* Close menu */}
-        <IconButton color="ink" onClick={onClose}>
-          <CloseRoundedIcon />
-        </IconButton>
-      </Actions>
-    </MToolbar>
+    <Fragment>
+      {Announcements}
+      <MToolbar>
+        {Logo}
+        <Actions>
+          {/* Search */}
+          <Search
+            closeMenu={onClose}
+            searchEnabled={searchEnabled}
+            searchURL={searchURL}
+          />
+          {/* Authentication */}
+          <Authentication
+            authenticationEnabled={authenticationEnabled}
+            closeMenu={onClose}
+          />
+          {/* Close menu */}
+          <IconButton color="ink" onClick={onClose}>
+            <CloseRoundedIcon />
+          </IconButton>
+        </Actions>
+      </MToolbar>
+    </Fragment>
   );
 };
