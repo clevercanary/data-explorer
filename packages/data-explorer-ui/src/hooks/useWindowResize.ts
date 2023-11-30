@@ -7,9 +7,10 @@ export interface WindowSize {
 
 /**
  * Listens to window resize event and returns window height and width values.
+ * @param timeout - Timeout in milliseconds to wait before recalculating window size.
  * @returns window height and width values.
  */
-export const useWindowResize = (): WindowSize => {
+export const useWindowResize = (timeout = 200): WindowSize => {
   const timeoutRef = useRef<NodeJS.Timeout>();
   const [windowSize, setWindowSize] = useState<WindowSize>(getWindowSize());
 
@@ -21,7 +22,7 @@ export const useWindowResize = (): WindowSize => {
       clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         setWindowSize(getWindowSize());
-      }, 200);
+      }, timeout);
     };
     // Add resize event listener.
     window.addEventListener("resize", onResize);
@@ -31,7 +32,7 @@ export const useWindowResize = (): WindowSize => {
       // Clear timeout.
       clearTimeout(timeoutRef.current);
     };
-  }, []);
+  }, [timeout]);
 
   return windowSize;
 };
