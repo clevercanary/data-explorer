@@ -4,7 +4,7 @@ import {
   AzulEntitiesResponse,
 } from "../../apis/azul/common/entities";
 import { Filters } from "../../common/entities";
-import { fetchEntitiesFromURL } from "../../entity/api/service";
+import { fetchEntitiesFromURL } from "../../entity/common/service";
 import { fetchQueryParams, SearchParams } from "../../utils/fetchQueryParams";
 import { useAsync } from "../useAsync";
 import { useAuthentication } from "../useAuthentication";

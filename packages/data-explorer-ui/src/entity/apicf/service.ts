@@ -1,11 +1,10 @@
 import {
   AzulEntitiesResponse,
-  AzulEntityStaticResponse,
   AzulSummaryResponse,
 } from "../../apis/azul/common/entities";
 import { EntityMapper } from "../../config/entities";
 import { PAGINATION_PAGE_SIZE } from "../../shared/constants";
-import { api } from "./client";
+import { fetchEntitiesFromURL, fetchEntityFromURL } from "../common/service";
 
 const THROW_ERROR = "Not implemented.";
 
@@ -16,28 +15,6 @@ export const fetchEntitiesFromQuery =
   async (): Promise<AzulEntitiesResponse> => {
     throw new Error(THROW_ERROR); // Not implemented.
   };
-
-/**
- * Fetch entity from the given URL.
- * @param url - URL.
- */
-export const fetchEntityFromURL = async (
-  url: string
-): Promise<AzulEntityStaticResponse> => {
-  const res = await api().get<AzulEntityStaticResponse>(url);
-  return res.data;
-};
-
-/**
- * Fetch entities from the given URL.
- * @param url - URL.
- */
-export const fetchEntitiesFromURL = async (
-  url: string
-): Promise<AzulEntitiesResponse> => {
-  const res = await api().get<AzulEntitiesResponse>(url);
-  return res.data;
-};
 
 /**
  * Fetch all entities from the given API path.

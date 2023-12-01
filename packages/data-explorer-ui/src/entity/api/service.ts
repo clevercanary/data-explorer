@@ -2,7 +2,6 @@
  * Handles Project's API requests
  */
 // TODO move to Azul APIs section
-import { AxiosRequestConfig } from "axios";
 import {
   AzulEntitiesResponse,
   AzulListParams,
@@ -15,17 +14,12 @@ import { FilterState } from "../../hooks/useCategoryFilter";
 import {
   getDefaultDetailParams,
   getDefaultListParams,
+  getEntityURL,
 } from "../../shared/utils";
 import { convertUrlParams } from "../../utils/url";
-import { api } from "./client";
-
-function createFetchOptions(
-  accessToken: string | undefined
-): AxiosRequestConfig {
-  return {
-    headers: accessToken ? { Authorization: "Bearer " + accessToken } : {},
-  };
-}
+import { api } from "../common/client";
+import { fetchEntitiesFromURL } from "../common/service";
+import { getAxiosRequestOptions } from "../common/utils";
 
 /**
  * Make a GET or POST request for a list of entities
@@ -49,22 +43,6 @@ export const fetchEntitiesFromQuery = async (
   );
   response.apiPath = apiPath;
   return response;
-};
-
-/**
- * Fetch entites list corresponding to the givenURL
- * @param path - path to request the list from
- * @param accessToken - auth token
- */
-export const fetchEntitiesFromURL = async (
-  path: string,
-  accessToken: string | undefined
-): Promise<AzulEntitiesResponse> => {
-  const res = await api().get<AzulEntitiesResponse>(
-    path,
-    createFetchOptions(accessToken)
-  );
-  return res.data;
 };
 
 /**
@@ -112,8 +90,9 @@ export const fetchEntityDetail = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
   const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
-  const options = createFetchOptions(accessToken);
-  const res = await api().get(
+  const options = getAxiosRequestOptions(accessToken);
+  const baseURL = getEntityURL();
+  const res = await api(baseURL).get(
     `${apiPath}/${id}?${convertUrlParams({
       ...defaultParams,
       ...catalogParam,
@@ -154,7 +133,7 @@ export const fetchSummary = async (
     };
   }
 
-  const options = createFetchOptions(accessToken);
+  const options = getAxiosRequestOptions(accessToken);
   const res = await api().get<AzulSummaryResponse>(
     `${apiPath}?${convertUrlParams({ ...summaryParams })}`,
     options
@@ -173,7 +152,7 @@ export const fetchSummaryFromURL = async (
 ): Promise<AzulSummaryResponse> => {
   const res = await api().get<AzulSummaryResponse>(
     path,
-    createFetchOptions(accessToken)
+    getAxiosRequestOptions(accessToken)
   );
   return res.data;
 };

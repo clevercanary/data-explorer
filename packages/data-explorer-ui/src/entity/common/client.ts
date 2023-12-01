@@ -4,13 +4,14 @@ import { getURL } from "../../shared/utils";
 let axiosInstance: AxiosInstance | null = null;
 
 /**
- * Returns an AxiosInstance to be used to make API calls with a timeout of 10 seconds
- * @returns {AxiosInstance} with the current configs URL as baseURL
+ * Returns a singleton Axios instance configured for making HTTP requests to a specified base URL.
+ * @param baseURL - The base URL to use for the AxiosInstance.
+ * @returns axios instance.
  */
-export const api = (): AxiosInstance => {
+export const api = (baseURL = getURL()): AxiosInstance => {
   if (!axiosInstance) {
     axiosInstance = axios.create({
-      baseURL: getURL(),
+      baseURL,
       timeout: 20 * 1000,
     });
   }
