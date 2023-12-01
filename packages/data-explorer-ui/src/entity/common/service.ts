@@ -8,16 +8,16 @@ import { getAxiosRequestOptions } from "./utils";
 
 /**
  * Fetch entities from the given URL.
- * @param url - URL.
+ * @param URL - URL.
  * @param accessToken - Access token.
  * @returns entities.
  */
 export const fetchEntitiesFromURL = async (
-  url: string,
+  URL: string,
   accessToken?: string
 ): Promise<AzulEntitiesResponse> => {
   const res = await api().get<AzulEntitiesResponse>(
-    url,
+    URL,
     getAxiosRequestOptions(accessToken)
   );
   return res.data;
@@ -25,17 +25,17 @@ export const fetchEntitiesFromURL = async (
 
 /**
  * Fetch entity from the given URL.
- * @param url - URL.
+ * @param URL - URL.
  * @param accessToken - Access token.
  * @returns entity.
  */
 export const fetchEntityFromURL = async (
-  url: string,
+  URL: string,
   accessToken?: string
 ): Promise<AzulEntityStaticResponse> => {
   const baseURL = getEntityURL();
   const res = await api(baseURL).get<AzulEntityStaticResponse>(
-    url,
+    URL,
     getAxiosRequestOptions(accessToken)
   );
   return res.data;

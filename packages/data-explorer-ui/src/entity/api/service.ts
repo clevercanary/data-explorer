@@ -14,6 +14,7 @@ import { FilterState } from "../../hooks/useCategoryFilter";
 import {
   getDefaultDetailParams,
   getDefaultListParams,
+  getEntityURL,
 } from "../../shared/utils";
 import { convertUrlParams } from "../../utils/url";
 import { api } from "../common/client";
@@ -90,7 +91,8 @@ export const fetchEntityDetail = async (
 ): Promise<any> => {
   const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
   const options = getAxiosRequestOptions(accessToken);
-  const res = await api().get(
+  const baseURL = getEntityURL();
+  const res = await api(baseURL).get(
     `${apiPath}/${id}?${convertUrlParams({
       ...defaultParams,
       ...catalogParam,
