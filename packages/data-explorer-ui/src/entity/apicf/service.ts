@@ -1,8 +1,9 @@
 import {
   AzulEntitiesResponse,
+  AzulEntityStaticResponse,
   AzulSummaryResponse,
 } from "../../apis/azul/common/entities";
-import { EntityMapper, GetIdFunction } from "../../config/entities";
+import { EntityMapper } from "../../config/entities";
 import { PAGINATION_PAGE_SIZE } from "../../shared/constants";
 import { api } from "./client";
 
@@ -15,6 +16,17 @@ export const fetchEntitiesFromQuery =
   async (): Promise<AzulEntitiesResponse> => {
     throw new Error(THROW_ERROR); // Not implemented.
   };
+
+/**
+ * Fetch entity from the given URL.
+ * @param url - URL.
+ */
+export const fetchEntityFromURL = async (
+  url: string
+): Promise<AzulEntityStaticResponse> => {
+  const res = await api().get<AzulEntityStaticResponse>(url);
+  return res.data;
+};
 
 /**
  * Fetch entities from the given URL.
@@ -54,20 +66,16 @@ export const fetchAllEntities = async (
  * Fetch entity from the given URL, entity ID and entity ID getter function.
  * @param id - Entity ID.
  * @param apiPath - API endpoint URL.
- * @param getId - Get identifier function.
  * @param entityMapper - Entity mapper.
  * @returns entity.
  */
 export const fetchEntity = async <T, I>(
   id: string,
   apiPath: string,
-  getId: GetIdFunction<T>,
   entityMapper?: EntityMapper<T, I>
 ): Promise<T> => {
-  const response = await fetchAllEntities(apiPath);
-  const entities = response.hits;
-  const entity = entities.find((entity) => getId(entity) === id);
-  return entityMapper?.(entity) || entity;
+  const entity = await fetchEntityFromURL(`${apiPath}/${id}`);
+  return entityMapper?.(entity as I) || (entity as T);
 };
 
 /**

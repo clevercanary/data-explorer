@@ -3,11 +3,7 @@ import {
   AzulListParams,
   AzulSummaryResponse,
 } from "../../apis/azul/common/entities";
-import {
-  DataSourceConfig,
-  EntityMapper,
-  GetIdFunction,
-} from "../../config/entities";
+import { DataSourceConfig, EntityMapper } from "../../config/entities";
 import { FilterState } from "../../hooks/useCategoryFilter";
 
 /**
@@ -33,7 +29,6 @@ export interface EntityService {
   fetchEntity?: <T, I>(
     id: string,
     apiPath: string,
-    getId: GetIdFunction<T>,
     entityMapper?: EntityMapper<T, I>
   ) => Promise<T>;
 

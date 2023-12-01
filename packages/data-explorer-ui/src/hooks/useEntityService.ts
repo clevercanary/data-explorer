@@ -1,4 +1,4 @@
-import { EntityConfig, EntityMapper, GetIdFunction } from "../config/entities";
+import { EntityConfig, EntityMapper } from "../config/entities";
 import { getEntityConfig } from "../config/utils";
 import { createEntityService } from "../entity/service/factory";
 import { EntityService, ENTITY_SERVICE_TYPE } from "../entity/service/model";
@@ -11,7 +11,6 @@ interface FetcherResponse<T, I> extends EntityService {
   catalog: string | undefined;
   detailStaticLoad: boolean;
   entityMapper?: EntityMapper<T, I>;
-  getId?: GetIdFunction<T>;
   path: string;
 }
 
@@ -27,7 +26,6 @@ export const getEntityService = <T, I>(
         catalog,
         detailStaticLoad: entityConfig.detail.staticLoad,
         entityMapper: entityConfig.entityMapper,
-        getId: entityConfig.getId,
         path: entityConfig.apiPath,
       };
     }
@@ -38,7 +36,6 @@ export const getEntityService = <T, I>(
         catalog,
         detailStaticLoad: entityConfig.detail.staticLoad,
         entityMapper: entityConfig.entityMapper,
-        getId: entityConfig.getId,
         path: entityConfig.apiPath,
       };
     }
@@ -50,7 +47,6 @@ export const getEntityService = <T, I>(
       catalog: undefined,
       detailStaticLoad: true,
       entityMapper: entityConfig.entityMapper,
-      getId: entityConfig.getId,
       path: entityConfig.route, //the entity list type
     };
   }
