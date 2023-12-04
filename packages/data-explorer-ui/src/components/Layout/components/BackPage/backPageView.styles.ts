@@ -110,7 +110,8 @@ export const BackPageContentSideColumn = styled(BackPageContentColumn)`
 export const DetailPageOverviewContentMainColumn = styled(Sections)`
   display: contents;
 
-  && > * {
+  // Added negation pseudo-class to ensure the display style is not applied to the style tag during initial rendering.
+  && > *:not(style) {
     display: contents; // required to override nested GridPaper.
   }
 
@@ -119,7 +120,8 @@ export const DetailPageOverviewContentMainColumn = styled(Sections)`
     display: grid;
     ${mainColumn};
 
-    && > * {
+    // Added negation pseudo-class to ensure the display style is not applied to the style tag during initial rendering.
+    && > *:not(style) {
       display: grid; // required to restore nested GridPaper display property.
     }
   }
@@ -130,7 +132,8 @@ export const DetailPageOverviewContentMainColumn = styled(Sections)`
 export const DetailPageOverviewContentSideColumn = styled(Sections)`
   display: contents;
 
-  && > * {
+  // Added negation pseudo-class to ensure the display style is not applied to the style tag during initial rendering.
+  && > *:not(style) {
     display: contents; // required to override nested GridPaper.
   }
 
@@ -139,7 +142,8 @@ export const DetailPageOverviewContentSideColumn = styled(Sections)`
     display: grid;
     ${sideColumn};
 
-    && > * {
+    // Added negation pseudo-class to ensure the display style is not applied to the style tag during initial rendering.
+    && > *:not(style) {
       display: grid; // required to restore nested GridPaper display property.
     }
   }
