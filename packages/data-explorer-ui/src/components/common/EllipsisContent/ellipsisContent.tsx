@@ -1,5 +1,8 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
-import { useResizeObserver } from "../../../hooks/useResizeObserver";
+import {
+  getBorderBoxSizeHeight,
+  useResizeObserver,
+} from "../../../hooks/useResizeObserver";
 import { Button, Content } from "./ellipsisContent.styles";
 
 enum EllipsisMode {
@@ -18,7 +21,8 @@ export const EllipsisContent = ({
   maxLineCount,
 }: OverviewDescriptionProps): JSX.Element => {
   const ellipsisRef = useRef<HTMLDivElement>(null);
-  const { height } = useResizeObserver(ellipsisRef) || {};
+  const { height } =
+    useResizeObserver(ellipsisRef, getBorderBoxSizeHeight) || {};
   const [ellipsisMode, setEllipsisMode] = useState<EllipsisMode | undefined>();
   const isEllipsis = ellipsisMode === EllipsisMode.ON;
 

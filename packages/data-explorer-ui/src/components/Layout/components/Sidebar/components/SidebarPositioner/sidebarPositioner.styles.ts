@@ -1,15 +1,20 @@
 import styled from "@emotion/styled";
 import { mediaDesktopSmallUp } from "../../../../../../styles/common/mixins/breakpoints";
 
-export const SidebarPositioner = styled("div")`
+interface Props {
+  headerHeight: number;
+}
+
+export const SidebarPositioner = styled("div")<Props>`
   height: 100%;
   overflow: visible;
   padding: 16px 0;
 
   ${mediaDesktopSmallUp} {
-    height: auto;
+    height: ${({ headerHeight }) => `calc(100vh - ${headerHeight}px)`};
     overflow: auto;
-    padding: 0;
+    padding: ${({ headerHeight }) => headerHeight}px 0 0;
     position: sticky;
+    top: 0;
   }
 `;
