@@ -120,7 +120,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
       type: ExploreActionKind.UpdateFilter,
     });
 
-    trackingConfig?.trackFilterApplied({
+    trackingConfig?.trackFilterApplied?.({
       category: categoryKey,
       fromSearchAll,
       searchTerm: searchTerm ?? "",

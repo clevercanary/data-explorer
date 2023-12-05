@@ -297,8 +297,8 @@ export type TrackFilterAppliedFunction = (payload: {
 export type TrackFilterOpenedFunction = (payload: { category: string }) => void;
 
 interface TrackingConfig {
-  trackFilterApplied: TrackFilterAppliedFunction;
-  trackFilterOpened: TrackFilterOpenedFunction;
+  trackFilterApplied?: TrackFilterAppliedFunction;
+  trackFilterOpened?: TrackFilterOpenedFunction;
 }
 
 /**
