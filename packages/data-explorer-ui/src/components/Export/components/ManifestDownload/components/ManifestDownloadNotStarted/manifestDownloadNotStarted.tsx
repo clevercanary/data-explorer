@@ -48,8 +48,7 @@ export const ManifestDownloadNotStarted = ({
           />
           <SectionActions>
             <ExportButton
-              disabled={fileManifestState.isLoading || !isRequestFormValid}
-              isLoading={fileManifestState.isLoading}
+              disabled={!isRequestFormValid}
               onClick={onRequestManifest}
             >
               Prepare Manifest

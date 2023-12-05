@@ -57,8 +57,7 @@ export const DownloadCurlCommandNotStarted = ({
           <SectionActions>
             <ExportButton
               Button={Button}
-              disabled={fileManifestState.isLoading || !isRequestFormValid}
-              isLoading={fileManifestState.isLoading}
+              disabled={!isRequestFormValid}
               onClick={onRequestManifest}
             >
               Request curl Command

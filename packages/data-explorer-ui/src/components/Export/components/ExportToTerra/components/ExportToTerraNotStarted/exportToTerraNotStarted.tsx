@@ -52,8 +52,7 @@ export const ExportToTerraNotStarted = ({
           />
           <SectionActions>
             <ExportButton
-              disabled={fileManifestState.isLoading || !isRequestFormValid}
-              isLoading={fileManifestState.isLoading}
+              disabled={!isRequestFormValid}
               onClick={onRequestManifest}
             >
               Request Link
