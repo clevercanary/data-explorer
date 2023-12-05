@@ -15,7 +15,6 @@ import {
   VariableSizeListProps as ListProps,
 } from "react-window";
 import { SelectCategoryView } from "../../../../../../common/entities";
-import { escapeRegExp } from "../../../../../../common/utils";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
@@ -59,7 +58,7 @@ interface VariableSizeListData {
   filteredItems: SearchAllFiltersItem[];
   onFilter: OnFilterFn;
   onUpdateItemSizeByItemKey: (key: string, size: number) => void;
-  searchTermRegExp: RegExp | null;
+  searchTerm?: string;
 }
 
 interface OuterElementContextValue {
@@ -75,12 +74,8 @@ interface OuterElementContextValue {
 function renderListItem(props: ListChildComponentProps): JSX.Element {
   const { data, index, style } = props;
   delete style.height; // Remove height style to allow variable size list to set item height.
-  const {
-    filteredItems,
-    onFilter,
-    onUpdateItemSizeByItemKey,
-    searchTermRegExp,
-  } = data as VariableSizeListData;
+  const { filteredItems, onFilter, onUpdateItemSizeByItemKey, searchTerm } =
+    data as VariableSizeListData;
   const item = filteredItems[index];
   if (item.type === ITEM_TYPE.DIVIDER) return <Divider style={style} />;
   else
@@ -89,7 +84,7 @@ function renderListItem(props: ListChildComponentProps): JSX.Element {
         item={item}
         onFilter={onFilter}
         onUpdateItemSizeByItemKey={onUpdateItemSizeByItemKey}
-        searchTermRegExp={searchTermRegExp}
+        searchTerm={searchTerm}
         style={style}
       />
     );
@@ -135,9 +130,6 @@ export const VariableSizeList = forwardRef<
   autocompleteListRef
 ): JSX.Element {
   const filteredItems = applyMenuFilter(categoryViews, searchTerm);
-  const searchTermRegExp = searchTerm
-    ? new RegExp(escapeRegExp(searchTerm), "ig")
-    : null;
   let resizeRequired = true;
   const desktopSmDown = useBreakpointHelper(
     BREAKPOINT_FN_NAME.DOWN,
@@ -188,7 +180,7 @@ export const VariableSizeList = forwardRef<
           filteredItems,
           onFilter,
           onUpdateItemSizeByItemKey,
-          searchTermRegExp,
+          searchTerm,
         }}
         itemSize={(index): number => {
           const item = filteredItems[index];

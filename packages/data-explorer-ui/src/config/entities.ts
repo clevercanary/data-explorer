@@ -280,6 +280,44 @@ type RelatedSearchFunction = (
 ) => Promise<RelatedSearchResult | undefined>;
 
 /**
+ * Filter applied tracking payload
+ */
+export interface TrackFilterAppliedPayload {
+  category: string;
+  fromSearchAll: boolean;
+  searchTerm: string;
+  section: string;
+  selected: boolean;
+  value: string;
+}
+
+/**
+ * Filter applied tracking function
+ */
+export type TrackFilterAppliedFunction = (
+  payload: TrackFilterAppliedPayload
+) => void;
+
+/**
+ * Filter opened tracking payload
+ */
+export interface TrackFilterOpenedPayload {
+  category: string;
+}
+
+/**
+ * Filter opened tracking function
+ */
+export type TrackFilterOpenedFunction = (
+  payload: TrackFilterOpenedPayload
+) => void;
+
+interface TrackingConfig {
+  trackFilterApplied?: TrackFilterAppliedFunction;
+  trackFilterOpened?: TrackFilterOpenedFunction;
+}
+
+/**
  * Product of the related search function.
  */
 export interface RelatedSearchResult {
@@ -321,6 +359,7 @@ export interface SiteConfig {
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   themeOptions?: ThemeOptions;
+  trackingConfig?: TrackingConfig;
 }
 
 /**

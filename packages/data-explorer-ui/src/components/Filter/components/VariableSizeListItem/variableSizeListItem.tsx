@@ -16,6 +16,7 @@ import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIc
 
 interface Props {
   categoryKey: CategoryKey;
+  categorySection?: string;
   listItem: SelectCategoryValueView;
   onFilter: OnFilterFn;
   onUpdateItemSizeByItemKey: (itemKey: string, itemSize: number) => void;
@@ -24,6 +25,7 @@ interface Props {
 
 export default function VariableSizeListItem({
   categoryKey,
+  categorySection,
   listItem,
   onFilter,
   onUpdateItemSizeByItemKey,
@@ -38,10 +40,14 @@ export default function VariableSizeListItem({
     onUpdateItemSizeByItemKey(key, listItemRef.current?.clientHeight || 0);
   }, [key, onUpdateItemSizeByItemKey]);
 
+  const handleItemClicked = (): void => {
+    onFilter(categoryKey, key, !selected, categorySection);
+  };
+
   return (
     <ListItemButton
       ref={listItemRef}
-      onClick={(): void => onFilter(categoryKey, key, !selected)}
+      onClick={handleItemClicked}
       selected={selected}
       style={style}
     >

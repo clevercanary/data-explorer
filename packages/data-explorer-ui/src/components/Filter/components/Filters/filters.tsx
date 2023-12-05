@@ -1,4 +1,5 @@
 import { Divider } from "@mui/material";
+import { TrackFilterOpenedFunction } from "config/entities";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { CategoryTag, SelectCategoryView } from "../../../../common/entities";
 import {
@@ -22,6 +23,7 @@ export interface FiltersProps {
   closeAncestor?: () => void;
   disabled: boolean; // Global disabling of filters; typically in "related" entity view.
   onFilter: OnFilterFn;
+  trackFilterOpened?: TrackFilterOpenedFunction;
 }
 
 /**
@@ -65,6 +67,7 @@ export const Filters = ({
   closeAncestor,
   disabled = false,
   onFilter,
+  trackFilterOpened,
 }: FiltersProps): JSX.Element => {
   const isFilterDrawer = useBreakpointHelper(
     BREAKPOINT_FN_NAME.DOWN,
@@ -80,16 +83,18 @@ export const Filters = ({
 
   return (
     <FilterList disabled={disabled} height={height} ref={filterListRef}>
-      {categoryFilters.map(({ categoryViews }, i) => (
+      {categoryFilters.map(({ categoryViews, label }, i) => (
         <Fragment key={i}>
           {i !== 0 && <Divider />}
           {categoryViews.map((categoryView) => (
             <Filter
               key={categoryView.key}
+              categorySection={label}
               categoryView={categoryView}
               closeAncestor={closeAncestor}
               isFilterDrawer={isFilterDrawer}
               onFilter={onFilter}
+              trackFilterOpened={trackFilterOpened}
               tags={renderFilterTags(categoryView, onFilter)}
             />
           ))}

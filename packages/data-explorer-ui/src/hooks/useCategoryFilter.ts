@@ -31,7 +31,9 @@ export interface FilterInstance {
 export type OnFilterFn = (
   categoryKey: CategoryKey,
   selectedCategoryValue: CategoryValueKey,
-  selected: boolean
+  selected: boolean,
+  categorySection?: string,
+  searchTerm?: string
 ) => void;
 
 /**
