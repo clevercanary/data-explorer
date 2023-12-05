@@ -66,7 +66,13 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   const tabletDown = useBreakpointHelper(BREAKPOINT_FN_NAME.DOWN, DESKTOP_SM);
   const { config, entityConfig } = useConfig(); // Get app level config.
   const { exploreDispatch, exploreState } = useExploreState(); // Get the useReducer state and dispatch for "Explore".
-  const { categorySiteConfig, entities, explorerTitle, summaryConfig } = config;
+  const {
+    categoryGroupConfigs,
+    entities,
+    explorerTitle,
+    summaryConfig,
+    trackingConfig,
+  } = config;
   const { listView } = entityConfig;
   const { listHero, subTitleHero } = listView || {};
   const { categoryViews, isRelatedView, tabValue } = exploreState;
@@ -77,12 +83,8 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   useEntityListRelatedView(); // Fetch related entities.
   const { entityListType } = props;
   const categoryFilters = useMemo(
-    () =>
-      buildCategoryFilters(
-        categoryViews,
-        categorySiteConfig?.categoryGroupConfigs
-      ),
-    [categoryViews, categorySiteConfig?.categoryGroupConfigs]
+    () => buildCategoryFilters(categoryViews, categoryGroupConfigs),
+    [categoryViews, categoryGroupConfigs]
   );
 
   /**
@@ -95,49 +97,45 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   /**
    * Callback fired when selected state of a category value is toggled.
    * @param fromSearchAll - Infication if the filter was originated from the search all field
-   * @returns - a function to be used as filter change callback.
-   * * @param categoryKey - The category being filtered.
-   * * @param selectedCategoryValue - The value to set or clear.
-   * * @param selected - Indication of whether the selected value is being set or cleared.
+   * @param categoryKey - The category being filtered.
+   * @param selectedCategoryValue - The value to set or clear.
+   * @param selected - Indication of whether the selected value is being set or cleared.
+   * @param categorySection -
+   * @param searchTerm -
    */
-  const onFilterChange =
-    (fromSearchAll: boolean) =>
-    (
-      categoryKey: CategoryKey,
-      selectedCategoryValue: CategoryValueKey,
-      selected: boolean,
-      categorySection?: string,
-      searchTerm?: string
-    ): void => {
-      exploreDispatch({
-        payload: {
-          categoryKey,
-          selected,
-          selectedValue: selectedCategoryValue,
-        },
-        type: ExploreActionKind.UpdateFilter,
-      });
-
-      categorySiteConfig?.onCategoryClicked?.(
+  const onFilterChange = (
+    fromSearchAll: boolean,
+    categoryKey: CategoryKey,
+    selectedCategoryValue: CategoryValueKey,
+    selected: boolean,
+    categorySection?: string,
+    searchTerm?: string
+  ): void => {
+    exploreDispatch({
+      payload: {
         categoryKey,
-        selectedCategoryValue,
-        categorySection ?? "",
         selected,
-        fromSearchAll,
-        searchTerm ?? ""
-      );
+        selectedValue: selectedCategoryValue,
+      },
+      type: ExploreActionKind.UpdateFilter,
+    });
 
-      // Execute GTM tracking.
-      if (selected) {
-        track(EVENT_NAME.FILTER_SELECTED, {
-          [EVENT_PARAM.FILTER_NAME]: categoryKey,
-          [EVENT_PARAM.FILTER_VALUE]: selectedCategoryValue,
-        });
-      }
-    };
+    trackingConfig?.trackFilterApplied({
+      category: categoryKey,
+      fromSearchAll,
+      searchTerm: searchTerm ?? "",
+      section: categorySection ?? "",
+      selected,
+      value: selectedCategoryValue,
+    });
 
-  const onFilterOpened = (key: string): void => {
-    categorySiteConfig?.onCategoryOpened?.(key);
+    // Execute GTM tracking.
+    if (selected) {
+      track(EVENT_NAME.FILTER_SELECTED, {
+        [EVENT_PARAM.FILTER_NAME]: categoryKey,
+        [EVENT_PARAM.FILTER_VALUE]: selectedCategoryValue,
+      });
+    }
   };
 
   /**
@@ -182,15 +180,15 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
             <SearchAllFilters
               categoryViews={categoryViews}
               drawerOpen={isDrawerOpen}
-              onFilter={onFilterChange(true)}
+              onFilter={onFilterChange.bind(null, true)}
             />
           </SidebarTools>
           <Filters
             categoryFilters={categoryFilters}
             closeAncestor={onCloseDrawer}
             disabled={isRelatedView}
-            onFilter={onFilterChange(false)}
-            onFilterOpened={onFilterOpened}
+            onFilter={onFilterChange.bind(null, false)}
+            trackFilterOpened={trackingConfig?.trackFilterOpened}
           />
         </Sidebar>
       )}

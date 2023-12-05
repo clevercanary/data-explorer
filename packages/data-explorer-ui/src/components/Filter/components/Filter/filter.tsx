@@ -1,11 +1,9 @@
 import { CloseRounded } from "@mui/icons-material";
 import { Grow, PopoverPosition, PopoverProps } from "@mui/material";
+import { TrackFilterOpenedFunction } from "config/entities";
 import React, { MouseEvent, ReactNode, useState } from "react";
 import { SelectCategoryView } from "../../../../common/entities";
-import {
-  OnFilterFn,
-  OnFilterOpenedFn,
-} from "../../../../hooks/useCategoryFilter";
+import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { CloseDrawerIconButton } from "../../../common/IconButton/iconButton.styles";
 import { FilterLabel } from "../FilterLabel/filterLabel";
 import { FilterMenu } from "../FilterMenu/filterMenu";
@@ -26,8 +24,8 @@ export interface FilterProps {
   closeAncestor?: () => void;
   isFilterDrawer: boolean;
   onFilter: OnFilterFn;
-  onFilterOpened?: OnFilterOpenedFn;
   tags?: ReactNode; // e.g. filter tags
+  trackFilterOpened?: TrackFilterOpenedFunction;
 }
 
 export const Filter = ({
@@ -36,8 +34,8 @@ export const Filter = ({
   closeAncestor,
   isFilterDrawer,
   onFilter,
-  onFilterOpened,
   tags,
+  trackFilterOpened,
 }: FilterProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [position, setPosition] = useState<PopoverPosition>(DEFAULT_POSITION);
@@ -74,7 +72,7 @@ export const Filter = ({
     // Set popover position and open state.
     setPosition({ left: popoverLeftPos, top: popoverTopPos });
     setIsOpen(true);
-    onFilterOpened?.(categoryView.key);
+    trackFilterOpened?.({ category: categoryView.key });
   };
 
   return (

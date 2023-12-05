@@ -1,14 +1,12 @@
 import { Divider } from "@mui/material";
+import { TrackFilterOpenedFunction } from "config/entities";
 import React, { Fragment, useEffect, useRef, useState } from "react";
 import { CategoryTag, SelectCategoryView } from "../../../../common/entities";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
 } from "../../../../hooks/useBreakpointHelper";
-import {
-  OnFilterFn,
-  OnFilterOpenedFn,
-} from "../../../../hooks/useCategoryFilter";
+import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { useWindowResize } from "../../../../hooks/useWindowResize";
 import { DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { Filter } from "../Filter/filter";
@@ -25,7 +23,7 @@ export interface FiltersProps {
   closeAncestor?: () => void;
   disabled: boolean; // Global disabling of filters; typically in "related" entity view.
   onFilter: OnFilterFn;
-  onFilterOpened?: OnFilterOpenedFn;
+  trackFilterOpened?: TrackFilterOpenedFunction;
 }
 
 /**
@@ -69,7 +67,7 @@ export const Filters = ({
   closeAncestor,
   disabled = false,
   onFilter,
-  onFilterOpened,
+  trackFilterOpened,
 }: FiltersProps): JSX.Element => {
   const isFilterDrawer = useBreakpointHelper(
     BREAKPOINT_FN_NAME.DOWN,
@@ -96,7 +94,7 @@ export const Filters = ({
               closeAncestor={closeAncestor}
               isFilterDrawer={isFilterDrawer}
               onFilter={onFilter}
-              onFilterOpened={onFilterOpened}
+              trackFilterOpened={trackFilterOpened}
               tags={renderFilterTags(categoryView, onFilter)}
             />
           ))}

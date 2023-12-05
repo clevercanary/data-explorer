@@ -280,21 +280,26 @@ type RelatedSearchFunction = (
 ) => Promise<RelatedSearchResult | undefined>;
 
 /**
- * Category clicked callback function
+ * Filter applied tracking function
  */
-type CategoryClickedFunction = (
-  key: string,
-  value: string,
-  section: string,
-  selected: boolean,
-  fromSearchAll: boolean,
-  searchTerm: string
-) => void;
+export type TrackFilterAppliedFunction = (payload: {
+  category: string;
+  fromSearchAll: boolean;
+  searchTerm: string;
+  section: string;
+  selected: boolean;
+  value: string;
+}) => void;
 
 /**
- * Category opened callback function
+ * Filter opened tracking function
  */
-type CategoryOpenedFunction = (key: string) => void;
+export type TrackFilterOpenedFunction = (payload: { category: string }) => void;
+
+interface TrackingConfig {
+  trackFilterApplied: TrackFilterAppliedFunction;
+  trackFilterOpened: TrackFilterOpenedFunction;
+}
 
 /**
  * Product of the related search function.
@@ -314,12 +319,6 @@ export interface RelatedViewConfig {
   searchKey: CategoryKey; // The related search function search parameters' category key.
 }
 
-export interface CategorySiteConfig {
-  categoryGroupConfigs?: CategoryGroupConfig[];
-  onCategoryClicked?: CategoryClickedFunction;
-  onCategoryOpened?: CategoryOpenedFunction;
-}
-
 /**
  * Interface that will hold the whole configuration for a given site.
  */
@@ -328,7 +327,7 @@ export interface SiteConfig {
   appTitle: string;
   authentication?: AuthenticationConfig;
   browserURL: string;
-  categorySiteConfig?: CategorySiteConfig;
+  categoryGroupConfigs?: CategoryGroupConfig[];
   contentDir?: string;
   contentThemeOptionsFn?: ThemeOptionsFn;
   dataSource: DataSourceConfig;
@@ -344,6 +343,7 @@ export interface SiteConfig {
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   themeOptions?: ThemeOptions;
+  trackingConfig?: TrackingConfig;
 }
 
 /**

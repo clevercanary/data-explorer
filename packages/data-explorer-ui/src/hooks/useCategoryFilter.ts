@@ -37,11 +37,6 @@ export type OnFilterFn = (
 ) => void;
 
 /**
- * Callback function invoked when a filter menu is opened
- */
-export type OnFilterOpenedFn = (key: CategoryKey) => void;
-
-/**
  * Build the view-specific model of the given category value.
  * @param categoryValue - The category value to build a view model of.
  * @param categorySelectedFilter - Current filter state for a category.
