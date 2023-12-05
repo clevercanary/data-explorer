@@ -96,12 +96,12 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
 
   /**
    * Callback fired when selected state of a category value is toggled.
-   * @param fromSearchAll - Infication if the filter was originated from the search all field
+   * @param fromSearchAll - Indication if the filter was originated from the search all field.
    * @param categoryKey - The category being filtered.
    * @param selectedCategoryValue - The value to set or clear.
    * @param selected - Indication of whether the selected value is being set or cleared.
-   * @param categorySection -
-   * @param searchTerm -
+   * @param categorySection - Name of group the category is in.
+   * @param searchTerm - Search term used to find the value.
    */
   const onFilterChange = (
     fromSearchAll: boolean,
