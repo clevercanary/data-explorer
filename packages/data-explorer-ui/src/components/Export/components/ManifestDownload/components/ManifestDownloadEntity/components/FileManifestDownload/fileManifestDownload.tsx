@@ -66,7 +66,7 @@ export const FileManifestDownload = ({
             loading={isInProgress}
             panelStyle={LOADING_PANEL_STYLE.INHERIT}
           />
-          <GridTable gridTemplateColumns={manifestURL ? "auto 1fr" : "1fr"}>
+          <GridTable gridTemplateColumns={isReady ? "auto 1fr" : "1fr"}>
             <TableBody>
               <TableRow>
                 {isInProgress ? (
@@ -101,7 +101,7 @@ export const FileManifestDownload = ({
                         />
                       </Tooltip>
                     </TableCell>
-                    {fileName && <TableCell>{fileName}</TableCell>}
+                    <TableCell>{fileName}</TableCell>
                   </>
                 ) : (
                   <TableCell>
