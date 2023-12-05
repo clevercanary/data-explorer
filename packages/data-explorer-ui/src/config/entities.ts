@@ -280,21 +280,37 @@ type RelatedSearchFunction = (
 ) => Promise<RelatedSearchResult | undefined>;
 
 /**
- * Filter applied tracking function
+ * Filter applied tracking payload
  */
-export type TrackFilterAppliedFunction = (payload: {
+export interface TrackFilterAppliedPayload {
   category: string;
   fromSearchAll: boolean;
   searchTerm: string;
   section: string;
   selected: boolean;
   value: string;
-}) => void;
+}
+
+/**
+ * Filter applied tracking function
+ */
+export type TrackFilterAppliedFunction = (
+  payload: TrackFilterAppliedPayload
+) => void;
+
+/**
+ * Filter opened tracking payload
+ */
+export interface TrackFilterOpenedPayload {
+  category: string;
+}
 
 /**
  * Filter opened tracking function
  */
-export type TrackFilterOpenedFunction = (payload: { category: string }) => void;
+export type TrackFilterOpenedFunction = (
+  payload: TrackFilterOpenedPayload
+) => void;
 
 interface TrackingConfig {
   trackFilterApplied?: TrackFilterAppliedFunction;
