@@ -1,8 +1,8 @@
 import { CloseRounded } from "@mui/icons-material";
 import { Grow, PopoverPosition, PopoverProps } from "@mui/material";
-import { TrackFilterOpenedFunction } from "config/entities";
 import React, { MouseEvent, ReactNode, useState } from "react";
 import { SelectCategoryView } from "../../../../common/entities";
+import { TrackFilterOpenedFunction } from "../../../../config/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { CloseDrawerIconButton } from "../../../common/IconButton/iconButton.styles";
 import { FilterLabel } from "../FilterLabel/filterLabel";
