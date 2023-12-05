@@ -9,7 +9,7 @@ export interface ButtonGroupButtonProps {
   label: ReactNode; // Button label may be a string or an element e.g. icon.
   loading?: boolean;
   loadingIcon?: ReactNode;
-  onClick?: () => void; // Function invoked with button onClick handler.
+  onClick: () => void; // Function invoked with button onClick handler.
 }
 
 export const ButtonGroupButton = ({
