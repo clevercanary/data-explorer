@@ -11,7 +11,6 @@ import { ManifestDownloadNotStarted } from "./components/ManifestDownloadNotStar
 import { ManifestDownloadReady } from "./components/ManifestDownloadReady/manifestDownloadReady";
 
 export interface ManifestDownloadProps {
-  disabled?: boolean;
   fileManifestState: FileManifestState;
   fileManifestType: FileManifestType;
   fileSummaryFacetName: string;
