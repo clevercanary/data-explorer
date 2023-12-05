@@ -1524,6 +1524,9 @@ export const MuiToolbar: Components["MuiToolbar"] = {
  */
 export const MuiTooltip = (theme: Theme): Components["MuiTooltip"] => {
   return {
+    defaultProps: {
+      placement: "top",
+    },
     styleOverrides: {
       arrow: {
         color: theme.palette.ink.main,

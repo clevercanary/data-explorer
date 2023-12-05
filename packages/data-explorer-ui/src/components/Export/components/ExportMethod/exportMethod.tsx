@@ -1,6 +1,7 @@
-import { Typography } from "@mui/material";
+import { Tooltip, Typography } from "@mui/material";
 import Link from "next/link";
 import React, { ReactNode } from "react";
+import { useDownloadStatus } from "../../../../hooks/useDownloadStatus";
 import { FluidPaper } from "../../../common/Paper/paper.styles";
 import { SectionTitle } from "../../../common/Section/components/SectionTitle/sectionTitle";
 import {
@@ -13,8 +14,8 @@ import { ExportButton, SectionFootnote } from "./exportMethod.styles";
 export interface ExportMethodProps {
   buttonLabel: string;
   description: ReactNode;
-  disabled: boolean;
-  disabledByLine?: ReactNode;
+  footnote?: ReactNode;
+  isAccessible?: boolean;
   route: string;
   title: string;
 }
@@ -22,11 +23,12 @@ export interface ExportMethodProps {
 export const ExportMethod = ({
   buttonLabel,
   description,
-  disabled,
-  disabledByLine,
+  footnote,
+  isAccessible = true,
   route,
   title,
 }: ExportMethodProps): JSX.Element => {
+  const { disabled, message } = useDownloadStatus();
   return (
     <FluidPaper>
       <Section>
@@ -35,13 +37,17 @@ export const ExportMethod = ({
           <Typography variant="text-body-400-2lines">{description}</Typography>
         </SectionContent>
         <SectionActions>
-          <Link href={route} passHref>
-            <ExportButton disabled={disabled}>{buttonLabel}</ExportButton>
-          </Link>
+          <Tooltip arrow title={message}>
+            <span>
+              <Link href={route} passHref>
+                <ExportButton disabled={disabled || !isAccessible}>
+                  {buttonLabel}
+                </ExportButton>
+              </Link>
+            </span>
+          </Tooltip>
         </SectionActions>
-        {disabled && disabledByLine && (
-          <SectionFootnote>{disabledByLine}</SectionFootnote>
-        )}
+        {footnote && <SectionFootnote>{footnote}</SectionFootnote>}
       </Section>
     </FluidPaper>
   );

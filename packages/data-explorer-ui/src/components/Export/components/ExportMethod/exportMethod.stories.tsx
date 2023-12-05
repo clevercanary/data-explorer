@@ -6,7 +6,6 @@ export default {
   argTypes: {
     buttonLabel: { control: "text" },
     description: { control: "text" },
-    disabled: { control: "boolean" },
     route: { control: "text" },
     title: { control: "text" },
   },
@@ -22,7 +21,6 @@ export const ExportMethodStory = ExportMethodTemplate.bind({});
 ExportMethodStory.args = {
   buttonLabel: "Request curl Command",
   description: "Obtain a curl command for downloading the selected data.",
-  disabled: false,
   route: "/request-curl-command",
   title: "Download Study Data and Metadata (Curl Command)",
 };

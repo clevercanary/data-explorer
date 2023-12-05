@@ -10,10 +10,10 @@ import {
   SectionContent,
   SectionFootnote,
 } from "../../../../export.styles";
+import { ExportButton } from "../../../ExportForm/components/ExportButton/exportButton";
 import { Button } from "./downloadCurlCommandNotStarted.styles";
 
 export interface DownloadCurlCommandNotStartedProps {
-  disabled: boolean;
   DownloadCurlForm: ElementType;
   DownloadCurlStart: ElementType;
   executionEnvironment: ExecutionEnvironment;
@@ -25,7 +25,6 @@ export interface DownloadCurlCommandNotStartedProps {
 }
 
 export const DownloadCurlCommandNotStarted = ({
-  disabled,
   DownloadCurlForm,
   DownloadCurlStart,
   executionEnvironment,
@@ -56,14 +55,14 @@ export const DownloadCurlCommandNotStarted = ({
             setIsRequestFormValid={setIsRequestFormValid}
           />
           <SectionActions>
-            <Button
-              disabled={
-                disabled || fileManifestState.isLoading || !isRequestFormValid
-              }
+            <ExportButton
+              Button={Button}
+              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              isLoading={fileManifestState.isLoading}
               onClick={onRequestManifest}
             >
-              <span>Request curl Command</span>
-            </Button>
+              Request curl Command
+            </ExportButton>
           </SectionActions>
           <SectionFootnote>
             The generated curl command is compatible with the Bash shell on Mac

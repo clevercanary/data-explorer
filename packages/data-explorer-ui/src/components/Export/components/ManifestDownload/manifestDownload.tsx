@@ -23,7 +23,6 @@ export interface ManifestDownloadProps {
 }
 
 export const ManifestDownload = ({
-  disabled = false,
   fileManifestState,
   fileSummaryFacetName,
   filters,
@@ -46,7 +45,6 @@ export const ManifestDownload = ({
     />
   ) : (
     <ManifestDownloadNotStarted
-      disabled={disabled}
       ManifestDownloadForm={ManifestDownloadForm}
       ManifestDownloadStart={ManifestDownloadStart}
       fileManifestState={fileManifestState}

@@ -1,6 +1,5 @@
 import React, { ElementType, useState } from "react";
 import { FileManifestState } from "../../../../../../providers/fileManifestState";
-import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
@@ -10,9 +9,9 @@ import {
   SectionActions,
   SectionContent,
 } from "../../../../export.styles";
+import { ExportButton } from "../../../ExportForm/components/ExportButton/exportButton";
 
 export interface ManifestDownloadNotStartedProps {
-  disabled: boolean;
   fileManifestState: FileManifestState;
   formFacet: FormFacet;
   isLoading: boolean;
@@ -22,7 +21,6 @@ export interface ManifestDownloadNotStartedProps {
 }
 
 export const ManifestDownloadNotStarted = ({
-  disabled,
   fileManifestState,
   formFacet,
   isLoading,
@@ -49,14 +47,13 @@ export const ManifestDownloadNotStarted = ({
             setIsRequestFormValid={setIsRequestFormValid}
           />
           <SectionActions>
-            <ButtonPrimary
-              disabled={
-                disabled || fileManifestState.isLoading || !isRequestFormValid
-              }
+            <ExportButton
+              disabled={fileManifestState.isLoading || !isRequestFormValid}
+              isLoading={fileManifestState.isLoading}
               onClick={onRequestManifest}
             >
               Prepare Manifest
-            </ButtonPrimary>
+            </ExportButton>
           </SectionActions>
         </Section>
       </FluidPaper>

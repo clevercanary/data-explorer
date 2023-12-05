@@ -68,10 +68,15 @@ export function SystemStatusProvider<R>({
   // Bind system status response.
   const response = useMemo(() => bindResponse?.(data), [bindResponse, data]);
 
-  // Build system status.
+  // Remove indexing status from response.
   // eslint-disable-next-line @typescript-eslint/no-unused-vars -- using destructuring to remove indexingStatus from response.
-  const { indexingStatus, ...systemStatus } = response || {};
-  const loading = isLoading || isIdle || DEFAULT_SYSTEM_STATUS.loading;
+  const { indexingStatus, ...systemStatusResponse } = response || {};
+  // Build system status.
+  const systemStatus = { ...DEFAULT_SYSTEM_STATUS, ...systemStatusResponse };
+  // If the system status is configured, update the loading state.
+  if (config.systemStatus) {
+    systemStatus.loading = isIdle || isLoading;
+  }
 
   // Fetch system status from URL.
   useEffect(() => {
@@ -82,9 +87,7 @@ export function SystemStatusProvider<R>({
   return (
     <SystemStatusContext.Provider
       value={{
-        ...DEFAULT_SYSTEM_STATUS,
         ...systemStatus,
-        loading,
       }}
     >
       {children}
