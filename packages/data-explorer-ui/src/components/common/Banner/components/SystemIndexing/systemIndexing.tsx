@@ -12,7 +12,7 @@ export interface SystemIndexingProps extends Omit<MAlertProps, "title"> {
 export const SystemIndexing = ({
   children,
   className,
-  title = "Data indexing in progress. Search results may be incomplete.",
+  title = "Data indexing in progress. Downloads and exports are disabled as search results may be incomplete.",
   ...props
 }: SystemIndexingProps): JSX.Element => {
   const systemStatus = useSystemStatus();
