@@ -12,7 +12,7 @@ export interface SystemStatusProps extends Omit<MAlertProps, "title"> {
 export const SystemStatus = ({
   children,
   className,
-  title = "One or more of the systems are currently unavailable. Functionality may be degraded.",
+  title = "One or more of the system components are currently unavailable. Functionality may be degraded.",
   ...props
 }: SystemStatusProps): JSX.Element => {
   const systemStatus = useSystemStatus();
