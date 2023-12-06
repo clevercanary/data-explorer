@@ -88,26 +88,28 @@ export const FileManifestSpreadsheet = ({
                         sx={{ display: "none" }}
                       />
                       <Tooltip arrow title={message}>
-                        <ButtonGroup
-                          Buttons={[
-                            <ButtonGroupButton
-                              key="download"
-                              action="Download metadata spreadsheet"
-                              disabled={disabled}
-                              label={<DownloadIconSmall />}
-                              onClick={downloadMetadataURL}
-                            />,
-                            <ButtonGroupButton
-                              key="copy"
-                              action="Copy metadata spreadsheet"
-                              disabled={disabled}
-                              label={<ContentCopyIconSmall />}
-                              onClick={(): void =>
-                                copyMetadataURL(spreadsheetURL)
-                              }
-                            />,
-                          ]}
-                        />
+                        <span>
+                          <ButtonGroup
+                            Buttons={[
+                              <ButtonGroupButton
+                                key="download"
+                                action="Download metadata spreadsheet"
+                                disabled={disabled}
+                                label={<DownloadIconSmall />}
+                                onClick={downloadMetadataURL}
+                              />,
+                              <ButtonGroupButton
+                                key="copy"
+                                action="Copy metadata spreadsheet"
+                                disabled={disabled}
+                                label={<ContentCopyIconSmall />}
+                                onClick={(): void =>
+                                  copyMetadataURL(spreadsheetURL)
+                                }
+                              />,
+                            ]}
+                          />
+                        </span>
                       </Tooltip>
                     </TableCell>
                     <TableCell>{fileName}</TableCell>
