@@ -1,7 +1,14 @@
-import { ButtonBase, TableBody, TableCell, TableRow } from "@mui/material";
+import {
+  ButtonBase,
+  TableBody,
+  TableCell,
+  TableRow,
+  Tooltip,
+} from "@mui/material";
 import copy from "copy-to-clipboard";
 import React, { useRef } from "react";
 import { Filters } from "../../../../../../../../common/entities";
+import { useDownloadStatus } from "../../../../../../../../hooks/useDownloadStatus";
 import { useFileManifestDownload } from "../../../../../../../../hooks/useFileManifest/useFileManifestDownload";
 import { ButtonGroup } from "../../../../../../../common/ButtonGroup/buttonGroup";
 import { ButtonGroupButton } from "../../../../../../../common/ButtonGroup/components/ButtonGroupButton/buttonGroupButton";
@@ -31,12 +38,17 @@ export const FileManifestDownload = ({
   filters,
 }: FileManifestDownloadProps): JSX.Element => {
   const downloadRef = useRef<HTMLAnchorElement>(null);
-  const { fileName, isIdle, isLoading, manifestURL } =
-    useFileManifestDownload(filters);
-  const isInProgress = isIdle || isLoading;
+  const { disabled, message } = useDownloadStatus();
+  const { fileName, isIdle, isLoading, manifestURL } = useFileManifestDownload(
+    filters,
+    disabled
+  );
+  const isInProgress = (isIdle || isLoading) && !disabled;
+  const isReady = Boolean(manifestURL) || disabled;
 
   // Copies file manifest.
-  const copyManifestURL = (url: string): void => {
+  const copyManifestURL = (url?: string): void => {
+    if (!url) return;
     copy(url);
   };
 
@@ -54,35 +66,40 @@ export const FileManifestDownload = ({
             loading={isInProgress}
             panelStyle={LOADING_PANEL_STYLE.INHERIT}
           />
-          <GridTable gridTemplateColumns={manifestURL ? "auto 1fr" : "1fr"}>
+          <GridTable gridTemplateColumns={isReady ? "auto 1fr" : "1fr"}>
             <TableBody>
               <TableRow>
                 {isInProgress ? (
                   <TableCell />
-                ) : manifestURL ? (
+                ) : isReady ? (
                   <>
                     <TableCell>
                       <ButtonBase
-                        href={manifestURL}
+                        disabled={disabled}
+                        href={manifestURL ?? ""}
                         ref={downloadRef}
                         sx={{ display: "none" }}
                       />
-                      <ButtonGroup
-                        Buttons={[
-                          <ButtonGroupButton
-                            key="download"
-                            action="Download file manifest"
-                            label={<DownloadIconSmall />}
-                            onClick={downloadManifestURL}
-                          />,
-                          <ButtonGroupButton
-                            key="copy"
-                            action="Copy file manifest"
-                            label={<ContentCopyIconSmall />}
-                            onClick={(): void => copyManifestURL(manifestURL)}
-                          />,
-                        ]}
-                      />
+                      <Tooltip arrow title={message}>
+                        <ButtonGroup
+                          Buttons={[
+                            <ButtonGroupButton
+                              key="download"
+                              action="Download file manifest"
+                              disabled={disabled}
+                              label={<DownloadIconSmall />}
+                              onClick={downloadManifestURL}
+                            />,
+                            <ButtonGroupButton
+                              key="copy"
+                              action="Copy file manifest"
+                              disabled={disabled}
+                              label={<ContentCopyIconSmall />}
+                              onClick={(): void => copyManifestURL(manifestURL)}
+                            />,
+                          ]}
+                        />
+                      </Tooltip>
                     </TableCell>
                     <TableCell>{fileName}</TableCell>
                   </>

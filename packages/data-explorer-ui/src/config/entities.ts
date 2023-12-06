@@ -9,6 +9,7 @@ import { ExploreMode } from "../hooks/useExploreMode";
 import { AuthContextProps } from "../providers/authentication";
 import { ExploreState } from "../providers/exploreState";
 import { FileManifestState } from "../providers/fileManifestState";
+import { SystemStatus, SystemStatusResponse } from "../providers/systemStatus";
 
 /**
  * Interface to define the analytics configuration for a given site.
@@ -358,6 +359,7 @@ export interface SiteConfig {
   };
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
+  systemStatus?: SystemStatusConfig;
   themeOptions?: ThemeOptions;
   trackingConfig?: TrackingConfig;
 }
@@ -397,6 +399,21 @@ export interface SummaryConfig {
 }
 
 /**
+ * System status bind response function.
+ */
+export type SystemStatusBindResponseFn = <R>(
+  response?: R
+) => SystemStatusResponse | undefined;
+
+/**
+ * System status endpoint.
+ */
+export interface SystemStatusConfig {
+  apiPath: string;
+  bindResponse: SystemStatusBindResponseFn;
+}
+
+/**
  * Interface used to define the tab label and route.
  */
 interface TabConfig {
@@ -426,4 +443,5 @@ export interface ViewContext {
   entityConfig: EntityConfig;
   exploreState: ExploreState;
   fileManifestState: FileManifestState;
+  systemStatus: SystemStatus;
 }

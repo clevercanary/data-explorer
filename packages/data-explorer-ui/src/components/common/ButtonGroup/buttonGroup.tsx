@@ -2,7 +2,7 @@ import {
   ButtonGroup as MButtonGroup,
   ButtonGroupProps as MButtonGroupProps,
 } from "@mui/material";
-import React, { Fragment, ReactElement } from "react";
+import React, { forwardRef, Fragment, ReactElement } from "react";
 import { ButtonGroupButton } from "./components/ButtonGroupButton/buttonGroupButton";
 
 /**
@@ -20,29 +20,37 @@ export interface ButtonGroupProps {
   variant?: MButtonGroupProps["variant"];
 }
 
-export const ButtonGroup = ({
-  Buttons,
-  className,
-  color = "primary",
-  disabled = false,
-  fullWidth = false,
-  orientation = "horizontal",
-  size = "small",
-  variant = "contained",
-}: ButtonGroupProps): JSX.Element => {
-  return (
-    <MButtonGroup
-      className={className}
-      color={color}
-      disabled={disabled}
-      fullWidth={fullWidth}
-      orientation={orientation}
-      size={size}
-      variant={variant}
-    >
-      {Buttons.map((Button, i) => (
-        <Fragment key={`button-${i}`}>{Button}</Fragment>
-      ))}
-    </MButtonGroup>
-  );
-};
+export const ButtonGroup = forwardRef<HTMLDivElement, ButtonGroupProps>(
+  function ButtonGroup(
+    {
+      Buttons,
+      className,
+      color = "primary",
+      disabled = false,
+      fullWidth = false,
+      orientation = "horizontal",
+      size = "small",
+      variant = "contained",
+      ...props
+    }: ButtonGroupProps,
+    ref
+  ): JSX.Element {
+    return (
+      <MButtonGroup
+        className={className}
+        color={color}
+        disabled={disabled}
+        fullWidth={fullWidth}
+        orientation={orientation}
+        ref={ref}
+        size={size}
+        variant={variant}
+        {...props}
+      >
+        {Buttons.map((Button, i) => (
+          <Fragment key={`button-${i}`}>{Button}</Fragment>
+        ))}
+      </MButtonGroup>
+    );
+  }
+);

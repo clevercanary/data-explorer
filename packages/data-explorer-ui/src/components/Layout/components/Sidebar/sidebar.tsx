@@ -1,15 +1,12 @@
 import React, { ReactNode, useEffect } from "react";
-import { SIDEBAR_POSITIONER } from "../../../../common/selectors";
 import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
 } from "../../../../hooks/useBreakpointHelper";
 import { DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { SidebarDrawer } from "./components/SidebarDrawer/sidebarDrawer";
-import {
-  Sidebar as PermanentSidebar,
-  SidebarPositioner,
-} from "./sidebar.styles";
+import { SidebarPositioner } from "./components/SidebarPositioner/sidebarPositioner";
+import { Sidebar as PermanentSidebar } from "./sidebar.styles";
 
 export interface SidebarProps {
   children: ReactNode | ReactNode[];
@@ -40,7 +37,7 @@ export const Sidebar = ({
 
   return (
     <Bar {...barProps}>
-      <SidebarPositioner id={SIDEBAR_POSITIONER}>{children}</SidebarPositioner>
+      <SidebarPositioner>{children}</SidebarPositioner>
     </Bar>
   );
 };

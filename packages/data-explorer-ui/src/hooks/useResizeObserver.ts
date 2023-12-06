@@ -14,38 +14,98 @@ export type ElementRect = {
 /**
  * Element resizing and repositioning observer.
  * @param ref - element to be observed for changes to its size or position.
+ * @param onResizeFn - action to be performed when the observed element is resized or repositioned.
  * @returns Element size and position properties for the given element.
  */
 export function useResizeObserver(
-  ref: RefObject<HTMLElement>
-): ElementRect | undefined {
-  const [elementRect, setElementRect] = useState<ElementRect>();
+  ref: RefObject<HTMLElement>,
+  onResizeFn: (entries: ResizeObserverEntry[]) => Partial<ElementRect>
+): Partial<ElementRect> | undefined {
+  const [elementRect, setElementRect] = useState<Partial<ElementRect>>();
   const observerRef = useRef<ResizeObserver>();
-  const observer = observerRef && observerRef.current;
-  const observedEl = ref && ref.current;
 
   // Observed element is resized or repositioned - set state elementRect with the element's new dimensions or position.
-  const onResize = useCallback((entries: ResizeObserverEntry[]) => {
-    if (entries && entries.length > 0) {
-      const entry = entries[0]; // grab the first entry; observing a single element
-      const contentRect = entry.contentRect.toJSON();
-      setElementRect({ ...contentRect });
-    }
-  }, []);
+  const onResize = useCallback(
+    (entries: ResizeObserverEntry[]) => {
+      if (entries && entries.length > 0) {
+        const nextElementRect = onResizeFn(entries);
+        setElementRect((elRect) => getNextElementRect(elRect, nextElementRect));
+      }
+    },
+    [onResizeFn]
+  );
 
-  // Creates a new ResizeObserver object which can be used to report changes to an element's dimensions or position.
+  // Creates a new ResizeObserver object which can be used to report changes to an "observed" element's dimensions or position.
   useEffect(() => {
+    if (!ref.current) return;
     observerRef.current = new ResizeObserver(onResize);
-  }, [onResize]);
-
-  // Element is "observed" and reports any changes to the element's dimensions or position.
-  useEffect(() => {
-    if (!observer || !observedEl) return;
+    const observer = observerRef.current;
+    const observedEl = ref.current;
     observer.observe(observedEl);
     return () => {
       observer.unobserve(observedEl);
     };
-  }, [observedEl, observer]);
+  }, [onResize, ref]);
 
+  return elementRect;
+}
+
+/**
+ * Return's the observed element's border box size.
+ * @param entries - Resize observer entries.
+ * @returns observed element's border box size.
+ */
+export function getBorderBoxSize(
+  entries: ResizeObserverEntry[]
+): Partial<ElementRect> {
+  const entry = entries[0]; // grab the first entry; observing a single element.
+  const borderBoxSize = entry.borderBoxSize[0];
+  return {
+    height: borderBoxSize.blockSize,
+    width: borderBoxSize.inlineSize,
+  };
+}
+
+/**
+ * Return's the observed element's border box height.
+ * @param entries - Resize observer entries.
+ * @returns observed element's border box height.
+ */
+export function getBorderBoxSizeHeight(
+  entries: ResizeObserverEntry[]
+): Partial<ElementRect> {
+  const { height } = getBorderBoxSize(entries);
+  return { height };
+}
+
+/**
+ * Return's the observed element's size and position properties.
+ * @param entries - Resize observer entries.
+ * @returns the observed element's size and position properties.
+ */
+export function getContentRect(entries: ResizeObserverEntry[]): ElementRect {
+  const entry = entries[0]; // grab the first entry; observing a single element
+  const contentRect = entry.contentRect.toJSON();
+  return {
+    ...contentRect,
+  };
+}
+
+/**
+ * Return's the next observed element's size and position properties.
+ * @param elementRect - Current observed element's rect properties.
+ * @param nextElementRect - Next observed element's rect properties.
+ * @returns the next observed element's size and position properties.
+ */
+export function getNextElementRect(
+  elementRect: Partial<ElementRect> | undefined,
+  nextElementRect: Partial<ElementRect> | undefined
+): Partial<ElementRect> | undefined {
+  if (!nextElementRect) return elementRect;
+  for (const [key, value] of Object.entries(nextElementRect)) {
+    if (elementRect?.[key as keyof ElementRect] !== value) {
+      return { ...elementRect, ...nextElementRect };
+    }
+  }
   return elementRect;
 }

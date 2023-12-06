@@ -32,6 +32,12 @@ export const inkLightest = ({ theme }: ThemeProps): PaletteColor["lightest"] =>
 export const inkMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
   theme.palette.ink.main;
 
+// Primary
+export const primaryDark = ({ theme }: ThemeProps): PaletteColor["dark"] =>
+  theme.palette.primary.dark;
+export const primaryMain = ({ theme }: ThemeProps): PaletteColor["main"] =>
+  theme.palette.primary.main;
+
 // Smoke
 export const smokeDark = ({ theme }: ThemeProps): PaletteColor["dark"] =>
   theme.palette.smoke.dark;

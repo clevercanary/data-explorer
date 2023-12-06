@@ -156,3 +156,12 @@ export const fetchSummaryFromURL = async (
   );
   return res.data;
 };
+
+/**
+ * Fetch system status from given URL.
+ * @param URL - URL.
+ */
+export const fetchSystemStatusFromURL = async <R>(URL: string): Promise<R> => {
+  const res = await api().get<AzulSummaryResponse>(URL);
+  return res.data;
+};

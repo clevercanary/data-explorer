@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { useLayoutState } from "../../hooks/useLayoutState";
 import { HeroTitle } from "../common/Title/title";
 import { Hero } from "./components/Hero/hero";
 import { Index as IndexLayout } from "./index.styles";
@@ -22,8 +23,10 @@ export const Index = ({
   Tabs,
   title,
 }: IndexProps): JSX.Element => {
+  const { layoutState } = useLayoutState();
+  const { headerHeight } = layoutState;
   return (
-    <IndexLayout>
+    <IndexLayout marginTop={headerHeight}>
       <Hero SideBarButton={SideBarButton} Summaries={Summaries} title={title} />
       {SubTitleHero}
       {Tabs}

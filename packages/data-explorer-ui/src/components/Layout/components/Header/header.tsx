@@ -1,5 +1,11 @@
 import { Fade, Toolbar } from "@mui/material";
-import React, { ReactNode, useCallback, useState } from "react";
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   ElementAlignment,
   ELEMENT_ALIGNMENT,
@@ -8,6 +14,12 @@ import {
   BREAKPOINT_FN_NAME,
   useBreakpointHelper,
 } from "../../../../hooks/useBreakpointHelper";
+import { useLayoutState } from "../../../../hooks/useLayoutState";
+import {
+  getBorderBoxSizeHeight,
+  useResizeObserver,
+} from "../../../../hooks/useResizeObserver";
+import { LayoutActionKind } from "../../../../providers/layoutState";
 import { DESKTOP, DESKTOP_SM } from "../../../../theme/common/breakpoints";
 import { FADE_TRANSITION_PROPS } from "./common/constants";
 import { SocialMedia } from "./common/entities";
@@ -26,6 +38,7 @@ import { Socials } from "./components/Content/components/Socials/socials.styles"
 import { AppBar as HeaderAppBar, HeaderSmAppBar } from "./header.styles";
 
 export interface HeaderProps {
+  Announcements?: ReactNode;
   authenticationEnabled?: boolean;
   className?: string;
   Logo: ReactNode;
@@ -39,6 +52,7 @@ export interface HeaderProps {
 
 export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   const {
+    Announcements,
     authenticationEnabled,
     className,
     Logo,
@@ -49,6 +63,9 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
     slogan,
     socialMedia,
   } = headerProps;
+  const { layoutDispatch } = useLayoutState();
+  const headerRef = useRef<HTMLElement>(null);
+  const { height } = useResizeObserver(headerRef, getBorderBoxSizeHeight) || {};
   const [menuOpen, setMenuOpen] = useState<boolean>(false);
   const onlySmDesktop = useBreakpointHelper(
     BREAKPOINT_FN_NAME.ONLY,
@@ -74,8 +91,25 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
     setMenuOpen(true);
   }, []);
 
+  // Updates layout state header height.
+  useEffect(() => {
+    if (!height) return;
+    layoutDispatch({
+      payload: height,
+      type: LayoutActionKind.UpdateHeaderHeight,
+    });
+  }, [height, layoutDispatch]);
+
   return (
-    <AppBar className={className} elevation={1} position="fixed">
+    <AppBar
+      ref={headerRef}
+      className={className}
+      elevation={1}
+      position="fixed"
+    >
+      {/* Announcements */}
+      {Announcements}
+      {/* Toolbar */}
       <Toolbar variant="dense">
         {/* Logo */}
         {Logo}

@@ -4,6 +4,7 @@ import { useAuthentication } from "../../hooks/useAuthentication";
 import { useConfig } from "../../hooks/useConfig";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useFileManifestState } from "../../hooks/useFileManifestState";
+import { useSystemStatus } from "../../hooks/useSystemStatus";
 
 export interface ComponentCreatorProps<T> {
   components: ComponentsConfig;
@@ -27,6 +28,7 @@ export const ComponentCreator = <T,>({
   const { config, entityConfig } = useConfig();
   const { exploreState } = useExploreState();
   const { fileManifestState } = useFileManifestState();
+  const systemStatus = useSystemStatus();
   const componentsValue =
     typeof components === "function" ? components(config) : components;
 
@@ -49,6 +51,7 @@ export const ComponentCreator = <T,>({
               entityConfig,
               exploreState,
               fileManifestState,
+              systemStatus,
             })
           : {};
         return React.createElement(

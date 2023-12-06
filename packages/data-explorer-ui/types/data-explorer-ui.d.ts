@@ -19,6 +19,10 @@ import { GridTrackSize } from "../src/config/entities";
  * Alert prop options.
  */
 declare module "@mui/material/Alert" {
+  interface AlertPropsColorOverrides {
+    primary: true;
+  }
+
   interface AlertPropsVariantOverrides {
     banner: true; // Single line alert.
     neutral: true;

@@ -1,9 +1,20 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
-import { HEADER_HEIGHT } from "../Header/common/constants";
 
-export const Main = styled.main`
+interface Props {
+  offset: number;
+}
+
+const main = css`
   align-items: flex-start;
   display: flex;
   flex: 1;
-  margin-top: ${HEADER_HEIGHT}px;
+`;
+
+export const Main = styled("main")`
+  ${main};
+`;
+
+export const MainWithOffset = styled(Main)<Props>`
+  margin-top: ${({ offset }) => offset}px;
 `;

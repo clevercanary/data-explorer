@@ -18,9 +18,13 @@ export interface ManifestDownload {
 /**
  * Returns file manifest download url and file name.
  * @param filters - Filters.
+ * @param disabled - Disabled.
  * @returns file manifest download url and file name.
  */
-export const useFileManifestDownload = (filters: Filters): ManifestDownload => {
+export const useFileManifestDownload = (
+  filters: Filters,
+  disabled: boolean
+): ManifestDownload => {
   // Determine file manifest request data URL.
   const URL = useFileManifestURL();
   // Determine catalog.
@@ -39,8 +43,9 @@ export const useFileManifestDownload = (filters: Filters): ManifestDownload => {
 
   // Requests file manifest.
   useEffect(() => {
+    if (disabled) return;
     run();
-  }, [requestURL, run]);
+  }, [disabled, requestURL, run]);
 
   return {
     fileName,

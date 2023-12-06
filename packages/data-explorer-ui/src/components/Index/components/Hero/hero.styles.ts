@@ -3,7 +3,6 @@ import {
   mediaDesktopSmallUp,
   mediaTabletUp,
 } from "../../../../styles/common/mixins/breakpoints";
-import { ButtonPrimary } from "../../../common/Button/components/ButtonPrimary/buttonPrimary";
 
 interface Props {
   buttonWidget: boolean;
@@ -52,16 +51,5 @@ export const SummaryWidget = styled.div<Props>`
     border-radius: ${({ buttonWidget }) =>
       buttonWidget ? "4px 0 0 4px" : "4px"};
     flex: none;
-  }
-`;
-
-export const ExportButton = styled(ButtonPrimary)`
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  display: none;
-  margin-left: -1px;
-
-  ${mediaTabletUp} {
-    display: block;
   }
 `;
