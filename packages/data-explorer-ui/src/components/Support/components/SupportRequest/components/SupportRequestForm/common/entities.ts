@@ -1,5 +1,13 @@
 import { FileRejection } from "react-dropzone";
 
+export enum REQUEST_FIELD_ID {
+  DESCRIPTION = "DESCRIPTION",
+  EMAIL = "EMAIL",
+  SUBJECT = "SUBJECT",
+  TICKET_FORM_ID = "TICKET_FORM_ID",
+  TYPE = "TYPE",
+}
+
 export enum FORM_CONTROL_LABEL {
   ATTACHMENT_TOKEN = "Attachment (optional)",
   DESCRIPTION = "How can we help you?",

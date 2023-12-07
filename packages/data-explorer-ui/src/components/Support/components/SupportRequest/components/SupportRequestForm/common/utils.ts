@@ -1,23 +1,37 @@
-import { FORM_CONTROL_NAME, RequestValue, UploadResponse } from "./entities";
+import { RequestValue, REQUEST_FIELD_ID, UploadResponse } from "./entities";
 
 /**
  * Create support request.
  * @param url - Request URL.
  * @param requestValue - Request values.
+ * @param FIELD_ID - Request field IDs.
  * @returns support request response.
  */
 export async function createSupportRequest(
   url: string,
-  requestValue: RequestValue
+  requestValue: RequestValue,
+  FIELD_ID: Record<REQUEST_FIELD_ID, number>
 ): Promise<Response> {
-  const attachmentToken = requestValue[FORM_CONTROL_NAME.ATTACHMENT_TOKEN];
-  const description = requestValue[FORM_CONTROL_NAME.DESCRIPTION];
-  const email = requestValue[FORM_CONTROL_NAME.EMAIL];
-  const name = requestValue[FORM_CONTROL_NAME.NAME];
-  const subject = requestValue[FORM_CONTROL_NAME.SUBJECT];
-  const type = requestValue[FORM_CONTROL_NAME.TYPE];
+  return await fetchWithErrorRejection(
+    url,
+    getSupportRequestOptions(requestValue, FIELD_ID)
+  );
+}
+
+/**
+ * Returns support request options.
+ * @param requestValue - Request values.
+ * @param FIELD_ID - Request field IDs.
+ * @returns request options.
+ */
+export function getSupportRequestOptions(
+  requestValue: RequestValue,
+  FIELD_ID: Record<REQUEST_FIELD_ID, number>
+): RequestInit {
+  const { attachmentToken, description, email, name, subject, type } =
+    requestValue;
   const requestedFromUrl = window.location.href;
-  return await fetchWithErrorRejection(url, {
+  return {
     body: JSON.stringify({
       request: {
         comment: {
@@ -25,22 +39,22 @@ export async function createSupportRequest(
           uploads: [attachmentToken],
         },
         custom_fields: [
-          { id: 360012782111, value: email },
-          { id: 360007369412, value: description },
-          { id: 360007369392, value: subject },
-          { id: 360012744452, value: type },
+          { id: FIELD_ID.EMAIL, value: email },
+          { id: FIELD_ID.DESCRIPTION, value: description },
+          { id: FIELD_ID.SUBJECT, value: subject },
+          { id: FIELD_ID.TYPE, value: type },
         ],
         requester: {
           email,
           name,
         },
         subject,
-        ticket_form_id: 360000932232,
+        ticket_form_id: FIELD_ID.TICKET_FORM_ID,
       },
     }),
     headers: { "Content-Type": "application/json" },
     method: "POST",
-  });
+  };
 }
 
 /**

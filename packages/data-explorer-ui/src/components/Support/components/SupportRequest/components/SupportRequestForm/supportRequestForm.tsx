@@ -8,8 +8,6 @@ import React, {
 } from "react";
 import { FileRejection } from "react-dropzone";
 import validate from "validate.js";
-import { SupportRequest } from "../../../../../../config/entities";
-import { useConfig } from "../../../../../../hooks/useConfig";
 import { TEXT_BODY_400 } from "../../../../../../theme/common/typography";
 import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { Input } from "../../../../../common/Form/components/Input/input";
@@ -20,6 +18,7 @@ import {
   SectionActions,
   SectionContent,
 } from "../../../../../common/Section/section.styles";
+import { SupportRequest } from "../../supportRequest";
 import Dropzone from "../Dropzone/dropzone";
 import {
   CONSTRAINTS,
@@ -40,16 +39,16 @@ import { Section, Title } from "./supportRequestForm.styles";
 
 export interface SupportRequestFormProps {
   setFormSubmitted: Dispatch<SetStateAction<boolean>>;
+  supportRequest: SupportRequest;
 }
 
 export const SupportRequestForm = ({
   setFormSubmitted,
+  supportRequest,
 }: SupportRequestFormProps): JSX.Element => {
-  const { config } = useConfig() || {};
   const [formState, setFormState] = useState<FormState>(DEFAULT_FORM_STATE);
-  const supportRequest = config.layout.support
-    ?.supportRequest as SupportRequest; // Support request must be configured.
   const errors = validate(buildSupportRequest(formState), CONSTRAINTS); // Determine error state of form
+  const { FIELD_ID, requestURL, uploadURL } = supportRequest;
 
   // Delete attachment.
   const onAttachmentDeleted = (): void => {
@@ -70,10 +69,7 @@ export const SupportRequestForm = ({
         attachmentRejections: [],
         attachmentUploading: true,
       }));
-      const response = await uploadAttachment(
-        supportRequest.uploadURL,
-        files[0]
-      );
+      const response = await uploadAttachment(uploadURL, files[0]);
       setFormState((formState) => ({
         ...formState,
         attachmentName: response.attachment.file_name,
@@ -142,7 +138,7 @@ export const SupportRequestForm = ({
         submitError: false,
         submitting: true,
       }));
-      await createSupportRequest(supportRequest.requestURL, request);
+      await createSupportRequest(requestURL, request, FIELD_ID);
       setFormState((formState) => ({
         ...formState,
         submitted: true,

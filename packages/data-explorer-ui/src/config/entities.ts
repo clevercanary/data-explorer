@@ -176,6 +176,13 @@ export interface ExportMethodConfig {
 }
 
 /**
+ * Floating configuration - for support and other floating components e.g. banners.
+ */
+export interface FloatingConfig {
+  components: ComponentsConfig;
+}
+
+/**
  * Get identifier function.
  */
 export type GetIdFunction<T> = (detail: T) => string;
@@ -353,33 +360,15 @@ export interface SiteConfig {
   export?: ExportConfig;
   exportToTerraUrl?: string; // TODO(cc) revist location; possibly nest inside "export"?
   layout: {
+    floating?: FloatingConfig;
     footer: FooterProps;
     header: HeaderProps;
-    support?: SupportConfig;
   };
   redirectRootToPath: string;
   summaryConfig?: SummaryConfig;
   systemStatus?: SystemStatusConfig;
   themeOptions?: ThemeOptions;
   trackingConfig?: TrackingConfig;
-}
-
-/**
- * Support configuration.
- * Facilitates configuration for support button and corresponding form or navigation to a configured url.
- */
-export interface SupportConfig {
-  supportRequest?: SupportRequest;
-  url?: string;
-}
-
-/**
- * Support request configuration.
- */
-export interface SupportRequest {
-  components: ComponentsConfig;
-  requestURL: string;
-  uploadURL: string;
 }
 
 /**
