@@ -1,22 +1,32 @@
-import React, { ElementType, useState } from "react";
+import React, { useState } from "react";
 import { FormDialog } from "./components/Dialog/dialog";
+import { REQUEST_FIELD_ID } from "./components/SupportRequestForm/common/entities";
+import { SupportRequestForm } from "./components/SupportRequestForm/supportRequestForm";
+import { SupportRequestSubmitted } from "./components/SupportRequestSubmitted/supportRequestSubmitted";
+
+export interface SupportRequest {
+  FIELD_ID: Record<REQUEST_FIELD_ID, number>;
+  requestURL: string;
+  uploadURL: string;
+}
 
 export interface SupportRequestProps {
-  SupportRequestForm: ElementType;
-  SupportRequestSubmitted: ElementType;
+  supportRequest: SupportRequest;
 }
 
 export const SupportRequest = ({
-  SupportRequestForm: RequestForm,
-  SupportRequestSubmitted: FormSubmitted,
+  supportRequest,
 }: SupportRequestProps): JSX.Element => {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false);
   return (
     <FormDialog setFormSubmitted={setFormSubmitted}>
       {formSubmitted ? (
-        <FormSubmitted />
+        <SupportRequestSubmitted />
       ) : (
-        <RequestForm setFormSubmitted={setFormSubmitted} />
+        <SupportRequestForm
+          setFormSubmitted={setFormSubmitted}
+          supportRequest={supportRequest}
+        />
       )}
     </FormDialog>
   );
