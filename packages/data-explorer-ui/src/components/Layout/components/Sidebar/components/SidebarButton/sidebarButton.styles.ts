@@ -26,7 +26,7 @@ export const SidebarButton = styled(ButtonSecondary)`
 export const Badge = styled.div`
   align-items: center;
   background-color: ${primaryMain};
-  border-radius: 52px;
+  border-radius: 10px;
   color: ${white};
   display: flex;
   flex: none;
@@ -35,5 +35,6 @@ export const Badge = styled.div`
   height: 18px;
   justify-content: center;
   line-height: 16px;
-  padding: 0 7px;
+  min-width: 20px;
+  padding: 0 6px;
 `;
