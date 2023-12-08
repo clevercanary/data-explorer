@@ -27,7 +27,11 @@ import {
   UpdateFilterPayload,
   UpdateSortingPayload,
 } from "./exploreState/payloads/entities";
-import { initExploreState, resetPage } from "./exploreState/utils";
+import {
+  getFilterCount,
+  initExploreState,
+  resetPage,
+} from "./exploreState/utils";
 
 export type CatalogState = string | undefined;
 
@@ -70,6 +74,7 @@ export type ExploreState = {
   catalogState: CatalogState;
   categoryViews: SelectCategory[];
   entityPageState: EntityPageStateMapper;
+  filterCount: number;
   filterState: SelectedFilter[];
   isRelatedView: boolean;
   listItems: ListItems;
@@ -330,6 +335,7 @@ function exploreReducer(
     case ExploreActionKind.ClearFilters: {
       return {
         ...state,
+        filterCount: 0,
         filterState: [],
         paginationState: resetPage(state.paginationState),
       };
@@ -416,14 +422,16 @@ function exploreReducer(
      * Update filter
      **/
     case ExploreActionKind.UpdateFilter: {
+      const filterState = buildNextFilterState(
+        state.filterState,
+        payload.categoryKey,
+        payload.selectedValue,
+        payload.selected
+      );
       return {
         ...state,
-        filterState: buildNextFilterState(
-          state.filterState,
-          payload.categoryKey,
-          payload.selectedValue,
-          payload.selected
-        ),
+        filterCount: getFilterCount(filterState),
+        filterState,
         paginationState: resetPage(state.paginationState),
       };
     }
