@@ -291,8 +291,10 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       }
       if (terraAuthConfig) {
         fetchTerraProfile(terraAuthConfig.terraProfileEndpoint, token);
-        fetchTerraNIHProfile(terraAuthConfig.terraNIHProfileEndpoint, token);
         fetchTerraTermsOfService(terraAuthConfig.termsOfServiceEndpoint, token);
+        if (terraAuthConfig.terraNIHProfileEndpoint) {
+          fetchTerraNIHProfile(terraAuthConfig.terraNIHProfileEndpoint, token);
+        }
       }
     }
   }, [
