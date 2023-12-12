@@ -1,50 +1,58 @@
 import {
   Checkbox,
   FormControlLabel,
+  FormHelperText,
   FormLabel,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
 } from "@mui/material";
-import React, { Dispatch, Fragment, SetStateAction, useEffect } from "react";
+import React, { Fragment } from "react";
 import { formatCountSize } from "../../../../../../utils/formatCountSize";
 import { formatFileSize } from "../../../../../../utils/formatFileSize";
 import { CheckedIcon } from "../../../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
+import { ErrorIcon } from "../../../../../common/CustomIcon/components/ErrorIcon/errorIcon";
+import { UncheckedErrorIcon } from "../../../../../common/CustomIcon/components/UncheckedErrorIcon/uncheckedErrorIcon";
 import { UncheckedIcon } from "../../../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
 import { GridTable } from "../../../../../Table/common/gridTable.styles";
 import { FileSummaryFacet } from "../../../../common/entities";
 import { OnFilterFn, OnUpdateFilterFacet } from "../../common/entities";
+import { ERROR, OnClearError } from "../../exportForm";
 import {
   GridPaper,
   TableFormControl as FormControl,
 } from "../../exportForm.styles";
 
 export interface ExportFileSummaryFormProps {
+  error: boolean;
   fileSummaryFacet: FileSummaryFacet;
+  onClearError: OnClearError;
   onFilter: OnFilterFn;
   onUpdateFilterFacet: OnUpdateFilterFacet;
-  setIsFileSummaryValid: Dispatch<SetStateAction<boolean>>;
 }
 
 export const ExportFileSummaryForm = ({
+  error,
   fileSummaryFacet,
+  onClearError,
   onFilter,
   onUpdateFilterFacet,
-  setIsFileSummaryValid,
 }: ExportFileSummaryFormProps): JSX.Element => {
-  const isFileSummarySelected = fileSummaryFacet.selectedTermCount > 0;
   const hasFileSize = isFileSummaryFacet(fileSummaryFacet);
   const gridTemplateColumns = hasFileSize ? "1fr auto auto" : "1fr auto";
-
-  // File summary form is valid if at least one file summary is selected.
-  useEffect(() => {
-    setIsFileSummaryValid(isFileSummarySelected);
-  }, [isFileSummarySelected, setIsFileSummaryValid]);
-
   return (
-    <FormControl>
+    <FormControl error={error}>
       <FormLabel>{fileSummaryFacet.formLabel || "File Type"}</FormLabel>
+      {error && (
+        <FormHelperText>
+          <ErrorIcon fontSize="xxsmall" />
+          <span>
+            Please select at least one{" "}
+            {fileSummaryFacet.formLabel || "File Type"} to continue
+          </span>
+        </FormHelperText>
+      )}
       <GridPaper>
         <GridTable gridTemplateColumns={gridTemplateColumns}>
           <TableHead>
@@ -59,10 +67,11 @@ export const ExportFileSummaryForm = ({
                         fileSummaryFacet.termCount
                       }
                       checkedIcon={<CheckedIcon />}
-                      icon={<UncheckedIcon />}
-                      onChange={(): void =>
-                        onUpdateFilterFacet(fileSummaryFacet.name)
-                      }
+                      icon={error ? <UncheckedErrorIcon /> : <UncheckedIcon />}
+                      onChange={(): void => {
+                        onClearError(error, ERROR.FILE_SUMMARY_ERROR);
+                        onUpdateFilterFacet(fileSummaryFacet.name);
+                      }}
                     />
                   }
                 />
@@ -82,10 +91,13 @@ export const ExportFileSummaryForm = ({
                           <Checkbox
                             checked={selected}
                             checkedIcon={<CheckedIcon />}
-                            icon={<UncheckedIcon />}
-                            onChange={(): void =>
-                              onFilter(fileSummaryFacet.name, name, selected)
+                            icon={
+                              error ? <UncheckedErrorIcon /> : <UncheckedIcon />
                             }
+                            onChange={(): void => {
+                              onClearError(error, ERROR.FILE_SUMMARY_ERROR);
+                              onFilter(fileSummaryFacet.name, name, selected);
+                            }}
                           />
                         }
                         key={name}

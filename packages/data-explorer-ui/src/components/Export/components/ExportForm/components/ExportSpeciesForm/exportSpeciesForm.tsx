@@ -2,36 +2,44 @@ import {
   Checkbox,
   FormControlLabel,
   FormGroup,
+  FormHelperText,
   FormLabel,
 } from "@mui/material";
-import React, { Dispatch, SetStateAction, useEffect } from "react";
+import React from "react";
 import { OnFilterFn } from "../../../../../../hooks/useCategoryFilter";
 import { CheckedIcon } from "../../../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
+import { ErrorIcon } from "../../../../../common/CustomIcon/components/ErrorIcon/errorIcon";
+import { UncheckedErrorIcon } from "../../../../../common/CustomIcon/components/UncheckedErrorIcon/uncheckedErrorIcon";
 import { UncheckedIcon } from "../../../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
 import { FormFileFacet } from "../../../../common/entities";
+import { ERROR, OnClearError } from "../../exportForm";
 import { FormControl } from "../../exportForm.styles";
 
 export interface ExportSpeciesFormProps {
+  error: boolean;
+  onClearError: OnClearError;
   onFilter: OnFilterFn;
-  setIsSpeciesValid: Dispatch<SetStateAction<boolean>>;
   speciesFacet: FormFileFacet;
 }
 
 export const ExportSpeciesForm = ({
+  error,
+  onClearError,
   onFilter,
-  setIsSpeciesValid,
   speciesFacet,
 }: ExportSpeciesFormProps): JSX.Element => {
-  const isSpeciesSelected = speciesFacet.selectedTermCount > 0;
-
-  // Species form is valid if at least one species is selected.
-  useEffect(() => {
-    setIsSpeciesValid(isSpeciesSelected);
-  }, [isSpeciesSelected, setIsSpeciesValid]);
-
   return (
-    <FormControl>
+    <FormControl error={error}>
       <FormLabel>{speciesFacet.formLabel || "Species"}</FormLabel>
+      {error && (
+        <FormHelperText>
+          <ErrorIcon fontSize="xxsmall" />
+          <span>
+            Please select at least one {speciesFacet.formLabel || "Species"} to
+            continue
+          </span>
+        </FormHelperText>
+      )}
       <FormGroup>
         {speciesFacet.terms.map(({ name, selected }) => (
           <FormControlLabel
@@ -39,10 +47,11 @@ export const ExportSpeciesForm = ({
               <Checkbox
                 checked={selected}
                 checkedIcon={<CheckedIcon />}
-                icon={<UncheckedIcon />}
-                onChange={(): void =>
-                  onFilter(speciesFacet.name, name, selected)
-                }
+                icon={error ? <UncheckedErrorIcon /> : <UncheckedIcon />}
+                onChange={(): void => {
+                  onClearError(error, ERROR.SPECIES_ERROR);
+                  onFilter(speciesFacet.name, name, selected);
+                }}
               />
             }
             key={name}

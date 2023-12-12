@@ -1,23 +1,37 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { FormFacet } from "../../../../common/entities";
-import { ExportForm } from "../../../ExportForm/exportForm";
+import { ExportButton } from "../../../ExportForm/components/ExportButton/exportButton";
+import {
+  ExportForm,
+  OnRequestManifestFn,
+} from "../../../ExportForm/exportForm";
 
 export interface ManifestDownloadFormProps {
   formFacet: FormFacet;
   isLoading: boolean;
-  setIsRequestFormValid: Dispatch<SetStateAction<boolean>>;
+  onRequestManifest: OnRequestManifestFn;
 }
 
 export const ManifestDownloadForm = ({
   formFacet,
   isLoading,
-  setIsRequestFormValid,
+  onRequestManifest,
 }: ManifestDownloadFormProps): JSX.Element => {
   return (
     <ExportForm
+      Button={renderButton}
       formFacet={formFacet}
       isLoading={isLoading}
-      setIsRequestFormValid={setIsRequestFormValid}
+      onRequestManifest={onRequestManifest}
     />
   );
 };
+
+/**
+ * Build the export button.
+ * @param props - Button props e.g. "onClick" to request manifest.
+ * @returns button element.
+ */
+function renderButton({ ...props }): JSX.Element {
+  return <ExportButton {...props}>Prepare Manifest</ExportButton>;
+}

@@ -7,14 +7,12 @@ import { ButtonPrimary } from "../../../../../common/Button/components/ButtonPri
 export interface ExportButtonProps {
   Button?: ElementType;
   children: ReactNode;
-  disabled: boolean;
   onClick?: () => void;
 }
 
 export const ExportButton = ({
   Button = ButtonPrimary,
   children,
-  disabled,
   onClick,
 }: ExportButtonProps): JSX.Element => {
   const downloadStatus = useDownloadStatus();
@@ -26,10 +24,7 @@ export const ExportButton = ({
       <span>
         <Button
           disabled={
-            disabled ||
-            isLoading ||
-            downloadStatus.disabled ||
-            downloadStatus.isLoading
+            isLoading || downloadStatus.disabled || downloadStatus.isLoading
           }
           onClick={onClick}
         >

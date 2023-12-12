@@ -1,14 +1,18 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { FormFacet, ManifestDownloadFormat } from "../../../../common/entities";
+import { ExportButton } from "../../../ExportForm/components/ExportButton/exportButton";
 import { ExportManifestDownloadFormatForm } from "../../../ExportForm/components/ExportManifestDownloadFormatForm/exportManifestDownloadFormatForm";
-import { ExportForm } from "../../../ExportForm/exportForm";
+import {
+  ExportForm,
+  OnRequestManifestFn,
+} from "../../../ExportForm/exportForm";
 
 export interface ExportToTerraFormProps {
   formFacet: FormFacet;
   isLoading: boolean;
   manifestDownloadFormat?: ManifestDownloadFormat;
   manifestDownloadFormats: ManifestDownloadFormat[];
-  setIsRequestFormValid: Dispatch<SetStateAction<boolean>>;
+  onRequestManifest: OnRequestManifestFn;
 }
 
 export const ExportToTerraForm = ({
@@ -16,13 +20,14 @@ export const ExportToTerraForm = ({
   isLoading,
   manifestDownloadFormat,
   manifestDownloadFormats,
-  setIsRequestFormValid,
+  onRequestManifest,
 }: ExportToTerraFormProps): JSX.Element => {
   return (
     <ExportForm
+      Button={renderButton}
       formFacet={formFacet}
       isLoading={isLoading}
-      setIsRequestFormValid={setIsRequestFormValid}
+      onRequestManifest={onRequestManifest}
     >
       <ExportManifestDownloadFormatForm
         manifestDownloadFormat={manifestDownloadFormat}
@@ -31,3 +36,12 @@ export const ExportToTerraForm = ({
     </ExportForm>
   );
 };
+
+/**
+ * Build the export button.
+ * @param props - Button props e.g. "onClick" to request manifest.
+ * @returns button element.
+ */
+function renderButton({ ...props }): JSX.Element {
+  return <ExportButton {...props}>Request Link</ExportButton>;
+}
