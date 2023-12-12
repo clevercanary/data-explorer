@@ -1,6 +1,7 @@
 import { Typography } from "@mui/material";
 import React from "react";
 import { useAuthentication } from "../../../../../../hooks/useAuthentication";
+import { useAuthenticationConfig } from "../../../../../../hooks/useAuthenticationConfig";
 import { AuthContextProps } from "../../../../../../providers/authentication";
 import { TEXT_BODY_400_2_LINES } from "../../../../../../theme/common/typography";
 import {
@@ -28,14 +29,22 @@ enum ONBOARDING_STEP {
 
 export const TerraSetUpForm = (): JSX.Element | null => {
   const authentication = useAuthentication();
-  const onboardingStatusByStep = getOnboardingStatusByStep(authentication);
+  const { terraAuthConfig } = useAuthenticationConfig();
+  const { terraNIHProfileEndpoint } = terraAuthConfig || {};
+  const isNIHConfigured = Boolean(terraNIHProfileEndpoint);
+  const onboardingStatusByStep = getOnboardingStatusByStep(
+    authentication,
+    isNIHConfigured
+  );
   const isIdleOrPending = isAuthenticationIdleOrPending(authentication);
   const isSuccess = isOnboardingComplete(
     authentication,
     onboardingStatusByStep
   );
   return isIdleOrPending ? null : isSuccess ? (
-    <NIHAccountExpiryWarning {...authentication.NIHProfile} />
+    isNIHConfigured ? (
+      <NIHAccountExpiryWarning {...authentication.NIHProfile} />
+    ) : null
   ) : (
     <FluidPaper>
       <GridPaper>
@@ -71,17 +80,19 @@ export const TerraSetUpForm = (): JSX.Element | null => {
           isTOSCurrent={authentication.termsOfServiceDetails?.isCurrent}
           step={ONBOARDING_STEP.TERRA_TOS}
         />
-        <ConnectTerraToNIHAccount
-          active={isStepActive(
-            onboardingStatusByStep,
-            ONBOARDING_STEP.NIH_ACCOUNT
-          )}
-          completed={isStepCompleted(
-            onboardingStatusByStep,
-            ONBOARDING_STEP.NIH_ACCOUNT
-          )}
-          step={ONBOARDING_STEP.NIH_ACCOUNT}
-        />
+        {isNIHConfigured && (
+          <ConnectTerraToNIHAccount
+            active={isStepActive(
+              onboardingStatusByStep,
+              ONBOARDING_STEP.NIH_ACCOUNT
+            )}
+            completed={isStepCompleted(
+              onboardingStatusByStep,
+              ONBOARDING_STEP.NIH_ACCOUNT
+            )}
+            step={ONBOARDING_STEP.NIH_ACCOUNT}
+          />
+        )}
       </GridPaper>
     </FluidPaper>
   );
@@ -140,12 +151,18 @@ function getCurrentStep(
 /**
  * Returns a map of onboarding steps and their status.
  * @param authentication - Authentication values.
+ * @param isNIHConfigured - Boolean indicating if the Terra NIH endpoint is configured.
  * @returns map of onboarding steps and their status.
  */
 function getOnboardingStatusByStep(
-  authentication: AuthContextProps
+  authentication: AuthContextProps,
+  isNIHConfigured: boolean
 ): Map<ONBOARDING_STEP, OnboardingStatus> {
   const completedStatusByStep = getCompletedStatusByStep(authentication);
+  // Remove the NIH onboarding step, when NIH endpoint is not defined.
+  if (!isNIHConfigured) {
+    completedStatusByStep.delete(ONBOARDING_STEP.NIH_ACCOUNT);
+  }
   const currentStep = getCurrentStep(completedStatusByStep);
   const onboardingStatusByStep = new Map();
   for (const [step, isCompleted] of completedStatusByStep.entries()) {
