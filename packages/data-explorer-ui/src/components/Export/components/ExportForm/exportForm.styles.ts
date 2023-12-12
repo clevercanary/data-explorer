@@ -2,8 +2,12 @@ import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import { FormControl as MFormControl } from "@mui/material";
 import { mediaTabletUp } from "../../../../styles/common/mixins/breakpoints";
-import { inkMain, smokeMain } from "../../../../styles/common/mixins/colors";
-import { textBody500 } from "../../../../styles/common/mixins/fonts";
+import {
+  inkMain,
+  smokeLightest,
+  smokeMain,
+} from "../../../../styles/common/mixins/colors";
+import { textBodyLarge500 } from "../../../../styles/common/mixins/fonts";
 import { ThemeProps } from "../../../../theme/theme";
 import {
   sectionMargin,
@@ -24,9 +28,16 @@ export const FormControl = styled(MFormControl)`
     gap: 16px;
 
     .MuiFormLabel-root {
-      ${textBody500};
+      ${textBodyLarge500};
       color: ${inkMain};
       display: block;
+    }
+
+    .MuiFormHelperText-root {
+      align-items: flex-start;
+      display: flex;
+      gap: 4px;
+      margin: 0;
     }
 
     .MuiRadio-root {
@@ -43,15 +54,29 @@ export const TableFormControl = styled(FormControl)`
     margin: 20px 0;
 
     .MuiFormLabel-root {
-      ${margin};
+      margin: 16px;
+
+      ${mediaTabletUp} {
+        margin: 16px 20px;
+      }
     }
 
     .MuiFormControlLabel-root {
       gap: 12px;
     }
 
+    .MuiFormHelperText-root {
+      margin: 16px;
+
+      ${mediaTabletUp} {
+        margin: 16px 20px;
+      }
+    }
+
     .MuiTable-root {
       th {
+        background-color: ${smokeLightest};
+
         .MuiFormControlLabel-label {
           font: inherit;
         }
@@ -77,5 +102,5 @@ export const GridPaper = styled.div`
   border-width: 1px 0 1px 0;
   display: grid;
   gap: 1px;
-  margin: 20px 0;
+  margin: 16px 0;
 `;

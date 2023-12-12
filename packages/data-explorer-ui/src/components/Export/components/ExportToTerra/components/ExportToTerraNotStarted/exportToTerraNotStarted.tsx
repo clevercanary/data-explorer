@@ -1,15 +1,11 @@
-import React, { ElementType, useState } from "react";
+import React, { ElementType } from "react";
 import { FileManifestState } from "../../../../../../providers/fileManifestState";
 import { PAPER_PANEL_STYLE } from "../../../../../common/Paper/paper";
 import { FluidPaper } from "../../../../../common/Paper/paper.styles";
 import { Loading } from "../../../../../Loading/loading";
 import { FormFacet, ManifestDownloadFormat } from "../../../../common/entities";
-import {
-  Section,
-  SectionActions,
-  SectionContent,
-} from "../../../../export.styles";
-import { ExportButton } from "../../../ExportForm/components/ExportButton/exportButton";
+import { Section, SectionContent } from "../../../../export.styles";
+import { OnRequestManifestFn } from "../../../ExportForm/exportForm";
 
 export interface ExportToTerraNotStartedProps {
   ExportTerraForm: ElementType;
@@ -18,7 +14,7 @@ export interface ExportToTerraNotStartedProps {
   formFacet: FormFacet;
   isLoading: boolean;
   manifestDownloadFormats: ManifestDownloadFormat[];
-  onRequestManifest: () => void;
+  onRequestManifest: OnRequestManifestFn;
 }
 
 export const ExportToTerraNotStarted = ({
@@ -30,7 +26,6 @@ export const ExportToTerraNotStarted = ({
   manifestDownloadFormats,
   onRequestManifest,
 }: ExportToTerraNotStartedProps): JSX.Element => {
-  const [isRequestFormValid, setIsRequestFormValid] = useState<boolean>(false);
   return (
     <div>
       <Loading
@@ -48,16 +43,8 @@ export const ExportToTerraNotStarted = ({
             isLoading={fileManifestState.isLoading}
             manifestDownloadFormat={fileManifestState.fileManifestFormat}
             manifestDownloadFormats={manifestDownloadFormats}
-            setIsRequestFormValid={setIsRequestFormValid}
+            onRequestManifest={onRequestManifest}
           />
-          <SectionActions>
-            <ExportButton
-              disabled={!isRequestFormValid}
-              onClick={onRequestManifest}
-            >
-              Request Link
-            </ExportButton>
-          </SectionActions>
         </Section>
       </FluidPaper>
     </div>
