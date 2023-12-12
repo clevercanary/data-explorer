@@ -75,7 +75,7 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
   } = config;
   const { listView } = entityConfig;
   const { listHero, subTitleHero } = listView || {};
-  const { categoryViews, isRelatedView, tabValue } = exploreState;
+  const { categoryViews, filterCount, isRelatedView, tabValue } = exploreState;
   const { push } = useRouter();
   const tabs = getTabs(entities);
   const { response: summaryResponse } = useSummary(); // Fetch summary.
@@ -197,7 +197,11 @@ export const ExploreView = (props: ExploreViewProps): JSX.Element => {
         ListHero={renderComponent(listHero)}
         SideBarButton={
           tabletDown ? (
-            <SidebarButton label="Filter" onClick={onOpenDrawer} />
+            <SidebarButton
+              count={filterCount}
+              label="Filter"
+              onClick={onOpenDrawer}
+            />
           ) : undefined
         }
         SubTitleHero={renderComponent(subTitleHero)}

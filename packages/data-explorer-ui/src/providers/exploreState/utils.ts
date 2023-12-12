@@ -11,6 +11,15 @@ import {
 import { INITIAL_STATE } from "./constants";
 
 /**
+ * Returns the filter count.
+ * @param filterState - Filter state.
+ * @returns filter count.
+ */
+export function getFilterCount(filterState: SelectedFilter[]): number {
+  return filterState.reduce((acc, filter) => acc + filter.value.length, 0);
+}
+
+/**
  * Returns the initial explore state.
  * @param config - Site config.
  * @param entityListType - Entity list type.
@@ -24,11 +33,14 @@ export function initExploreState(
   decodedFilterParam: string,
   decodedCatalogParam?: string
 ): ExploreState {
+  const filterState = initFilterState(decodedFilterParam);
+  const filterCount = getFilterCount(filterState);
   return {
     ...INITIAL_STATE,
     catalogState: decodedCatalogParam,
     entityPageState: initEntityPageState(config),
-    filterState: initFilterState(decodedFilterParam),
+    filterCount,
+    filterState,
     listView: ENTITY_VIEW.EXACT,
     tabValue: entityListType,
   };
