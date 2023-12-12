@@ -3,6 +3,17 @@ import { textBody4002Lines } from "../../styles/common/mixins/fonts";
 import { TABLET } from "../../theme/common/breakpoints";
 import { Section, sectionMarginXsm } from "../common/Section/section.styles";
 
+interface Props {
+  offset: number;
+}
+
+export const ErrorLayout = styled("div", {
+  shouldForwardProp: (prop) => prop !== "offset",
+})<Props>`
+  flex: 1;
+  margin-top: ${({ offset }) => offset}px;
+`;
+
 export const Error = styled.div`
   margin: 0 auto;
   max-width: 648px;
