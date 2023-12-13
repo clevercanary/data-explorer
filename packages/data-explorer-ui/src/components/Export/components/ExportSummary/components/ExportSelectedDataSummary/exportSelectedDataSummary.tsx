@@ -1,10 +1,11 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { SectionTitle } from "../../../../../common/Section/components/SectionTitle/sectionTitle";
 import { GridPaperSection } from "../../../../../common/Section/section.styles";
 import { Loading, LOADING_PANEL_STYLE } from "../../../../../Loading/loading";
 import { Label, Values } from "../../exportSummary.styles";
 
-export type Summary = [string, string];
+export type SummaryValue = ReactNode | ReactNode[];
+export type Summary = [ReactNode, SummaryValue];
 
 export interface ExportSelectedDataSummaryProps {
   isLoading: boolean;
@@ -19,8 +20,8 @@ export const ExportSelectedDataSummary = ({
     <GridPaperSection>
       <Loading loading={isLoading} panelStyle={LOADING_PANEL_STYLE.INHERIT} />
       <SectionTitle title="Selected Data Summary" />
-      {summaries.map(([label, value]) => (
-        <div key={label}>
+      {summaries.map(([label, value], i) => (
+        <div key={i}>
           <Label>{label}</Label>
           <Values>{value}</Values>
         </div>

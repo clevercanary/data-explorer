@@ -18,6 +18,10 @@ const DEFAULT_SLOT_PROPS = {
           offset: [0, -6],
         },
       },
+      {
+        name: "preventOverflow",
+        options: { padding: 8 },
+      },
     ],
   },
 };
@@ -37,7 +41,6 @@ export const FilterTag = ({
     <Tooltip
       arrow
       disableInteractive
-      placement="top"
       slotProps={DEFAULT_SLOT_PROPS}
       title={isOverflowed ? label : null}
     >
