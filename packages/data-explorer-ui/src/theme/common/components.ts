@@ -1539,6 +1539,7 @@ export const MuiTooltip = (theme: Theme): Components["MuiTooltip"] => {
         ...theme.typography[TEXT_BODY_SMALL_400],
         backgroundColor: theme.palette.ink.main,
         boxShadow: theme.shadows[2], // elevation02
+        boxSizing: "content-box",
         padding: "8px 12px",
       },
     },
