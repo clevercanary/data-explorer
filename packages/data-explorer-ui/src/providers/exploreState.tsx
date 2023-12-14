@@ -3,6 +3,7 @@ import React, {
   createContext,
   Dispatch,
   ReactNode,
+  useEffect,
   useMemo,
   useReducer,
   useState,
@@ -10,6 +11,7 @@ import React, {
 import { AzulSearchIndex } from "../apis/azul/common/entities";
 import { SelectCategory, SelectedFilter } from "../common/entities";
 import { CategoryConfig, EntityPath, SiteConfig } from "../config/entities";
+import { useAuthentication } from "../hooks/useAuthentication";
 import { useCategoryConfigs } from "../hooks/useCategoryConfigs";
 import {
   buildCategoryViews,
@@ -17,11 +19,15 @@ import {
 } from "../hooks/useCategoryFilter";
 import { useConfig } from "../hooks/useConfig";
 import { useURLFilterParams } from "../hooks/useURLFilterParams";
-import { INITIAL_STATE } from "./exploreState/constants";
+import {
+  DEFAULT_PAGINATION_STATE,
+  INITIAL_STATE,
+} from "./exploreState/constants";
 import {
   PaginateTablePayload,
   ProcessExploreResponsePayload,
   ProcessRelatedResponsePayload,
+  ResetExploreResponsePayload,
   ToggleEntityViewPayload,
   UpdateColumnVisibilityPayload,
   UpdateFilterPayload,
@@ -170,6 +176,7 @@ export function ExploreStateProvider({
   const { config, defaultEntityListType } = useConfig();
   const categoryConfigs = useCategoryConfigs();
   const { decodedCatalogParam, decodedFilterParam } = useURLFilterParams();
+  const { token } = useAuthentication();
   const entityList = entityListType || defaultEntityListType;
   const [initReducerState] = useState(() =>
     initExploreState(
@@ -195,6 +202,14 @@ export function ExploreStateProvider({
     return { exploreDispatch, exploreState };
   }, [exploreDispatch, exploreState]);
 
+  // Reset explore response when token changes.
+  useEffect(() => {
+    exploreDispatch({
+      payload: undefined,
+      type: ExploreActionKind.ResetExploreResponse,
+    });
+  }, [exploreDispatch, token]);
+
   return (
     <ExploreStateContext.Provider value={exploreContextValue}>
       {children}
@@ -210,6 +225,7 @@ export enum ExploreActionKind {
   PaginateTable = "PAGINATE_TABLE",
   ProcessExploreResponse = "PROCESS_EXPLORE_RESPONSE",
   ProcessRelatedResponse = "PROCESS_RELATED_RESPONSE",
+  ResetExploreResponse = "RESET_EXPLORE_RESPONSE",
   ResetState = "RESET_STATE",
   SelectEntityType = "SELECT_ENTITY_TYPE",
   ToggleEntityView = "TOGGLE_ENTITY_VIEW",
@@ -226,6 +242,7 @@ export type ExploreAction =
   | PaginateTableAction
   | ProcessExploreResponseAction
   | ProcessRelatedResponseAction
+  | ResetExploreResponseAction
   | ResetStateAction
   | SelectEntityTypeAction
   | ToggleEntityViewAction
@@ -263,6 +280,14 @@ type ProcessExploreResponseAction = {
 type ProcessRelatedResponseAction = {
   payload: ProcessRelatedResponsePayload;
   type: ExploreActionKind.ProcessRelatedResponse;
+};
+
+/**
+ * Reset explore response action.
+ */
+type ResetExploreResponseAction = {
+  payload: ResetExploreResponsePayload;
+  type: ExploreActionKind.ResetExploreResponse;
 };
 
 /**
@@ -385,6 +410,17 @@ function exploreReducer(
       return {
         ...state,
         relatedListItems: payload.relatedListItems,
+      };
+    }
+    /**
+     * Reset explore response.
+     **/
+    case ExploreActionKind.ResetExploreResponse: {
+      return {
+        ...state,
+        listItems: [],
+        loading: true,
+        paginationState: DEFAULT_PAGINATION_STATE,
       };
     }
     /**
