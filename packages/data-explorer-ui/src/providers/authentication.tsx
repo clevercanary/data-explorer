@@ -10,6 +10,7 @@ import React, {
 } from "react";
 import { useIdleTimer } from "react-idle-timer";
 import { useConfig } from "../hooks/useConfig";
+import { INACTIVITY_PARAM } from "../hooks/useSessionTimeout";
 
 // Template constants
 export const ROUTE_LOGIN = "/login";
@@ -117,7 +118,7 @@ interface Props {
  * @returns Provider element to be used by consumers to both update authentication state and subscribe to changes in authentication state.
  */
 export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
-  const { authentication: authConfig } = useConfig().config;
+  const { authentication: authConfig, redirectRootToPath } = useConfig().config;
   const { googleGISAuthConfig, terraAuthConfig } = authConfig || {};
   const { clientId, scope } = googleGISAuthConfig || {};
   const { asPath, basePath } = useRouter();
@@ -140,13 +141,18 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
 
   /**
    * If sessionTimeout is set and user is authenticated, the app will reload and redirect to
-   * origin (including basePath)
+   * origin, including base path, root path, and query param.
    */
   useIdleTimer({
     onIdle: () =>
       isAuthenticated &&
       sessionTimeout &&
-      (window.location.href = window.location.origin + basePath),
+      (window.location.href =
+        window.location.origin +
+        basePath +
+        redirectRootToPath +
+        "?" +
+        `${INACTIVITY_PARAM}=true`),
     timeout: sessionTimeout,
   });
 
