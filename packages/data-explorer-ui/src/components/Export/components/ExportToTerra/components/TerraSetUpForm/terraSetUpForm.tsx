@@ -1,5 +1,5 @@
 import { Typography } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAuthentication } from "../../../../../../hooks/useAuthentication";
 import { useAuthenticationConfig } from "../../../../../../hooks/useAuthenticationConfig";
 import { AuthContextProps } from "../../../../../../providers/authentication";
@@ -12,7 +12,6 @@ import { SectionTitle } from "../../../../../common/Section/components/SectionTi
 import { AcceptTerraTOS } from "./components/FormStep/components/AcceptTerraTOS/acceptTerraTOS";
 import { ConnectTerraToNIHAccount } from "./components/FormStep/components/ConnectTerraToNIHAccount/connectTerraToNIHAccount";
 import { CreateTerraAccount } from "./components/FormStep/components/CreateTerraAccount/createTerraAccount";
-import { NIHAccountExpiryWarning } from "./components/NIHAccountExpiryWarning/nihAccountExpiryWarning";
 import { Section, SectionContent } from "./terraSetUpForm.styles";
 
 interface OnboardingStatus {
@@ -28,6 +27,7 @@ enum ONBOARDING_STEP {
 }
 
 export const TerraSetUpForm = (): JSX.Element | null => {
+  const [showForm, setShowForm] = useState<boolean>(false);
   const authentication = useAuthentication();
   const { terraAuthConfig } = useAuthenticationConfig();
   const { terraNIHProfileEndpoint } = terraAuthConfig || {};
@@ -37,15 +37,13 @@ export const TerraSetUpForm = (): JSX.Element | null => {
     isNIHConfigured
   );
   const isIdleOrPending = isAuthenticationIdleOrPending(authentication);
-  const isSuccess = isOnboardingComplete(
-    authentication,
-    onboardingStatusByStep
-  );
-  return isIdleOrPending ? null : isSuccess ? (
-    isNIHConfigured ? (
-      <NIHAccountExpiryWarning {...authentication.NIHProfile} />
-    ) : null
-  ) : (
+  const isSuccess = isOnboardingComplete(onboardingStatusByStep);
+
+  useEffect(() => {
+    setShowForm(isIdleOrPending ? false : !isSuccess);
+  }, [isIdleOrPending, isSuccess]);
+
+  return showForm ? (
     <FluidPaper>
       <GridPaper>
         <Section>
@@ -95,7 +93,7 @@ export const TerraSetUpForm = (): JSX.Element | null => {
         )}
       </GridPaper>
     </FluidPaper>
-  );
+  ) : null;
 };
 
 /**
@@ -181,31 +179,33 @@ function getOnboardingStatusByStep(
 /**
  * Returns true if authentication is idle, or pending.
  * Idle state is when a user has not logged in (not authenticated).
- * Pending state is when a user is logged in, but the Terra profile is undefined.
+ * Pending state is when a user is logged in, but the Terra profile or terms of service details are undefined.
  * @param authentication - Authentication values.
  * @returns true if authentication is idle or pending.
  */
 function isAuthenticationIdleOrPending(
   authentication: AuthContextProps
 ): boolean {
-  const { isAuthenticated, terraProfile } = authentication;
-  return !isAuthenticated || !terraProfile;
+  const { isAuthenticated, termsOfServiceDetails, terraProfile } =
+    authentication;
+  if (!isAuthenticated) {
+    return true;
+  }
+  if (!terraProfile) {
+    return true;
+  }
+  return !termsOfServiceDetails;
 }
 
 /**
  * Returns true if onboarding is complete.
- * @param authentication - Authentication values.
  * @param onboardingStatusByStep - Onboarding steps and their status.
  * @returns true if onboarding is complete.
  */
 function isOnboardingComplete(
-  authentication: AuthContextProps,
   onboardingStatusByStep: Map<ONBOARDING_STEP, OnboardingStatus>
 ): boolean {
-  return Boolean(
-    authentication.isAuthenticated &&
-      onboardingStatusByStep.get(ONBOARDING_STEP.COMPLETE)?.active
-  );
+  return Boolean(onboardingStatusByStep.get(ONBOARDING_STEP.COMPLETE)?.active);
 }
 
 /**

@@ -1,19 +1,13 @@
 import React from "react";
+import { useAuthentication } from "../../../../../../../../hooks/useAuthentication";
 import { expireTimeInSeconds } from "../../../../../../../../providers/authentication";
 import { FluidAlert } from "../../../../../../../common/Alert/alert.styles";
 import { Link } from "../../../../../../../Links/components/Link/link";
 
-export interface NIHAccountExpiryWarningProps {
-  linkExpired?: boolean;
-  linkExpireTime?: number;
-  linkWillExpire?: boolean;
-}
-
-export const NIHAccountExpiryWarning = ({
-  linkExpired = false,
-  linkExpireTime,
-  linkWillExpire = false,
-}: NIHAccountExpiryWarningProps): JSX.Element | null => {
+export const NIHAccountExpiryWarning = (): JSX.Element | null => {
+  const authentication = useAuthentication();
+  const { NIHProfile } = authentication || {};
+  const { linkExpired, linkExpireTime, linkWillExpire } = NIHProfile || {};
   return linkWillExpire || linkExpired ? (
     <FluidAlert
       severity="warning"
@@ -53,7 +47,7 @@ function getExpireTimeInDays(expireTime?: number): number {
  * @param expireTime - Link expiration time in seconds.
  * @returns expiration message.
  */
-function getExpiryMessage(linkExpired: boolean, expireTime?: number): string {
+function getExpiryMessage(linkExpired?: boolean, expireTime?: number): string {
   if (linkExpired) {
     return "Your NIH account link has expired.";
   }
