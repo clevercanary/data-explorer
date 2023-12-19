@@ -1,11 +1,9 @@
 import { useRouter } from "next/router";
 import { useEffect, useMemo } from "react";
-import { RESPONSE_SOURCE } from "../apis/azul/common/entities";
 import { PARAMS_INDEX_UUID } from "../common/constants";
 import { EntityDetailViewProps } from "../views/EntityDetailView/entityDetailView";
 import { useAsync } from "./useAsync";
 import { useAuthentication } from "./useAuthentication";
-import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
 import { EXPLORE_MODE, useExploreMode } from "./useExploreMode";
 import { useExploreState } from "./useExploreState";
@@ -24,31 +22,28 @@ interface UseEntityDetailResponse<T> {
 export const useFetchEntity = <T,>(
   detailViewProps?: EntityDetailViewProps
 ): UseEntityDetailResponse<T> => {
-  const { data: entityList, entityListType } = detailViewProps || {}; // Data is statically loaded if entity list is defined.
-  const { authentication } = useConfig().config;
+  const { data: staticData, entityListType } = detailViewProps || {};
   const { token } = useAuthentication();
   const exploreMode = useExploreMode();
-  const {
-    exploreState: { catalogState },
-  } = useExploreState();
+  const { exploreState } = useExploreState();
+  const { catalogState } = exploreState;
   const { catalog, fetchEntityDetail, path } = useEntityService(entityListType);
-  const {
-    query: { params },
-  } = useRouter();
+  const { query } = useRouter();
+  const { params } = query;
   const uuid = params?.[PARAMS_INDEX_UUID] as string;
   const { data: response, isIdle, isLoading, run } = useAsync<T>();
-  const isIdleOrLoading = isIdle || isLoading;
+  const entityResponse = response || staticData;
   const shouldFetchEntity = useMemo(
     () =>
       isFetchRequired(
-        exploreMode === EXPLORE_MODE.CS_FETCH_CS_FILTERING,
-        Boolean(authentication && token),
-        Boolean(entityList),
-        Boolean(response),
-        Boolean(catalogState)
+        exploreMode !== EXPLORE_MODE.CS_FETCH_CS_FILTERING,
+        Boolean(token),
+        Boolean(catalogState),
+        Boolean(entityResponse)
       ),
-    [authentication, catalogState, entityList, exploreMode, response, token]
+    [catalogState, entityResponse, exploreMode, token]
   );
+  const isResponseLoading = shouldFetchEntity ? isIdle || isLoading : false;
 
   useEffect(() => {
     // Fetch entity if entity data originates from a request, and has not yet been requested.
@@ -57,49 +52,30 @@ export const useFetchEntity = <T,>(
     }
   }, [catalog, fetchEntityDetail, path, run, shouldFetchEntity, token, uuid]);
 
-  if (token) {
-    return {
-      isLoading: entityList ? false : isIdleOrLoading,
-      response: response
-        ? {
-            ...response,
-            responseSource: RESPONSE_SOURCE.FETCH,
-          }
-        : { ...entityList, responseSource: RESPONSE_SOURCE.STATIC_GENERATION },
-    };
-  }
-
   return {
-    isLoading: entityList ? false : isIdleOrLoading,
-    response: entityList ? entityList : response,
+    isLoading: isResponseLoading,
+    response: entityResponse
+      ? { ...entityResponse, isLoading: isResponseLoading }
+      : undefined,
   };
 };
 
 /**
  * Returns true if fetching the entity is necessary.
- * TODO see Fix fetch of entity if entity is statically generated and catalog is user defined #476.
- * @param listStaticLoad - Flag indicating if the entity list is statically loaded.
- * @param isAuthenticated - Flag indicating if authentication is enabled.
- * @param hasStaticResponse - Flag indicating if a statically loaded response exists.
- * @param hasFetchResponse - Flag indicating if a response exists.
- * @param isCatalogState - Flag indicating if the catalog state is defined.
+ * @param isServerSideFetch - Data is fetched on the server side.
+ * @param isAuthenticated - User is authenticated.
+ * @param isCatalogState - Catalog state is defined.
+ * @param hasEntityReponse - Entity response is defined.
  * @returns true if a fetch is necessary.
  */
 function isFetchRequired(
-  listStaticLoad: boolean,
+  isServerSideFetch: boolean,
   isAuthenticated: boolean,
-  hasStaticResponse: boolean,
-  hasFetchResponse: boolean,
-  isCatalogState: boolean
+  isCatalogState: boolean,
+  hasEntityReponse: boolean
 ): boolean {
-  if (listStaticLoad) {
-    return false;
+  if (isServerSideFetch) {
+    return isAuthenticated || isCatalogState || !hasEntityReponse;
   }
-  if (hasStaticResponse) {
-    if (isAuthenticated || isCatalogState) {
-      return !hasFetchResponse;
-    }
-    return false;
-  }
-  return !hasFetchResponse;
+  return false;
 }

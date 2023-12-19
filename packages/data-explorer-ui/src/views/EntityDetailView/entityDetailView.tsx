@@ -33,7 +33,7 @@ function getTabs(entity: EntityConfig): Tab[] {
 
 export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
   const { currentTab, route: tabRoute } = useCurrentDetailTab();
-  const { isLoading, response } = useFetchEntity(props);
+  const { response } = useFetchEntity(props);
   const { push, query } = useRouter();
   const { entityConfig } = useConfig();
   const { mainColumn, sideColumn } = currentTab;
@@ -43,7 +43,7 @@ export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
   const isDetailOverview = detailOverviews?.includes(currentTab.label);
   const tabs = getTabs(entityConfig);
 
-  if (isLoading) {
+  if (!response) {
     return <span></span>; //TODO: return the loading UI component
   }
 

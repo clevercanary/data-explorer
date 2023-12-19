@@ -125,14 +125,6 @@ enum AZUL_TERM_TYPE {
 }
 
 /**
- * Set of possible response sources.
- */
-export enum RESPONSE_SOURCE {
-  "FETCH" = "FETCH",
-  "STATIC_GENERATION" = "STATIC_GENERATION",
-}
-
-/**
  * Model of the response to get a download link, using a get-retry approach
  */
 export interface FileLocationResponse {
