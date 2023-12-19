@@ -35,6 +35,11 @@ export interface ProcessRelatedResponsePayload {
 export type PaginateTablePayload = PaginationDirectionType;
 
 /**
+ * Reset explore response payload.
+ */
+export type ResetExploreResponsePayload = undefined;
+
+/**
  * Toggle entity view payload.
  */
 export type ToggleEntityViewPayload = ENTITY_VIEW;
