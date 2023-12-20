@@ -93,15 +93,15 @@ function markSearchTerm(
   label: string,
   ranges: FilterMenuSearchMatchRange[]
 ): React.ReactNode {
-  ranges = ranges.slice().sort(([a], [b]) => a - b);
+  ranges = ranges.slice().sort(({ start: a }, { start: b }) => a - b);
   let prevIndex = 0;
   const items = [];
   for (let i = 0; i < ranges.length; i++) {
-    const start = ranges[i][0];
-    let end = ranges[i][1];
-    while (i + 1 < ranges.length && ranges[i + 1][0] <= end) {
+    const { start } = ranges[i];
+    let { end } = ranges[i];
+    while (i + 1 < ranges.length && ranges[i + 1].start <= end) {
       i++;
-      end = Math.max(end, ranges[i][1]);
+      end = Math.max(end, ranges[i].end);
     }
     const leftChar = label[start - 1];
     const rightChar = label[end];
