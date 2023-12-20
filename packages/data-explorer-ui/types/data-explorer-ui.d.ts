@@ -20,6 +20,7 @@ import { GridTrackSize } from "../src/config/entities";
  */
 declare module "@mui/material/Alert" {
   interface AlertPropsColorOverrides {
+    ink: true;
     primary: true;
   }
 
