@@ -30,7 +30,7 @@ function getMatchStringFn(
         allMatch = false;
         break;
       }
-      ranges.push([i, i + word.length]);
+      ranges.push({ end: i + word.length, start: i });
     }
     return allMatch ? { ranges, score: 1 } : false;
   };

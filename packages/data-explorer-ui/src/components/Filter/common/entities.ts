@@ -6,7 +6,10 @@ import { SelectCategoryValueView } from "../../../common/entities";
  */
 export type SetSearchTermFn = Dispatch<SetStateAction<string>>;
 
-export type FilterMenuSearchMatchRange = [number, number];
+export interface FilterMenuSearchMatchRange {
+  end: number;
+  start: number;
+}
 
 export interface FilterMenuSearchStringMatch {
   ranges: FilterMenuSearchMatchRange[];
