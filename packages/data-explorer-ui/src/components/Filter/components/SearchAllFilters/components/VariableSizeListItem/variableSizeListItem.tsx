@@ -6,11 +6,11 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import { escapeRegExp } from "../../../../../../common/utils";
 import { OnFilterFn } from "../../../../../../hooks/useCategoryFilter";
 import { TEXT_BODY_SMALL_400 } from "../../../../../../theme/common/typography";
 import { CheckedIcon } from "../../../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
+import { FilterMenuSearchMatchRange } from "../../../../common/entities";
 import { FilterNoResultsFound } from "../../../FilterNoResultsFound/filterNoResultsFound";
 import { ITEM_TYPE, SearchAllFiltersDynamicItem } from "../../common/entites";
 import { MatchHighlight } from "../../searchAllFilters.styles";
@@ -31,9 +31,6 @@ export default function VariableSizeListItem({
   style,
 }: Props): JSX.Element {
   const { key } = item;
-  const searchTermRegExp = searchTerm
-    ? new RegExp(escapeRegExp(searchTerm), "ig")
-    : null;
   const listItemRef = useRef<HTMLElement>();
 
   const setRef = (e: HTMLElement | null): void => {
@@ -48,6 +45,7 @@ export default function VariableSizeListItem({
   if (item.type === ITEM_TYPE.VALUE) {
     const {
       categoryKey,
+      matchRanges,
       value: { count, key: valueKey, label, selected },
     } = item;
     return (
@@ -69,9 +67,7 @@ export default function VariableSizeListItem({
           disableTypography
           primary={
             <span>
-              {searchTermRegExp
-                ? markSearchTerm(label, searchTermRegExp)
-                : label}
+              {matchRanges?.length ? markSearchTerm(label, matchRanges) : label}
             </span>
           }
           secondary={
@@ -95,31 +91,31 @@ export default function VariableSizeListItem({
 
 function markSearchTerm(
   label: string,
-  searchTermRegExp: RegExp
+  ranges: FilterMenuSearchMatchRange[]
 ): React.ReactNode {
+  ranges = ranges.slice().sort(([a], [b]) => a - b);
   let prevIndex = 0;
-  return [
-    Array.from(label.matchAll(searchTermRegExp), (match, itemIndex) => {
-      const [matchText] = match;
-      const matchIndex = match.index as number; // type assertion to get around a TypeScript bug: https://github.com/microsoft/TypeScript/issues/36788
-      const endIndex = matchIndex + matchText.length;
-      const leftChar = label[matchIndex - 1];
-      const rightChar = label[endIndex];
-      const leftOpen = !leftChar || /\s/.test(leftChar);
-      const rightOpen = !rightChar || /\s/.test(rightChar);
-      const items = [
-        label.substring(prevIndex, matchIndex),
-        <MatchHighlight
-          key={itemIndex}
-          leftOpen={leftOpen}
-          rightOpen={rightOpen}
-        >
-          {matchText}
-        </MatchHighlight>,
-      ];
-      prevIndex = endIndex;
-      return items;
-    }),
-    label.substring(prevIndex),
-  ];
+  const items = [];
+  for (let i = 0; i < ranges.length; i++) {
+    const start = ranges[i][0];
+    let end = ranges[i][1];
+    while (i + 1 < ranges.length && ranges[i + 1][0] <= end) {
+      i++;
+      end = Math.max(end, ranges[i][1]);
+    }
+    const leftChar = label[start - 1];
+    const rightChar = label[end];
+    const leftOpen = !leftChar || /\s/.test(leftChar);
+    const rightOpen = !rightChar || /\s/.test(rightChar);
+    const matchItems = [
+      label.substring(prevIndex, start),
+      <MatchHighlight key={start} leftOpen={leftOpen} rightOpen={rightOpen}>
+        {label.substring(start, end)}
+      </MatchHighlight>,
+    ];
+    prevIndex = end;
+    items.push(matchItems);
+  }
+  items.push(label.substring(prevIndex));
+  return items;
 }

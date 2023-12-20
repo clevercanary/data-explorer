@@ -1,4 +1,5 @@
 import { SelectCategoryValueView } from "../../../../../common/entities";
+import { FilterMenuSearchMatchRange } from "../../../common/entities";
 
 export enum ITEM_TYPE {
   CATEGORY = "CATEGORY",
@@ -30,6 +31,7 @@ export enum OVERFLOW_STYLE {
 export interface ValueItem {
   categoryKey: string;
   key: string;
+  matchRanges?: FilterMenuSearchMatchRange[];
   type: ITEM_TYPE.VALUE;
   value: SelectCategoryValueView;
 }
