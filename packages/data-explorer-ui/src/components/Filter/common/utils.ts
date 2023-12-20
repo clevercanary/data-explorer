@@ -60,11 +60,11 @@ export function getSortMatchesFn(
   return (values: SelectCategoryValueView[]) => {
     const matches: FilterMenuSearchMatch[] = [];
     for (const value of values) {
-      let match = matchString(value.label);
+      let match = matchString(value.label || "");
       if (match) {
         matches.push({ ...match, value });
       } else {
-        match = matchString(value.key);
+        match = matchString(value.key || "");
         if (match) matches.push({ score: match.score, value });
       }
     }
