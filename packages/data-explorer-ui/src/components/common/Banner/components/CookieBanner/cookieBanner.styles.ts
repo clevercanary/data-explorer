@@ -16,7 +16,7 @@ export const CookieBanner = styled(Banner)`
   padding: 16px;
   position: fixed;
   width: calc(100vw - 16px);
-  z-index: 1400; // Above support fab.
+  z-index: 1100; // Above support fab, below support form.
 
   .MuiAlert-message {
     ${textBody400};
