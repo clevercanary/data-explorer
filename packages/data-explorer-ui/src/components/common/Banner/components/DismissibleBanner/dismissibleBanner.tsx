@@ -30,7 +30,7 @@ export const DismissibleBanner = ({
   };
 
   return (
-    <Fade in={isIn}>
+    <Fade in={isIn} unmountOnExit>
       <Alert className={className} onClose={onClose} {...props}>
         {children}
       </Alert>
