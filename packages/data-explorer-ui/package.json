@@ -1,6 +1,6 @@
 {
   "name": "@clevercanary/data-explorer-ui",
-  "version": "63.0.0",
+  "version": "64.0.0",
   "description": "",
   "scripts": {
     "test": "jest",
