@@ -229,8 +229,7 @@ function applyMenuFilter(
   categoryViews: SelectCategoryView[],
   inputValue: string
 ): SearchAllFiltersItem[] {
-  const sortMatches = getSortMatchesFn(inputValue, true);
-  if (!sortMatches) return [NO_RESULTS_ITEM];
+  const sortMatches = getSortMatchesFn(inputValue);
   const filteredItems = categoryViews.reduce((filteredItems, category) => {
     if (!category.isDisabled) {
       const categoryValueKeyPrefix =

@@ -79,7 +79,5 @@ export function applyMenuFilter(
   values: SelectCategoryValueView[],
   searchTerm: string
 ): SelectCategoryValueView[] {
-  const sortMatches = getSortMatchesFn(searchTerm);
-  if (!sortMatches) return values;
-  return sortMatches(values).map(({ value }) => value);
+  return getSortMatchesFn(searchTerm)(values).map(({ value }) => value);
 }

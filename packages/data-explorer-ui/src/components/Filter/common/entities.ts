@@ -18,7 +18,7 @@ export interface FilterMenuSearchStringMatch {
 
 export type FilterMenuSearchMatchStringFn = (
   s: string
-) => FilterMenuSearchStringMatch | false;
+) => FilterMenuSearchStringMatch | null;
 
 export interface FilterMenuSearchMatch {
   ranges?: FilterMenuSearchMatchRange[];

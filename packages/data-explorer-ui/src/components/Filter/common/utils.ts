@@ -1,11 +1,9 @@
-import { SelectCategoryValueView } from "../../../common/entities";
 import { escapeRegExp } from "../../../common/utils";
 import {
   FilterMenuSearchMatch,
   FilterMenuSearchMatchRange,
   FilterMenuSearchMatchStringFn,
   FilterMenuSearchSortMatchesFn,
-  FilterMenuSearchStringMatch,
 } from "./entities";
 
 function getRegExpMatchRanges(
@@ -22,17 +20,13 @@ function getRegExpMatchRanges(
 }
 
 function getMatchStringFn(
-  searchTerm: string,
-  matchEmptySearchTerm = false
-): FilterMenuSearchMatchStringFn | false {
+  searchTerm: string
+): FilterMenuSearchMatchStringFn | null {
+  if (!searchTerm) return null;
   const wordRegExps = searchTerm
     .split(/\s+/)
     .filter((w) => w)
     .map((w) => new RegExp(escapeRegExp(w), "ig"));
-  if (!wordRegExps.length)
-    return matchEmptySearchTerm
-      ? (): FilterMenuSearchStringMatch => ({ ranges: [], score: 1 })
-      : false;
   const fullRegExp = new RegExp(escapeRegExp(searchTerm), "ig");
   return (str) => {
     let allMatch = true;
@@ -47,17 +41,18 @@ function getMatchStringFn(
     }
     const fullTermRanges = getRegExpMatchRanges(str, fullRegExp);
     ranges.push(...fullTermRanges);
-    return allMatch ? { ranges, score: fullTermRanges.length ? 2 : 1 } : false;
+    return allMatch ? { ranges, score: fullTermRanges.length ? 2 : 1 } : null;
   };
 }
 
 export function getSortMatchesFn(
-  searchTerm: string,
-  matchEmptySearchTerm?: boolean
-): FilterMenuSearchSortMatchesFn | false {
-  const matchString = getMatchStringFn(searchTerm, matchEmptySearchTerm);
-  if (!matchString) return false;
-  return (values: SelectCategoryValueView[]) => {
+  searchTerm: string
+): FilterMenuSearchSortMatchesFn {
+  const matchString = getMatchStringFn(searchTerm);
+  if (!matchString) {
+    return (values) => values.map((value) => ({ score: 0, value }));
+  }
+  return (values) => {
     const matches: FilterMenuSearchMatch[] = [];
     for (const value of values) {
       let match = matchString(value.label || "");
