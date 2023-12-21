@@ -1,10 +1,8 @@
 import { AlertProps as MAlertProps, ButtonProps } from "@mui/material";
 import React, { forwardRef, Fragment, ReactNode } from "react";
 import { FLAG } from "../../../../../hooks/useFeatureFlag/common/entities";
-import {
-  getLocalStorage,
-  setLocalStorage,
-} from "../../../../../hooks/useFeatureFlag/common/utils";
+import { setLocalStorage } from "../../../../../hooks/useLocalStorage/common/utils";
+import { useLocalStorage } from "../../../../../hooks/useLocalStorage/useLocalStorage";
 import { ButtonPrimary } from "../../../Button/components/ButtonPrimary/buttonPrimary";
 import { DismissibleBanner } from "../DismissibleBanner/dismissibleBanner";
 import { CookieBanner as Banner } from "./cookieBanner.styles";
@@ -22,7 +20,8 @@ export const CookieBanner = ({
   message,
   secondaryAction,
 }: CookieBannerProps): JSX.Element => {
-  const isCookieAccepted = getLocalStorage(localStorageKey) === FLAG.TRUE;
+  const localStorage = useLocalStorage(localStorageKey);
+  const isCookieAccepted = localStorage === FLAG.TRUE;
 
   // Callback fired when the banner requests to be closed.
   const onDismiss = (): void => {
