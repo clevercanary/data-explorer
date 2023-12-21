@@ -3,7 +3,7 @@ import {
   AlertProps as MAlertProps,
   Fade,
 } from "@mui/material";
-import React, { ElementType, ReactNode, useState } from "react";
+import React, { ElementType, ReactNode, useEffect, useState } from "react";
 
 export interface CookieBannerProps extends MAlertProps {
   Alert?: ElementType;
@@ -21,13 +21,18 @@ export const DismissibleBanner = ({
   open,
   ...props /* Spread props to allow for Mui AlertProps specific prop overrides. */
 }: CookieBannerProps): JSX.Element => {
-  const [isIn, setIsIn] = useState<boolean>(open);
+  const [isIn, setIsIn] = useState<boolean>(false);
 
   // Callback fired when the component requests to be closed.
   const onClose = (): void => {
     onDismiss?.();
     setIsIn(false);
   };
+
+  // Sets the open state.
+  useEffect(() => {
+    setIsIn(open);
+  }, [open]);
 
   return (
     <Fade in={isIn} unmountOnExit>
