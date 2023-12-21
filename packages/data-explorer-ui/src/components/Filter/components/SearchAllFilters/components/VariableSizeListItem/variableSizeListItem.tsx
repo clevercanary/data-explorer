@@ -99,6 +99,7 @@ function markSearchTerm(
   for (let i = 0; i < ranges.length; i++) {
     const { start } = ranges[i];
     let { end } = ranges[i];
+    // Consolidate overlapping ranges
     while (i + 1 < ranges.length && ranges[i + 1].start <= end) {
       i++;
       end = Math.max(end, ranges[i].end);
