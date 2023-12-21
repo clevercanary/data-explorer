@@ -238,7 +238,7 @@ function applyMenuFilter(
         (match): ValueItem => ({
           categoryKey: category.key,
           key: categoryValueKeyPrefix + match.value.key,
-          matchRanges: match.ranges,
+          matchRanges: match.labelRanges,
           type: ITEM_TYPE.VALUE,
           value: match.value,
         })

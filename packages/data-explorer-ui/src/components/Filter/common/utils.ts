@@ -6,6 +6,12 @@ import {
   FilterMenuSearchSortMatchesFn,
 } from "./entities";
 
+/**
+ * Get range of each substring matched by a regular expression
+ * @param str - String to find matches in
+ * @param regExp - Regular expression to match with
+ * @returns array of match ranges
+ */
 function getRegExpMatchRanges(
   str: string,
   regExp: RegExp
@@ -19,6 +25,11 @@ function getRegExpMatchRanges(
   });
 }
 
+/**
+ * Create a function that takes a string and matches it against a given search term, returning information about the match
+ * @param searchTerm - Search term for the function to match strings against
+ * @returns a function for matching, or null if the search term doesn't limit search results (namely, if it's empty string)
+ */
 function getMatchStringFn(
   searchTerm: string
 ): FilterMenuSearchMatchStringFn | null {
@@ -45,6 +56,11 @@ function getMatchStringFn(
   };
 }
 
+/**
+ * Create a function that takes a SelectCategoryValueView array, and filters and sorts it according to a given search term, providing information about individual matches
+ * @param searchTerm - Search term to apply to the SelectCategoryValueView array
+ * @returns a function for searching SelectCategoryValueView arrays
+ */
 export function getSortMatchesFn(
   searchTerm: string
 ): FilterMenuSearchSortMatchesFn {
@@ -57,7 +73,7 @@ export function getSortMatchesFn(
     for (const value of values) {
       let match = matchString(value.label || "");
       if (match) {
-        matches.push({ ...match, value });
+        matches.push({ labelRanges: match.ranges, score: match.score, value });
       } else {
         match = matchString(value.key || "");
         if (match) matches.push({ score: match.score, value });
