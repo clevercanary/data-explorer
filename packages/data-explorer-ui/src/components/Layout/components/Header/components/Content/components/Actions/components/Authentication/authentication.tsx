@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import React, { useCallback } from "react";
-import { useAuthentication } from "../../../../../../../../../../hooks/useAuthentication";
+import { useAuthentication } from "../../../../../../../../../../hooks/useAuthentication/useAuthentication";
 import { AuthenticationMenu } from "./components/AuthenticationMenu/authenticationMenu";
 import { RequestAuthentication } from "./components/RequestAuthentication/requestAuthentication";
 

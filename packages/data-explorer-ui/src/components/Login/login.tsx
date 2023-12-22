@@ -1,6 +1,6 @@
 import { Checkbox, Typography } from "@mui/material";
 import React, { ChangeEvent, ReactNode, useState } from "react";
-import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthentication } from "../../hooks/useAuthentication/useAuthentication";
 import { LoginButton } from "../common/Button/components/LoginButton/loginButton";
 import { CheckedIcon } from "../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { GoogleIcon } from "../common/CustomIcon/components/GoogleIcon/googleIcon";

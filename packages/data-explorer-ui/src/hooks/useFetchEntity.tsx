@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { PARAMS_INDEX_UUID } from "../common/constants";
 import { EntityDetailViewProps } from "../views/EntityDetailView/entityDetailView";
 import { useAsync } from "./useAsync";
-import { useAuthentication } from "./useAuthentication";
+import { useAuthentication } from "./useAuthentication/useAuthentication";
 import { useEntityService } from "./useEntityService";
 import { EXPLORE_MODE, useExploreMode } from "./useExploreMode";
 import { useExploreState } from "./useExploreState";

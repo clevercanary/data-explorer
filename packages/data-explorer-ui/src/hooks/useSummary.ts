@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { AzulSummaryResponse } from "../apis/azul/common/entities";
 import { useAsync } from "./useAsync";
-import { useAuthentication } from "./useAuthentication";
+import { useAuthentication } from "./useAuthentication/useAuthentication";
 import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
 import { useExploreState } from "./useExploreState";

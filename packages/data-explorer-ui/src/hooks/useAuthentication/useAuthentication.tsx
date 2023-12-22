@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AuthContext, AuthContextProps } from "../providers/authentication";
+import { AuthContext, AuthContextProps } from "../../providers/authentication";
 
 /**
  * Returns authentication context.

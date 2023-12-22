@@ -1,4 +1,7 @@
 import React, { ReactNode } from "react";
+import { AuthenticationResponse } from "../../../../../../../../../../hooks/useAuthentication/common/entities";
+import { useAuthentication } from "../../../../../../../../../../hooks/useAuthentication/useAuthentication";
+import { TerraEndpointResponse } from "../../../../../../../../../../hooks/useAuthentication/useFetchTerraProfile";
 import { useConfig } from "../../../../../../../../../../hooks/useConfig";
 import { ButtonPrimary } from "../../../../../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { ANCHOR_TARGET } from "../../../../../../../../../Links/common/entities";
@@ -7,18 +10,18 @@ import { FormStep } from "../../formStep";
 export interface AcceptTerraTOSProps {
   active: boolean;
   completed: boolean;
-  isTOSCurrent?: boolean;
   step: ReactNode;
 }
 
 export const AcceptTerraTOS = ({
   active,
   completed,
-  isTOSCurrent,
   step,
 }: AcceptTerraTOSProps): JSX.Element | null => {
   const { config } = useConfig();
   const { exportToTerraUrl } = config;
+  const { terraProfileResponse } = useAuthentication();
+  const isTOSAccepted = isTermsOfServiceAccepted(terraProfileResponse);
 
   const onOpenTerra = (): void => {
     if (exportToTerraUrl) {
@@ -33,10 +36,10 @@ export const AcceptTerraTOS = ({
       completed={completed}
       step={step}
       text={
-        isTOSCurrent === false ? (
+        isTOSAccepted ? (
           <p>
             {/* Only show reminder to re-accept TOS if the accepted terms of service version is not current.
-            An undefined value could imply the TOS is not accepted. */}
+            Accepted TOS imply the version is not current. */}
             Terra&apos;s terms of service have changed. Please login to Terra to
             accept the updated terms of service.
           </p>
@@ -51,3 +54,14 @@ export const AcceptTerraTOS = ({
     />
   );
 };
+
+/**
+ * Returns true if the terms of service have been accepted.
+ * @param terraProfileResponse - Terra profile response.
+ * @returns true if the terms of service have been accepted.
+ */
+function isTermsOfServiceAccepted(
+  terraProfileResponse: AuthenticationResponse<TerraEndpointResponse>
+): boolean {
+  return Boolean(terraProfileResponse.response?.enabled?.tosAccepted);
+}

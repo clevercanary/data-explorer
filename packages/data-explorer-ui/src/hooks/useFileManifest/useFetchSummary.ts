@@ -7,7 +7,7 @@ import { Filters } from "../../common/entities";
 import { fetchSummaryFromURL } from "../../entity/api/service";
 import { fetchQueryParams } from "../../utils/fetchQueryParams";
 import { useAsync } from "../useAsync";
-import { useAuthentication } from "../useAuthentication";
+import { useAuthentication } from "../useAuthentication/useAuthentication";
 import { useFetchRequestURL } from "../useFetchRequestURL";
 import { FetchFileSummary } from "./common/entities";
 
