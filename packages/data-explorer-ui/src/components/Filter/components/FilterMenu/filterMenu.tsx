@@ -6,6 +6,7 @@ import {
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { SouthIcon } from "../../../common/CustomIcon/components/SouthIcon/southIcon";
 import { MAX_DISPLAYABLE_LIST_ITEMS } from "../../common/constants";
+import { getSortMatchesFn } from "../../common/utils";
 import { List } from "../FilterList/filterList.styles";
 import { FilterMenuSearch } from "../FilterMenuSearch/filterMenuSearch";
 import { FilterNoResultsFound } from "../FilterNoResultsFound/filterNoResultsFound";
@@ -78,11 +79,5 @@ export function applyMenuFilter(
   values: SelectCategoryValueView[],
   searchTerm: string
 ): SelectCategoryValueView[] {
-  if (!searchTerm) return values;
-  searchTerm = searchTerm.toLowerCase();
-  return values.filter(
-    ({ key, label }) =>
-      key?.toLowerCase().includes(searchTerm) ||
-      label?.toLowerCase().includes(searchTerm)
-  );
+  return getSortMatchesFn(searchTerm)(values).map(({ value }) => value);
 }

@@ -28,6 +28,7 @@ import {
   MAX_DISPLAYABLE_LIST_ITEMS,
   MAX_LIST_HEIGHT_PX,
 } from "../../../../common/constants";
+import { getSortMatchesFn } from "../../../../common/utils";
 import { List as FilterList } from "../../../FilterList/filterList.styles";
 import {
   DIVIDER_HEIGHT,
@@ -228,26 +229,20 @@ function applyMenuFilter(
   categoryViews: SelectCategoryView[],
   inputValue: string
 ): SearchAllFiltersItem[] {
-  inputValue = inputValue.toLowerCase();
+  const sortMatches = getSortMatchesFn(inputValue);
   const filteredItems = categoryViews.reduce((filteredItems, category) => {
     if (!category.isDisabled) {
       const categoryValueKeyPrefix =
         "value_" + category.key.replaceAll(";", ";;") + ";_"; // Terminating the category key with a semicolon (and escaping preceding semicolons) ensures a unique prefix
-      const filteredCategoryValues = category.values.reduce((values, value) => {
-        if (
-          !inputValue ||
-          value.key?.toLowerCase().includes(inputValue) ||
-          value.label?.toLowerCase().includes(inputValue)
-        ) {
-          values.push({
-            categoryKey: category.key,
-            key: categoryValueKeyPrefix + value.key,
-            type: ITEM_TYPE.VALUE,
-            value,
-          });
-        }
-        return values;
-      }, [] as ValueItem[]);
+      const filteredCategoryValues = sortMatches(category.values).map(
+        (match): ValueItem => ({
+          categoryKey: category.key,
+          key: categoryValueKeyPrefix + match.value.key,
+          matchRanges: match.labelRanges,
+          type: ITEM_TYPE.VALUE,
+          value: match.value,
+        })
+      );
       if (filteredCategoryValues.length) {
         if (filteredItems.length) filteredItems.push(DIVIDER_ITEM);
         filteredItems.push({
