@@ -7,7 +7,7 @@ import { Filters } from "../../common/entities";
 import { fetchEntitiesFromURL } from "../../entity/common/service";
 import { fetchQueryParams, SearchParams } from "../../utils/fetchQueryParams";
 import { useAsync } from "../useAsync";
-import { useAuthentication } from "../useAuthentication";
+import { useAuthentication } from "../useAuthentication/useAuthentication";
 import { useFetchRequestURL } from "../useFetchRequestURL";
 import { FetchFilesFacets } from "./common/entities";
 import { bindEntitySearchResultsResponse } from "./common/utils";

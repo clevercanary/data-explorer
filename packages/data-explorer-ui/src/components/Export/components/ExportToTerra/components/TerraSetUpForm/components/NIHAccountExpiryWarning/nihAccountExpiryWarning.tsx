@@ -1,13 +1,18 @@
 import React from "react";
-import { useAuthentication } from "../../../../../../../../hooks/useAuthentication";
-import { expireTimeInSeconds } from "../../../../../../../../providers/authentication";
+import {
+  expireTimeInSeconds,
+  useAuthenticationNIHExpiry,
+} from "../../../../../../../../hooks/useAuthentication/useAuthenticationNIHExpiry";
 import { FluidAlert } from "../../../../../../../common/Alert/alert.styles";
 import { Link } from "../../../../../../../Links/components/Link/link";
 
 export const NIHAccountExpiryWarning = (): JSX.Element | null => {
-  const authentication = useAuthentication();
-  const { NIHProfile } = authentication || {};
-  const { linkExpired, linkExpireTime, linkWillExpire } = NIHProfile || {};
+  const expiryStatus = useAuthenticationNIHExpiry();
+  const { isReady, linkExpired, linkExpireTime, linkWillExpire } =
+    expiryStatus || {};
+
+  if (!isReady) return null;
+
   return linkWillExpire || linkExpired ? (
     <FluidAlert
       severity="warning"

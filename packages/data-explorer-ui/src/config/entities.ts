@@ -428,7 +428,7 @@ export type ThemeOptionsFn = (theme: Theme) => ThemeOptions;
  * View context.
  */
 export interface ViewContext {
-  authState: Pick<AuthContextProps, "isAuthenticated" | "terraProfile">;
+  authState: Pick<AuthContextProps, "isAuthenticated" | "status">;
   entityConfig: EntityConfig;
   exploreState: ExploreState;
   fileManifestState: FileManifestState;

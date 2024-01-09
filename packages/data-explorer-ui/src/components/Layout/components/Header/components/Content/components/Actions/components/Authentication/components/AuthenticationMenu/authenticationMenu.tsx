@@ -1,6 +1,6 @@
 import { MenuItem } from "@mui/material";
 import React, { MouseEvent, useState } from "react";
-import { UserProfile } from "../../../../../../../../../../../../providers/authentication";
+import { UserProfile } from "../../../../../../../../../../../../hooks/useAuthentication/useFetchGoogleProfile";
 import {
   AuthenticationMenu as Menu,
   Avatar,

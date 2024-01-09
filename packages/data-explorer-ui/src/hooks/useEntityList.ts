@@ -14,7 +14,7 @@ import { getEntityConfig } from "../config/utils";
 import { ExploreActionKind } from "../providers/exploreState";
 import { DEFAULT_PAGINATION_STATE } from "../providers/exploreState/constants";
 import { useAsync } from "./useAsync";
-import { useAuthentication } from "./useAuthentication";
+import { useAuthentication } from "./useAuthentication/useAuthentication";
 import { useConfig } from "./useConfig";
 import { useEntityService } from "./useEntityService";
 import { ExploreMode, EXPLORE_MODE, useExploreMode } from "./useExploreMode";

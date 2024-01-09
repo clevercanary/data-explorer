@@ -11,7 +11,7 @@ import React, {
 import { AzulSearchIndex } from "../apis/azul/common/entities";
 import { SelectCategory, SelectedFilter } from "../common/entities";
 import { CategoryConfig, EntityPath, SiteConfig } from "../config/entities";
-import { useAuthentication } from "../hooks/useAuthentication";
+import { useAuthentication } from "../hooks/useAuthentication/useAuthentication";
 import { useCategoryConfigs } from "../hooks/useCategoryConfigs";
 import {
   buildCategoryViews,

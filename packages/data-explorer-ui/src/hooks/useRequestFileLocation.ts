@@ -5,7 +5,7 @@ import {
 } from "../apis/azul/common/constants";
 import { FileLocationResponse } from "../apis/azul/common/entities";
 import { useAsync } from "./useAsync";
-import { useAuthentication } from "./useAuthentication";
+import { useAuthentication } from "./useAuthentication/useAuthentication";
 
 export interface FileLocation {
   commandLine?: { [key: string]: string };

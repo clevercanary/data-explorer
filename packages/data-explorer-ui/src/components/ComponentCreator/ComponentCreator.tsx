@@ -1,6 +1,6 @@
 import React from "react";
 import { ComponentsConfig } from "../../config/entities";
-import { useAuthentication } from "../../hooks/useAuthentication";
+import { useAuthentication } from "../../hooks/useAuthentication/useAuthentication";
 import { useConfig } from "../../hooks/useConfig";
 import { useExploreState } from "../../hooks/useExploreState";
 import { useFileManifestState } from "../../hooks/useFileManifestState";
@@ -24,7 +24,7 @@ export const ComponentCreator = <T,>({
   components,
   response,
 }: ComponentCreatorProps<T>): JSX.Element => {
-  const { isAuthenticated, terraProfile } = useAuthentication();
+  const { isAuthenticated, status } = useAuthentication();
   const { config, entityConfig } = useConfig();
   const { exploreState } = useExploreState();
   const { fileManifestState } = useFileManifestState();
@@ -47,7 +47,10 @@ export const ComponentCreator = <T,>({
         ) : null;
         const props = c.viewBuilder
           ? c.viewBuilder(response, {
-              authState: { isAuthenticated, terraProfile },
+              authState: {
+                isAuthenticated,
+                status,
+              },
               entityConfig,
               exploreState,
               fileManifestState,
