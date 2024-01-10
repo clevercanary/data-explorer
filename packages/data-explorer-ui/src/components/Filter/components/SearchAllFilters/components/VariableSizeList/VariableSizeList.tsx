@@ -189,23 +189,25 @@ export const VariableSizeList = forwardRef<
           return itemSizeByItemKey.get(item.key) || itemSize;
         }}
         onItemsRendered={(): void => {
-          if (
-            resizeRequired &&
-            innerRef.current?.childElementCount &&
-            outerRef.current
-          ) {
-            // Set height of list.
-            resizeRequired = false;
-            setHeight(
-              calculateListHeight(
-                outerRef.current,
-                innerRef.current,
-                windowHeight,
-                desktopSmDown
-              )
-            );
-          }
-          listRef.current?.resetAfterIndex(0); // Facilitates correct positioning of list items when list scrolls.
+          requestAnimationFrame(() => {
+            if (
+              resizeRequired &&
+              innerRef.current?.childElementCount &&
+              outerRef.current
+            ) {
+              // Set height of list.
+              resizeRequired = false;
+              setHeight(
+                calculateListHeight(
+                  outerRef.current,
+                  innerRef.current,
+                  windowHeight,
+                  desktopSmDown
+                )
+              );
+            }
+            listRef.current?.resetAfterIndex(0); // Facilitates correct positioning of list items when list scrolls.
+          });
         }}
         outerElementType={OuterElement}
         outerRef={outerRef}
