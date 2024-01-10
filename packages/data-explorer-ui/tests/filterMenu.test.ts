@@ -94,11 +94,7 @@ const values = [
 ];
 
 test("applyMenuFilter", () => {
-  expect(applyMenuFilter(values, "ro")).toStrictEqual([
-    values[2],
-    values[4],
-    values[7],
-    values[12],
-    values[14],
-  ]);
+  expect(applyMenuFilter(values, "ro").map(({ value }) => value)).toStrictEqual(
+    [values[2], values[4], values[7], values[12], values[14]]
+  );
 });

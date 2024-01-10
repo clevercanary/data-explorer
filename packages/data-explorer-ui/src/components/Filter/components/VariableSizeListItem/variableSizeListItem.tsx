@@ -5,19 +5,18 @@ import {
   Typography,
 } from "@mui/material";
 import React, { CSSProperties, useEffect, useRef } from "react";
-import {
-  CategoryKey,
-  SelectCategoryValueView,
-} from "../../../../common/entities";
+import { CategoryKey } from "../../../../common/entities";
+import { FilterMenuSearchMatch } from "../../../../components/Filter/common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { TEXT_BODY_SMALL_400 } from "../../../../theme/common/typography";
 import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
+import { HighlightedLabel } from "../HighlightedLabel/highlightedLabel";
 
 interface Props {
   categoryKey: CategoryKey;
   categorySection?: string;
-  listItem: SelectCategoryValueView;
+  matchedItem: FilterMenuSearchMatch;
   onFilter: OnFilterFn;
   onUpdateItemSizeByItemKey: (itemKey: string, itemSize: number) => void;
   style: CSSProperties;
@@ -26,13 +25,16 @@ interface Props {
 export default function VariableSizeListItem({
   categoryKey,
   categorySection,
-  listItem,
+  matchedItem,
   onFilter,
   onUpdateItemSizeByItemKey,
   style,
 }: Props): JSX.Element {
   const listItemRef = useRef<HTMLDivElement>(null);
-  const { count, key, label, selected } = listItem;
+  const {
+    labelRanges,
+    value: { count, key, label, selected },
+  } = matchedItem;
   delete style.height; // Remove height style to allow variable size list to set item height.
 
   // Sets map of list item key to its height.
@@ -58,7 +60,12 @@ export default function VariableSizeListItem({
       />
       <ListItemText
         disableTypography
-        primary={<span>{label}</span>}
+        primary={
+          <HighlightedLabel
+            label={label}
+            ranges={labelRanges}
+          ></HighlightedLabel>
+        }
         secondary={
           <Typography color="ink.light" variant={TEXT_BODY_SMALL_400}>
             {count}
