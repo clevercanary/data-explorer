@@ -4,10 +4,7 @@ import {
   VariableSizeList as List,
   VariableSizeListProps as ListProps,
 } from "react-window";
-import {
-  CategoryKey,
-  SelectCategoryValueView,
-} from "../../../../common/entities";
+import { CategoryKey } from "../../../../common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { useWindowResize } from "../../../../hooks/useWindowResize";
 import {
@@ -16,6 +13,7 @@ import {
   MAX_DISPLAYABLE_LIST_ITEMS,
   MAX_LIST_HEIGHT_PX,
 } from "../../common/constants";
+import { FilterMenuSearchMatch } from "../../common/entities";
 import { List as FilterList } from "../FilterList/filterList.styles";
 import VariableSizeListItem from "../VariableSizeListItem/variableSizeListItem";
 
@@ -27,9 +25,9 @@ export interface VariableSizeListProps {
   height?: number; // Height of list; vertical list must be a number.
   isFilterDrawer: boolean;
   itemSize?: number; // Default item size.
+  matchedItems: FilterMenuSearchMatch[];
   onFilter: OnFilterFn;
   overscanCount?: ListProps["overscanCount"];
-  values: SelectCategoryValueView[];
   width?: ListProps["width"]; // Width of list; default to 100% width of parent element.
 }
 
@@ -43,15 +41,15 @@ function renderListItem(props: ListChildComponentProps): JSX.Element {
   const {
     categoryKey,
     categorySection,
+    matchedItems,
     onFilter,
     onUpdateItemSizeByItemKey,
-    values,
   } = data;
   return (
     <VariableSizeListItem
       categorySection={categorySection}
       categoryKey={categoryKey}
-      listItem={values[index]}
+      matchedItem={matchedItems[index]}
       onFilter={onFilter}
       onUpdateItemSizeByItemKey={onUpdateItemSizeByItemKey}
       style={style}
@@ -67,7 +65,7 @@ export const VariableSizeList = ({
   itemSize = LIST_ITEM_HEIGHT,
   onFilter,
   overscanCount = MAX_DISPLAYABLE_LIST_ITEMS * 2,
-  values,
+  matchedItems,
   width = "100%",
 }: VariableSizeListProps): JSX.Element => {
   const { height: windowHeight } = useWindowResize();
@@ -87,36 +85,36 @@ export const VariableSizeList = ({
     setHeight(
       calculateListHeight(
         initHeight,
-        values,
+        matchedItems,
         itemSizeByItemKeyRef.current,
         isFilterDrawer,
         windowHeight,
         outerRef.current
       )
     );
-  }, [initHeight, isFilterDrawer, values, windowHeight]);
+  }, [initHeight, isFilterDrawer, matchedItems, windowHeight]);
 
   // Clears VariableSizeList cache (offsets and measurements) when values are updated (filtered).
   // Facilitates correct positioning of list items when list is updated.
   useEffect(() => {
     listRef.current?.resetAfterIndex(0);
-  }, [values]);
+  }, [matchedItems]);
 
   return (
     <List
       height={height}
       outerRef={outerRef}
       innerElementType={FilterList}
-      itemCount={values.length}
+      itemCount={matchedItems.length}
       itemData={{
         categoryKey,
         categorySection,
+        matchedItems,
         onFilter,
         onUpdateItemSizeByItemKey,
-        values,
       }}
       itemSize={(index): number =>
-        itemSizeByItemKey.get(values[index].key) || itemSize
+        itemSizeByItemKey.get(matchedItems[index].value.key) || itemSize
       }
       onItemsRendered={(): void => listRef.current?.resetAfterIndex(0)} // Facilitates correct positioning of list items when list scrolls.
       overscanCount={overscanCount}
@@ -132,7 +130,7 @@ export const VariableSizeList = ({
  * Returns given height of list if number of items is greater than max displayable list items, otherwise the minimum
  * height of either the sum of the heights of the filtered list items or the given height of the list.
  * @param height - Specified height of list.
- * @param values - Set of category value view models for the given category.
+ * @param matchedItems - Set of search results for category value view models in the given category.
  * @param itemSizeByItemKey - Map of item size by item key.
  * @param isFilterDrawer - True if filter is displayed in filter drawer.
  * @param windowHeight - Window height.
@@ -141,7 +139,7 @@ export const VariableSizeList = ({
  */
 function calculateListHeight(
   height: number,
-  values: SelectCategoryValueView[],
+  matchedItems: FilterMenuSearchMatch[],
   itemSizeByItemKey: ItemSizeByItemKey,
   isFilterDrawer: boolean,
   windowHeight: number,
@@ -150,11 +148,11 @@ function calculateListHeight(
   if (isFilterDrawer && outerListElem) {
     return windowHeight - outerListElem.getBoundingClientRect().top;
   }
-  if (values.length > MAX_DISPLAYABLE_LIST_ITEMS) {
+  if (matchedItems.length > MAX_DISPLAYABLE_LIST_ITEMS) {
     return height;
   }
   return Math.min(
-    values.reduce((acc, { key }) => {
+    matchedItems.reduce((acc, { value: { key } }) => {
       acc += itemSizeByItemKey.get(key) || LIST_ITEM_HEIGHT;
       return acc;
     }, LIST_MARGIN * 2),
