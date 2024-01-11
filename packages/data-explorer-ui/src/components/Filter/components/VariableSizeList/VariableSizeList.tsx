@@ -5,7 +5,6 @@ import {
   VariableSizeListProps as ListProps,
 } from "react-window";
 import { CategoryKey } from "../../../../common/entities";
-import { FilterMenuSearchMatch } from "../../../../components/Filter/common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { useWindowResize } from "../../../../hooks/useWindowResize";
 import {
@@ -14,6 +13,7 @@ import {
   MAX_DISPLAYABLE_LIST_ITEMS,
   MAX_LIST_HEIGHT_PX,
 } from "../../common/constants";
+import { FilterMenuSearchMatch } from "../../common/entities";
 import { List as FilterList } from "../FilterList/filterList.styles";
 import VariableSizeListItem from "../VariableSizeListItem/variableSizeListItem";
 

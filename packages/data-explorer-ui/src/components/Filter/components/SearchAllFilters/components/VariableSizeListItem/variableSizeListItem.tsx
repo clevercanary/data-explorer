@@ -64,12 +64,7 @@ export default function VariableSizeListItem({
         />
         <ListItemText
           disableTypography
-          primary={
-            <HighlightedLabel
-              label={label}
-              ranges={matchRanges}
-            ></HighlightedLabel>
-          }
+          primary={<HighlightedLabel label={label} ranges={matchRanges} />}
           secondary={
             <Typography color="ink.light" variant={TEXT_BODY_SMALL_400}>
               {count}

@@ -14,14 +14,14 @@ export const MatchHighlight = styled.mark<MatchHighlightProps>`
   ${({ leftOpen }) =>
     leftOpen &&
     css`
-      padding-left: 2px;
       margin-left: -2px;
+      padding-left: 2px;
     `}
 
   ${({ rightOpen }) =>
     rightOpen &&
     css`
-      padding-right: 2px;
       margin-right: -2px;
+      padding-right: 2px;
     `}
 `;

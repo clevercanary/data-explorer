@@ -1,5 +1,5 @@
 import React from "react";
-import { FilterMenuSearchMatchRange } from "../../../../components/Filter/common/entities";
+import { FilterMenuSearchMatchRange } from "../../common/entities";
 import { MatchHighlight } from "./highlightedLabel.styles";
 
 interface HighlightedLabelProps {

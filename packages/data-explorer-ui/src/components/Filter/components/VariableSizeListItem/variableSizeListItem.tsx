@@ -6,11 +6,11 @@ import {
 } from "@mui/material";
 import React, { CSSProperties, useEffect, useRef } from "react";
 import { CategoryKey } from "../../../../common/entities";
-import { FilterMenuSearchMatch } from "../../../../components/Filter/common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { TEXT_BODY_SMALL_400 } from "../../../../theme/common/typography";
 import { CheckedIcon } from "../../../common/CustomIcon/components/CheckedIcon/checkedIcon";
 import { UncheckedIcon } from "../../../common/CustomIcon/components/UncheckedIcon/uncheckedIcon";
+import { FilterMenuSearchMatch } from "../../common/entities";
 import { HighlightedLabel } from "../HighlightedLabel/highlightedLabel";
 
 interface Props {
@@ -60,12 +60,7 @@ export default function VariableSizeListItem({
       />
       <ListItemText
         disableTypography
-        primary={
-          <HighlightedLabel
-            label={label}
-            ranges={labelRanges}
-          ></HighlightedLabel>
-        }
+        primary={<HighlightedLabel label={label} ranges={labelRanges} />}
         secondary={
           <Typography color="ink.light" variant={TEXT_BODY_SMALL_400}>
             {count}

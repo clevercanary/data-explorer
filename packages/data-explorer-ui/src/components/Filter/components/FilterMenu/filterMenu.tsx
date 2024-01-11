@@ -3,10 +3,10 @@ import {
   CategoryKey,
   SelectCategoryValueView,
 } from "../../../../common/entities";
-import { FilterMenuSearchMatch } from "../../../../components/Filter/common/entities";
 import { OnFilterFn } from "../../../../hooks/useCategoryFilter";
 import { SouthIcon } from "../../../common/CustomIcon/components/SouthIcon/southIcon";
 import { MAX_DISPLAYABLE_LIST_ITEMS } from "../../common/constants";
+import { FilterMenuSearchMatch } from "../../common/entities";
 import { getSortMatchesFn } from "../../common/utils";
 import { List } from "../FilterList/filterList.styles";
 import { FilterMenuSearch } from "../FilterMenuSearch/filterMenuSearch";
