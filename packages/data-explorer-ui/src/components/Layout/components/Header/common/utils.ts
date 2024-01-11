@@ -14,6 +14,9 @@ import { SocialMedia } from "./entities";
 export function flattenMoreLink(links: NavLinkItem[]): NavLinkItem[] {
   return links.flatMap((link: NavLinkItem) => {
     if (link.label === HEADER_NAVIGATION_LABEL.MORE) {
+      if (link.flatten === false) {
+        return link;
+      }
       return link.menuItems as NavLinkItem[];
     }
     return link;
