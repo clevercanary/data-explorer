@@ -29,7 +29,7 @@ export const Breadcrumbs = ({
         <MBreadcrumbs className={className} separator={Separator}>
           {breadcrumbs.map(({ path, text }, b) =>
             path ? (
-              <Link key={`${path}${b}`} href={path} passHref>
+              <Link key={`${path}${b}`} href={path} legacyBehavior passHref>
                 <BreadcrumbLink>{text}</BreadcrumbLink>
               </Link>
             ) : (

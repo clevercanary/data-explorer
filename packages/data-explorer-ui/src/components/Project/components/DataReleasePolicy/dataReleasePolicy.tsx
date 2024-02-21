@@ -8,7 +8,11 @@ export const DataReleasePolicy = (): JSX.Element => {
     <CollapsableSection title="Data Access Policy">
       <Typography>
         For information regarding data sharing and data use, please see our{" "}
-        <Link href="https://anvilproject.org/faq/data-security/" passHref>
+        <Link
+          href="https://anvilproject.org/faq/data-security/"
+          legacyBehavior
+          passHref
+        >
           <PolicyLink target="_blank">Data Access Policy</PolicyLink>
         </Link>
         .

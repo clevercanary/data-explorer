@@ -81,7 +81,7 @@ export const Error = ({
           </SectionContent>
           {rootPath && (
             <SectionActions>
-              <Link href={rootPath} passHref>
+              <Link href={rootPath} legacyBehavior passHref>
                 <ButtonPrimary
                   onClick={handleToHomePageClicked}
                   href="passHref"

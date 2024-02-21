@@ -9,7 +9,7 @@ export const ExportButton = (): JSX.Element => {
   return (
     <Tooltip arrow title={message}>
       <span>
-        <Link href="/export" passHref>
+        <Link href="/export" legacyBehavior passHref>
           <Button disabled={disabled || isLoading} href="passHref">
             Export
           </Button>

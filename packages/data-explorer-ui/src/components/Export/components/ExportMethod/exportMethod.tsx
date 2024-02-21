@@ -39,7 +39,7 @@ export const ExportMethod = ({
         <SectionActions>
           <Tooltip arrow title={message}>
             <span>
-              <Link href={route} passHref>
+              <Link href={route} legacyBehavior passHref>
                 <ExportButton disabled={disabled || !isAccessible}>
                   {buttonLabel}
                 </ExportButton>

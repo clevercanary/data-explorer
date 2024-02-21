@@ -22,7 +22,7 @@ export const Nav = ({ Hero, navigation }: NavProps): JSX.Element => {
         {navigation.map(({ active, label, url }, i) => {
           return (
             <ListItem key={`${label}${i}`}>
-              <Link href={url ?? ""} passHref>
+              <Link href={url ?? ""} legacyBehavior passHref>
                 <ListItemButton disabled={!url} selected={active}>
                   <ListItemText disableTypography primary={label} />
                 </ListItemButton>
