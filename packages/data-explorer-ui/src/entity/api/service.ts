@@ -145,6 +145,7 @@ export const fetchSummary = async (
  * Fetch summary from given URL.
  * @param path - URL.
  * @param accessToken - Auth token.
+ * @returns summary response.
  */
 export const fetchSummaryFromURL = async (
   path: string,
@@ -160,6 +161,7 @@ export const fetchSummaryFromURL = async (
 /**
  * Fetch system status from given URL.
  * @param URL - URL.
+ * @returns system status.
  */
 export const fetchSystemStatusFromURL = async <R>(URL: string): Promise<R> => {
   const res = await api().get<AzulSummaryResponse>(URL);

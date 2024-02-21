@@ -61,6 +61,7 @@ export function getSupportRequestOptions(
  * Upload file to add as attachment to request.
  * @param url - Upload URL.
  * @param file - File.
+ * @returns upload response.
  */
 export async function uploadAttachment<T extends File>(
   url: string,
@@ -81,6 +82,7 @@ export async function uploadAttachment<T extends File>(
  * Execute fetch, throwing error on non-200 response.
  * @param input - Request URL.
  * @param options - Request options.
+ * @returns response.
  */
 async function fetchWithErrorRejection(
   input: RequestInfo | URL,
