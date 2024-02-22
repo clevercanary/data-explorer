@@ -14,7 +14,7 @@ export default {
   },
   component: Socials,
   title: "Components/Navigation/SocialLinks",
-} satisfies Meta<typeof Socials>;
+} as Meta<typeof Socials>;
 
 type Story = StoryObj<typeof Socials>;
 

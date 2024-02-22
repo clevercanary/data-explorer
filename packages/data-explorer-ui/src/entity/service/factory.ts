@@ -2,7 +2,6 @@ import * as apiEntityService from "../api/service";
 import * as apicfEntityService from "../apicf/service";
 import * as entityService from "../common/service";
 import * as tsvEntityService from "../tsv/service";
-
 import { EntityService, EntityServiceType } from "./model";
 
 const API_ENTITY_SERVICE: EntityService = {

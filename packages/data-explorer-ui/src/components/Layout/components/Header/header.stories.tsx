@@ -28,7 +28,7 @@ export default {
     layout: "fullscreen",
   },
   title: "Components/Layout/Header",
-} satisfies Meta<typeof Header>;
+} as Meta<typeof Header>;
 
 type Story = StoryObj<typeof Header>;
 

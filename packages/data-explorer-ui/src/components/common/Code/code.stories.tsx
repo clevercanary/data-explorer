@@ -4,7 +4,7 @@ import { Code } from "./code";
 const meta = {
   component: Code,
   title: "Components/Common/Code",
-} satisfies Meta<typeof Code>;
+} as Meta<typeof Code>;
 
 export default meta;
 

@@ -27,7 +27,7 @@ export default {
   },
   component: Alert,
   title: "Components/Common/Alert",
-} satisfies Meta<typeof Alert>;
+} as Meta<typeof Alert>;
 
 type Story = StoryObj<typeof Alert>;
 

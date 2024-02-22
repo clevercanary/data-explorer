@@ -85,7 +85,7 @@ export async function uploadAttachment<T extends File>(
  * @returns response.
  */
 async function fetchWithErrorRejection(
-  input: RequestInfo | URL,
+  input: string,
   options?: RequestInit
 ): Promise<Response> {
   const res = await fetch(input, options);
