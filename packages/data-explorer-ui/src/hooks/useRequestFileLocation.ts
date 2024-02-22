@@ -136,14 +136,14 @@ export const useRequestFileLocation = (
     isSuccess,
     run: runAsync,
   } = useAsync<FileLocation>();
-  const active = useRef(true);
+  const active = useRef<boolean>(true);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    active.current = true;
+    return () => {
       active.current = false;
-    },
-    []
-  );
+    };
+  }, []);
 
   const run = useCallback(() => {
     if (url) {
