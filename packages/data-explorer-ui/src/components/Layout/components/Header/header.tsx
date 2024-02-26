@@ -38,6 +38,7 @@ import { Socials } from "./components/Content/components/Socials/socials.styles"
 import { AppBar as HeaderAppBar, HeaderSmAppBar } from "./header.styles";
 
 export interface HeaderProps {
+  actions?: ReactNode;
   Announcements?: ReactNode;
   authenticationEnabled?: boolean;
   className?: string;
@@ -54,6 +55,7 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
   const {
     Announcements,
     authenticationEnabled,
+    actions,
     className,
     Logo,
     navAlignment = ELEMENT_ALIGNMENT.LEFT,
@@ -160,6 +162,8 @@ export const Header = ({ ...headerProps }: HeaderProps): JSX.Element => {
             authenticationEnabled={authenticationEnabled}
             closeMenu={closeMenu}
           />
+          {/* Additional actions i.e. call-to-action button */}
+          {actions}
           {/* Menu */}
           <Menu
             closeMenu={closeMenu}

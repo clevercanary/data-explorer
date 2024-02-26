@@ -6,6 +6,7 @@ import { Authentication } from "../../../Authentication/authentication";
 import { Search } from "../../../Search/search";
 
 export interface DialogTitleProps {
+  actions?: ReactNode;
   Announcements?: ReactNode;
   authenticationEnabled?: boolean;
   Logo?: ReactNode;
@@ -15,6 +16,7 @@ export interface DialogTitleProps {
 }
 
 export const Toolbar = ({
+  actions,
   Announcements,
   authenticationEnabled,
   Logo,
@@ -39,6 +41,8 @@ export const Toolbar = ({
             authenticationEnabled={authenticationEnabled}
             closeMenu={onClose}
           />
+          {/* Additional actions i.e. call-to-action button */}
+          {actions}
           {/* Close menu */}
           <IconButton color="ink" onClick={onClose}>
             <CloseRoundedIcon />
