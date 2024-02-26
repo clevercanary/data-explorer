@@ -41,6 +41,7 @@ type RequestAuthenticationFn = () => void;
 export interface AuthContextProps {
   authenticateUser: AuthenticateUserFn;
   isAuthenticated: boolean;
+  isEnabled: boolean;
   requestAuthentication: RequestAuthenticationFn;
   status: AUTHENTICATION_STATUS;
   terraNIHProfileResponse: AuthenticationResponse<TerraNIHEndpointResponse>;
@@ -57,6 +58,7 @@ export const AuthContext = createContext<AuthContextProps>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   authenticateUser: () => {},
   isAuthenticated: false,
+  isEnabled: true,
   // eslint-disable-next-line @typescript-eslint/no-empty-function -- allow dummy function for default state.
   requestAuthentication: () => {},
   status: AUTHENTICATION_STATUS.NOT_STARTED,
@@ -84,13 +86,14 @@ interface Props {
  */
 export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const { config } = useConfig();
-  const { redirectRootToPath } = config;
+  const { authentication, redirectRootToPath } = config;
   const { basePath } = useRouter();
   const { token, tokenClient } = useTokenClient();
   const terraNIHProfileResponse = useFetchTerraNIHProfile(token);
   const terraProfileResponse = useFetchTerraProfile(token);
   const terraTOSResponse = useFetchTerraTermsOfService(token);
   const userProfileResponse = useFetchGoogleProfile(token);
+  const isEnabled = Boolean(authentication);
   const isAuthenticated = userProfileResponse.isSuccess;
   const releaseToken = terraTOSResponse.isSuccess;
   const status = getAuthenticationStatus([
@@ -139,6 +142,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
       value={{
         authenticateUser,
         isAuthenticated,
+        isEnabled,
         requestAuthentication,
         status,
         terraNIHProfileResponse,

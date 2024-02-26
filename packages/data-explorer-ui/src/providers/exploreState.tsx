@@ -176,7 +176,7 @@ export function ExploreStateProvider({
   const { config, defaultEntityListType } = useConfig();
   const categoryConfigs = useCategoryConfigs();
   const { decodedCatalogParam, decodedFilterParam } = useURLFilterParams();
-  const { token } = useAuthentication();
+  const { isEnabled: isAuthEnabled, token } = useAuthentication();
   const entityList = entityListType || defaultEntityListType;
   const [initReducerState] = useState(() =>
     initExploreState(
@@ -204,11 +204,12 @@ export function ExploreStateProvider({
 
   // Reset explore response when token changes.
   useEffect(() => {
+    if (!isAuthEnabled) return;
     exploreDispatch({
       payload: undefined,
       type: ExploreActionKind.ResetExploreResponse,
     });
-  }, [exploreDispatch, token]);
+  }, [exploreDispatch, isAuthEnabled, token]);
 
   return (
     <ExploreStateContext.Provider value={exploreContextValue}>
