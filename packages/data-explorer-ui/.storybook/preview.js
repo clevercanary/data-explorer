@@ -1,8 +1,8 @@
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import { ThemeProvider as Emotion10ThemeProvider } from "emotion-theming";
-import { RouterContext } from "next/dist/shared/lib/router-context";
-import { useConfig } from "../src//hooks/useConfig";
+import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
+import { useConfig } from "../src/hooks/useConfig";
 import "../src/index";
 import { createAppTheme } from "../src/theme/theme";
 

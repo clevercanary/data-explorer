@@ -19,7 +19,7 @@ export const HelpIconButton = ({
 }: HelpIconButtonProps): JSX.Element => {
   const isInternal = isClientSideNavigation(url);
   return isInternal ? (
-    <Link href={url} passHref>
+    <Link href={url} legacyBehavior passHref>
       <Button
         href="passHref"
         rel="noopener"

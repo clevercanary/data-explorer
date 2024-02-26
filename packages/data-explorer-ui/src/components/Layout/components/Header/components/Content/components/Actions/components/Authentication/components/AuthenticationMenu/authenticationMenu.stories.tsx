@@ -13,7 +13,7 @@ export default {
   },
   component: AuthenticationMenu,
   title: "Components/Navigation/AuthenticationMenu",
-} satisfies Meta<typeof AuthenticationMenu>;
+} as Meta<typeof AuthenticationMenu>;
 
 const AuthenticationMenuTemplate: StoryFn<typeof AuthenticationMenu> = (
   args

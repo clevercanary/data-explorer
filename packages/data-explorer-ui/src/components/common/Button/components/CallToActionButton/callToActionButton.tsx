@@ -26,7 +26,7 @@ export const CallToActionButton = ({
   const { label, target, url } = callToAction;
   const isInternal = isClientSideNavigation(url);
   return isInternal ? (
-    <NLink href={url} passHref>
+    <NLink href={url} legacyBehavior passHref>
       <Button
         className={className}
         disabled={disabled}

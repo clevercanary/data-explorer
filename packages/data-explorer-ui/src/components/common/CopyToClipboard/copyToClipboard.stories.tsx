@@ -1,5 +1,4 @@
-import { ComponentMeta, ComponentStory } from "@storybook/react";
-import * as React from "react";
+import { Meta, StoryObj } from "@storybook/react";
 import { CopyToClipboard } from "./copyToClipboard";
 
 export default {
@@ -10,13 +9,12 @@ export default {
   },
   component: CopyToClipboard,
   title: "Components/Common/CopyToClipboard",
-} satisfies ComponentMeta<typeof CopyToClipboard>;
+} as Meta<typeof CopyToClipboard>;
 
-const CopyToClipboardTemplate: ComponentStory<typeof CopyToClipboard> = (
-  args
-) => <CopyToClipboard {...args} />;
+type Story = StoryObj<typeof CopyToClipboard>;
 
-export const CopyToClipboardStory = CopyToClipboardTemplate.bind({});
-CopyToClipboardStory.args = {
-  copyStr: "Copy me",
+export const CopyToClipboardStory: Story = {
+  args: {
+    copyStr: "Copy me",
+  },
 };

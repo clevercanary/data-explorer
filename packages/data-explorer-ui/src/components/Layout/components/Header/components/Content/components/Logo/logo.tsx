@@ -30,7 +30,7 @@ export const Logo = ({
     <StaticImage alt={alt} height={height} src={src} width={width} />
   );
   return isClientSideNavigation(link) ? (
-    <Link href={link} passHref>
+    <Link href={link} legacyBehavior passHref>
       <a className={className} href="passHref" rel="noopener" target={target}>
         {logo}
       </a>

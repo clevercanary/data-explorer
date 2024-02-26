@@ -29,7 +29,7 @@ export const Link = ({
     <>
       {isClientSideNavigation(url) ? (
         <>
-          <NLink href={url} passHref>
+          <NLink href={url} legacyBehavior passHref>
             <MLink
               className={className}
               rel="noopener"

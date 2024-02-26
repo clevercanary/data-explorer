@@ -20,7 +20,7 @@ export default {
     layout: "fullscreen",
   },
   title: "Components/Layout/Footer",
-} satisfies Meta<typeof Footer>;
+} as Meta<typeof Footer>;
 
 type Story = StoryObj<typeof Footer>;
 
