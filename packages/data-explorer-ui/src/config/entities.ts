@@ -147,6 +147,7 @@ export interface EntityConfig<T = any, I = any> extends TabConfig {
   entityMapper?: EntityMapper<T, I>;
   exploreMode: ExploreMode;
   getId?: GetIdFunction<T>;
+  getTitle?: GetTitleFunction<T>;
   list: ListConfig;
   listView?: ListViewConfig;
   options?: Options;
@@ -186,6 +187,11 @@ export interface FloatingConfig {
  * Get identifier function.
  */
 export type GetIdFunction<T> = (detail: T) => string;
+
+/**
+ * Get title function.
+ */
+export type GetTitleFunction<T> = (detail?: T) => string | undefined;
 
 /**
  * Google GIS authentication configuration.
@@ -405,11 +411,12 @@ export interface SystemStatusConfig {
 /**
  * Interface used to define the tab label and route.
  */
-interface TabConfig {
+export interface TabConfig {
   label: ReactNode;
   route: string;
   tabIcon?: MTabProps["icon"];
   tabIconPosition?: MTabProps["iconPosition"];
+  tabName?: string; // Used by the entity view to generate a title for the <Head> component; when label is not typed string.
 }
 
 export interface TerraAuthConfig {

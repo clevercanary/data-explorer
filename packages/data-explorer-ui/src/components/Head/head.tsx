@@ -12,9 +12,15 @@ const FAV_ICONS = {
   siteWebManifest: "/favicons/site.webmanifest",
 };
 
-export const Head = (): JSX.Element => {
+export interface HeadProps {
+  pageTitle?: string;
+}
+
+export const Head = ({ pageTitle }: HeadProps): JSX.Element => {
   const { config } = useConfig();
   const router = useRouter();
+  const { appTitle } = config;
+  const title = pageTitle ? `${pageTitle} - ${appTitle}` : appTitle;
 
   const renderIcons = (): JSX.Element => {
     return (
@@ -56,7 +62,7 @@ export const Head = (): JSX.Element => {
 
   return (
     <NextHead key="page-head">
-      <title>{config.appTitle}</title>
+      <title>{title}</title>
       {renderIcons()}
     </NextHead>
   );

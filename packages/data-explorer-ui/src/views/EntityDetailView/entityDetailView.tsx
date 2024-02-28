@@ -1,5 +1,6 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { Fragment } from "react";
 import { PARAMS_INDEX_UUID } from "../../common/constants";
 import { Tab, Tabs, TabValue } from "../../components/common/Tabs/tabs";
 import { ComponentCreator } from "../../components/ComponentCreator/ComponentCreator";
@@ -7,6 +8,7 @@ import { Detail as DetailView } from "../../components/Detail/detail";
 import { EntityConfig } from "../../config/entities";
 import { useConfig } from "../../hooks/useConfig";
 import { useCurrentDetailTab } from "../../hooks/useCurrentDetailTab";
+import { useEntityHeadTitle } from "../../hooks/useEntityHeadTitle";
 import { useFetchEntity } from "../../hooks/useFetchEntity";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this data type can't be determined beforehand
@@ -42,6 +44,7 @@ export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
   const uuid = query.params?.[PARAMS_INDEX_UUID];
   const isDetailOverview = detailOverviews?.includes(currentTab.label);
   const tabs = getTabs(entityConfig);
+  const title = useEntityHeadTitle(response);
 
   if (!response) {
     return <span></span>; //TODO: return the loading UI component
@@ -57,18 +60,25 @@ export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
   };
 
   return (
-    <DetailView
-      isDetailOverview={isDetailOverview}
-      mainColumn={
-        <ComponentCreator components={mainColumn} response={response} />
-      }
-      sideColumn={
-        sideColumn ? (
-          <ComponentCreator components={sideColumn} response={response} />
-        ) : undefined
-      }
-      Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabRoute} />}
-      top={<ComponentCreator components={top} response={response} />}
-    />
+    <Fragment>
+      {title && (
+        <Head>
+          <title>{title}</title>
+        </Head>
+      )}
+      <DetailView
+        isDetailOverview={isDetailOverview}
+        mainColumn={
+          <ComponentCreator components={mainColumn} response={response} />
+        }
+        sideColumn={
+          sideColumn ? (
+            <ComponentCreator components={sideColumn} response={response} />
+          ) : undefined
+        }
+        Tabs={<Tabs onTabChange={onTabChange} tabs={tabs} value={tabRoute} />}
+        top={<ComponentCreator components={top} response={response} />}
+      />
+    </Fragment>
   );
 };
