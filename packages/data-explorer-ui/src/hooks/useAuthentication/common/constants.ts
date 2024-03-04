@@ -16,3 +16,10 @@ export const DEFAULT_FAILURE_RESPONSE: Response<AuthenticationEndpointResponse> 
     response: undefined,
     status: RESPONSE_STATUS.FAILED,
   };
+
+export const ENDPOINT_NOT_SUPPORTED_RESPONSE: Response<AuthenticationEndpointResponse> =
+  {
+    isSuccess: false,
+    response: undefined,
+    status: RESPONSE_STATUS.NOT_SUPPORTED,
+  };

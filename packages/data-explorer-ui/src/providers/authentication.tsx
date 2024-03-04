@@ -3,12 +3,12 @@ import React, { createContext, ReactNode, useCallback } from "react";
 import { useIdleTimer } from "react-idle-timer";
 import { DEFAULT_RESPONSE } from "../hooks/useAuthentication/common/constants";
 import {
-  AuthenticationEndpointResponse,
   AuthenticationResponse,
   AUTHENTICATION_STATUS,
   RESPONSE_STATUS,
 } from "../hooks/useAuthentication/common/entities";
 import { useAuthenticationComplete } from "../hooks/useAuthentication/useAuthenticationComplete";
+import { useAuthenticationStatus } from "../hooks/useAuthentication/useAuthenticationStatus";
 import {
   useFetchGoogleProfile,
   UserProfile,
@@ -95,13 +95,17 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
   const userProfileResponse = useFetchGoogleProfile(token);
   const isEnabled = Boolean(authentication);
   const isAuthenticated = userProfileResponse.isSuccess;
-  const releaseToken = terraTOSResponse.isSuccess;
-  const status = getAuthenticationStatus([
-    terraNIHProfileResponse,
+  const releaseToken = shouldReleaseToken(
+    userProfileResponse,
+    terraProfileResponse,
+    terraTOSResponse
+  );
+  const status = useAuthenticationStatus(
+    userProfileResponse,
     terraProfileResponse,
     terraTOSResponse,
-    userProfileResponse,
-  ]);
+    terraNIHProfileResponse
+  );
 
   // Handle completion of authentication process.
   useAuthenticationComplete(status);
@@ -158,17 +162,21 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
 }
 
 /**
- * Returns the authentication status ("NOT STARTED" or "COMPLETE").
- * @param responses - Authentication responses.
- * @returns authentication status.
+ * Token is released for the following conditions:
+ * - Terra endpoint is configured and the terms of service response is successful, or
+ * - Terra endpoint is not configured and the user profile response is successful.
+ * @param userProfileResponse - User profile response.
+ * @param terraProfileResponse - Terra profile response.
+ * @param terraTOSResponse - Terra terms of service response.
+ * @returns true if the token should be released.
  */
-function getAuthenticationStatus(
-  responses: AuthenticationResponse<AuthenticationEndpointResponse>[]
-): AUTHENTICATION_STATUS {
-  for (const response of responses) {
-    if (response.status === RESPONSE_STATUS.NOT_STARTED) {
-      return AUTHENTICATION_STATUS.NOT_STARTED;
-    }
+function shouldReleaseToken(
+  userProfileResponse: AuthenticationResponse<UserProfile>,
+  terraProfileResponse: AuthenticationResponse<TerraEndpointResponse>,
+  terraTOSResponse: AuthenticationResponse<TerraTermsOfServiceEndpointResponse>
+): boolean {
+  if (terraProfileResponse.status === RESPONSE_STATUS.NOT_SUPPORTED) {
+    return userProfileResponse.isSuccess;
   }
-  return AUTHENTICATION_STATUS.COMPLETED;
+  return terraTOSResponse.isSuccess;
 }

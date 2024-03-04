@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticationConfig } from "../useAuthenticationConfig";
-import { DEFAULT_FAILURE_RESPONSE, DEFAULT_RESPONSE } from "./common/constants";
+import { DEFAULT_FAILURE_RESPONSE } from "./common/constants";
 import {
   AuthenticationResponse,
   EndpointResponseError,
   RESPONSE_STATUS,
 } from "./common/entities";
-import { getAuthenticationRequestOptions } from "./common/utils";
+import {
+  getAuthenticationRequestOptions,
+  initResponseState,
+} from "./common/utils";
 
 type Response = AuthenticationResponse<TerraEndpointResponse>;
 
@@ -34,12 +37,12 @@ interface TerraEndpointResponseUserInfo {
  * @returns Terra profile response.
  */
 export const useFetchTerraProfile = (token?: string): Response => {
-  const [response, setResponse] = useState<Response>(
-    DEFAULT_RESPONSE as Response
-  );
   const authenticationConfig = useAuthenticationConfig();
   const { terraAuthConfig: { terraProfileEndpoint: endpoint } = {} } =
     authenticationConfig;
+  const [response, setResponse] = useState<Response>(
+    initResponseState(endpoint) as Response
+  );
 
   // Fetch Terra profile.
   const fetchEndpointData = useCallback(

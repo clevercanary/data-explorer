@@ -1,18 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticationConfig } from "../useAuthenticationConfig";
-import { DEFAULT_FAILURE_RESPONSE, DEFAULT_RESPONSE } from "./common/constants";
+import { DEFAULT_FAILURE_RESPONSE } from "./common/constants";
 import {
   AuthenticationResponse,
   EndpointResponseError,
   RESPONSE_STATUS,
 } from "./common/entities";
-import { getAuthenticationRequestOptions } from "./common/utils";
-
-const ENDPOINT_NOT_SUPPORTED_RESPONSE: Response = {
-  isSuccess: false,
-  response: undefined,
-  status: RESPONSE_STATUS.NOT_SUPPORTED,
-};
+import {
+  getAuthenticationRequestOptions,
+  initResponseState,
+} from "./common/utils";
 
 interface DatasetPermission {
   authorized: boolean;
@@ -37,7 +34,7 @@ export const useFetchTerraNIHProfile = (token?: string): Response => {
   const { terraAuthConfig: { terraNIHProfileEndpoint: endpoint } = {} } =
     authenticationConfig;
   const [response, setResponse] = useState<Response>(
-    initResponseState(endpoint)
+    initResponseState(endpoint) as Response
   );
 
   // Fetch Terra NIH account profile.
@@ -73,19 +70,6 @@ export const useFetchTerraNIHProfile = (token?: string): Response => {
 
   return response;
 };
-
-/**
- * Initializes response state.
- * @param endpoint - Endpoint.
- * @returns initial response state.
- */
-function initResponseState(endpoint?: string): Response {
-  if (!endpoint) {
-    // Endpoint not supported.
-    return ENDPOINT_NOT_SUPPORTED_RESPONSE;
-  }
-  return DEFAULT_RESPONSE as Response;
-}
 
 /**
  * Returns true if response is an error response.
