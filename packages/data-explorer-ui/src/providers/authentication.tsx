@@ -169,7 +169,7 @@ export function AuthProvider({ children, sessionTimeout }: Props): JSX.Element {
  * @param terraTOSLoginStatus - Terra terms of service login status.
  * @returns true if the token should be released.
  */
-function shouldReleaseToken(
+export function shouldReleaseToken(
   userProfileLoginStatus: LoginStatus<UserProfile>,
   terraProfileLoginStatus: LoginStatus<TerraResponse>,
   terraTOSLoginStatus: LoginStatus<TerraTermsOfServiceResponse>
