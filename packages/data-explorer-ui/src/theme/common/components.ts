@@ -1525,6 +1525,8 @@ export const MuiToolbar: Components["MuiToolbar"] = {
 export const MuiTooltip = (theme: Theme): Components["MuiTooltip"] => {
   return {
     defaultProps: {
+      enterTouchDelay: 0,
+      leaveTouchDelay: 4000,
       placement: "top",
     },
     styleOverrides: {
