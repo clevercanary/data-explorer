@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticationConfig } from "../useAuthenticationConfig";
-import { DEFAULT_FAILURE_RESPONSE, DEFAULT_RESPONSE } from "./common/constants";
-import { AuthenticationResponse, RESPONSE_STATUS } from "./common/entities";
+import {
+  LOGIN_STATUS_FAILED,
+  LOGIN_STATUS_NOT_STARTED,
+} from "./common/constants";
+import { LoginStatus, REQUEST_STATUS } from "./common/entities";
 import { getAuthenticationRequestOptions } from "./common/utils";
 
-export type UserProfile = GoogleEndpointResponse;
+export type UserProfile = GoogleResponse;
 
-export interface GoogleEndpointResponse {
+export interface GoogleResponse {
   email: string;
   email_verified: boolean;
   family_name: string;
@@ -18,36 +21,37 @@ export interface GoogleEndpointResponse {
   sub: string;
 }
 
-type Response = AuthenticationResponse<GoogleEndpointResponse>;
+type Status = LoginStatus<GoogleResponse>;
 
 /**
- * Returns user profile response from configured endpoint.
+ * Returns user profile login status from configured endpoint.
  * @param token - Token.
- * @returns google profile response.
+ * @returns google profile login status.
  */
-export const useFetchGoogleProfile = (token?: string): Response => {
-  const [response, setResponse] = useState<Response>(
-    DEFAULT_RESPONSE as Response
-  );
+export const useFetchGoogleProfile = (token?: string): Status => {
   const authenticationConfig = useAuthenticationConfig();
   const { googleGISAuthConfig: { googleProfileEndpoint: endpoint } = {} } =
     authenticationConfig;
+  const [loginStatus, setLoginStatus] = useState<Status>(
+    LOGIN_STATUS_NOT_STARTED as Status
+  );
 
   // Fetch google user profile.
   const fetchEndpointData = useCallback(
     (endpoint: string, accessToken: string): void => {
       fetch(endpoint, getAuthenticationRequestOptions(accessToken))
         .then((response) => response.json())
-        .then((profile: GoogleEndpointResponse) => {
-          setResponse({
+        .then((profile: GoogleResponse) => {
+          setLoginStatus((prevStatus) => ({
+            ...prevStatus,
             isSuccess: true,
+            requestStatus: REQUEST_STATUS.COMPLETED,
             response: profile,
-            status: RESPONSE_STATUS.COMPLETED,
-          });
+          }));
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
-          setResponse(DEFAULT_FAILURE_RESPONSE as Response);
+          setLoginStatus(LOGIN_STATUS_FAILED as Status);
         });
     },
     []
@@ -60,5 +64,5 @@ export const useFetchGoogleProfile = (token?: string): Response => {
     fetchEndpointData(endpoint, token);
   }, [endpoint, fetchEndpointData, token]);
 
-  return response;
+  return loginStatus;
 };

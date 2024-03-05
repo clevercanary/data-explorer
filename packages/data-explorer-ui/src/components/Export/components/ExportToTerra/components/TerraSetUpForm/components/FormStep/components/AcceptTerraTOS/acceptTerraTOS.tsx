@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import { AuthenticationResponse } from "../../../../../../../../../../hooks/useAuthentication/common/entities";
+import { LoginStatus } from "../../../../../../../../../../hooks/useAuthentication/common/entities";
 import { useAuthentication } from "../../../../../../../../../../hooks/useAuthentication/useAuthentication";
-import { TerraEndpointResponse } from "../../../../../../../../../../hooks/useAuthentication/useFetchTerraProfile";
+import { TerraResponse } from "../../../../../../../../../../hooks/useAuthentication/useFetchTerraProfile";
 import { useConfig } from "../../../../../../../../../../hooks/useConfig";
 import { ButtonPrimary } from "../../../../../../../../../common/Button/components/ButtonPrimary/buttonPrimary";
 import { ANCHOR_TARGET } from "../../../../../../../../../Links/common/entities";
@@ -20,8 +20,8 @@ export const AcceptTerraTOS = ({
 }: AcceptTerraTOSProps): JSX.Element | null => {
   const { config } = useConfig();
   const { exportToTerraUrl } = config;
-  const { terraProfileResponse } = useAuthentication();
-  const isTOSAccepted = isTermsOfServiceAccepted(terraProfileResponse);
+  const { terraProfileLoginStatus } = useAuthentication();
+  const isTOSAccepted = isTermsOfServiceAccepted(terraProfileLoginStatus);
 
   const onOpenTerra = (): void => {
     if (exportToTerraUrl) {
@@ -57,11 +57,11 @@ export const AcceptTerraTOS = ({
 
 /**
  * Returns true if the terms of service have been accepted.
- * @param terraProfileResponse - Terra profile response.
+ * @param terraProfileLoginStatus - Terra profile login status.
  * @returns true if the terms of service have been accepted.
  */
 function isTermsOfServiceAccepted(
-  terraProfileResponse: AuthenticationResponse<TerraEndpointResponse>
+  terraProfileLoginStatus: LoginStatus<TerraResponse>
 ): boolean {
-  return Boolean(terraProfileResponse.response?.enabled?.tosAccepted);
+  return Boolean(terraProfileLoginStatus.response?.enabled?.tosAccepted);
 }

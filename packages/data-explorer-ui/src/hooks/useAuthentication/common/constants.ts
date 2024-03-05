@@ -1,25 +1,22 @@
-import {
-  AuthenticationEndpointResponse,
-  AuthenticationResponse as Response,
-  RESPONSE_STATUS,
-} from "./entities";
+import { LoginResponse, LoginStatus, REQUEST_STATUS } from "./entities";
 
-export const DEFAULT_RESPONSE: Response<AuthenticationEndpointResponse> = {
+export const LOGIN_STATUS_FAILED: LoginStatus<LoginResponse> = {
   isSuccess: false,
+  isSupported: true,
+  requestStatus: REQUEST_STATUS.FAILED,
   response: undefined,
-  status: RESPONSE_STATUS.NOT_STARTED,
 };
 
-export const DEFAULT_FAILURE_RESPONSE: Response<AuthenticationEndpointResponse> =
-  {
-    isSuccess: false,
-    response: undefined,
-    status: RESPONSE_STATUS.FAILED,
-  };
+export const LOGIN_STATUS_NOT_STARTED: LoginStatus<LoginResponse> = {
+  isSuccess: false,
+  isSupported: true,
+  requestStatus: REQUEST_STATUS.NOT_STARTED,
+  response: undefined,
+};
 
-export const ENDPOINT_NOT_SUPPORTED_RESPONSE: Response<AuthenticationEndpointResponse> =
-  {
-    isSuccess: false,
-    response: undefined,
-    status: RESPONSE_STATUS.NOT_SUPPORTED,
-  };
+export const LOGIN_STATUS_NOT_SUPPORTED: LoginStatus<LoginResponse> = {
+  isSuccess: false,
+  isSupported: false,
+  requestStatus: REQUEST_STATUS.NOT_STARTED,
+  response: undefined,
+};

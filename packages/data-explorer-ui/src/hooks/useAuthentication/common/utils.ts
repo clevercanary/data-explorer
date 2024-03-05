@@ -1,8 +1,8 @@
-import { DEFAULT_RESPONSE, ENDPOINT_NOT_SUPPORTED_RESPONSE } from "./constants";
 import {
-  AuthenticationEndpointResponse,
-  AuthenticationResponse as Response,
-} from "./entities";
+  LOGIN_STATUS_NOT_STARTED,
+  LOGIN_STATUS_NOT_SUPPORTED,
+} from "./constants";
+import { LoginResponse, LoginStatus } from "./entities";
 
 /**
  * Returns the options for an authentication request.
@@ -16,16 +16,16 @@ export function getAuthenticationRequestOptions(token: string): RequestInit {
 }
 
 /**
- * Initializes response state.
+ * Returns login status.
+ * An undefined endpoint will return a not supported login status,
+ * otherwise a not started login status is returned.
  * @param endpoint - Endpoint.
- * @returns initial response state.
+ * @returns initial login status.
  */
-export function initResponseState(
-  endpoint?: string
-): Response<AuthenticationEndpointResponse> {
+export function initLoginStatus(endpoint?: string): LoginStatus<LoginResponse> {
   if (!endpoint) {
     // Endpoint not supported.
-    return ENDPOINT_NOT_SUPPORTED_RESPONSE;
+    return LOGIN_STATUS_NOT_SUPPORTED;
   }
-  return DEFAULT_RESPONSE;
+  return LOGIN_STATUS_NOT_STARTED;
 }

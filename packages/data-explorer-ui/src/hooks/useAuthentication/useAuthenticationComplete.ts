@@ -5,10 +5,10 @@ import { AUTHENTICATION_STATUS } from "./common/entities";
 
 /**
  * Handles the completion of the authentication process.
- * @param status - Authentication status.
+ * @param authenticationStatus - Authentication status.
  */
 export const useAuthenticationComplete = (
-  status: AUTHENTICATION_STATUS
+  authenticationStatus: AUTHENTICATION_STATUS
 ): void => {
   const { asPath } = useRouter();
   const routeHistoryRef = useRef<string>(initRouteHistory(asPath));
@@ -21,10 +21,10 @@ export const useAuthenticationComplete = (
 
   // Redirect to the previous route after authentication is completed.
   useEffect(() => {
-    if (status === AUTHENTICATION_STATUS.COMPLETED) {
+    if (authenticationStatus === AUTHENTICATION_STATUS.COMPLETED) {
       Router.push(routeHistoryRef.current);
     }
-  }, [status]);
+  }, [authenticationStatus]);
 };
 
 /**

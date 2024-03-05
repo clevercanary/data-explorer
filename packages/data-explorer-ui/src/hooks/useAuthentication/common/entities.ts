@@ -1,40 +1,34 @@
-import { GoogleEndpointResponse } from "../useFetchGoogleProfile";
-import { TerraNIHEndpointResponse } from "../useFetchTerraNIHProfile";
-import { TerraEndpointResponse } from "../useFetchTerraProfile";
-import { TerraTermsOfServiceEndpointResponse } from "../useFetchTerraTermsOfService";
+import { GoogleResponse } from "../useFetchGoogleProfile";
+import { TerraNIHResponse } from "../useFetchTerraNIHProfile";
+import { TerraResponse } from "../useFetchTerraProfile";
+import { TerraTermsOfServiceResponse } from "../useFetchTerraTermsOfService";
 
-export type AuthenticationEndpointResponse =
-  | GoogleEndpointResponse
-  | TerraEndpointResponse
-  | TerraNIHEndpointResponse
-  | TerraTermsOfServiceEndpointResponse;
-
-export interface AuthenticationResponse<T> {
-  isSuccess: boolean;
-  response: T | undefined;
-  status: RESPONSE_STATUS;
-}
-
-/**
- * Possible set of authentication status values.
- */
 export enum AUTHENTICATION_STATUS {
   COMPLETED = "COMPLETED",
-  NOT_STARTED = "NOT_STARTED",
+  INCOMPLETE = "INCOMPLETE",
 }
 
-export interface EndpointResponseError {
+export type LoginResponse =
+  | GoogleResponse
+  | TerraResponse
+  | TerraNIHResponse
+  | TerraTermsOfServiceResponse;
+
+export interface LoginResponseError {
   message: string;
   source: string;
   statusCode: number;
 }
 
-/**
- * Possible set of response status values.
- */
-export enum RESPONSE_STATUS {
+export interface LoginStatus<T> {
+  isSuccess: boolean;
+  isSupported: boolean;
+  requestStatus: REQUEST_STATUS;
+  response: T | undefined;
+}
+
+export enum REQUEST_STATUS {
   COMPLETED = "COMPLETED",
   FAILED = "FAILED",
   NOT_STARTED = "NOT_STARTED",
-  NOT_SUPPORTED = "NOT_SUPPORTED",
 }

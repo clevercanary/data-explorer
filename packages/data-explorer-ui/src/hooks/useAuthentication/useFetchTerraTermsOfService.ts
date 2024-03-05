@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticationConfig } from "../useAuthenticationConfig";
-import { DEFAULT_FAILURE_RESPONSE } from "./common/constants";
+import { LOGIN_STATUS_FAILED } from "./common/constants";
 import {
-  AuthenticationResponse,
-  EndpointResponseError,
-  RESPONSE_STATUS,
+  LoginResponseError,
+  LoginStatus,
+  REQUEST_STATUS,
 } from "./common/entities";
 import {
   getAuthenticationRequestOptions,
-  initResponseState,
+  initLoginStatus,
 } from "./common/utils";
 
-type Response = AuthenticationResponse<TerraTermsOfServiceEndpointResponse>;
+type Status = LoginStatus<TerraTermsOfServiceResponse>;
 
-export interface TerraTermsOfServiceEndpointResponse {
+export interface TerraTermsOfServiceResponse {
   currentVersion: string;
   isEnabled: boolean;
   isGracePeriodEnabled: boolean;
@@ -21,16 +21,16 @@ export interface TerraTermsOfServiceEndpointResponse {
 }
 
 /**
- * Returns Terra terms of service response from configured endpoint.
+ * Returns Terra terms of service login status from configured endpoint.
  * @param token - Token.
- * @returns Terra terms of service response.
+ * @returns Terra terms of service login status.
  */
-export const useFetchTerraTermsOfService = (token?: string): Response => {
+export const useFetchTerraTermsOfService = (token?: string): Status => {
   const authenticationConfig = useAuthenticationConfig();
   const { terraAuthConfig: { termsOfServiceEndpoint: endpoint } = {} } =
     authenticationConfig;
-  const [response, setResponse] = useState<Response>(
-    initResponseState(endpoint) as Response
+  const [loginStatus, setLoginStatus] = useState<Status>(
+    initLoginStatus(endpoint) as Status
   );
 
   // Fetch Terra terms of service.
@@ -38,26 +38,21 @@ export const useFetchTerraTermsOfService = (token?: string): Response => {
     (endpoint: string, accessToken: string): void => {
       fetch(endpoint, getAuthenticationRequestOptions(accessToken))
         .then((response) => response.json())
-        .then(
-          (
-            response:
-              | EndpointResponseError
-              | TerraTermsOfServiceEndpointResponse
-          ) => {
-            if (isResponseError(response)) {
-              setResponse(DEFAULT_FAILURE_RESPONSE as Response);
-            } else {
-              setResponse({
-                isSuccess: isResponseSuccess(response),
-                response,
-                status: RESPONSE_STATUS.COMPLETED,
-              });
-            }
+        .then((response: LoginResponseError | TerraTermsOfServiceResponse) => {
+          if (isResponseError(response)) {
+            setLoginStatus(LOGIN_STATUS_FAILED as Status);
+          } else {
+            setLoginStatus((prevStatus) => ({
+              ...prevStatus,
+              isSuccess: isResponseSuccess(response),
+              response,
+              status: REQUEST_STATUS.COMPLETED,
+            }));
           }
-        )
+        })
         .catch((err) => {
           console.log(err); // TODO handle error.
-          setResponse(DEFAULT_FAILURE_RESPONSE as Response);
+          setLoginStatus(LOGIN_STATUS_FAILED as Status);
         });
     },
     []
@@ -70,7 +65,7 @@ export const useFetchTerraTermsOfService = (token?: string): Response => {
     fetchEndpointData(endpoint, token);
   }, [endpoint, fetchEndpointData, token]);
 
-  return response;
+  return loginStatus;
 };
 
 /**
@@ -79,9 +74,9 @@ export const useFetchTerraTermsOfService = (token?: string): Response => {
  * @returns true if response is an error response.
  */
 function isResponseError(
-  response: TerraTermsOfServiceEndpointResponse | EndpointResponseError
-): response is EndpointResponseError {
-  return Boolean((response as EndpointResponseError).statusCode);
+  response: TerraTermsOfServiceResponse | LoginResponseError
+): response is LoginResponseError {
+  return Boolean((response as LoginResponseError).statusCode);
 }
 
 /**
@@ -89,8 +84,6 @@ function isResponseError(
  * @param response - Response.
  * @returns true if response is successful.
  */
-function isResponseSuccess(
-  response: TerraTermsOfServiceEndpointResponse
-): boolean {
+function isResponseSuccess(response: TerraTermsOfServiceResponse): boolean {
   return Boolean(response.currentVersion === response.userAcceptedVersion);
 }

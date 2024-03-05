@@ -1,4 +1,4 @@
-import { RESPONSE_STATUS } from "./common/entities";
+import { REQUEST_STATUS } from "./common/entities";
 import { useAuthentication } from "./useAuthentication";
 
 const WARNING_WINDOW_SECONDS = 60 * 60 * 24 * 5; // 5 days.
@@ -16,10 +16,10 @@ interface UseAuthenticationNIHExpiry {
  */
 export const useAuthenticationNIHExpiry = (): UseAuthenticationNIHExpiry => {
   const authentication = useAuthentication();
-  const { terraNIHProfileResponse } = authentication;
-  const { response, status } = terraNIHProfileResponse;
+  const { terraNIHProfileLoginStatus } = authentication;
+  const { requestStatus, response } = terraNIHProfileLoginStatus;
   const { linkExpireTime } = response || {};
-  const isReady = status === RESPONSE_STATUS.COMPLETED;
+  const isReady = requestStatus === REQUEST_STATUS.COMPLETED;
   const linkExpired = hasLinkedNIHAccountExpired(linkExpireTime);
   const linkWillExpire = isLinkedNIHAccountWillExpire(linkExpireTime);
   return {
