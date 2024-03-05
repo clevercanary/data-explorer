@@ -24,7 +24,7 @@ export const ComponentCreator = <T,>({
   components,
   response,
 }: ComponentCreatorProps<T>): JSX.Element => {
-  const { isAuthenticated, status } = useAuthentication();
+  const { authenticationStatus, isAuthenticated } = useAuthentication();
   const { config, entityConfig } = useConfig();
   const { exploreState } = useExploreState();
   const { fileManifestState } = useFileManifestState();
@@ -48,8 +48,8 @@ export const ComponentCreator = <T,>({
         const props = c.viewBuilder
           ? c.viewBuilder(response, {
               authState: {
+                authenticationStatus,
                 isAuthenticated,
-                status,
               },
               entityConfig,
               exploreState,

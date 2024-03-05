@@ -1,21 +1,24 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticationConfig } from "../useAuthenticationConfig";
-import { DEFAULT_FAILURE_RESPONSE, DEFAULT_RESPONSE } from "./common/constants";
+import { LOGIN_STATUS_FAILED } from "./common/constants";
 import {
-  AuthenticationResponse,
-  EndpointResponseError,
-  RESPONSE_STATUS,
+  LoginResponseError,
+  LoginStatus,
+  REQUEST_STATUS,
 } from "./common/entities";
-import { getAuthenticationRequestOptions } from "./common/utils";
+import {
+  getAuthenticationRequestOptions,
+  initLoginStatus,
+} from "./common/utils";
 
-type Response = AuthenticationResponse<TerraEndpointResponse>;
+type Status = LoginStatus<TerraResponse>;
 
-export interface TerraEndpointResponse {
-  enabled: TerraEndpointResponseEnabled;
-  userInfo: TerraEndpointResponseUserInfo;
+export interface TerraResponse {
+  enabled: TerraResponseEnabled;
+  userInfo: TerraResponseUserInfo;
 }
 
-interface TerraEndpointResponseEnabled {
+interface TerraResponseEnabled {
   adminEnabled: boolean;
   allUsersGroup: boolean;
   google: boolean;
@@ -23,43 +26,44 @@ interface TerraEndpointResponseEnabled {
   tosAccepted: boolean;
 }
 
-interface TerraEndpointResponseUserInfo {
+interface TerraResponseUserInfo {
   userEmail: string;
   userSubjectId: string;
 }
 
 /**
- * Returns Terra profile response from configured endpoint.
+ * Returns Terra profile login status from configured endpoint.
  * @param token - Token.
- * @returns Terra profile response.
+ * @returns Terra profile login status.
  */
-export const useFetchTerraProfile = (token?: string): Response => {
-  const [response, setResponse] = useState<Response>(
-    DEFAULT_RESPONSE as Response
-  );
+export const useFetchTerraProfile = (token?: string): Status => {
   const authenticationConfig = useAuthenticationConfig();
   const { terraAuthConfig: { terraProfileEndpoint: endpoint } = {} } =
     authenticationConfig;
+  const [loginStatus, setLoginStatus] = useState<Status>(
+    initLoginStatus(endpoint) as Status
+  );
 
   // Fetch Terra profile.
   const fetchEndpointData = useCallback(
     (endpoint: string, accessToken: string): void => {
       fetch(endpoint, getAuthenticationRequestOptions(accessToken))
         .then((response) => response.json())
-        .then((response: TerraEndpointResponse | EndpointResponseError) => {
+        .then((response: TerraResponse | LoginResponseError) => {
           if (isResponseError(response)) {
-            setResponse(DEFAULT_FAILURE_RESPONSE as Response);
+            setLoginStatus(LOGIN_STATUS_FAILED as Status);
           } else {
-            setResponse({
+            setLoginStatus((prevStatus) => ({
+              ...prevStatus,
               isSuccess: isResponseSuccess(response),
+              requestStatus: REQUEST_STATUS.COMPLETED,
               response: response,
-              status: RESPONSE_STATUS.COMPLETED,
-            });
+            }));
           }
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
-          setResponse(DEFAULT_FAILURE_RESPONSE as Response);
+          setLoginStatus(LOGIN_STATUS_FAILED as Status);
         });
     },
     []
@@ -72,7 +76,7 @@ export const useFetchTerraProfile = (token?: string): Response => {
     fetchEndpointData(endpoint, token);
   }, [endpoint, fetchEndpointData, token]);
 
-  return response;
+  return loginStatus;
 };
 
 /**
@@ -81,9 +85,9 @@ export const useFetchTerraProfile = (token?: string): Response => {
  * @returns true if response is an error response.
  */
 function isResponseError(
-  response: TerraEndpointResponse | EndpointResponseError
-): response is EndpointResponseError {
-  return Boolean((response as EndpointResponseError).statusCode);
+  response: TerraResponse | LoginResponseError
+): response is LoginResponseError {
+  return Boolean((response as LoginResponseError).statusCode);
 }
 
 /**
@@ -91,6 +95,6 @@ function isResponseError(
  * @param response - Response.
  * @returns true if response is successful.
  */
-function isResponseSuccess(response: TerraEndpointResponse): boolean {
+function isResponseSuccess(response: TerraResponse): boolean {
   return Boolean(response.enabled?.google);
 }

@@ -1,43 +1,40 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAuthenticationConfig } from "../useAuthenticationConfig";
-import { DEFAULT_FAILURE_RESPONSE, DEFAULT_RESPONSE } from "./common/constants";
+import { LOGIN_STATUS_FAILED } from "./common/constants";
 import {
-  AuthenticationResponse,
-  EndpointResponseError,
-  RESPONSE_STATUS,
+  LoginResponseError,
+  LoginStatus,
+  REQUEST_STATUS,
 } from "./common/entities";
-import { getAuthenticationRequestOptions } from "./common/utils";
-
-const ENDPOINT_NOT_SUPPORTED_RESPONSE: Response = {
-  isSuccess: false,
-  response: undefined,
-  status: RESPONSE_STATUS.NOT_SUPPORTED,
-};
+import {
+  getAuthenticationRequestOptions,
+  initLoginStatus,
+} from "./common/utils";
 
 interface DatasetPermission {
   authorized: boolean;
   name: string;
 }
 
-type Response = AuthenticationResponse<TerraNIHEndpointResponse>;
+type Status = LoginStatus<TerraNIHResponse>;
 
-export interface TerraNIHEndpointResponse {
+export interface TerraNIHResponse {
   datasetPermissions: DatasetPermission[];
   linkedNihUsername: string;
   linkExpireTime: number;
 }
 
 /**
- * Returns Terra NIH account from configured endpoint.
+ * Returns Terra NIH login status from configured endpoint.
  * @param token - Token.
- * @returns Terra NIH account response.
+ * @returns Terra NIH login status.
  */
-export const useFetchTerraNIHProfile = (token?: string): Response => {
+export const useFetchTerraNIHProfile = (token?: string): Status => {
   const authenticationConfig = useAuthenticationConfig();
   const { terraAuthConfig: { terraNIHProfileEndpoint: endpoint } = {} } =
     authenticationConfig;
-  const [response, setResponse] = useState<Response>(
-    initResponseState(endpoint)
+  const [loginStatus, setLoginStatus] = useState<Status>(
+    initLoginStatus(endpoint) as Status
   );
 
   // Fetch Terra NIH account profile.
@@ -45,20 +42,21 @@ export const useFetchTerraNIHProfile = (token?: string): Response => {
     (endpoint: string, accessToken: string): void => {
       fetch(endpoint, getAuthenticationRequestOptions(accessToken))
         .then((response) => response.json())
-        .then((response: EndpointResponseError | TerraNIHEndpointResponse) => {
+        .then((response: LoginResponseError | TerraNIHResponse) => {
           if (isResponseError(response)) {
-            setResponse(DEFAULT_FAILURE_RESPONSE as Response);
+            setLoginStatus(LOGIN_STATUS_FAILED as Status);
           } else {
-            setResponse({
+            setLoginStatus((prevStatus) => ({
+              ...prevStatus,
               isSuccess: isResponseSuccess(response),
+              requestStatus: REQUEST_STATUS.COMPLETED,
               response,
-              status: RESPONSE_STATUS.COMPLETED,
-            });
+            }));
           }
         })
         .catch((err) => {
           console.log(err); // TODO handle error.
-          setResponse(DEFAULT_FAILURE_RESPONSE as Response);
+          setLoginStatus(LOGIN_STATUS_FAILED as Status);
         });
     },
     []
@@ -71,21 +69,8 @@ export const useFetchTerraNIHProfile = (token?: string): Response => {
     fetchEndpointData(endpoint, token);
   }, [endpoint, fetchEndpointData, token]);
 
-  return response;
+  return loginStatus;
 };
-
-/**
- * Initializes response state.
- * @param endpoint - Endpoint.
- * @returns initial response state.
- */
-function initResponseState(endpoint?: string): Response {
-  if (!endpoint) {
-    // Endpoint not supported.
-    return ENDPOINT_NOT_SUPPORTED_RESPONSE;
-  }
-  return DEFAULT_RESPONSE as Response;
-}
 
 /**
  * Returns true if response is an error response.
@@ -93,9 +78,9 @@ function initResponseState(endpoint?: string): Response {
  * @returns true if response is an error response.
  */
 function isResponseError(
-  response: TerraNIHEndpointResponse | EndpointResponseError
-): response is EndpointResponseError {
-  return Boolean((response as EndpointResponseError).statusCode);
+  response: TerraNIHResponse | LoginResponseError
+): response is LoginResponseError {
+  return Boolean((response as LoginResponseError).statusCode);
 }
 
 /**
@@ -103,6 +88,6 @@ function isResponseError(
  * @param response - Response.
  * @returns true if response is successful.
  */
-function isResponseSuccess(response: TerraNIHEndpointResponse): boolean {
+function isResponseSuccess(response: TerraNIHResponse): boolean {
   return Boolean(response.linkedNihUsername);
 }

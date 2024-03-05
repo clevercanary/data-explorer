@@ -435,7 +435,7 @@ export type ThemeOptionsFn = (theme: Theme) => ThemeOptions;
  * View context.
  */
 export interface ViewContext {
-  authState: Pick<AuthContextProps, "isAuthenticated" | "status">;
+  authState: Pick<AuthContextProps, "authenticationStatus" | "isAuthenticated">;
   entityConfig: EntityConfig;
   exploreState: ExploreState;
   fileManifestState: FileManifestState;

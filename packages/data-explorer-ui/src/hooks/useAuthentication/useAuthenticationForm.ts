@@ -1,9 +1,8 @@
 import { AuthContextProps } from "../../providers/authentication";
 import {
-  AuthenticationEndpointResponse,
-  AuthenticationResponse,
   AUTHENTICATION_STATUS,
-  RESPONSE_STATUS,
+  LoginResponse,
+  LoginStatus,
 } from "./common/entities";
 import { useAuthentication } from "./useAuthentication";
 
@@ -30,9 +29,11 @@ interface UseAuthenticationForm {
  */
 export const useAuthenticationForm = (): UseAuthenticationForm => {
   const authentication = useAuthentication();
-  const isReady = authentication.status === AUTHENTICATION_STATUS.COMPLETED;
-  const responses = concatResponses(authentication).filter(filterResponse);
-  const onboardingStatusByStep = getOnboardingStatusByStep(responses);
+  const isReady =
+    authentication.authenticationStatus === AUTHENTICATION_STATUS.COMPLETED;
+  const loginStatuses =
+    concatLoginStatuses(authentication).filter(filterLoginStatus);
+  const onboardingStatusByStep = getOnboardingStatusByStep(loginStatuses);
   const isComplete = isAuthenticationComplete(onboardingStatusByStep);
   return {
     isComplete,
@@ -58,40 +59,45 @@ function isAuthenticationComplete(
 }
 
 /**
- * Returns all authentication responses, ordered by onboarding step.
+ * Returns all login statuses, ordered by onboarding step.
  * @param authentication - Authentication.
- * @returns authentication responses.
+ * @returns login statuses.
  */
-function concatResponses(
+function concatLoginStatuses(
   authentication: AuthContextProps
-): AuthenticationResponse<AuthenticationEndpointResponse>[] {
-  const { terraNIHProfileResponse, terraProfileResponse, terraTOSResponse } =
-    authentication;
-  return [terraProfileResponse, terraTOSResponse, terraNIHProfileResponse];
+): LoginStatus<LoginResponse>[] {
+  const {
+    terraNIHProfileLoginStatus,
+    terraProfileLoginStatus,
+    terraTOSLoginStatus,
+  } = authentication;
+  return [
+    terraProfileLoginStatus,
+    terraTOSLoginStatus,
+    terraNIHProfileLoginStatus,
+  ];
 }
 
 /**
- * Returns true if response is not supported.
- * @param response - Response.
- * @returns true if response is not supported.
+ * Returns true if login is supported.
+ * @param loginStatus - Login status.
+ * @returns true if login is supported.
  */
-function filterResponse(
-  response: AuthenticationResponse<AuthenticationEndpointResponse>
-): boolean {
-  return response.status !== RESPONSE_STATUS.NOT_SUPPORTED;
+function filterLoginStatus(loginStatus: LoginStatus<LoginResponse>): boolean {
+  return loginStatus.isSupported;
 }
 
 /**
  * Returns a map of onboarding steps and their status.
- * @param responses - Authentication responses.
+ * @param loginStatuses - Login statuses.
  * @returns map of onboarding steps and their status.
  */
 function getOnboardingStatusByStep(
-  responses: AuthenticationResponse<AuthenticationEndpointResponse>[]
+  loginStatuses: LoginStatus<LoginResponse>[]
 ): Map<ONBOARDING_STEP, OnboardingStatus> {
   const onboardingStatusByStep = new Map();
-  for (let i = 0; i < responses.length; i++) {
-    const { isSuccess } = responses[i];
+  for (let i = 0; i < loginStatuses.length; i++) {
+    const { isSuccess } = loginStatuses[i];
     onboardingStatusByStep.set(i + 1, {
       active: isStepActive(isSuccess, onboardingStatusByStep),
       completed: isSuccess,

@@ -11,7 +11,10 @@ import { FilterState } from "../../hooks/useCategoryFilter";
  * for each entity
  */
 export interface EntityService {
-  fetchAllEntities: (apiPath: string) => Promise<AzulEntitiesResponse>;
+  fetchAllEntities: (
+    apiPath: string,
+    accessToken: string | undefined
+  ) => Promise<AzulEntitiesResponse>;
 
   fetchEntitiesFromQuery: (
     apiPath: string,

@@ -19,12 +19,14 @@ export const fetchEntitiesFromQuery =
 /**
  * Fetch all entities from the given API path.
  * @param apiPath - API endpoint URL.
+ * @param accessToken - Access token.
  * @returns entities.
  */
 export const fetchAllEntities = async (
-  apiPath: string
+  apiPath: string,
+  accessToken: string | undefined
 ): Promise<AzulEntitiesResponse> => {
-  const response = await fetchEntitiesFromURL(apiPath);
+  const response = await fetchEntitiesFromURL(apiPath, accessToken);
   const entities = Object.values(response);
   return {
     apiPath,
