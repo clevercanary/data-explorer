@@ -45,8 +45,8 @@ export const useFetchTerraTermsOfService = (token?: string): Status => {
             setLoginStatus((prevStatus) => ({
               ...prevStatus,
               isSuccess: isResponseSuccess(response),
+              requestStatus: REQUEST_STATUS.COMPLETED,
               response,
-              status: REQUEST_STATUS.COMPLETED,
             }));
           }
         })
