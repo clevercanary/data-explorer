@@ -36,7 +36,7 @@ export const useAuthenticationStatus = (
  * @param loginStatuses - Login statuses.
  * @returns authentication status.
  */
-function getAuthenticationStatus(
+export function getAuthenticationStatus(
   loginStatuses: LoginStatus<LoginResponse>[]
 ): AUTHENTICATION_STATUS {
   for (const loginStatus of loginStatuses) {
