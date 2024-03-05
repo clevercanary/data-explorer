@@ -128,9 +128,9 @@ export const useEntityList = (
   // Fetch entities - server-side fetching and client-side filtering.
   useEffect(() => {
     if (exploreMode === EXPLORE_MODE.SS_FETCH_CS_FILTERING) {
-      run(fetchAllEntities(path));
+      run(fetchAllEntities(path, token));
     }
-  }, [exploreMode, fetchAllEntities, path, run]);
+  }, [exploreMode, fetchAllEntities, path, run, token]);
 
   // Process explore response - server-side or client-side fetching and client-side filtering.
   useEffect(() => {
