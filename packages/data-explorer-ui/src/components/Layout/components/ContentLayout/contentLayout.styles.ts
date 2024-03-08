@@ -4,14 +4,13 @@ import {
   mediaDesktopSmallDown,
   mediaTabletDown,
 } from "../../../../styles/common/mixins/breakpoints";
-import { smokeMain } from "../../../../styles/common/mixins/colors";
 import {
-  getLayoutBackgroundColor,
-  getNavigationBackgroundColor,
-  getNavigationMaxHeight,
-  getNavigationTop,
-} from "./common/utils";
-import { LayoutStyle } from "./contentLayout";
+  smokeLight,
+  smokeLightest,
+  smokeMain,
+  white,
+} from "../../../../styles/common/mixins/colors";
+import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
 
 const CONTENT_GRID_WIDTH = 734;
 const NAV_MAX_WIDTH = 232;
@@ -19,17 +18,17 @@ const PADDING = 24;
 const PADDING_X = PADDING;
 const PADDING_Y = PADDING;
 
-export interface LayoutProps {
+interface LayoutProps {
   layoutStyle?: LayoutStyle;
 }
 
-export interface NavigationProps {
+interface NavigationProps {
   headerHeight: number;
   layoutStyle?: LayoutStyle;
 }
 
 export const ContentLayout = styled.div<LayoutProps>`
-  background-color: ${getLayoutBackgroundColor};
+  background-color: ${smokeLight};
   display: grid;
   flex: 1;
   grid-template-areas: "navigation content outline";
@@ -50,24 +49,59 @@ export const ContentLayout = styled.div<LayoutProps>`
     grid-template-areas: "content";
     grid-template-columns: 1fr;
   }
+
+  // Contrast layout style.
+  ${({ layoutStyle, theme }) =>
+    layoutStyle === LAYOUT_STYLE.CONTRAST &&
+    css`
+      background-color: ${white({ theme })};
+    `};
+
+  // Contrast lightest layout style.
+  ${({ layoutStyle, theme }) =>
+    layoutStyle === LAYOUT_STYLE.CONTRAST_LIGHTEST &&
+    css`
+      background-color: ${white({ theme })};
+    `};
+
+  // Default lightest layout style.
+  ${({ layoutStyle, theme }) =>
+    layoutStyle === LAYOUT_STYLE.DEFAULT_LIGHTEST &&
+    css`
+      background-color: ${smokeLightest({ theme })};
+    `};
 `;
 
-const navigation = (props: NavigationProps) => css`
-  max-height: ${getNavigationMaxHeight(props)};
+const navigation = ({ headerHeight }: NavigationProps) => css`
+  max-height: calc(100vh - ${headerHeight}px);
   overflow: auto;
   position: sticky;
-  top: ${getNavigationTop(props)};
+  top: ${headerHeight}px;
 `;
 
 export const NavigationGrid = styled.div<NavigationProps>`
   ${navigation};
-  background-color: ${getNavigationBackgroundColor};
+  background-color: ${smokeLight};
   box-shadow: inset -1px 0 ${smokeMain};
   grid-area: navigation;
 
   ${mediaTabletDown} {
     display: none;
   }
+
+  // Contrast lightest layout style.
+  ${({ layoutStyle, theme }) =>
+    layoutStyle === LAYOUT_STYLE.CONTRAST_LIGHTEST &&
+    css`
+      background-color: ${smokeLightest({ theme })};
+    `};
+
+  // Default lightest layout style.
+  ${({ layoutStyle, theme }) =>
+    layoutStyle === LAYOUT_STYLE.DEFAULT_LIGHTEST &&
+    css`
+      background-color: ${smokeLightest({ theme })};
+    `};
 `;
 
 export const ContentGrid = styled.div`
