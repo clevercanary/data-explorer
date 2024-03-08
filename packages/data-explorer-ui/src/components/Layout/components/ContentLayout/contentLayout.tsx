@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
 import { useLayoutState } from "../../../../hooks/useLayoutState";
 import {
@@ -15,7 +16,9 @@ import {
  */
 export enum LAYOUT_STYLE {
   CONTRAST = "CONTRAST",
+  CONTRAST_LIGHTEST = "CONTRAST_LIGHTEST",
   DEFAULT = "DEFAULT",
+  DEFAULT_LIGHTEST = "DEFAULT_LIGHTEST",
 }
 
 /**
@@ -38,13 +41,14 @@ export const ContentLayout = ({
   navigation,
   outline,
 }: ContentLayoutProps): JSX.Element => {
+  const { asPath } = useRouter();
   const {
     layoutState: { headerHeight },
   } = useLayoutState();
   return (
     <Layout className={className} layoutStyle={layoutStyle}>
       {navigation && (
-        <NavigationGrid>
+        <NavigationGrid headerHeight={headerHeight} layoutStyle={layoutStyle}>
           <NavigationPositioner>{navigation}</NavigationPositioner>
         </NavigationGrid>
       )}
@@ -52,10 +56,20 @@ export const ContentLayout = ({
         <Content>{content}</Content>
       </ContentGrid>
       {outline && (
-        <OutlineGrid headerHeight={headerHeight}>
+        <OutlineGrid key={getOutlineKey(asPath)} headerHeight={headerHeight}>
           <OutlinePositioner>{outline}</OutlinePositioner>
         </OutlineGrid>
       )}
     </Layout>
   );
 };
+
+/**
+ * Returns outline key.
+ * Facilitates re-rendering of outline when path changes, prevents stale active outline tab on navigation.
+ * @param asPath - Current path.
+ * @returns key for outline.
+ */
+function getOutlineKey(asPath: string): string {
+  return asPath.split("#")[0] || "";
+}

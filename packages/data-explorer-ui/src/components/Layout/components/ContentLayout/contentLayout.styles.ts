@@ -1,14 +1,17 @@
+import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import {
   mediaDesktopSmallDown,
   mediaTabletDown,
 } from "../../../../styles/common/mixins/breakpoints";
+import { smokeMain } from "../../../../styles/common/mixins/colors";
 import {
-  smokeLight,
-  smokeMain,
-  white,
-} from "../../../../styles/common/mixins/colors";
-import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
+  getLayoutBackgroundColor,
+  getNavigationBackgroundColor,
+  getNavigationMaxHeight,
+  getNavigationTop,
+} from "./common/utils";
+import { LayoutStyle } from "./contentLayout";
 
 const CONTENT_GRID_WIDTH = 734;
 const NAV_MAX_WIDTH = 232;
@@ -16,17 +19,17 @@ const PADDING = 24;
 const PADDING_X = PADDING;
 const PADDING_Y = PADDING;
 
-interface LayoutProps {
+export interface LayoutProps {
   layoutStyle?: LayoutStyle;
 }
 
-interface OutlineProps {
+export interface NavigationProps {
   headerHeight: number;
+  layoutStyle?: LayoutStyle;
 }
 
 export const ContentLayout = styled.div<LayoutProps>`
-  background-color: ${({ layoutStyle }) =>
-    layoutStyle === LAYOUT_STYLE.CONTRAST ? white : smokeLight};
+  background-color: ${getLayoutBackgroundColor};
   display: grid;
   flex: 1;
   grid-template-areas: "navigation content outline";
@@ -49,8 +52,16 @@ export const ContentLayout = styled.div<LayoutProps>`
   }
 `;
 
-export const NavigationGrid = styled.div`
-  background-color: ${smokeLight};
+const navigation = (props: NavigationProps) => css`
+  max-height: ${getNavigationMaxHeight(props)};
+  overflow: auto;
+  position: sticky;
+  top: ${getNavigationTop(props)};
+`;
+
+export const NavigationGrid = styled.div<NavigationProps>`
+  ${navigation};
+  background-color: ${getNavigationBackgroundColor};
   box-shadow: inset -1px 0 ${smokeMain};
   grid-area: navigation;
 
@@ -63,12 +74,9 @@ export const ContentGrid = styled.div`
   grid-area: content;
 `;
 
-export const OutlineGrid = styled("div")<OutlineProps>`
+export const OutlineGrid = styled("div")<NavigationProps>`
+  ${navigation};
   grid-area: outline;
-  max-height: ${({ headerHeight }) => `calc(100vh - ${headerHeight}px)`};
-  overflow: auto;
-  position: sticky;
-  top: ${({ headerHeight }) => headerHeight}px;
 
   ${mediaDesktopSmallDown} {
     display: none;

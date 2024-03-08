@@ -25,6 +25,10 @@ export const List = styled(MList)`
       flex: 1;
       padding: 0;
 
+      &:hover {
+        background-color: transparent;
+      }
+
       .MuiListItemText-root {
         ${textBody400};
       }
