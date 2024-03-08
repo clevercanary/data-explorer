@@ -10,6 +10,7 @@ import type {} from "@mui/material/styles/createPalette";
 import { PaletteColorOptions } from "@mui/material/styles/createPalette";
 import { TypographyStyleOptions } from "@mui/material/styles/createTypography";
 import type {} from "@mui/material/SvgIcon";
+import type {} from "@mui/material/Tabs";
 import type {} from "@mui/material/Typography";
 import { RowData } from "@tanstack/react-table";
 import { DataLayer } from "../src/common/analytics/entities";
@@ -144,6 +145,15 @@ declare module "@mui/material/SvgIcon" {
     xsmall: true;
     xxlarge: true;
     xxsmall: true;
+  }
+}
+
+/**
+ * Tabs prop options.
+ */
+declare module "@mui/material/Tabs" {
+  interface TabsPropsIndicatorColorOverrides {
+    transparent: true;
   }
 }
 

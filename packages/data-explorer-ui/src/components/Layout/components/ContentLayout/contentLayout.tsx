@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import { useLayoutState } from "../../../../hooks/useLayoutState";
 import {
   Content,
   ContentGrid,
@@ -23,6 +24,7 @@ export enum LAYOUT_STYLE {
 export type LayoutStyle = keyof typeof LAYOUT_STYLE;
 
 export interface ContentLayoutProps {
+  className?: string;
   content: ReactNode;
   layoutStyle?: LayoutStyle;
   navigation?: ReactNode;
@@ -30,13 +32,17 @@ export interface ContentLayoutProps {
 }
 
 export const ContentLayout = ({
+  className,
   content,
   layoutStyle,
   navigation,
   outline,
 }: ContentLayoutProps): JSX.Element => {
+  const {
+    layoutState: { headerHeight },
+  } = useLayoutState();
   return (
-    <Layout layoutStyle={layoutStyle}>
+    <Layout className={className} layoutStyle={layoutStyle}>
       {navigation && (
         <NavigationGrid>
           <NavigationPositioner>{navigation}</NavigationPositioner>
@@ -46,7 +52,7 @@ export const ContentLayout = ({
         <Content>{content}</Content>
       </ContentGrid>
       {outline && (
-        <OutlineGrid>
+        <OutlineGrid headerHeight={headerHeight}>
           <OutlinePositioner>{outline}</OutlinePositioner>
         </OutlineGrid>
       )}

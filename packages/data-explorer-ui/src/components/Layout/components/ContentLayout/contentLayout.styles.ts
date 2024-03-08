@@ -1,5 +1,13 @@
 import styled from "@emotion/styled";
-import { DESKTOP_SM, TABLET } from "../../../../theme/common/breakpoints";
+import {
+  mediaDesktopSmallDown,
+  mediaTabletDown,
+} from "../../../../styles/common/mixins/breakpoints";
+import {
+  smokeLight,
+  smokeMain,
+  white,
+} from "../../../../styles/common/mixins/colors";
 import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
 
 const CONTENT_GRID_WIDTH = 734;
@@ -8,15 +16,17 @@ const PADDING = 24;
 const PADDING_X = PADDING;
 const PADDING_Y = PADDING;
 
-interface Props {
+interface LayoutProps {
   layoutStyle?: LayoutStyle;
 }
 
-export const ContentLayout = styled.div<Props>`
-  background-color: ${({ layoutStyle, theme }) =>
-    layoutStyle === LAYOUT_STYLE.CONTRAST
-      ? theme.palette.common.white
-      : theme.palette.smoke.light};
+interface OutlineProps {
+  headerHeight: number;
+}
+
+export const ContentLayout = styled.div<LayoutProps>`
+  background-color: ${({ layoutStyle }) =>
+    layoutStyle === LAYOUT_STYLE.CONTRAST ? white : smokeLight};
   display: grid;
   flex: 1;
   grid-template-areas: "navigation content outline";
@@ -26,25 +36,25 @@ export const ContentLayout = styled.div<Props>`
   height: 100%;
   margin: 0 auto;
 
-  ${({ theme }) => theme.breakpoints.down(DESKTOP_SM)} {
+  ${mediaDesktopSmallDown} {
     grid-template-areas: "navigation content";
     grid-template-columns: ${NAV_MAX_WIDTH + PADDING_X * 2}px fit-content(
         ${CONTENT_GRID_WIDTH}px
       );
   }
 
-  ${({ theme }) => theme.breakpoints.down(TABLET)} {
+  ${mediaTabletDown} {
     grid-template-areas: "content";
     grid-template-columns: 1fr;
   }
 `;
 
 export const NavigationGrid = styled.div`
-  background-color: ${({ theme }) => theme.palette.smoke.light};
-  box-shadow: inset -1px 0 ${({ theme }) => theme.palette.smoke.main};
+  background-color: ${smokeLight};
+  box-shadow: inset -1px 0 ${smokeMain};
   grid-area: navigation;
 
-  ${({ theme }) => theme.breakpoints.down(TABLET)} {
+  ${mediaTabletDown} {
     display: none;
   }
 `;
@@ -53,10 +63,14 @@ export const ContentGrid = styled.div`
   grid-area: content;
 `;
 
-export const OutlineGrid = styled.div`
+export const OutlineGrid = styled("div")<OutlineProps>`
   grid-area: outline;
+  max-height: ${({ headerHeight }) => `calc(100vh - ${headerHeight}px)`};
+  overflow: auto;
+  position: sticky;
+  top: ${({ headerHeight }) => headerHeight}px;
 
-  ${({ theme }) => theme.breakpoints.down(DESKTOP_SM)} {
+  ${mediaDesktopSmallDown} {
     display: none;
   }
 `;
@@ -71,7 +85,7 @@ export const Navigation = styled.div`
 export const Content = styled.div`
   padding: ${PADDING_Y}px 40px;
 
-  ${({ theme }) => theme.breakpoints.down(TABLET)} {
+  ${mediaTabletDown} {
     padding: ${PADDING_Y}px 16px;
   }
 `;
