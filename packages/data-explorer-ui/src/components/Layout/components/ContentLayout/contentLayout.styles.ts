@@ -1,7 +1,8 @@
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 import {
-  mediaDesktopSmallDown,
+  media1366Up,
+  mediaDesktopSmallUp,
   mediaTabletDown,
 } from "../../../../styles/common/mixins/breakpoints";
 import {
@@ -12,10 +13,10 @@ import {
 } from "../../../../styles/common/mixins/colors";
 import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
 
-const CONTENT_GRID_WIDTH = 734;
+const CONTENT_MAX_WIDTH = 756;
+const NAV_GRID_WIDTH = 280;
 const NAV_MAX_WIDTH = 232;
 const PADDING = 24;
-const PADDING_X = PADDING;
 const PADDING_Y = PADDING;
 
 interface LayoutProps {
@@ -31,23 +32,24 @@ export const ContentLayout = styled.div<LayoutProps>`
   background-color: ${smokeLight};
   display: grid;
   flex: 1;
-  grid-template-areas: "navigation content outline";
-  grid-template-columns:
-    minmax(360px, auto) minmax(auto, ${CONTENT_GRID_WIDTH}px)
-    minmax(346px, auto);
+  grid-template-areas: "content";
+  grid-template-columns: 1fr;
   height: 100%;
   margin: 0 auto;
 
-  ${mediaDesktopSmallDown} {
+  ${mediaDesktopSmallUp} {
     grid-template-areas: "navigation content";
-    grid-template-columns: ${NAV_MAX_WIDTH + PADDING_X * 2}px fit-content(
-        ${CONTENT_GRID_WIDTH}px
-      );
+    grid-template-columns:
+      ${NAV_GRID_WIDTH}px
+      1fr;
   }
 
-  ${mediaTabletDown} {
-    grid-template-areas: "content";
-    grid-template-columns: 1fr;
+  ${media1366Up} {
+    grid-template-areas: "navigation content outline";
+    grid-template-columns:
+      ${NAV_GRID_WIDTH}px
+      1fr
+      ${NAV_GRID_WIDTH}px;
   }
 
   // Contrast layout style.
@@ -83,10 +85,11 @@ export const NavigationGrid = styled.div<NavigationProps>`
   ${navigation};
   background-color: ${smokeLight};
   box-shadow: inset -1px 0 ${smokeMain};
+  display: none;
   grid-area: navigation;
 
-  ${mediaTabletDown} {
-    display: none;
+  ${mediaDesktopSmallUp} {
+    display: block;
   }
 
   // Contrast lightest layout style.
@@ -110,10 +113,11 @@ export const ContentGrid = styled.div`
 
 export const OutlineGrid = styled("div")<NavigationProps>`
   ${navigation};
+  display: none;
   grid-area: outline;
 
-  ${mediaDesktopSmallDown} {
-    display: none;
+  ${media1366Up} {
+    display: block;
   }
 `;
 
@@ -125,6 +129,10 @@ export const Navigation = styled.div`
 `;
 
 export const Content = styled.div`
+  align-self: center;
+  box-sizing: content-box;
+  margin: 0 auto;
+  max-width: ${CONTENT_MAX_WIDTH}px;
   padding: ${PADDING_Y}px 40px;
 
   ${mediaTabletDown} {
