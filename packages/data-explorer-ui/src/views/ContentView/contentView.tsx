@@ -1,28 +1,26 @@
 import React, { ReactNode } from "react";
-import {
-  ContentLayout,
-  ContentLayoutPanelColor,
-} from "../../components/Layout/components/ContentLayout/contentLayout";
+import { LayoutStyle } from "../../components/Layout/components/ContentLayout/common/entities";
+import { ContentLayout } from "../../components/Layout/components/ContentLayout/contentLayout";
 
 export interface ContentViewProps {
   content: ReactNode;
+  layoutStyle?: LayoutStyle;
   navigation?: ReactNode;
   outline?: ReactNode;
-  panelColor?: ContentLayoutPanelColor;
 }
 
 export const ContentView = ({
   content,
+  layoutStyle,
   navigation,
   outline,
-  panelColor,
 }: ContentViewProps): JSX.Element => {
   return (
     <ContentLayout
       content={content}
+      layoutStyle={layoutStyle}
       navigation={navigation}
       outline={outline}
-      panelColor={panelColor}
     />
   );
 };

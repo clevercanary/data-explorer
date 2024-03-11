@@ -1,3 +1,9 @@
+export interface LayoutStyle {
+  content?: PanelBackgroundColor;
+  navigation?: PanelBackgroundColor;
+  outline?: PanelBackgroundColor;
+}
+
 export enum PANEL_BACKGROUND_COLOR {
   DEFAULT = "DEFAULT",
   SMOKE_LIGHT = "SMOKE_LIGHT",

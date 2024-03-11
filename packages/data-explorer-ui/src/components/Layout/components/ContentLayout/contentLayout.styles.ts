@@ -40,7 +40,7 @@ interface GridProps {
 
 export const ContentLayout = styled.div<LayoutProps>`
   background-color: ${({ panelColor, theme }) =>
-    getPanelBackgroundColor(panelColor, theme)};
+    getPanelBackgroundColor(theme, panelColor)};
   display: grid;
   flex: 1;
   grid-template-areas: "content";
@@ -69,7 +69,7 @@ const content = ({
   panelColor,
   theme,
 }: GridProps & ThemeProps) => css`
-  background-color: ${getPanelBackgroundColor(panelColor, theme)};
+  background-color: ${getPanelBackgroundColor(theme, panelColor)};
   padding-top: ${headerHeight}px;
 `;
 
@@ -78,7 +78,7 @@ const navigation = ({
   panelColor,
   theme,
 }: GridProps & ThemeProps) => css`
-  background-color: ${getPanelBackgroundColor(panelColor, theme)};
+  background-color: ${getPanelBackgroundColor(theme, panelColor)};
   max-height: calc(100vh - ${headerHeight}px);
   overflow: auto;
   padding-top: ${headerHeight}px;
@@ -140,13 +140,13 @@ export const Outline = styled.div`
 
 /**
  * Returns the background color for the panel.
- * @param panelColor - Panel color.
  * @param theme - Theme.
+ * @param panelColor - Panel color.
  * @returns background color for the panel.
  */
 function getPanelBackgroundColor(
-  panelColor: PanelBackgroundColor | undefined,
-  theme: ThemeProps["theme"]
+  theme: ThemeProps["theme"],
+  panelColor?: PanelBackgroundColor
 ): string | undefined {
   return panelColor ? COLOR[panelColor]({ theme }) : undefined;
 }
