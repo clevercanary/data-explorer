@@ -11,7 +11,8 @@ import {
   smokeMain,
   white,
 } from "../../../../styles/common/mixins/colors";
-import { LayoutStyle, LAYOUT_STYLE } from "./contentLayout";
+import { ThemeProps } from "../../../../theme/theme";
+import { PanelBackgroundColor } from "./common/entities";
 
 const CONTENT_MAX_WIDTH = 756;
 const NAV_GRID_WIDTH = 280;
@@ -19,17 +20,27 @@ const NAV_MAX_WIDTH = 232;
 const PADDING = 24;
 const PADDING_Y = PADDING;
 
+const COLOR: Record<
+  PanelBackgroundColor,
+  ({ theme }: ThemeProps) => string | undefined
+> = {
+  DEFAULT: white,
+  SMOKE_LIGHT: smokeLight,
+  SMOKE_LIGHTEST: smokeLightest,
+};
+
 interface LayoutProps {
-  layoutStyle?: LayoutStyle;
+  panelColor?: PanelBackgroundColor;
 }
 
-interface NavigationProps {
+interface GridProps {
   headerHeight: number;
-  layoutStyle?: LayoutStyle;
+  panelColor?: PanelBackgroundColor;
 }
 
 export const ContentLayout = styled.div<LayoutProps>`
-  background-color: ${smokeLight};
+  background-color: ${({ panelColor, theme }) =>
+    getPanelBackgroundColor(panelColor, theme)};
   display: grid;
   flex: 1;
   grid-template-areas: "content";
@@ -51,39 +62,32 @@ export const ContentLayout = styled.div<LayoutProps>`
       1fr
       ${NAV_GRID_WIDTH}px;
   }
-
-  // Contrast layout style.
-  ${({ layoutStyle, theme }) =>
-    layoutStyle === LAYOUT_STYLE.CONTRAST &&
-    css`
-      background-color: ${white({ theme })};
-    `};
-
-  // Contrast lightest layout style.
-  ${({ layoutStyle, theme }) =>
-    layoutStyle === LAYOUT_STYLE.CONTRAST_LIGHTEST &&
-    css`
-      background-color: ${white({ theme })};
-    `};
-
-  // Default lightest layout style.
-  ${({ layoutStyle, theme }) =>
-    layoutStyle === LAYOUT_STYLE.DEFAULT_LIGHTEST &&
-    css`
-      background-color: ${smokeLightest({ theme })};
-    `};
 `;
 
-const navigation = ({ headerHeight }: NavigationProps) => css`
+const content = ({
+  headerHeight,
+  panelColor,
+  theme,
+}: GridProps & ThemeProps) => css`
+  background-color: ${getPanelBackgroundColor(panelColor, theme)};
+  padding-top: ${headerHeight}px;
+`;
+
+const navigation = ({
+  headerHeight,
+  panelColor,
+  theme,
+}: GridProps & ThemeProps) => css`
+  background-color: ${getPanelBackgroundColor(panelColor, theme)};
   max-height: calc(100vh - ${headerHeight}px);
   overflow: auto;
+  padding-top: ${headerHeight}px;
   position: sticky;
-  top: ${headerHeight}px;
+  top: 0;
 `;
 
-export const NavigationGrid = styled.div<NavigationProps>`
+export const NavigationGrid = styled.div<GridProps>`
   ${navigation};
-  background-color: ${smokeLight};
   box-shadow: inset -1px 0 ${smokeMain};
   display: none;
   grid-area: navigation;
@@ -91,27 +95,14 @@ export const NavigationGrid = styled.div<NavigationProps>`
   ${mediaDesktopSmallUp} {
     display: block;
   }
-
-  // Contrast lightest layout style.
-  ${({ layoutStyle, theme }) =>
-    layoutStyle === LAYOUT_STYLE.CONTRAST_LIGHTEST &&
-    css`
-      background-color: ${smokeLightest({ theme })};
-    `};
-
-  // Default lightest layout style.
-  ${({ layoutStyle, theme }) =>
-    layoutStyle === LAYOUT_STYLE.DEFAULT_LIGHTEST &&
-    css`
-      background-color: ${smokeLightest({ theme })};
-    `};
 `;
 
-export const ContentGrid = styled.div`
+export const ContentGrid = styled.div<GridProps>`
+  ${content};
   grid-area: content;
 `;
 
-export const OutlineGrid = styled("div")<NavigationProps>`
+export const OutlineGrid = styled("div")<GridProps>`
   ${navigation};
   display: none;
   grid-area: outline;
@@ -146,3 +137,16 @@ export const Outline = styled.div`
   max-width: 242px;
   padding: ${PADDING_Y}px 0;
 `;
+
+/**
+ * Returns the background color for the panel.
+ * @param panelColor - Panel color.
+ * @param theme - Theme.
+ * @returns background color for the panel.
+ */
+function getPanelBackgroundColor(
+  panelColor: PanelBackgroundColor | undefined,
+  theme: ThemeProps["theme"]
+): string | undefined {
+  return panelColor ? COLOR[panelColor]({ theme }) : undefined;
+}

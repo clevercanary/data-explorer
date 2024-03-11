@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
 import { useLayoutState } from "../../../../hooks/useLayoutState";
+import { PanelBackgroundColor } from "./common/entities";
 import {
   Content,
   ContentGrid,
@@ -11,52 +12,50 @@ import {
   OutlineGrid,
 } from "./contentLayout.styles";
 
-/**
- * Possible set of layout style values.
- */
-export enum LAYOUT_STYLE {
-  CONTRAST = "CONTRAST",
-  CONTRAST_LIGHTEST = "CONTRAST_LIGHTEST",
-  DEFAULT = "DEFAULT",
-  DEFAULT_LIGHTEST = "DEFAULT_LIGHTEST",
+export interface ContentLayoutPanelColor {
+  content?: PanelBackgroundColor;
+  navigation?: PanelBackgroundColor;
+  outline?: PanelBackgroundColor;
 }
-
-/**
- * Model of layout style.
- */
-export type LayoutStyle = keyof typeof LAYOUT_STYLE;
 
 export interface ContentLayoutProps {
   className?: string;
   content: ReactNode;
-  layoutStyle?: LayoutStyle;
   navigation?: ReactNode;
   outline?: ReactNode;
+  panelColor?: ContentLayoutPanelColor;
 }
 
 export const ContentLayout = ({
   className,
   content,
-  layoutStyle,
   navigation,
   outline,
+  panelColor,
 }: ContentLayoutProps): JSX.Element => {
   const { asPath } = useRouter();
   const {
     layoutState: { headerHeight },
   } = useLayoutState();
   return (
-    <Layout className={className} layoutStyle={layoutStyle}>
+    <Layout className={className} panelColor={panelColor?.content}>
       {navigation && (
-        <NavigationGrid headerHeight={headerHeight} layoutStyle={layoutStyle}>
+        <NavigationGrid
+          headerHeight={headerHeight}
+          panelColor={panelColor?.navigation}
+        >
           <NavigationPositioner>{navigation}</NavigationPositioner>
         </NavigationGrid>
       )}
-      <ContentGrid>
+      <ContentGrid headerHeight={headerHeight} panelColor={panelColor?.content}>
         <Content>{content}</Content>
       </ContentGrid>
       {outline && (
-        <OutlineGrid key={getOutlineKey(asPath)} headerHeight={headerHeight}>
+        <OutlineGrid
+          key={getOutlineKey(asPath)}
+          headerHeight={headerHeight}
+          panelColor={panelColor?.outline}
+        >
           <OutlinePositioner>{outline}</OutlinePositioner>
         </OutlineGrid>
       )}

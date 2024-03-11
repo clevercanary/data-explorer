@@ -1,0 +1,26 @@
+import { ContentLayoutPanelColor } from "../contentLayout";
+import { PANEL_BACKGROUND_COLOR } from "./entities";
+
+export const PANEL_COLOR_CONTRAST_LIGHT: ContentLayoutPanelColor = {
+  content: PANEL_BACKGROUND_COLOR.DEFAULT,
+  navigation: PANEL_BACKGROUND_COLOR.SMOKE_LIGHT,
+  outline: PANEL_BACKGROUND_COLOR.DEFAULT,
+};
+
+export const PANEL_COLOR_CONTRAST_LIGHTEST: ContentLayoutPanelColor = {
+  content: PANEL_BACKGROUND_COLOR.DEFAULT,
+  navigation: PANEL_BACKGROUND_COLOR.SMOKE_LIGHTEST,
+  outline: PANEL_BACKGROUND_COLOR.DEFAULT,
+};
+
+export const PANEL_COLOR_NO_CONTRAST_LIGHT: ContentLayoutPanelColor = {
+  content: PANEL_BACKGROUND_COLOR.SMOKE_LIGHT,
+  navigation: PANEL_BACKGROUND_COLOR.SMOKE_LIGHT,
+  outline: PANEL_BACKGROUND_COLOR.SMOKE_LIGHT,
+};
+
+export const PANEL_COLOR_NO_CONTRAST_LIGHTEST: ContentLayoutPanelColor = {
+  content: PANEL_BACKGROUND_COLOR.SMOKE_LIGHTEST,
+  navigation: PANEL_BACKGROUND_COLOR.SMOKE_LIGHTEST,
+  outline: PANEL_BACKGROUND_COLOR.SMOKE_LIGHTEST,
+};
