@@ -1,8 +1,6 @@
 import React, { ReactNode } from "react";
-import {
-  ContentLayout,
-  LayoutStyle,
-} from "../../components/Layout/components/ContentLayout/contentLayout";
+import { LayoutStyle } from "../../components/Layout/components/ContentLayout/common/entities";
+import { ContentLayout } from "../../components/Layout/components/ContentLayout/contentLayout";
 
 export interface ContentViewProps {
   content: ReactNode;

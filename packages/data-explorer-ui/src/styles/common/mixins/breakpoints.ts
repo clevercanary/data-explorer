@@ -15,3 +15,6 @@ export const mediaTabletDown = ({ theme }: ThemeProps): string =>
 
 export const mediaTabletUp = ({ theme }: ThemeProps): string =>
   theme.breakpoints.up(TABLET);
+
+export const media1366Up = ({ theme }: ThemeProps): string =>
+  theme.breakpoints.up(1366);

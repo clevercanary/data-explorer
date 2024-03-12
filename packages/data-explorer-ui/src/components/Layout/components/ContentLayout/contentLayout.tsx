@@ -1,4 +1,7 @@
+import { useRouter } from "next/router";
 import React, { ReactNode } from "react";
+import { useLayoutState } from "../../../../hooks/useLayoutState";
+import { LayoutStyle } from "./common/entities";
 import {
   Content,
   ContentGrid,
@@ -9,20 +12,8 @@ import {
   OutlineGrid,
 } from "./contentLayout.styles";
 
-/**
- * Possible set of layout style values.
- */
-export enum LAYOUT_STYLE {
-  CONTRAST = "CONTRAST",
-  DEFAULT = "DEFAULT",
-}
-
-/**
- * Model of layout style.
- */
-export type LayoutStyle = keyof typeof LAYOUT_STYLE;
-
 export interface ContentLayoutProps {
+  className?: string;
   content: ReactNode;
   layoutStyle?: LayoutStyle;
   navigation?: ReactNode;
@@ -30,26 +21,51 @@ export interface ContentLayoutProps {
 }
 
 export const ContentLayout = ({
+  className,
   content,
   layoutStyle,
   navigation,
   outline,
 }: ContentLayoutProps): JSX.Element => {
+  const { asPath } = useRouter();
+  const {
+    layoutState: { headerHeight },
+  } = useLayoutState();
   return (
-    <Layout layoutStyle={layoutStyle}>
+    <Layout className={className} panelColor={layoutStyle?.content}>
       {navigation && (
-        <NavigationGrid>
+        <NavigationGrid
+          headerHeight={headerHeight}
+          panelColor={layoutStyle?.navigation}
+        >
           <NavigationPositioner>{navigation}</NavigationPositioner>
         </NavigationGrid>
       )}
-      <ContentGrid>
+      <ContentGrid
+        headerHeight={headerHeight}
+        panelColor={layoutStyle?.content}
+      >
         <Content>{content}</Content>
       </ContentGrid>
       {outline && (
-        <OutlineGrid>
+        <OutlineGrid
+          key={getOutlineKey(asPath)}
+          headerHeight={headerHeight}
+          panelColor={layoutStyle?.outline}
+        >
           <OutlinePositioner>{outline}</OutlinePositioner>
         </OutlineGrid>
       )}
     </Layout>
   );
 };
+
+/**
+ * Returns outline key.
+ * Facilitates re-rendering of outline when path changes, prevents stale active outline tab on navigation.
+ * @param asPath - Current path.
+ * @returns key for outline.
+ */
+function getOutlineKey(asPath: string): string {
+  return asPath.split("#")[0] || "";
+}
