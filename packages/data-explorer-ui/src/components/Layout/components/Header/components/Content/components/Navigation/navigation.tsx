@@ -86,7 +86,7 @@ export const Navigation = forwardRef<HTMLDivElement, NavigationProps>(
                   onClick={(): void => {
                     isClientSideNavigation(url)
                       ? router.push(url)
-                      : window.open(url, target);
+                      : window.open(url, target, "noopener noreferrer");
                     closeAncestor?.();
                   }}
                   variant="nav"

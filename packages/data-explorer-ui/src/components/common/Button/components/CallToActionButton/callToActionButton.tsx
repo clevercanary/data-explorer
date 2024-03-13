@@ -42,7 +42,7 @@ export const CallToActionButton = ({
       className={className}
       disabled={disabled}
       href={url}
-      rel="noopener"
+      rel="noopener noreferrer"
       target={target || ANCHOR_TARGET.BLANK}
     >
       {label}

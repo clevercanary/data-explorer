@@ -22,7 +22,7 @@ export const CardActionArea = ({
       if (isClientSideNavigation(url)) {
         push(url);
       } else {
-        window.open(url, ANCHOR_TARGET.BLANK);
+        window.open(url, ANCHOR_TARGET.BLANK, "noopener noreferrer");
       }
     }
   };

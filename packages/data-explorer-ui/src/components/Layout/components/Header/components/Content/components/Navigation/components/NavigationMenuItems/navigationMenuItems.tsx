@@ -61,7 +61,7 @@ export const NavigationMenuItems = ({
                   closeMenu();
                   isClientSideNavigation(url)
                     ? router.push(url)
-                    : window.open(url, target);
+                    : window.open(url, target, "noopener noreferrer");
                 }}
               >
                 {icon && <ListItemIcon>{icon}</ListItemIcon>}

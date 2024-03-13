@@ -40,7 +40,7 @@ export const Socials = forwardRef<HTMLDivElement, SocialsProps>(
           <IconButtonElType
             key={i}
             href={url}
-            rel="noopener"
+            rel="noopener noreferrer"
             size={buttonSize}
             target={ANCHOR_TARGET.BLANK}
           >

@@ -47,7 +47,7 @@ export const Link = ({
           <MLink
             className={className}
             href={url}
-            rel="noopener"
+            rel="noopener noreferrer"
             noWrap={noWrap}
             target={target || ANCHOR_TARGET.BLANK}
             onClick={onClick}
