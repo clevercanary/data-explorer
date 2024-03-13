@@ -36,7 +36,12 @@ export const Logo = ({
       </a>
     </Link>
   ) : (
-    <a className={className} href={link} rel="noopener" target={target}>
+    <a
+      className={className}
+      href={link}
+      rel="noopener noreferrer"
+      target={target}
+    >
       {logo}
     </a>
   );

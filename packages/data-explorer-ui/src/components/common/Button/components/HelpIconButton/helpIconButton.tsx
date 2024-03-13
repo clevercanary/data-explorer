@@ -29,7 +29,11 @@ export const HelpIconButton = ({
       </Button>
     </Link>
   ) : (
-    <Button href={url} rel="noopener" target={target || ANCHOR_TARGET.BLANK}>
+    <Button
+      href={url}
+      rel="noopener noreferrer"
+      target={target || ANCHOR_TARGET.BLANK}
+    >
       <HelpIcon fontSize={size} />
     </Button>
   );
