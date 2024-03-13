@@ -2,10 +2,35 @@
  * Set of end point paths accepted by Azul.
  */
 export enum APIEndpoints {
+  CATALOGS = "/index/catalogs",
   FETCH = "/fetch", // Required in path for entity matrix downloads and direct file downloads
   FILES = "/files",
   INDEX_STATUS = "/health/progress",
   SUMMARY = "/summary",
+}
+
+/**
+ * Model of response returned from /index/catalogs API endpoint.
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- this type can't be determined beforehand
+export interface AzulCatalogResponse {
+  catalogs: AzulCatalogs;
+  default_catalog: string;
+}
+
+/**
+ * Model of catalog returned from Azul catalogs endpoint (e.g. index/catalogs).
+ */
+export interface AzulCatalog {
+  atlas: string;
+  internal: boolean;
+}
+
+/**
+ * Model of catalogs returned from Azul catalogs endpoint (e.g. index/catalogs).
+ */
+export interface AzulCatalogs {
+  [key: string]: AzulCatalog;
 }
 
 /**

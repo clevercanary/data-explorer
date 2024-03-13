@@ -24,9 +24,9 @@ export const configureInterceptors = (api: AxiosInstance): void => {
         return new Promise((resolve) => {
           setTimeout(() => resolve(api(config)), waitingTime);
         });
+      } else {
+        return Promise.reject(error);
       }
-
-      Promise.reject(error);
     }
   );
 };

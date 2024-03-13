@@ -3,6 +3,8 @@
  */
 // TODO move to Azul APIs section
 import {
+  APIEndpoints,
+  AzulCatalogResponse,
   AzulEntitiesResponse,
   AzulListParams,
   AzulSummaryResponse,
@@ -48,17 +50,22 @@ export const fetchEntitiesFromQuery = async (
 /**
  * Recursively call the endpoint to get a list of entities. This will iterate over the entity list until the next entity comes null
  * @param apiPath - Path that will be used to compose the API url
+ * @param accessToken - Access token.
+ * @param catalog - Catalog.
+ * @param listParams - Params to be used on the request.
  * @returns @see ListResponseType
  */
 export const fetchAllEntities = async (
-  apiPath: string
+  apiPath: string,
+  accessToken: string | undefined,
+  catalog?: string,
+  listParams?: AzulListParams
 ): Promise<AzulEntitiesResponse> => {
-  const listParams = {};
   const result = await fetchEntitiesFromQuery(
     apiPath,
-    listParams,
-    undefined,
-    undefined
+    listParams ?? {},
+    catalog,
+    accessToken
   );
   let hits = result.hits;
   let nextPage = result.pagination.next;
@@ -73,12 +80,22 @@ export const fetchAllEntities = async (
 };
 
 /**
+ * Fetch all catalogs and default catalog from given URL.
+ * @returns name of the default catalog and all available catalogs.
+ */
+export const fetchCatalog = async (): Promise<AzulCatalogResponse> => {
+  const res = await api().get(APIEndpoints.CATALOGS);
+  return res.data;
+};
+
+/**
  *  Request to get a single project.
  * @param id - entity's uuid.
  * @param apiPath - API endpoint URL.
  * @param catalog - Catalog.
  * @param accessToken - Access token.
  * @param defaultParams - Default parameters.
+ * @param swallow404 - Swallow 404 error.
  * @returns @see ProjectResponse
  */
 export const fetchEntityDetail = async (
@@ -86,20 +103,32 @@ export const fetchEntityDetail = async (
   apiPath: string,
   catalog: string | undefined,
   accessToken: string | undefined,
-  defaultParams = getDefaultDetailParams()
+  defaultParams = getDefaultDetailParams(),
+  swallow404 = false
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this response type can't be determined beforehand
 ): Promise<any> => {
   const catalogParam = catalog ? { [AZUL_PARAM.CATALOG]: catalog } : undefined;
   const options = getAxiosRequestOptions(accessToken);
   const baseURL = getEntityURL();
-  const res = await api(baseURL).get(
-    `${apiPath}/${id}?${convertUrlParams({
-      ...defaultParams,
-      ...catalogParam,
-    })}`,
-    options
-  );
-  return res.data;
+  return await api(baseURL)
+    .get(
+      `${apiPath}/${id}?${convertUrlParams({
+        ...defaultParams,
+        ...catalogParam,
+      })}`,
+      options
+    )
+    .then((res) => {
+      return res.data;
+    })
+    .catch((error) => {
+      if (swallow404) {
+        // skipping 404 error.
+        console.log(`Building stub page for ${id}.`);
+      } else {
+        throw error;
+      }
+    });
 };
 
 /**
