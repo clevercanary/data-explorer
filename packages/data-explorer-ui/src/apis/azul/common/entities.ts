@@ -12,7 +12,6 @@ export enum APIEndpoints {
 /**
  * Model of response returned from /index/catalogs API endpoint.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- this type can't be determined beforehand
 export interface AzulCatalogResponse {
   catalogs: AzulCatalogs;
   default_catalog: string;
@@ -22,7 +21,6 @@ export interface AzulCatalogResponse {
  * Model of catalog returned from Azul catalogs endpoint (e.g. index/catalogs).
  */
 export interface AzulCatalog {
-  atlas: string;
   internal: boolean;
 }
 
