@@ -10,6 +10,7 @@ import { useConfig } from "../../hooks/useConfig";
 import { useCurrentDetailTab } from "../../hooks/useCurrentDetailTab";
 import { useEntityHeadTitle } from "../../hooks/useEntityHeadTitle";
 import { useFetchEntity } from "../../hooks/useFetchEntity";
+import { useUpdateURLCatalogParams } from "../../hooks/useUpdateURLCatalogParam";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- this data type can't be determined beforehand
 export interface EntityDetailViewProps<T = any> {
@@ -34,6 +35,7 @@ function getTabs(entity: EntityConfig): Tab[] {
 }
 
 export const EntityDetailView = (props: EntityDetailViewProps): JSX.Element => {
+  useUpdateURLCatalogParams();
   const { currentTab, route: tabRoute } = useCurrentDetailTab();
   const { response } = useFetchEntity(props);
   const { push, query } = useRouter();

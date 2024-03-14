@@ -48,7 +48,7 @@ export const useFetchEntity = <T,>(
   useEffect(() => {
     // Fetch entity if entity data originates from a request, and has not yet been requested.
     if (shouldFetchEntity && uuid) {
-      run(fetchEntityDetail(uuid, path, catalog, token));
+      run(fetchEntityDetail(uuid, path, catalog, token, undefined));
     }
   }, [catalog, fetchEntityDetail, path, run, shouldFetchEntity, token, uuid]);
 

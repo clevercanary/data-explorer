@@ -13,7 +13,9 @@ import { FilterState } from "../../hooks/useCategoryFilter";
 export interface EntityService {
   fetchAllEntities: (
     apiPath: string,
-    accessToken: string | undefined
+    accessToken: string | undefined,
+    catalog?: string,
+    listParams?: AzulListParams
   ) => Promise<AzulEntitiesResponse>;
 
   fetchEntitiesFromQuery: (
@@ -40,9 +42,11 @@ export interface EntityService {
     apiPath: string,
     catalog: string | undefined,
     accessToken: string | undefined,
-    defaultParams?:
+    defaultParams:
       | DataSourceConfig["defaultDetailParams"]
       | DataSourceConfig["defaultParams"]
+      | undefined,
+    swallow404?: boolean
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- This type can't be known before hand
   ) => Promise<any>;
 
