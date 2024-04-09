@@ -1,6 +1,7 @@
 import Router, { useRouter } from "next/router";
 import { useEffect, useMemo, useRef } from "react";
 import { ROUTE_LOGIN } from "../../providers/authentication";
+import { INACTIVITY_PARAM } from "../useSessionTimeout";
 import { AUTHENTICATION_STATUS } from "./common/entities";
 
 /**
@@ -34,7 +35,19 @@ export const useAuthenticationComplete = (
  * @returns path to be used as the initial route history.
  */
 function initRouteHistory(path: string): string {
-  return path === ROUTE_LOGIN ? "/" : path;
+  return path === ROUTE_LOGIN ? "/" : removeInactivityTimeoutQueryParam(path);
+}
+
+/**
+ * Removes the inactivity timeout query parameter from the path.
+ * the inactivity timeout parameter is used to indicate that the session has timed out; remove the parameter to
+ * clear the session timeout banner after the user logs in again.
+ * @param path - Path.
+ * @returns path without the inactivity timeout query parameter.
+ */
+function removeInactivityTimeoutQueryParam(path: string): string {
+  const regex = new RegExp(`\\?${INACTIVITY_PARAM}.*`);
+  return path.replace(regex, "");
 }
 
 /**
@@ -44,8 +57,9 @@ function initRouteHistory(path: string): string {
  * @returns updated path to be used as the route history.
  */
 function updateRouteHistory(prevPath: string, path: string): string {
+  let currentPath = prevPath;
   if (path !== ROUTE_LOGIN) {
-    return path;
+    currentPath = path;
   }
-  return prevPath;
+  return removeInactivityTimeoutQueryParam(currentPath);
 }
