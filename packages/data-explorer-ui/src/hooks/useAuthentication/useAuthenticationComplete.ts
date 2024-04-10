@@ -1,5 +1,6 @@
 import Router, { useRouter } from "next/router";
 import { useEffect, useMemo, useRef } from "react";
+import { escapeRegExp } from "../../common/utils";
 import { ROUTE_LOGIN } from "../../providers/authentication";
 import { INACTIVITY_PARAM } from "../useSessionTimeout";
 import { AUTHENTICATION_STATUS } from "./common/entities";
@@ -46,7 +47,7 @@ function initRouteHistory(path: string): string {
  * @returns path without the inactivity timeout query parameter.
  */
 function removeInactivityTimeoutQueryParam(path: string): string {
-  const regex = new RegExp(`\\?${INACTIVITY_PARAM}.*`);
+  const regex = new RegExp(`\\?${escapeRegExp(INACTIVITY_PARAM)}(?:$|[=&].*)`);
   return path.replace(regex, "");
 }
 
